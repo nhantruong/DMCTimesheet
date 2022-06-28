@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="7124f95bb97c44879f27610578baaf4a" Name="Diagram1">
+        <EntityTypeShape EntityType="DmcTimesheet.Models.C01_Projects" Width="1.5" PointX="5.75" PointY="1" />
+        <EntityTypeShape EntityType="DmcTimesheet.Models.C03_ProjectMembers" Width="1.5" PointX="8" PointY="1.25" />
+        <AssociationConnector Association="DmcTimesheet.Models.FK_3_ChonNhansu_01_Projects" />
+        <EntityTypeShape EntityType="DmcTimesheet.Models.C04_Permission" Width="1.5" PointX="15.5" PointY="4.375" />
+        <EntityTypeShape EntityType="DmcTimesheet.Models.C05_PermissionDetail" Width="1.5" PointX="15.625" PointY="6.875" />
+        <EntityTypeShape EntityType="DmcTimesheet.Models.C06_UserPermisRelationship" Width="1.5" PointX="12.875" PointY="4.125" />
+        <AssociationConnector Association="DmcTimesheet.Models.FK_05_PermissionDetail_04_Permission" />
+        <AssociationConnector Association="DmcTimesheet.Models.FK_06_UserPermisRelationship_04_Permission" />
+        <EntityTypeShape EntityType="DmcTimesheet.Models.C02_Members" Width="1.5" PointX="10.5" PointY="1.375" />
+        <AssociationConnector Association="DmcTimesheet.Models.FK_06_UserPermisRelationship_02_Members" />
+        <AssociationConnector Association="DmcTimesheet.Models.FK_3_ChonNhansu_02_Members_Main" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
