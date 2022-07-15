@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DmcTimesheet.Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="01_Projects">
+    <Key>
+      <PropertyRef Name="ProjectID" />
+    </Key>
+    <Property Name="ProjectID" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="ProjectName" Type="nvarchar" MaxLength="250" />
+    <Property Name="ProjectOtherName" Type="nvarchar" MaxLength="250" />
+  </EntityType>
+  <EntityType Name="02_Members">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="UserName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Pass" Type="nvarchar" MaxLength="250" />
+    <Property Name="FullName" Type="nvarchar" MaxLength="150" />
+    <Property Name="ShortName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Image" Type="nvarchar" MaxLength="255" />
+    <Property Name="Leader" Type="bit" />
+    <Property Name="Email" Type="nvarchar" MaxLength="100" />
+    <Property Name="Descipline" Type="int" />
+    <Property Name="Position" Type="nvarchar" MaxLength="100" />
+    <Property Name="Deactived" Type="bit" />
+  </EntityType>
+  <EntityType Name="03_ProjectMembers">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProjectID" Type="nchar" MaxLength="10" />
+    <Property Name="ChuTriChinh" Type="int" />
+    <Property Name="ChuTriKienTruc" Type="int" />
+    <Property Name="ChuTriKetCau" Type="int" />
+    <Property Name="ChuTriMEP" Type="int" />
+    <Property Name="Ngay" Type="date" />
+  </EntityType>
+  <EntityType Name="04_Permission">
+    <Key>
+      <PropertyRef Name="id_Per" />
+    </Key>
+    <Property Name="id_Per" Type="int" Nullable="false" />
+    <Property Name="PermissionName" Type="nvarchar" MaxLength="50" />
+    <Property Name="PerDescription" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="05_PermissionDetail">
+    <Key>
+      <PropertyRef Name="id_detail" />
+    </Key>
+    <Property Name="id_detail" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="id_per" Type="int" />
+    <Property Name="Action_Name" Type="nvarchar" MaxLength="100" />
+    <Property Name="Action_code" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="06_UserPermisRelationship">
+    <Key>
+      <PropertyRef Name="id_user_perm" />
+    </Key>
+    <Property Name="id_user_perm" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="idUser" Type="int" />
+    <Property Name="idPer" Type="int" />
+    <Property Name="actived" Type="bit" />
+  </EntityType>
+  <Association Name="FK_05_PermissionDetail_04_Permission">
+    <End Role="04_Permission" Type="Self.04_Permission" Multiplicity="0..1" />
+    <End Role="05_PermissionDetail" Type="Self.05_PermissionDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="04_Permission">
+        <PropertyRef Name="id_Per" />
+      </Principal>
+      <Dependent Role="05_PermissionDetail">
+        <PropertyRef Name="id_per" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_06_UserPermisRelationship_02_Members">
+    <End Role="02_Members" Type="Self.02_Members" Multiplicity="0..1" />
+    <End Role="06_UserPermisRelationship" Type="Self.06_UserPermisRelationship" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="02_Members">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="06_UserPermisRelationship">
+        <PropertyRef Name="idUser" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_06_UserPermisRelationship_04_Permission">
+    <End Role="04_Permission" Type="Self.04_Permission" Multiplicity="0..1" />
+    <End Role="06_UserPermisRelationship" Type="Self.06_UserPermisRelationship" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="04_Permission">
+        <PropertyRef Name="id_Per" />
+      </Principal>
+      <Dependent Role="06_UserPermisRelationship">
+        <PropertyRef Name="idPer" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_3_ChonNhansu_01_Projects">
+    <End Role="01_Projects" Type="Self.01_Projects" Multiplicity="0..1" />
+    <End Role="03_ProjectMembers" Type="Self.03_ProjectMembers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="01_Projects">
+        <PropertyRef Name="ProjectID" />
+      </Principal>
+      <Dependent Role="03_ProjectMembers">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_3_ChonNhansu_02_Members_Main">
+    <End Role="02_Members" Type="Self.02_Members" Multiplicity="0..1" />
+    <End Role="03_ProjectMembers" Type="Self.03_ProjectMembers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="02_Members">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="03_ProjectMembers">
+        <PropertyRef Name="ChuTriChinh" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="DmcTimesheetModelsStoreContainer">
+    <EntitySet Name="01_Projects" EntityType="Self.01_Projects" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="02_Members" EntityType="Self.02_Members" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="03_ProjectMembers" EntityType="Self.03_ProjectMembers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="04_Permission" EntityType="Self.04_Permission" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="05_PermissionDetail" EntityType="Self.05_PermissionDetail" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="06_UserPermisRelationship" EntityType="Self.06_UserPermisRelationship" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_05_PermissionDetail_04_Permission" Association="Self.FK_05_PermissionDetail_04_Permission">
+      <End Role="04_Permission" EntitySet="04_Permission" />
+      <End Role="05_PermissionDetail" EntitySet="05_PermissionDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK_06_UserPermisRelationship_02_Members" Association="Self.FK_06_UserPermisRelationship_02_Members">
+      <End Role="02_Members" EntitySet="02_Members" />
+      <End Role="06_UserPermisRelationship" EntitySet="06_UserPermisRelationship" />
+    </AssociationSet>
+    <AssociationSet Name="FK_06_UserPermisRelationship_04_Permission" Association="Self.FK_06_UserPermisRelationship_04_Permission">
+      <End Role="04_Permission" EntitySet="04_Permission" />
+      <End Role="06_UserPermisRelationship" EntitySet="06_UserPermisRelationship" />
+    </AssociationSet>
+    <AssociationSet Name="FK_3_ChonNhansu_01_Projects" Association="Self.FK_3_ChonNhansu_01_Projects">
+      <End Role="01_Projects" EntitySet="01_Projects" />
+      <End Role="03_ProjectMembers" EntitySet="03_ProjectMembers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_3_ChonNhansu_02_Members_Main" Association="Self.FK_3_ChonNhansu_02_Members_Main">
+      <End Role="02_Members" EntitySet="02_Members" />
+      <End Role="03_ProjectMembers" EntitySet="03_ProjectMembers" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

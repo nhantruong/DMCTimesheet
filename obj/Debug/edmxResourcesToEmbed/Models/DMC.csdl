@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="DmcTimesheet.Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="dmcDbcontext" annotation:LazyLoadingEnabled="false">
+    <EntitySet Name="C01_Projects" EntityType="DmcTimesheet.Models.C01_Projects" />
+    <EntitySet Name="C03_ProjectMembers" EntityType="DmcTimesheet.Models.C03_ProjectMembers" />
+    <AssociationSet Name="FK_3_ChonNhansu_01_Projects" Association="DmcTimesheet.Models.FK_3_ChonNhansu_01_Projects">
+      <End Role="C01_Projects" EntitySet="C01_Projects" />
+      <End Role="C03_ProjectMembers" EntitySet="C03_ProjectMembers" />
+    </AssociationSet>
+    <EntitySet Name="C04_Permission" EntityType="DmcTimesheet.Models.C04_Permission" />
+    <EntitySet Name="C05_PermissionDetail" EntityType="DmcTimesheet.Models.C05_PermissionDetail" />
+    <EntitySet Name="C06_UserPermisRelationship" EntityType="DmcTimesheet.Models.C06_UserPermisRelationship" />
+    <AssociationSet Name="FK_05_PermissionDetail_04_Permission" Association="DmcTimesheet.Models.FK_05_PermissionDetail_04_Permission">
+      <End Role="C04_Permission" EntitySet="C04_Permission" />
+      <End Role="C05_PermissionDetail" EntitySet="C05_PermissionDetail" />
+    </AssociationSet>
+    <AssociationSet Name="FK_06_UserPermisRelationship_04_Permission" Association="DmcTimesheet.Models.FK_06_UserPermisRelationship_04_Permission">
+      <End Role="C04_Permission" EntitySet="C04_Permission" />
+      <End Role="C06_UserPermisRelationship" EntitySet="C06_UserPermisRelationship" />
+    </AssociationSet>
+    <EntitySet Name="C02_Members" EntityType="DmcTimesheet.Models.C02_Members" />
+    <AssociationSet Name="FK_06_UserPermisRelationship_02_Members" Association="DmcTimesheet.Models.FK_06_UserPermisRelationship_02_Members">
+      <End Role="C02_Members" EntitySet="C02_Members" />
+      <End Role="C06_UserPermisRelationship" EntitySet="C06_UserPermisRelationship" />
+    </AssociationSet>
+    <AssociationSet Name="FK_3_ChonNhansu_02_Members_Main" Association="DmcTimesheet.Models.FK_3_ChonNhansu_02_Members_Main">
+      <End Role="C02_Members" EntitySet="C02_Members" />
+      <End Role="C03_ProjectMembers" EntitySet="C03_ProjectMembers" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="C01_Projects">
+    <Key>
+      <PropertyRef Name="ProjectID" />
+    </Key>
+    <Property Name="ProjectID" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="ProjectName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="ProjectOtherName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="C03_ProjectMembers" Relationship="DmcTimesheet.Models.FK_3_ChonNhansu_01_Projects" FromRole="C01_Projects" ToRole="C03_ProjectMembers" />
+  </EntityType>
+  <EntityType Name="C03_ProjectMembers">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ProjectID" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="ChuTriChinh" Type="Int32" />
+    <Property Name="ChuTriKienTruc" Type="Int32" />
+    <Property Name="ChuTriKetCau" Type="Int32" />
+    <Property Name="ChuTriMEP" Type="Int32" />
+    <Property Name="Ngay" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="C01_Projects" Relationship="DmcTimesheet.Models.FK_3_ChonNhansu_01_Projects" FromRole="C03_ProjectMembers" ToRole="C01_Projects" />
+    <NavigationProperty Name="C02_Members" Relationship="DmcTimesheet.Models.FK_3_ChonNhansu_02_Members_Main" FromRole="C03_ProjectMembers" ToRole="C02_Members" />
+  </EntityType>
+  <Association Name="FK_3_ChonNhansu_01_Projects">
+    <End Type="DmcTimesheet.Models.C01_Projects" Role="C01_Projects" Multiplicity="0..1" />
+    <End Type="DmcTimesheet.Models.C03_ProjectMembers" Role="C03_ProjectMembers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="C01_Projects">
+        <PropertyRef Name="ProjectID" />
+      </Principal>
+      <Dependent Role="C03_ProjectMembers">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="C04_Permission">
+    <Key>
+      <PropertyRef Name="id_Per" />
+    </Key>
+    <Property Name="id_Per" Type="Int32" Nullable="false" />
+    <Property Name="PermissionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="PerDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="C05_PermissionDetail" Relationship="DmcTimesheet.Models.FK_05_PermissionDetail_04_Permission" FromRole="C04_Permission" ToRole="C05_PermissionDetail" />
+    <NavigationProperty Name="C06_UserPermisRelationship" Relationship="DmcTimesheet.Models.FK_06_UserPermisRelationship_04_Permission" FromRole="C04_Permission" ToRole="C06_UserPermisRelationship" />
+  </EntityType>
+  <EntityType Name="C05_PermissionDetail">
+    <Key>
+      <PropertyRef Name="id_detail" />
+    </Key>
+    <Property Name="id_detail" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="id_per" Type="Int32" />
+    <Property Name="Action_Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Action_code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="C04_Permission" Relationship="DmcTimesheet.Models.FK_05_PermissionDetail_04_Permission" FromRole="C05_PermissionDetail" ToRole="C04_Permission" />
+  </EntityType>
+  <EntityType Name="C06_UserPermisRelationship">
+    <Key>
+      <PropertyRef Name="id_user_perm" />
+    </Key>
+    <Property Name="id_user_perm" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="idUser" Type="Int32" />
+    <Property Name="idPer" Type="Int32" />
+    <Property Name="actived" Type="Boolean" />
+    <NavigationProperty Name="C04_Permission" Relationship="DmcTimesheet.Models.FK_06_UserPermisRelationship_04_Permission" FromRole="C06_UserPermisRelationship" ToRole="C04_Permission" />
+    <NavigationProperty Name="C02_Members" Relationship="DmcTimesheet.Models.FK_06_UserPermisRelationship_02_Members" FromRole="C06_UserPermisRelationship" ToRole="C02_Members" />
+  </EntityType>
+  <Association Name="FK_05_PermissionDetail_04_Permission">
+    <End Type="DmcTimesheet.Models.C04_Permission" Role="C04_Permission" Multiplicity="0..1" />
+    <End Type="DmcTimesheet.Models.C05_PermissionDetail" Role="C05_PermissionDetail" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="C04_Permission">
+        <PropertyRef Name="id_Per" />
+      </Principal>
+      <Dependent Role="C05_PermissionDetail">
+        <PropertyRef Name="id_per" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_06_UserPermisRelationship_04_Permission">
+    <End Type="DmcTimesheet.Models.C04_Permission" Role="C04_Permission" Multiplicity="0..1" />
+    <End Type="DmcTimesheet.Models.C06_UserPermisRelationship" Role="C06_UserPermisRelationship" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="C04_Permission">
+        <PropertyRef Name="id_Per" />
+      </Principal>
+      <Dependent Role="C06_UserPermisRelationship">
+        <PropertyRef Name="idPer" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="C02_Members">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Pass" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="ShortName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Image" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Leader" Type="Boolean" />
+    <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Descipline" Type="Int32" />
+    <Property Name="Position" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Deactived" Type="Boolean" />
+    <NavigationProperty Name="C06_UserPermisRelationship" Relationship="DmcTimesheet.Models.FK_06_UserPermisRelationship_02_Members" FromRole="C02_Members" ToRole="C06_UserPermisRelationship" />
+    <NavigationProperty Name="C03_ProjectMembers" Relationship="DmcTimesheet.Models.FK_3_ChonNhansu_02_Members_Main" FromRole="C02_Members" ToRole="C03_ProjectMembers" />
+  </EntityType>
+  <Association Name="FK_06_UserPermisRelationship_02_Members">
+    <End Type="DmcTimesheet.Models.C02_Members" Role="C02_Members" Multiplicity="0..1" />
+    <End Type="DmcTimesheet.Models.C06_UserPermisRelationship" Role="C06_UserPermisRelationship" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="C02_Members">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="C06_UserPermisRelationship">
+        <PropertyRef Name="idUser" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_3_ChonNhansu_02_Members_Main">
+    <End Type="DmcTimesheet.Models.C02_Members" Role="C02_Members" Multiplicity="0..1" />
+    <End Type="DmcTimesheet.Models.C03_ProjectMembers" Role="C03_ProjectMembers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="C02_Members">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="C03_ProjectMembers">
+        <PropertyRef Name="ChuTriChinh" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

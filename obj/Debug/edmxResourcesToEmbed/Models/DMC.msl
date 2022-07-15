@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="DmcTimesheetModelsStoreContainer" CdmEntityContainer="dmcDbcontext">
+    <EntitySetMapping Name="C01_Projects">
+      <EntityTypeMapping TypeName="DmcTimesheet.Models.C01_Projects">
+        <MappingFragment StoreEntitySet="01_Projects">
+          <ScalarProperty Name="ProjectOtherName" ColumnName="ProjectOtherName" />
+          <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+          <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="C03_ProjectMembers">
+      <EntityTypeMapping TypeName="DmcTimesheet.Models.C03_ProjectMembers">
+        <MappingFragment StoreEntitySet="03_ProjectMembers">
+          <ScalarProperty Name="Ngay" ColumnName="Ngay" />
+          <ScalarProperty Name="ChuTriMEP" ColumnName="ChuTriMEP" />
+          <ScalarProperty Name="ChuTriKetCau" ColumnName="ChuTriKetCau" />
+          <ScalarProperty Name="ChuTriKienTruc" ColumnName="ChuTriKienTruc" />
+          <ScalarProperty Name="ChuTriChinh" ColumnName="ChuTriChinh" />
+          <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="C04_Permission">
+      <EntityTypeMapping TypeName="DmcTimesheet.Models.C04_Permission">
+        <MappingFragment StoreEntitySet="04_Permission">
+          <ScalarProperty Name="PerDescription" ColumnName="PerDescription" />
+          <ScalarProperty Name="PermissionName" ColumnName="PermissionName" />
+          <ScalarProperty Name="id_Per" ColumnName="id_Per" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="C05_PermissionDetail">
+      <EntityTypeMapping TypeName="DmcTimesheet.Models.C05_PermissionDetail">
+        <MappingFragment StoreEntitySet="05_PermissionDetail">
+          <ScalarProperty Name="Action_code" ColumnName="Action_code" />
+          <ScalarProperty Name="Action_Name" ColumnName="Action_Name" />
+          <ScalarProperty Name="id_per" ColumnName="id_per" />
+          <ScalarProperty Name="id_detail" ColumnName="id_detail" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="C06_UserPermisRelationship">
+      <EntityTypeMapping TypeName="DmcTimesheet.Models.C06_UserPermisRelationship">
+        <MappingFragment StoreEntitySet="06_UserPermisRelationship">
+          <ScalarProperty Name="actived" ColumnName="actived" />
+          <ScalarProperty Name="idPer" ColumnName="idPer" />
+          <ScalarProperty Name="idUser" ColumnName="idUser" />
+          <ScalarProperty Name="id_user_perm" ColumnName="id_user_perm" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="C02_Members">
+      <EntityTypeMapping TypeName="DmcTimesheet.Models.C02_Members">
+        <MappingFragment StoreEntitySet="02_Members">
+          <ScalarProperty Name="Deactived" ColumnName="Deactived" />
+          <ScalarProperty Name="Position" ColumnName="Position" />
+          <ScalarProperty Name="Descipline" ColumnName="Descipline" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Leader" ColumnName="Leader" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
+          <ScalarProperty Name="ShortName" ColumnName="ShortName" />
+          <ScalarProperty Name="FullName" ColumnName="FullName" />
+          <ScalarProperty Name="Pass" ColumnName="Pass" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>
