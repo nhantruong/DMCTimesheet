@@ -15,7 +15,8 @@ namespace DMCTimesheet.Models
     
     public partial class dmcDbcontext : DbContext
     {
-        string conn = "server = 103.27.60.66; user id=dmcAdmin;password=DmcNewVision@2022#; persistsecurityinfo = True; database =cbimtech_dmc";
+        string conn = "server = 103.27.60.66; user id=dmcAdmin;password=DmcNewVision@2022#; persistsecurityinfo = True; database =cbimtech_dmc ";
+
         public dmcDbcontext()
             : base("name=dmcDbcontext")
         {

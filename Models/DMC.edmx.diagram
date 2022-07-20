@@ -5,23 +5,22 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="7124f95bb97c44879f27610578baaf4a" Name="Diagram1">
-        <EntityTypeShape EntityType="DmcTimesheet.Models.C01_Projects" Width="1.5" PointX="5.75" PointY="1" />
-        <EntityTypeShape EntityType="DmcTimesheet.Models.C03_ProjectMembers" Width="1.5" PointX="8" PointY="1.25" />
+        <EntityTypeShape EntityType="DmcTimesheet.Models.C01_Projects" Width="1.5" PointX="6" PointY="0.5" />
+        <EntityTypeShape EntityType="DmcTimesheet.Models.C03_ProjectMembers" Width="1.5" PointX="7.875" PointY="2" />
         <AssociationConnector Association="DmcTimesheet.Models.FK_3_ChonNhansu_01_Projects" />
         <EntityTypeShape EntityType="DmcTimesheet.Models.C04_Permission" Width="1.5" PointX="15.125" PointY="5.125" />
         <EntityTypeShape EntityType="DmcTimesheet.Models.C05_PermissionDetail" Width="1.5" PointX="17.5" PointY="5.125" />
         <EntityTypeShape EntityType="DmcTimesheet.Models.C06_UserPermisRelationship" Width="1.5" PointX="12.875" PointY="5.125" />
         <AssociationConnector Association="DmcTimesheet.Models.FK_05_PermissionDetail_04_Permission" />
         <AssociationConnector Association="DmcTimesheet.Models.FK_06_UserPermisRelationship_04_Permission" />
-        <EntityTypeShape EntityType="DmcTimesheet.Models.C02_Members" Width="1.5" PointX="10.5" PointY="1.375" />
+        <EntityTypeShape EntityType="DmcTimesheet.Models.C02_Members" Width="1.5" PointX="9.875" PointY="2.625" />
         <AssociationConnector Association="DmcTimesheet.Models.FK_06_UserPermisRelationship_02_Members" />
         <AssociationConnector Association="DmcTimesheet.Models.FK_3_ChonNhansu_02_Members_Main" />
         <EntityTypeShape EntityType="DmcTimesheet.Models.C07_WorkType" Width="1.5" PointX="14.75" PointY="0.875" />
-        <EntityTypeShape EntityType="DmcTimesheet.Models.C08_Timesheet" Width="1.5" PointX="12.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DmcTimesheet.Models.C08_Timesheet" Width="1.5" PointX="12.625" PointY="0.75" />
         <AssociationConnector Association="DmcTimesheet.Models.FK_08_Timesheet_01_Projects" />
         <AssociationConnector Association="DmcTimesheet.Models.FK_08_Timesheet_02_Members" />
         <AssociationConnector Association="DmcTimesheet.Models.FK_08_Timesheet_07_WorkType" />
-        <AssociationConnector Association="DmcTimesheet.Models.FK_08_Timesheet_08_Timesheet" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

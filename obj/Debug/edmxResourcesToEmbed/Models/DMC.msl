@@ -4,6 +4,8 @@
     <EntitySetMapping Name="C01_Projects">
       <EntityTypeMapping TypeName="DmcTimesheet.Models.C01_Projects">
         <MappingFragment StoreEntitySet="01_Projects">
+          <ScalarProperty Name="ProjectStatus" ColumnName="ProjectStatus" />
+          <ScalarProperty Name="ProjectType" ColumnName="ProjectType" />
           <ScalarProperty Name="Year" ColumnName="Year" />
           <ScalarProperty Name="StartDate" ColumnName="StartDate" />
           <ScalarProperty Name="ProjectOtherName" ColumnName="ProjectOtherName" />

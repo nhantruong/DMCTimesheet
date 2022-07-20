@@ -26,6 +26,8 @@ namespace DMCTimesheet.Models
         public string ProjectOtherName { get; set; }
         public Nullable<System.DateTime> StartDate { get; set; }
         public Nullable<int> Year { get; set; }
+        public string ProjectType { get; set; }
+        public string ProjectStatus { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<C03_ProjectMembers> C03_ProjectMembers { get; set; }

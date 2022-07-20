@@ -14,6 +14,8 @@
           <Property Name="ProjectOtherName" Type="nvarchar" MaxLength="250" />
           <Property Name="StartDate" Type="date" />
           <Property Name="Year" Type="int" />
+          <Property Name="ProjectType" Type="nvarchar" MaxLength="50" />
+          <Property Name="ProjectStatus" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="02_Members">
           <Key>
@@ -274,10 +276,6 @@
             <End Role="C07_WorkType" EntitySet="C07_WorkType" />
             <End Role="C08_Timesheet" EntitySet="C08_Timesheet" />
           </AssociationSet>
-          <AssociationSet Name="FK_08_Timesheet_08_Timesheet" Association="DmcTimesheet.Models.FK_08_Timesheet_08_Timesheet">
-            <End EntitySet="C08_Timesheet" Role="C08_Timesheet" />
-            <End EntitySet="C08_Timesheet" Role="C08_Timesheet1" />
-          </AssociationSet>
         </EntityContainer>
         <EntityType Name="C01_Projects">
           <Key>
@@ -289,6 +287,8 @@
           <NavigationProperty Name="C03_ProjectMembers" Relationship="DmcTimesheet.Models.FK_3_ChonNhansu_01_Projects" FromRole="C01_Projects" ToRole="C03_ProjectMembers" />
           <Property Name="StartDate" Type="DateTime" Precision="0" />
           <Property Name="Year" Type="Int32" />
+          <Property Name="ProjectType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ProjectStatus" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="C08_Timesheet" Relationship="DmcTimesheet.Models.FK_08_Timesheet_01_Projects" FromRole="C01_Projects" ToRole="C08_Timesheet" />
         </EntityType>
         <EntityType Name="C03_ProjectMembers">
@@ -440,8 +440,6 @@
           <NavigationProperty Name="C01_Projects" Relationship="DmcTimesheet.Models.FK_08_Timesheet_01_Projects" FromRole="C08_Timesheet" ToRole="C01_Projects" />
           <NavigationProperty Name="C02_Members" Relationship="DmcTimesheet.Models.FK_08_Timesheet_02_Members" FromRole="C08_Timesheet" ToRole="C02_Members" />
           <NavigationProperty Name="C07_WorkType" Relationship="DmcTimesheet.Models.FK_08_Timesheet_07_WorkType" FromRole="C08_Timesheet" ToRole="C07_WorkType" />
-          <NavigationProperty Name="C08_Timesheet1" Relationship="DmcTimesheet.Models.FK_08_Timesheet_08_Timesheet" FromRole="C08_Timesheet" ToRole="C08_Timesheet1" />
-          <NavigationProperty Name="C08_Timesheet2" Relationship="DmcTimesheet.Models.FK_08_Timesheet_08_Timesheet" FromRole="C08_Timesheet1" ToRole="C08_Timesheet" />
         </EntityType>
         <Association Name="FK_08_Timesheet_01_Projects">
           <End Type="DmcTimesheet.Models.C01_Projects" Role="C01_Projects" Multiplicity="0..1" />
@@ -479,18 +477,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_08_Timesheet_08_Timesheet">
-          <End Type="DmcTimesheet.Models.C08_Timesheet" Multiplicity="1" Role="C08_Timesheet" />
-          <End Type="DmcTimesheet.Models.C08_Timesheet" Multiplicity="0..1" Role="C08_Timesheet1" />
-          <ReferentialConstraint>
-            <Principal Role="C08_Timesheet">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="C08_Timesheet1">
-              <PropertyRef Name="Id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -500,6 +486,8 @@
           <EntitySetMapping Name="C01_Projects">
             <EntityTypeMapping TypeName="DmcTimesheet.Models.C01_Projects">
               <MappingFragment StoreEntitySet="01_Projects">
+                <ScalarProperty Name="ProjectStatus" ColumnName="ProjectStatus" />
+                <ScalarProperty Name="ProjectType" ColumnName="ProjectType" />
                 <ScalarProperty Name="Year" ColumnName="Year" />
                 <ScalarProperty Name="StartDate" ColumnName="StartDate" />
                 <ScalarProperty Name="ProjectOtherName" ColumnName="ProjectOtherName" />

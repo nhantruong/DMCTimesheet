@@ -9,6 +9,8 @@
     <Property Name="ProjectOtherName" Type="nvarchar" MaxLength="250" />
     <Property Name="StartDate" Type="date" />
     <Property Name="Year" Type="int" />
+    <Property Name="ProjectType" Type="nvarchar" MaxLength="50" />
+    <Property Name="ProjectStatus" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="02_Members">
     <Key>
