@@ -1,0 +1,55 @@
+﻿@{
+    DMCTimesheet.Models.C02_Members loginUser = Session["UserLogin"] as DMCTimesheet.Models.C02_Members;
+    string imgPath = "../Assets/Photos/MemberImage/no-image.jpg";
+    try
+    {
+        if (loginUser == null)
+        {
+            imgPath = "../Assets/Photos/MemberImage/no-image.jpg";
+        }
+        else
+        {
+            imgPath = "../Assets/Photos/MemberImage/" + loginUser.Image;
+        }
+
+    }
+    catch (Exception)
+    {
+        imgPath = "../Assets/Photos/MemberImage/no-image.jpg";
+    }
+}
+<!-- sidebar menu -->
+<div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
+    <div class="menu_section">
+        <h3 class="text-warning">General</h3>
+        <ul class="nav side-menu">
+            <li>
+                <a><i class="fa fa-home"></i> Dashboard <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li>@Html.ActionLink("DMC Projects", "UserLogin", "Home")</li>
+                </ul>
+            </li>
+            <li>
+                <a><i class="fa fa-desktop"></i> My Works <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li>@Html.ActionLink("My Projects", "UserIndex", "Projects", new { id = loginUser.UserID }, null)</li>
+                    <li>@Html.ActionLink("My Timesheet", "UserTimeSheetList", "TimeSheet", new { id = loginUser.UserID }, null)</li>
+                    <li class="dropdown-divider"></li>
+                    @if (loginUser != null)
+                    {
+                        <li>@Html.ActionLink("My Profile", "UserProfile", "Member", new { id = loginUser.UserID }, null)</li>
+                    }
+                    @*<li><a>BIM Targets for project</a></li>*@
+                </ul>
+            </li>
+        </ul>
+    </div>
+
+    <div class="menu_section">
+        <ul class="nav side-menu">
+            <li></li>
+        </ul>
+    </div>
+
+</div>
+<!-- /sidebar menu -->

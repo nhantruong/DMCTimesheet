@@ -19,6 +19,7 @@ namespace DMCTimesheet.Models
         {
             this.C06_UserPermisRelationship = new HashSet<C06_UserPermisRelationship>();
             this.C03_ProjectMembers = new HashSet<C03_ProjectMembers>();
+            this.C08_Timesheet = new HashSet<C08_Timesheet>();
         }
     
         public int UserID { get; set; }
@@ -37,5 +38,7 @@ namespace DMCTimesheet.Models
         public virtual ICollection<C06_UserPermisRelationship> C06_UserPermisRelationship { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<C03_ProjectMembers> C03_ProjectMembers { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<C08_Timesheet> C08_Timesheet { get; set; }
     }
 }

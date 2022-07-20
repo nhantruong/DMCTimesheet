@@ -1,0 +1,185 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="~/UserStyles/production/images/favicon.ico" type="image/ico" />
+
+    <title>@ViewBag.Title - Coteccons BIM Apps</title>
+    @Styles.Render("~/Content/css")
+    @Styles.Render("~/Content")
+    @Scripts.Render("~/bundles/modernizr")
+    <!-- Bootstrap -->
+    @*<link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">*@
+
+    @*Font Awesome*@
+    <link href="~/UserStyles/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+
+    @* NProgress*@
+    <link href="~/UserStyles/nprogress/nprogress.css" rel="stylesheet">
+
+    @*iCheck*@
+    <link href="~/UserStyles/iCheck/skins/flat/green.css" rel="stylesheet">
+    @*Chart JS*@
+    <link href="~/Content/Chart.min.css" rel="stylesheet" />
+
+    @*bootstrap-progressbar*@
+    <link href="~/UserStyles/bootstrap-progressbar/css/bootstrap-progressbar-3.3.4.min.css" rel="stylesheet">
+    @*JQVMap*@
+    <link href="~/UserStyles/jqvmap/dist/jqvmap.min.css" rel="stylesheet" />
+    @*bootstrap-daterangepicker*@
+    <link href="~/UserStyles/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+
+    <!-- Bootstrap Colorpicker -->
+    <link href="~/UserStyles/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css" rel="stylesheet">
+    <link href="~/UserStyles/cropper/dist/cropper.min.css" rel="stylesheet">
+
+    @*Custom Theme Style*@
+    <link href="~/UserStyles/build/css/custom.min.css" rel="stylesheet">
+    @{
+        DMCTimesheet.Models.C02_Members loginUser = Session["UserLogin"] as DMCTimesheet.Models.C02_Members;
+        string imgPath = "~/Assets/Photos/MemberImage/";
+        try
+        {
+            if (loginUser == null)
+            {
+                imgPath = "~/Assets/Photos/MemberImage/no-image.jpg";
+            }
+            else
+            {
+                imgPath = "~/Assets/Photos/MemberImage/" + loginUser.Image;
+            }
+
+        }
+        catch (Exception)
+        {
+            imgPath = "~/Assets/Photos/MemberImage/no-image.jpg";
+        }
+
+    }
+</head>
+
+<body class="nav-md">
+    <div class="container body">
+        <div class="main_container">
+            <div class="col-md-3 left_col">
+                <div class="left_col scroll-view">
+                    <div class="text-center mx-auto d-block">
+                        <img src="@Url.Content("~/Assets/logoCTC_New.png")" alt="Alternate Text" class="profile_info img-fluid" />
+                    </div>
+                    <div class="navbar nav_title" style="border: 0;">
+                        <a class="site_title"><i class="fa fa-paw"></i> <span>DMC Management</span></a>
+                        <div class="clearfix"></div>
+                        <hr />
+                    </div>
+
+                    <br />
+                    @* menu profile quick info -->*@
+                    <div class="profile clearfix">
+                        <div class="profile_pic">
+                            <img src="@Url.Content(imgPath)" alt="..." class="img-circle profile_img">
+                        </div>
+                        <div class="profile_info">
+                            <span>Welcome,</span>
+                            @if (loginUser != null)
+                            {
+                                <h2 class="text-warning">@loginUser.ShortName</h2>
+                            }
+                            else
+                            {
+                                <h2 class="text-warning">User/ need login</h2>
+                            }
+
+                            @*<h2 class="text-warning">@Html.ActionLink(loginUser.Sortname, "Details", "Member", new { id = loginUser.BIMstaffID }, new { @class = "text-center text-warning" })</h2>*@
+                        </div>
+                    </div>
+                    <hr />
+                    @* /menu profile quick info -->*@
+                    @*<br />*@
+                    <div class="clearfix"></div>
+                    @* sidebar menu -->*@
+                    @Html.Partial("_UserLeftSliderBar")
+                    @*< /sidebar menu -->*@
+                    @* /menu footer buttons -->*@
+                    <div class="sidebar-footer hidden-small">
+                        @Html.ActionLink(" LogOut", "Logout", "Home", null, new { @class = "glyphicon glyphicon-off" })
+                    </div>
+                    @* /menu footer buttons -->*@
+                </div>
+            </div>
+            @* top navigation -->*@
+            @Html.Partial("_UserTopNavBar")
+            @* /top navigation -->*@
+            @* page content -->*@
+            <div class="right_col" role="main">
+                @RenderBody()
+            </div>
+            @* /page content -->*@
+            @* footer content -->*@
+            <footer>
+                <div class="pull-right">
+                    @DateTime.Now.Year - DMC Department (base on <a href="https://colorlib.com/">Colorlib</a> template)
+                </div>
+                <div class="clearfix"></div>
+            </footer>
+            @* /footer content -->*@
+        </div>
+    </div>
+
+    @* jQuery -->*@
+    <script src="~/UserStyles/jquery/dist/jquery.min.js"></script>
+    @* Bootstrap -->*@
+    <script src="~/UserStyles/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    @* FastClick -->*@
+    <script src="~/UserStyles/fastclick/lib/fastclick.js"></script>
+    @* NProgress -->*@
+    <script src="~/UserStyles/nprogress/nprogress.js"></script>
+    @* Chart.js -->*@
+    @*<script src="~/UserStyles/Chart.js/dist/Chart.min.js"></script>*@
+    <script src="~/Scripts/Chart.min.js"></script>
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>*@
+
+    @* gauge.js -->*@
+    <script src="~/UserStyles/gauge.js/dist/gauge.min.js"></script>
+    @* bootstrap-progressbar -->*@
+    <script src="~/UserStyles/bootstrap-progressbar/bootstrap-progressbar.min.js"></script>
+    @* iCheck -->*@
+    <script src="~/UserStyles/iCheck/icheck.min.js"></script>
+    @* Skycons -->*@
+    <script src="~/UserStyles/skycons/skycons.js"></script>
+    @* Flot -->*@
+    <script src="~/UserStyles/Flot/jquery.flot.js"></script>
+    <script src="~/UserStyles/Flot/jquery.flot.pie.js"></script>
+    <script src="~/UserStyles/Flot/jquery.flot.time.js"></script>
+    <script src="~/UserStyles/Flot/jquery.flot.stack.js"></script>
+    <script src="~/UserStyles/Flot/jquery.flot.resize.js"></script>
+    @* Flot plugins -->*@
+    <script src="~/UserStyles/flot.orderbars/js/jquery.flot.orderBars.js"></script>
+    <script src="~/UserStyles/flot-spline/js/jquery.flot.spline.min.js"></script>
+    <script src="~/UserStyles/flot.curvedlines/curvedLines.js"></script>
+    @* DateJS -->*@
+    <script src="~/UserStyles/DateJS/build/date.js"></script>
+    @* JQVMap -->*@
+    <script src="~/UserStyles/jqvmap/dist/jquery.vmap.js"></script>
+    <script src="~/UserStyles/jqvmap/dist/maps/jquery.vmap.world.js"></script>
+    <script src="~/UserStyles/jqvmap/examples/js/jquery.vmap.sampledata.js"></script>
+    @* bootstrap-daterangepicker -->*@
+    <script src="~/UserStyles/moment/min/moment.min.js"></script>
+    <script src="~/UserStyles/bootstrap-daterangepicker/daterangepicker.js"></script>
+    <!-- ECharts -->
+    <script src="~/UserStyles/echarts/dist/echarts.min.js"></script>
+
+    <!-- Bootstrap Colorpicker -->
+    <script src="~/UserStyles/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
+
+    @*Custom Theme Scripts -->*@
+    <script src="~/UserStyles/production/build/js/custom.min.js"></script>
+
+    @* Dùng để tránh lỗi đòi hỏi Layout*@
+    @RenderSection("scripts", required: false)
+
+</body>
+
+</html>

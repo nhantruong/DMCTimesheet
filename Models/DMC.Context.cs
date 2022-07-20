@@ -15,10 +15,12 @@ namespace DMCTimesheet.Models
     
     public partial class dmcDbcontext : DbContext
     {
+        string conn = "server = 103.27.60.66; user id=dmcAdmin;password=DmcNewVision@2022#; persistsecurityinfo = True; database =cbimtech_dmc";
         public dmcDbcontext()
             : base("name=dmcDbcontext")
         {
             this.Configuration.LazyLoadingEnabled = false;
+            this.Database.Connection.ConnectionString = conn;
         }
     
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
@@ -32,5 +34,7 @@ namespace DMCTimesheet.Models
         public virtual DbSet<C05_PermissionDetail> C05_PermissionDetail { get; set; }
         public virtual DbSet<C06_UserPermisRelationship> C06_UserPermisRelationship { get; set; }
         public virtual DbSet<C02_Members> C02_Members { get; set; }
+        public virtual DbSet<C07_WorkType> C07_WorkType { get; set; }
+        public virtual DbSet<C08_Timesheet> C08_Timesheet { get; set; }
     }
 }

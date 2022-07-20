@@ -18,13 +18,18 @@ namespace DMCTimesheet.Models
         public C01_Projects()
         {
             this.C03_ProjectMembers = new HashSet<C03_ProjectMembers>();
+            this.C08_Timesheet = new HashSet<C08_Timesheet>();
         }
     
         public string ProjectID { get; set; }
         public string ProjectName { get; set; }
         public string ProjectOtherName { get; set; }
+        public Nullable<System.DateTime> StartDate { get; set; }
+        public Nullable<int> Year { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<C03_ProjectMembers> C03_ProjectMembers { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<C08_Timesheet> C08_Timesheet { get; set; }
     }
 }

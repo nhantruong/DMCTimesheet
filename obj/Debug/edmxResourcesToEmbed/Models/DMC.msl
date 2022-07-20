@@ -4,6 +4,8 @@
     <EntitySetMapping Name="C01_Projects">
       <EntityTypeMapping TypeName="DmcTimesheet.Models.C01_Projects">
         <MappingFragment StoreEntitySet="01_Projects">
+          <ScalarProperty Name="Year" ColumnName="Year" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
           <ScalarProperty Name="ProjectOtherName" ColumnName="ProjectOtherName" />
           <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
           <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
@@ -13,6 +15,8 @@
     <EntitySetMapping Name="C03_ProjectMembers">
       <EntityTypeMapping TypeName="DmcTimesheet.Models.C03_ProjectMembers">
         <MappingFragment StoreEntitySet="03_ProjectMembers">
+          <ScalarProperty Name="LegalManager" ColumnName="LegalManager" />
+          <ScalarProperty Name="BIMManager" ColumnName="BIMManager" />
           <ScalarProperty Name="Ngay" ColumnName="Ngay" />
           <ScalarProperty Name="ChuTriMEP" ColumnName="ChuTriMEP" />
           <ScalarProperty Name="ChuTriKetCau" ColumnName="ChuTriKetCau" />
@@ -66,6 +70,28 @@
           <ScalarProperty Name="Pass" ColumnName="Pass" />
           <ScalarProperty Name="UserName" ColumnName="UserName" />
           <ScalarProperty Name="UserID" ColumnName="UserID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="C07_WorkType">
+      <EntityTypeMapping TypeName="DmcTimesheet.Models.C07_WorkType">
+        <MappingFragment StoreEntitySet="07_WorkType">
+          <ScalarProperty Name="WorkGroup" ColumnName="WorkGroup" />
+          <ScalarProperty Name="WorkName" ColumnName="WorkName" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="C08_Timesheet">
+      <EntityTypeMapping TypeName="DmcTimesheet.Models.C08_Timesheet">
+        <MappingFragment StoreEntitySet="08_Timesheet">
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="OT" ColumnName="OT" />
+          <ScalarProperty Name="Hour" ColumnName="Hour" />
+          <ScalarProperty Name="WorkType" ColumnName="WorkType" />
+          <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+          <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -12,6 +12,11 @@ namespace DMCTimesheet.Controllers
         private readonly dmcDbcontext db = new dmcDbcontext();
         public ActionResult Index()
         {
+            ViewBag.Projectlist = db.C01_Projects.ToList();
+            ViewBag.Permission = db.C04_Permission.ToList();
+            ViewBag.Members = db.C02_Members.ToList();
+            ViewBag.UserPermRelate = db.C06_UserPermisRelationship.ToList();
+
 
             return View();
         }
@@ -26,7 +31,6 @@ namespace DMCTimesheet.Controllers
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
-
             return View();
         }
     }
