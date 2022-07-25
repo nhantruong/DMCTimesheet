@@ -12,31 +12,22 @@ namespace DMCTimesheet.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class C01_Projects
+    public partial class C12_SubContractor
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public C01_Projects()
+        public C12_SubContractor()
         {
-            this.C08_Timesheet = new HashSet<C08_Timesheet>();
             this.C09_ProjectSubCon = new HashSet<C09_ProjectSubCon>();
-            this.C03_ProjectMembers = new HashSet<C03_ProjectMembers>();
+            this.C15_SubConServices = new HashSet<C15_SubConServices>();
         }
     
-        public string ProjectID { get; set; }
-        public string ProjectName { get; set; }
-        public string ProjectOtherName { get; set; }
-        public Nullable<System.DateTime> StartDate { get; set; }
-        public Nullable<int> Year { get; set; }
-        public Nullable<int> ProjectTypeId { get; set; }
-        public Nullable<int> ProjectStatusId { get; set; }
-        public Nullable<int> LocationId { get; set; }
-        public Nullable<int> OwnerId { get; set; }
+        public int SubConId { get; set; }
+        public string ContractorName { get; set; }
+        public Nullable<int> ContractorLocation { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<C08_Timesheet> C08_Timesheet { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<C09_ProjectSubCon> C09_ProjectSubCon { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<C03_ProjectMembers> C03_ProjectMembers { get; set; }
+        public virtual ICollection<C15_SubConServices> C15_SubConServices { get; set; }
     }
 }

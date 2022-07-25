@@ -12,14 +12,9 @@ namespace DMCTimesheet.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class C05_PermissionDetail
+    public partial class C11_Location
     {
-        public int id_detail { get; set; }
-        public Nullable<int> id_per { get; set; }
-        public string Action_Name { get; set; }
-        public string Action_code { get; set; }
-        public string ActionGroup { get; set; }
-    
-        public virtual C04_Permission C04_Permission { get; set; }
+        public int LocationId { get; set; }
+        public string LocationName { get; set; }
     }
 }

@@ -2,6 +2,8 @@
     DMCTimesheet.Models.C02_Members loginUser = Session["UserLogin"] as DMCTimesheet.Models.C02_Members;
     string imgPath = "../Assets/Photos/MemberImage/no-image.jpg";
     imgPath = loginUser == null ? "~/Assets/Photos/MemberImage/no-image.jpg" : "~/Assets/Photos/MemberImage/" + loginUser.Image;
+    DMCTimesheet.Models.C04_Permission Userpermiss = Session["UserPermission"] as DMCTimesheet.Models.C04_Permission;
+    //var permissionGroup = Userpermiss.GroupBy(s => s.ActionGroup);
 }
 <!-- sidebar menu -->
 <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
@@ -13,7 +15,7 @@
                 <a><i class="fa fa-home"></i> Dashboard <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                     <li>@Html.ActionLink("Overview", "Index", "Home")</li>
-                    <li>@Html.ActionLink("BIM Projects", "BIMprojectsIndex", "Projects")</li>
+                    <li>@Html.ActionLink("Ongoing Projects", "BIMprojectsIndex", "Projects")</li>
                 </ul>
             </li>
             @* Quản lý dự án *@
@@ -21,10 +23,9 @@
                 <a><i class="fa fa-desktop"></i> Project Manage <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                     <li>@Html.ActionLink("Projects", "Index", "Projects")</li>
-                    <li>@Html.ActionLink("Create New Projects", "AdminCreate", "Projects", new { @class = "text-info" })</li>                    
+                    <li>@Html.ActionLink("Create New Projects", "AdminCreate", "Projects", new { @class = "text-info" })</li>
                 </ul>
             </li>
-            
             @* Quản lý Members *@
             <li>
                 <a><i class="fa fa-table"></i> Members <span class="fa fa-chevron-down"></span></a>
@@ -38,7 +39,37 @@
                 </ul>
                 <a class="text-info"></a>
             </li>
-            
+            @* Công việc *@
+            <li>
+                <a><i class="fa fa-table"></i> Worktype <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="#">Contacts</a></li>
+                    @if (loginUser != null)
+                    {
+                        <li>@Html.ActionLink("Profile", "Details", "Member", new { id = loginUser.UserID }, null)</li>
+                    }
+                    <li>@Html.ActionLink("Timesheet", "UserTimeSheetList", "TimeSheet")</li>
+                </ul>
+                <a class="text-info"></a>
+            </li>
+
+            @*Danh sách Permission*@
+            <li>
+                <a><i class="fa fa-pencil"></i> Current User Permissions <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    @*@foreach (var item in permissionGroup)
+                {
+                    <li><a href="#">@item.Key</a></li>
+
+                    foreach (var it in item.ToList())
+                    {
+                        <li>@it.Action_Name - @it.Action_code</li>
+                    }
+                }*@
+                </ul>
+                <a class="text-info"></a>
+            </li>
+
         </ul>
     </div>
 </div>

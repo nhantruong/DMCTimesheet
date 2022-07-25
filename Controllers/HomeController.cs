@@ -14,10 +14,14 @@ namespace DMCTimesheet.Controllers
     public class HomeController : Controller
     {
         private readonly dmcDbcontext db = new dmcDbcontext();
+        string conn = "server = 103.27.60.66; user id=dmcAdmin;password=DmcNewVision@2022#; persistsecurityinfo = True; database =cbimtech_dmc";
+
+
         public ActionResult Index()
         {
-            if (Session["Login"] != null)
+            if (Session["UserLogin"] != null)
             {
+                db.Database.Connection.ConnectionString = conn;
                 ViewBag.Projectlist = db.C01_Projects.ToList();
                 ViewBag.Permission = db.C04_Permission.ToList();
                 ViewBag.Members = db.C02_Members.ToList();
@@ -56,71 +60,81 @@ namespace DMCTimesheet.Controllers
                 if (string.IsNullOrEmpty(Username) || string.IsNullOrEmpty(Password))
                 {
                     ViewBag.LoginNote = "Nhập username hoặc Password";
-                    return View("Login");
+                    return RedirectToAction("Login");
                 }
                 else
                 {
                     //dmcDbcontext db2 = new dmcDbcontext();
                     //db2.Database.Connection.Open();
-                    string SercurityPass = MaHoaPass(Password);
-
-                    C02_Members logUser = db.C02_Members.FirstOrDefault(s => s.UserName == Username.Trim());
-                    if (logUser == null || logUser.Deactived == true)
+                    try
                     {
-                        ViewBag.LoginNote = "User không tồn tại, vui lòng liên hệ admin";
+                        string SercurityPass = MaHoaPass(Password);
+                        db.Database.Connection.ConnectionString = conn;
+                        C02_Members logUser = db.C02_Members.FirstOrDefault(s => s.UserName == Username.Trim());
+                        if (logUser == null || logUser.Deactived == true)
+                        {
+                            ViewBag.LoginNote = "User không tồn tại, vui lòng liên hệ admin";
+                            return View("Login");
+                        }
+                        if (logUser.Pass == SercurityPass)
+                        {
+                            C06_UserPermisRelationship userper = db.C06_UserPermisRelationship.FirstOrDefault(s => s.idUser == logUser.UserID);
+                            if (userper.actived == false)
+                            {
+                                ViewBag.LoginNote = "Không tìm thấy User này trên Hệ thống";
+                                return View();
+                            }
+                            switch (userper.idPer)
+                            {
+                                case 1: //WebAdmin
+                                    {
+                                        Session["UserLogin"] = logUser;
+                                        return RedirectToAction("WebAdmin", "Home");
+                                    }
+                                case 2: //WebUser
+                                    {
+                                        Session["UserLogin"] = logUser;
+                                        return RedirectToAction("UserLogin", "Home");
+                                    }
+                                case 3: //SysAdmin
+                                    {
+                                        Session["UserLogin"] = logUser;
+                                        return RedirectToAction("SysAdmin", "Home");
+                                    }
+                                case 4: //SysMod
+                                    {
+                                        Session["UserLogin"] = logUser;
+                                        return RedirectToAction("SysMod", "Home");
+                                    }
+                                default: return RedirectToAction("UserLogin");
+                            }
+
+                        }
+                        else
+                        {
+                            ViewBag.LoginNote = "Sai Password";
+                            ViewBag.UserName = Username;
+                            return RedirectToAction("Login");
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        ViewBag.LoginNote = $"Có lỗi khi kết nối server do {ex.Message}";
                         return View("Login");
                     }
-                    if (logUser.Pass == SercurityPass)
-                    {
-                        C06_UserPermisRelationship userper = db.C06_UserPermisRelationship.FirstOrDefault(s => s.idUser == logUser.UserID);
-                        if (userper.actived == false)
-                        {
-                            ViewBag.LoginNote = "Không tìm thấy User này trên Hệ thống";
-                            return View();
-                        }
-                        switch (userper.idPer)
-                        {
-                            case 1: //WebAdmin
-                                {
-                                    Session["UserLogin"] = logUser;
-                                    return RedirectToAction("WebAdmin", "Home");
-                                }
-                            case 2: //WebUser
-                                {
-                                    Session["UserLogin"] = logUser;
-                                    return RedirectToAction("UserLogin", "Home");
-                                }
-                            case 3: //SysAdmin
-                                {
-                                    Session["UserLogin"] = logUser;
-                                    return RedirectToAction("SysAdmin", "Home");
-                                }
-                            case 4: //SysMod
-                                {
-                                    Session["UserLogin"] = logUser;
-                                    return RedirectToAction("SysMod", "Home");
-                                }
-                            default: return RedirectToAction("UserLogin");
-                        }
 
-                    }
-                    else
-                    {
-                        ViewBag.LoginNote = "Sai Password";
-                        ViewBag.UserName = Username;
-                        return View("Login");
-                    }
                 }
             }
             catch (Exception ex)
             {
                 ViewBag.LoginNote = $"Có lỗi do {ex.Message}";
-                return View("Login");
+                return RedirectToAction("Login");
             }
         }
 
         private string MaHoaPass(string password)
-        {            
+        {
             MD5 mD5 = MD5.Create();
             byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(password);
             byte[] hash = mD5.ComputeHash(inputBytes);
@@ -147,6 +161,7 @@ namespace DMCTimesheet.Controllers
                 {
                     using (dmcDbcontext context = new dmcDbcontext())
                     {
+                        context.Database.Connection.ConnectionString = conn;
                         var mem = context.C02_Members.Where(s => s.UserName.ToLower() == UserName.ToLower()).FirstOrDefault();
                         if (mem != null && mem.Deactived == false)
                         {
@@ -159,10 +174,10 @@ namespace DMCTimesheet.Controllers
                     }
                     return RedirectToAction("Index");
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    ViewBag.LoginNote = "Có lỗi khi tạo Password mới";
-                    return View("Login");
+                    ViewBag.LoginNote = $"Có lỗi khi tạo Password mới do {ex.Message}";
+                    return RedirectToAction("Login");
                 }
             }
         }
@@ -189,7 +204,45 @@ namespace DMCTimesheet.Controllers
         }
         #endregion
 
+        #region SysAdmin
+        public ActionResult SysAdmin()
+        {
+            if (Session["UserLogin"] != null)
+            {
+                try
+                {
+                    db.Database.Connection.ConnectionString = conn;
+                    C02_Members logUser = Session["UserLogin"] as C02_Members;
+                    C06_UserPermisRelationship memberPermis = db.C06_UserPermisRelationship
+                        .Include("C05_PermissionDetail")
+                        .Include("C04_Permission")
+                        .FirstOrDefault(s => s.idUser == logUser.UserID);            
 
+                    ViewBag.Userpermis = memberPermis.C04_Permission.C05_PermissionDetail.ToList();
+
+                    //Session["UserPermission"] = UserPers;
+                    return View();
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.LoginNote = $"Có lỗi khi kết nối server do {ex.Message}";
+                    return RedirectToAction("Login");
+                }
+
+            }
+            else
+            {
+                return RedirectToAction("Login");
+            }
+        }
+
+
+
+
+
+
+
+        #endregion
 
 
 

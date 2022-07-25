@@ -72,7 +72,7 @@
                         <img src="@Url.Content("~/Assets/logoCTC_New.png")" alt="Alternate Text" class="profile_info img-fluid" />
                     </div>
                     <div class="navbar nav_title" style="border: 0;">
-                        <a class="site_title"><i class="fa fa-paw"></i> <span>BIM Manage</span></a>
+                        <a class="site_title"><i class="fa fa-paw"></i> <span>DMC Manage</span></a>
                         <div class="clearfix"></div>
                         <hr />
                     </div>
@@ -85,7 +85,7 @@
                             <span>Welcome,</span>
                             @if (loginUser != null)
                             {
-                                <h2 class="text-warning">@loginUser.UserName</h2>
+                                <h2 class="text-warning">@loginUser.ShortName</h2>
                             }
                             else
                             {

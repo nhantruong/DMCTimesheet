@@ -12,19 +12,14 @@ namespace DMCTimesheet.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class C03_ProjectMembers
+    public partial class C09_ProjectSubCon
     {
-        public int ID { get; set; }
-        public string ProjectID { get; set; }
-        public Nullable<int> ChuTriChinh { get; set; }
-        public Nullable<int> ChuTriKienTruc { get; set; }
-        public Nullable<int> ChuTriKetCau { get; set; }
-        public Nullable<int> ChuTriMEP { get; set; }
-        public Nullable<System.DateTime> Ngay { get; set; }
-        public Nullable<int> BIMManager { get; set; }
-        public Nullable<int> LegalManager { get; set; }
+        public int Id { get; set; }
+        public string ProjectId { get; set; }
+        public Nullable<int> SubconId { get; set; }
+        public Nullable<System.DateTime> Date { get; set; }
     
-        public virtual C02_Members C02_Members { get; set; }
+        public virtual C12_SubContractor C12_SubContractor { get; set; }
         public virtual C01_Projects C01_Projects { get; set; }
     }
 }

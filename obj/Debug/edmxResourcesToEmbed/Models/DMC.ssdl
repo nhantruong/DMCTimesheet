@@ -9,8 +9,10 @@
     <Property Name="ProjectOtherName" Type="nvarchar" MaxLength="250" />
     <Property Name="StartDate" Type="date" />
     <Property Name="Year" Type="int" />
-    <Property Name="ProjectType" Type="nvarchar" MaxLength="50" />
-    <Property Name="ProjectStatus" Type="nvarchar" MaxLength="50" />
+    <Property Name="ProjectTypeId" Type="int" />
+    <Property Name="ProjectStatusId" Type="int" />
+    <Property Name="LocationId" Type="int" />
+    <Property Name="OwnerId" Type="int" />
   </EntityType>
   <EntityType Name="02_Members">
     <Key>
@@ -58,6 +60,7 @@
     <Property Name="id_per" Type="int" />
     <Property Name="Action_Name" Type="nvarchar" MaxLength="100" />
     <Property Name="Action_code" Type="nvarchar" MaxLength="50" />
+    <Property Name="ActionGroup" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="06_UserPermisRelationship">
     <Key>
@@ -87,6 +90,63 @@
     <Property Name="Hour" Type="float" />
     <Property Name="OT" Type="float" />
     <Property Name="Description" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="09_ProjectSubCon">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProjectId" Type="nchar" MaxLength="10" />
+    <Property Name="SubconId" Type="int" />
+    <Property Name="Date" Type="date" />
+  </EntityType>
+  <EntityType Name="10_Owner">
+    <Key>
+      <PropertyRef Name="OnwerId" />
+    </Key>
+    <Property Name="OnwerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="OwnerName" Type="nvarchar" MaxLength="250" />
+    <Property Name="OnwerLocation" Type="int" />
+    <Property Name="OnwerDescription" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="11_Location">
+    <Key>
+      <PropertyRef Name="LocationId" />
+    </Key>
+    <Property Name="LocationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="LocationName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="12_SubContractor">
+    <Key>
+      <PropertyRef Name="SubConId" />
+    </Key>
+    <Property Name="SubConId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ContractorName" Type="nvarchar" MaxLength="250" />
+    <Property Name="ContractorLocation" Type="int" />
+  </EntityType>
+  <EntityType Name="13_ProjectType">
+    <Key>
+      <PropertyRef Name="TypeId" />
+    </Key>
+    <Property Name="TypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TypeName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Description" Type="nvarchar" MaxLength="250" />
+  </EntityType>
+  <EntityType Name="14_Services">
+    <Key>
+      <PropertyRef Name="ServiceId" />
+    </Key>
+    <Property Name="ServiceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ServiceName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="15_SubConServices">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="SubConId" Type="int" />
+    <Property Name="ServiceId" Type="int" />
+    <Property Name="Date" Type="date" />
   </EntityType>
   <Association Name="FK_05_PermissionDetail_04_Permission">
     <End Role="04_Permission" Type="Self.04_Permission" Multiplicity="0..1" />
@@ -160,6 +220,54 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Association Name="FK_09_ProjectSubCon_01_Projects">
+    <End Role="01_Projects" Type="Self.01_Projects" Multiplicity="0..1" />
+    <End Role="09_ProjectSubCon" Type="Self.09_ProjectSubCon" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="01_Projects">
+        <PropertyRef Name="ProjectID" />
+      </Principal>
+      <Dependent Role="09_ProjectSubCon">
+        <PropertyRef Name="ProjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_09_ProjectSubCon_12_SubContractor">
+    <End Role="12_SubContractor" Type="Self.12_SubContractor" Multiplicity="0..1" />
+    <End Role="09_ProjectSubCon" Type="Self.09_ProjectSubCon" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="12_SubContractor">
+        <PropertyRef Name="SubConId" />
+      </Principal>
+      <Dependent Role="09_ProjectSubCon">
+        <PropertyRef Name="SubconId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_15_SubConServices_12_SubContractor">
+    <End Role="12_SubContractor" Type="Self.12_SubContractor" Multiplicity="0..1" />
+    <End Role="15_SubConServices" Type="Self.15_SubConServices" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="12_SubContractor">
+        <PropertyRef Name="SubConId" />
+      </Principal>
+      <Dependent Role="15_SubConServices">
+        <PropertyRef Name="SubConId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_15_SubConServices_14_Services">
+    <End Role="14_Services" Type="Self.14_Services" Multiplicity="0..1" />
+    <End Role="15_SubConServices" Type="Self.15_SubConServices" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="14_Services">
+        <PropertyRef Name="ServiceId" />
+      </Principal>
+      <Dependent Role="15_SubConServices">
+        <PropertyRef Name="ServiceId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_3_ChonNhansu_01_Projects">
     <End Role="01_Projects" Type="Self.01_Projects" Multiplicity="0..1" />
     <End Role="03_ProjectMembers" Type="Self.03_ProjectMembers" Multiplicity="*" />
@@ -193,6 +301,13 @@
     <EntitySet Name="06_UserPermisRelationship" EntityType="Self.06_UserPermisRelationship" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="07_WorkType" EntityType="Self.07_WorkType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="08_Timesheet" EntityType="Self.08_Timesheet" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="09_ProjectSubCon" EntityType="Self.09_ProjectSubCon" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="10_Owner" EntityType="Self.10_Owner" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="11_Location" EntityType="Self.11_Location" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="12_SubContractor" EntityType="Self.12_SubContractor" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="13_ProjectType" EntityType="Self.13_ProjectType" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="14_Services" EntityType="Self.14_Services" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="15_SubConServices" EntityType="Self.15_SubConServices" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_05_PermissionDetail_04_Permission" Association="Self.FK_05_PermissionDetail_04_Permission">
       <End Role="04_Permission" EntitySet="04_Permission" />
       <End Role="05_PermissionDetail" EntitySet="05_PermissionDetail" />
@@ -216,6 +331,22 @@
     <AssociationSet Name="FK_08_Timesheet_07_WorkType" Association="Self.FK_08_Timesheet_07_WorkType">
       <End Role="07_WorkType" EntitySet="07_WorkType" />
       <End Role="08_Timesheet" EntitySet="08_Timesheet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_09_ProjectSubCon_01_Projects" Association="Self.FK_09_ProjectSubCon_01_Projects">
+      <End Role="01_Projects" EntitySet="01_Projects" />
+      <End Role="09_ProjectSubCon" EntitySet="09_ProjectSubCon" />
+    </AssociationSet>
+    <AssociationSet Name="FK_09_ProjectSubCon_12_SubContractor" Association="Self.FK_09_ProjectSubCon_12_SubContractor">
+      <End Role="12_SubContractor" EntitySet="12_SubContractor" />
+      <End Role="09_ProjectSubCon" EntitySet="09_ProjectSubCon" />
+    </AssociationSet>
+    <AssociationSet Name="FK_15_SubConServices_12_SubContractor" Association="Self.FK_15_SubConServices_12_SubContractor">
+      <End Role="12_SubContractor" EntitySet="12_SubContractor" />
+      <End Role="15_SubConServices" EntitySet="15_SubConServices" />
+    </AssociationSet>
+    <AssociationSet Name="FK_15_SubConServices_14_Services" Association="Self.FK_15_SubConServices_14_Services">
+      <End Role="14_Services" EntitySet="14_Services" />
+      <End Role="15_SubConServices" EntitySet="15_SubConServices" />
     </AssociationSet>
     <AssociationSet Name="FK_3_ChonNhansu_01_Projects" Association="Self.FK_3_ChonNhansu_01_Projects">
       <End Role="01_Projects" EntitySet="01_Projects" />
