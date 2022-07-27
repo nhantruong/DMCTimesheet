@@ -1,5 +1,7 @@
 ﻿@{
     DMCTimesheet.Models.C02_Members loginUser = Session["UserLogin"] as DMCTimesheet.Models.C02_Members;
+    DMCTimesheet.Models.C06_UserPermisRelationship Userpermiss = Session["UserPermission"] as DMCTimesheet.Models.C06_UserPermisRelationship;
+
     string imgPath = "../Assets/Photos/MemberImage/no-image.jpg";
     try
     {
@@ -26,7 +28,24 @@
             <li>
                 <a><i class="fa fa-home"></i> Dashboard <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
-                    <li>@Html.ActionLink("DMC Projects", "UserLogin", "Home")</li>
+                    @switch (Userpermiss.idPer)
+                    {
+                        case 1://WebAdmin
+                            {
+                                <li>@Html.ActionLink("DMC Projects", "WebAdminPage", "Home")</li>
+                                break;
+                            }
+                        case 2://User
+                            {
+                                <li>@Html.ActionLink("Dashboard", "UserPage", "Home")</li>
+                                break;
+                            }
+                        default:
+                            {
+                                <li>@Html.ActionLink("Dashboard", "UserPage", "Home")</li>
+                                break;
+                            }
+                    }
                 </ul>
             </li>
             <li>

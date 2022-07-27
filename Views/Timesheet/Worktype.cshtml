@@ -1,0 +1,36 @@
+﻿@model IEnumerable<DMCTimesheet.Models.C07_WorkType>
+@{
+    ViewBag.Title = "WorkType Page";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    //List<DMCTimesheet.Models.C07_WorkType> ProjectList = ViewBag.Projectlist as List<DMCTimesheet.Models.C01_Projects>;
+}
+<h1>DANH MỤC CÔNG VIỆC</h1>
+<table class="table table-condensed table-hover tab-pane">
+    <thead class="bg-dark text-white">
+        <tr>
+            <th>Mã công việc</th>
+            <th>Tên công việc</th>
+            <th>Nhóm công việc</th>
+        </tr>
+    </thead>
+
+    @if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+            <tr class="table table-info">
+                <td>@item.ID</td>
+                <td>@Html.ActionLink(item.WorkName.ToString(), "Edit", "Timesheet", new { id = item.ID }, new { @class = "text-info" })</td>
+                <td>@Html.ActionLink(item.WorkGroup.ToString(), "Edit", "Timesheet", new { id = item.ID }, new { @class = "text-info" })</td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <td>Chưa có danh mục công việc được tạo</td>
+            <td><a class="btn btn-xs">Tạo mới</a></td>
+        </tr>
+    }
+</table>

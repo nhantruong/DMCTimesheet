@@ -121,6 +121,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\TimesheetController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -1824,6 +1825,22 @@
     <Content Include="UserStyles\iCheck\skins\square\yellow.css" />
     <Content Include="UserStyles\iCheck\skins\square\yellow.png" />
     <Content Include="UserStyles\iCheck\skins\square\_all.css" />
+    <Content Include="UserStyles\images\american-express.png" />
+    <Content Include="UserStyles\images\cropper.jpg" />
+    <Content Include="UserStyles\images\favicon.ico" />
+    <Content Include="UserStyles\images\img.jpg" />
+    <Content Include="UserStyles\images\inbox.png" />
+    <Content Include="UserStyles\images\mastercard.png" />
+    <Content Include="UserStyles\images\media.jpg" />
+    <Content Include="UserStyles\images\paypal.png" />
+    <Content Include="UserStyles\images\picture.jpg" />
+    <Content Include="UserStyles\images\prod-1.jpg" />
+    <Content Include="UserStyles\images\prod-2.jpg" />
+    <Content Include="UserStyles\images\prod-3.jpg" />
+    <Content Include="UserStyles\images\prod-4.jpg" />
+    <Content Include="UserStyles\images\prod-5.jpg" />
+    <Content Include="UserStyles\images\user.png" />
+    <Content Include="UserStyles\images\visa.png" />
     <Content Include="UserStyles\jquery\AUTHORS.txt" />
     <Content Include="UserStyles\jquery\dist\jquery.js" />
     <Content Include="UserStyles\jquery\dist\jquery.min.js" />
@@ -2915,7 +2932,11 @@
     <Content Include="UserStyles\flot.curvedlines\bower.json" />
     <Content Include="UserStyles\flot.orderbars\.bower.json" />
     <Content Include="UserStyles\flot.orderbars\README.md" />
-    <Content Include="Views\Home\SysAdmin.cshtml" />
+    <Content Include="Views\Home\SysAdminPage.cshtml" />
+    <Content Include="Views\Home\SysModPage.cshtml" />
+    <Content Include="Views\Home\UserPage.cshtml" />
+    <Content Include="Views\Home\WebAdminPage.cshtml" />
+    <Content Include="Views\Timesheet\Worktype.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
