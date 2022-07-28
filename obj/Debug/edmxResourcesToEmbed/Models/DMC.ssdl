@@ -84,6 +84,7 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="RecordDate" Type="date" />
     <Property Name="MemberID" Type="int" />
     <Property Name="ProjectId" Type="nchar" MaxLength="10" />
     <Property Name="WorkType" Type="int" />

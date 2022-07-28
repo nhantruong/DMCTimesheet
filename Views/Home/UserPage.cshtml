@@ -1,8 +1,81 @@
 ﻿
 @{
-    ViewBag.Title = "UserPage";
+    ViewBag.Title = "Trang chủ";
     Layout = "~/Views/Shared/_UserLayout.cshtml";
+    List<DMCTimesheet.Models.C01_Projects> myProject = ViewBag.MyProjects as List<DMCTimesheet.Models.C01_Projects>;
+    List<DMCTimesheet.Models.C08_Timesheet> myWorks = ViewBag.MyWorks as List<DMCTimesheet.Models.C08_Timesheet>;
+
 }
 
 <h2>UserPage</h2>
 
+<h3>Danh mục dự án đang tham gia</h3>
+<div class="form-group-lg">
+    <table class="table table-bordered table-condensed">
+        <thead class="table-dark">
+            <tr class="row-fluid">
+                <td class="col-md-2">Mã dự án</td>
+                <td class="col-md-4">Tên dự án</td>
+                <td class="col-md-3">Tên khác dự án</td>
+                <td class="col-md-2">Ngày bắt đầu</td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (myProject.Count() > 0)
+            {
+                foreach (DMCTimesheet.Models.C01_Projects item in myProject)
+                {
+                    <tr>
+                        <td class="col-md-2">@item.ProjectID</td>
+                        <td class="col-md-4">@item.ProjectName</td>
+                        <td class="col-md-3">@item.ProjectOtherName</td>
+                        <td class="col-md-2">@item.StartDate</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr class="row">Bạn chưa có dự án</tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+
+<h3>Danh sách công việc đã triển khai</h3>
+<div class="form-group-lg">
+    <table class="table table-bordered table-info">
+        <thead class="table-dark">
+            <tr class="row-fluid">
+                <td class="col-md-1">Ngày</td>
+                <td class="col-md-2">Tên dự án</td>
+                <td class="col-md-1">Loại công việc</td>
+                <td class="col-md-1">Thời gian</td>
+                <td class="col-md-1">Tăng ca</td>
+                <td class="col-md-6">Chi tiết</td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (myProject.Count() > 0)
+            {
+                foreach (DMCTimesheet.Models.C08_Timesheet item in myWorks)
+                {
+                    <tr>
+                        <td class="col-md-1">Ngày</td>
+                        <td class="col-md-2">Tên dự án</td>
+                        <td class="col-md-1">Loại công việc</td>
+                        <td class="col-md-1">Thời gian</td>
+                        <td class="col-md-1">Tăng ca</td>
+                        <td class="col-md-6">Chi tiết</td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr class="row">Bạn chưa có dự án</tr>
+            }
+        </tbody>
+    </table>
+
+</div>

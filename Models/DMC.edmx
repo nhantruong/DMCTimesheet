@@ -89,6 +89,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RecordDate" Type="date" />
           <Property Name="MemberID" Type="int" />
           <Property Name="ProjectId" Type="nchar" MaxLength="10" />
           <Property Name="WorkType" Type="int" />
@@ -152,6 +153,15 @@
           <Property Name="SubConId" Type="int" />
           <Property Name="ServiceId" Type="int" />
           <Property Name="Date" Type="date" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'cbimtech_dmc.dbo.16_Status' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="16_Status">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StatusName" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <Association Name="FK_05_PermissionDetail_04_Permission">
           <End Role="04_Permission" Type="Self.04_Permission" Multiplicity="0..1" />
@@ -313,6 +323,12 @@
           <EntitySet Name="13_ProjectType" EntityType="Self.13_ProjectType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="14_Services" EntityType="Self.14_Services" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="15_SubConServices" EntityType="Self.15_SubConServices" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="16_Status" EntityType="Self.16_Status" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [16_Status].[Id] AS [Id], 
+    [16_Status].[StatusName] AS [StatusName]
+    FROM [dbo].[16_Status] AS [16_Status]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_05_PermissionDetail_04_Permission" Association="Self.FK_05_PermissionDetail_04_Permission">
             <End Role="04_Permission" EntitySet="04_Permission" />
             <End Role="05_PermissionDetail" EntitySet="05_PermissionDetail" />
@@ -430,6 +446,7 @@
             <End Role="C01_Projects" EntitySet="C01_Projects" />
             <End Role="C03_ProjectMembers" EntitySet="C03_ProjectMembers" />
           </AssociationSet>
+          <EntitySet Name="C16_Status" EntityType="DmcTimesheet.Models.C16_Status" />
         </EntityContainer>
         <EntityType Name="C03_ProjectMembers">
           <Key>
@@ -569,6 +586,7 @@
           <NavigationProperty Name="C02_Members" Relationship="DmcTimesheet.Models.FK_08_Timesheet_02_Members" FromRole="C08_Timesheet" ToRole="C02_Members" />
           <NavigationProperty Name="C07_WorkType" Relationship="DmcTimesheet.Models.FK_08_Timesheet_07_WorkType" FromRole="C08_Timesheet" ToRole="C07_WorkType" />
           <NavigationProperty Name="C01_Projects" Relationship="DmcTimesheet.Models.FK_08_Timesheet_01_Projects" FromRole="C08_Timesheet" ToRole="C01_Projects" />
+          <Property Name="RecordDate" Type="DateTime" Precision="0" />
         </EntityType>
         <Association Name="FK_08_Timesheet_02_Members">
           <End Type="DmcTimesheet.Models.C02_Members" Role="C02_Members" Multiplicity="0..1" />
@@ -747,6 +765,13 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="C16_Status">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -827,6 +852,7 @@
           <EntitySetMapping Name="C08_Timesheet">
             <EntityTypeMapping TypeName="DmcTimesheet.Models.C08_Timesheet">
               <MappingFragment StoreEntitySet="08_Timesheet">
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="OT" ColumnName="OT" />
                 <ScalarProperty Name="Hour" ColumnName="Hour" />
@@ -913,6 +939,14 @@
                 <ScalarProperty Name="ProjectOtherName" ColumnName="ProjectOtherName" />
                 <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
                 <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C16_Status">
+            <EntityTypeMapping TypeName="DmcTimesheet.Models.C16_Status">
+              <MappingFragment StoreEntitySet="16_Status">
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

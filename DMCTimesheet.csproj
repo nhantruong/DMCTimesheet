@@ -170,6 +170,9 @@
     <Compile Include="Models\C15_SubConServices.cs">
       <DependentUpon>DMC.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\C16_Status.cs">
+      <DependentUpon>DMC.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DMC.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -2937,6 +2940,8 @@
     <Content Include="Views\Home\UserPage.cshtml" />
     <Content Include="Views\Home\WebAdminPage.cshtml" />
     <Content Include="Views\Timesheet\Worktype.cshtml" />
+    <Content Include="Views\Timesheet\EditWorktype.cshtml" />
+    <Content Include="Views\Timesheet\DeleteWorktype.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -75,6 +75,7 @@
     <EntitySetMapping Name="C08_Timesheet">
       <EntityTypeMapping TypeName="DmcTimesheet.Models.C08_Timesheet">
         <MappingFragment StoreEntitySet="08_Timesheet">
+          <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
           <ScalarProperty Name="Description" ColumnName="Description" />
           <ScalarProperty Name="OT" ColumnName="OT" />
           <ScalarProperty Name="Hour" ColumnName="Hour" />

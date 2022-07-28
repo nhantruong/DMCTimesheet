@@ -41,5 +41,6 @@ namespace DMCTimesheet.Models
         public virtual DbSet<C14_Services> C14_Services { get; set; }
         public virtual DbSet<C15_SubConServices> C15_SubConServices { get; set; }
         public virtual DbSet<C01_Projects> C01_Projects { get; set; }
+        public virtual DbSet<C16_Status> C16_Status { get; set; }
     }
 }

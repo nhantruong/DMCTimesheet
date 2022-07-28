@@ -32,6 +32,7 @@
         <AssociationConnector Association="DmcTimesheet.Models.FK_08_Timesheet_01_Projects" />
         <AssociationConnector Association="DmcTimesheet.Models.FK_09_ProjectSubCon_01_Projects" />
         <AssociationConnector Association="DmcTimesheet.Models.FK_3_ChonNhansu_01_Projects" />
+        <EntityTypeShape EntityType="DmcTimesheet.Models.C16_Status" Width="1.5" PointX="5.625" PointY="6.375" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -21,6 +21,7 @@ namespace DMCTimesheet.Models
         public Nullable<double> Hour { get; set; }
         public Nullable<double> OT { get; set; }
         public string Description { get; set; }
+        public Nullable<System.DateTime> RecordDate { get; set; }
     
         public virtual C02_Members C02_Members { get; set; }
         public virtual C07_WorkType C07_WorkType { get; set; }

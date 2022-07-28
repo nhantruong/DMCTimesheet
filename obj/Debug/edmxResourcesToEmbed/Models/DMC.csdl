@@ -203,6 +203,7 @@
     <NavigationProperty Name="C02_Members" Relationship="DmcTimesheet.Models.FK_08_Timesheet_02_Members" FromRole="C08_Timesheet" ToRole="C02_Members" />
     <NavigationProperty Name="C07_WorkType" Relationship="DmcTimesheet.Models.FK_08_Timesheet_07_WorkType" FromRole="C08_Timesheet" ToRole="C07_WorkType" />
     <NavigationProperty Name="C01_Projects" Relationship="DmcTimesheet.Models.FK_08_Timesheet_01_Projects" FromRole="C08_Timesheet" ToRole="C01_Projects" />
+    <Property Name="RecordDate" Type="DateTime" Precision="0" />
   </EntityType>
   <Association Name="FK_08_Timesheet_02_Members">
     <End Type="DmcTimesheet.Models.C02_Members" Role="C02_Members" Multiplicity="0..1" />

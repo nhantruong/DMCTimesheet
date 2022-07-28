@@ -338,6 +338,18 @@ namespace DMCTimesheet.Controllers
                         ViewBag.LoginNote = "User không tồn tại, vui lòng liên hệ admin";
                         return View("Login");
                     }
+                    //Lấy danh sách dự án theo User ID
+                    List<string> projectsAssigned = db.C03_ProjectMembers.Where(s => s.ChuTriKienTruc == logUser.UserID || s.ChuTriChinh == logUser.UserID ||
+                    s.ChuTriKetCau == logUser.UserID || s.ChuTriMEP == logUser.UserID || s.LegalManager == logUser.UserID).Select(p => p.ProjectID).ToList();
+                    List<C01_Projects> myProjects = new List<C01_Projects>();
+                    foreach (var item in projectsAssigned)
+                    {
+                        myProjects.AddRange(db.C01_Projects.Where(s => s.ProjectID == item && s.ProjectStatusId == 1).ToList());
+                    }
+                    //Lấy danh sách timesheet đã làm
+                    List<C08_Timesheet> myWorks = db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).OrderByDescending(p=>p.RecordDate).ToList();
+                    ViewBag.MyProjects = myProjects;
+                    ViewBag.MyWorks = myWorks;
                     return View();
                 }
                 catch (Exception ex)
