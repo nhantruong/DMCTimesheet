@@ -102,9 +102,14 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="ProjectId" Type="nchar" MaxLength="10" />
-          <Property Name="SubconId" Type="int" />
           <Property Name="Date" Type="date" />
+          <Property Name="ProjectId" Type="nchar" MaxLength="10" />
+          <Property Name="ArcId" Type="int" />
+          <Property Name="InteriorId" Type="int" />
+          <Property Name="StructureId" Type="int" />
+          <Property Name="MEPid" Type="int" />
+          <Property Name="LandscapeId" Type="int" />
+          <Property Name="LegalId" Type="int" />
         </EntityType>
         <EntityType Name="10_Owner">
           <Key>
@@ -114,6 +119,10 @@
           <Property Name="OwnerName" Type="nvarchar" MaxLength="250" />
           <Property Name="OnwerLocation" Type="int" />
           <Property Name="OnwerDescription" Type="nvarchar(max)" />
+          <Property Name="ShortName" Type="nvarchar" MaxLength="50" />
+          <Property Name="KeyPerson" Type="nvarchar" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" />
+          <Property Name="Active" Type="bit" />
         </EntityType>
         <EntityType Name="11_Location">
           <Key>
@@ -128,6 +137,7 @@
           </Key>
           <Property Name="SubConId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ContractorName" Type="nvarchar" MaxLength="250" />
+          <Property Name="ShortName" Type="nvarchar" MaxLength="50" />
           <Property Name="ContractorLocation" Type="int" />
         </EntityType>
         <EntityType Name="13_ProjectType">
@@ -154,8 +164,6 @@
           <Property Name="ServiceId" Type="int" />
           <Property Name="Date" Type="date" />
         </EntityType>
-        <!--Errors Found During Generation:
-warning 6002: The table/view 'cbimtech_dmc.dbo.16_Status' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="16_Status">
           <Key>
             <PropertyRef Name="Id" />
@@ -255,7 +263,7 @@ warning 6002: The table/view 'cbimtech_dmc.dbo.16_Status' does not have a primar
               <PropertyRef Name="SubConId" />
             </Principal>
             <Dependent Role="09_ProjectSubCon">
-              <PropertyRef Name="SubconId" />
+              <PropertyRef Name="ArcId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -323,12 +331,7 @@ warning 6002: The table/view 'cbimtech_dmc.dbo.16_Status' does not have a primar
           <EntitySet Name="13_ProjectType" EntityType="Self.13_ProjectType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="14_Services" EntityType="Self.14_Services" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="15_SubConServices" EntityType="Self.15_SubConServices" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="16_Status" EntityType="Self.16_Status" store:Type="Tables" store:Schema="dbo">
-            <DefiningQuery>SELECT 
-    [16_Status].[Id] AS [Id], 
-    [16_Status].[StatusName] AS [StatusName]
-    FROM [dbo].[16_Status] AS [16_Status]</DefiningQuery>
-          </EntitySet>
+          <EntitySet Name="16_Status" EntityType="Self.16_Status" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_05_PermissionDetail_04_Permission" Association="Self.FK_05_PermissionDetail_04_Permission">
             <End Role="04_Permission" EntitySet="04_Permission" />
             <End Role="05_PermissionDetail" EntitySet="05_PermissionDetail" />
@@ -447,6 +450,10 @@ warning 6002: The table/view 'cbimtech_dmc.dbo.16_Status' does not have a primar
             <End Role="C03_ProjectMembers" EntitySet="C03_ProjectMembers" />
           </AssociationSet>
           <EntitySet Name="C16_Status" EntityType="DmcTimesheet.Models.C16_Status" />
+          <AssociationSet Name="FK_09_ProjectSubCon_12_SubContractor1" Association="DmcTimesheet.Models.FK_09_ProjectSubCon_12_SubContractor1">
+            <End Role="C12_SubContractor" EntitySet="C12_SubContractor" />
+            <End Role="C09_ProjectSubCon" EntitySet="C09_ProjectSubCon" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="C03_ProjectMembers">
           <Key>
@@ -622,6 +629,13 @@ warning 6002: The table/view 'cbimtech_dmc.dbo.16_Status' does not have a primar
           <Property Name="Date" Type="DateTime" Precision="0" />
           <NavigationProperty Name="C12_SubContractor" Relationship="DmcTimesheet.Models.FK_09_ProjectSubCon_12_SubContractor" FromRole="C09_ProjectSubCon" ToRole="C12_SubContractor" />
           <NavigationProperty Name="C01_Projects" Relationship="DmcTimesheet.Models.FK_09_ProjectSubCon_01_Projects" FromRole="C09_ProjectSubCon" ToRole="C01_Projects" />
+          <Property Name="ArcId" Type="Int32" />
+          <Property Name="InteriorId" Type="Int32" />
+          <Property Name="StructureId" Type="Int32" />
+          <Property Name="MEPid" Type="Int32" />
+          <Property Name="LandscapeId" Type="Int32" />
+          <Property Name="LegalId" Type="Int32" />
+          <NavigationProperty Name="C12_SubContractor1" Relationship="DmcTimesheet.Models.FK_09_ProjectSubCon_12_SubContractor1" FromRole="C09_ProjectSubCon" ToRole="C12_SubContractor" />
         </EntityType>
         <EntityType Name="C10_Owner">
           <Key>
@@ -631,6 +645,10 @@ warning 6002: The table/view 'cbimtech_dmc.dbo.16_Status' does not have a primar
           <Property Name="OwnerName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <Property Name="OnwerLocation" Type="Int32" />
           <Property Name="OnwerDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ShortName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="KeyPerson" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Active" Type="Boolean" />
         </EntityType>
         <EntityType Name="C11_Location">
           <Key>
@@ -648,6 +666,8 @@ warning 6002: The table/view 'cbimtech_dmc.dbo.16_Status' does not have a primar
           <Property Name="ContractorLocation" Type="Int32" />
           <NavigationProperty Name="C09_ProjectSubCon" Relationship="DmcTimesheet.Models.FK_09_ProjectSubCon_12_SubContractor" FromRole="C12_SubContractor" ToRole="C09_ProjectSubCon" />
           <NavigationProperty Name="C15_SubConServices" Relationship="DmcTimesheet.Models.FK_15_SubConServices_12_SubContractor" FromRole="C12_SubContractor" ToRole="C15_SubConServices" />
+          <Property Name="ShortName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="C09_ProjectSubCon1" Relationship="DmcTimesheet.Models.FK_09_ProjectSubCon_12_SubContractor1" FromRole="C12_SubContractor" ToRole="C09_ProjectSubCon" />
         </EntityType>
         <EntityType Name="C13_ProjectType">
           <Key>
@@ -772,6 +792,18 @@ warning 6002: The table/view 'cbimtech_dmc.dbo.16_Status' does not have a primar
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
+        <Association Name="FK_09_ProjectSubCon_12_SubContractor1">
+          <End Type="DmcTimesheet.Models.C12_SubContractor" Role="C12_SubContractor" Multiplicity="0..1" />
+          <End Type="DmcTimesheet.Models.C09_ProjectSubCon" Role="C09_ProjectSubCon" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C12_SubContractor">
+              <PropertyRef Name="SubConId" />
+            </Principal>
+            <Dependent Role="C09_ProjectSubCon">
+              <PropertyRef Name="ArcId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -866,8 +898,13 @@ warning 6002: The table/view 'cbimtech_dmc.dbo.16_Status' does not have a primar
           <EntitySetMapping Name="C09_ProjectSubCon">
             <EntityTypeMapping TypeName="DmcTimesheet.Models.C09_ProjectSubCon">
               <MappingFragment StoreEntitySet="09_ProjectSubCon">
+                <ScalarProperty Name="LegalId" ColumnName="LegalId" />
+                <ScalarProperty Name="LandscapeId" ColumnName="LandscapeId" />
+                <ScalarProperty Name="MEPid" ColumnName="MEPid" />
+                <ScalarProperty Name="StructureId" ColumnName="StructureId" />
+                <ScalarProperty Name="InteriorId" ColumnName="InteriorId" />
+                <ScalarProperty Name="ArcId" ColumnName="ArcId" />
                 <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="SubconId" ColumnName="SubconId" />
                 <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
@@ -876,6 +913,10 @@ warning 6002: The table/view 'cbimtech_dmc.dbo.16_Status' does not have a primar
           <EntitySetMapping Name="C10_Owner">
             <EntityTypeMapping TypeName="DmcTimesheet.Models.C10_Owner">
               <MappingFragment StoreEntitySet="10_Owner">
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="KeyPerson" ColumnName="KeyPerson" />
+                <ScalarProperty Name="ShortName" ColumnName="ShortName" />
                 <ScalarProperty Name="OnwerDescription" ColumnName="OnwerDescription" />
                 <ScalarProperty Name="OnwerLocation" ColumnName="OnwerLocation" />
                 <ScalarProperty Name="OwnerName" ColumnName="OwnerName" />
@@ -894,6 +935,7 @@ warning 6002: The table/view 'cbimtech_dmc.dbo.16_Status' does not have a primar
           <EntitySetMapping Name="C12_SubContractor">
             <EntityTypeMapping TypeName="DmcTimesheet.Models.C12_SubContractor">
               <MappingFragment StoreEntitySet="12_SubContractor">
+                <ScalarProperty Name="ShortName" ColumnName="ShortName" />
                 <ScalarProperty Name="ContractorLocation" ColumnName="ContractorLocation" />
                 <ScalarProperty Name="ContractorName" ColumnName="ContractorName" />
                 <ScalarProperty Name="SubConId" ColumnName="SubConId" />

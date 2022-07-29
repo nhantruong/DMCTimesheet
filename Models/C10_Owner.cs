@@ -18,5 +18,9 @@ namespace DMCTimesheet.Models
         public string OwnerName { get; set; }
         public Nullable<int> OnwerLocation { get; set; }
         public string OnwerDescription { get; set; }
+        public string ShortName { get; set; }
+        public string KeyPerson { get; set; }
+        public string Email { get; set; }
+        public Nullable<bool> Active { get; set; }
     }
 }

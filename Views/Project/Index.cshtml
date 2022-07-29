@@ -1,0 +1,189 @@
+﻿@model IEnumerable<DMCTimesheet.Models.C01_Projects>
+@{
+    DMCTimesheet.Models.C06_UserPermisRelationship Userpermiss = Session["UserPermission"] as DMCTimesheet.Models.C06_UserPermisRelationship;
+    switch (Userpermiss.idPer)
+    {
+        case 1://WebAdmin
+            {
+                ViewBag.Title = "Web Admin";
+                Layout = "~/Views/Shared/_AdminLayout.cshtml";
+                break;
+            }
+        case 2://User
+            {
+                ViewBag.Title = "User";
+                Layout = "~/Views/Shared/_UserLayout.cshtml";
+                break;
+            }
+        case 3: //System Admin
+            {
+                ViewBag.Title = "Sys admin";
+                Layout = "~/Views/Shared/_AdminLayout.cshtml";
+                break;
+            }
+        case 4: //System Mod
+            {
+                ViewBag.Title = "Mod";
+                Layout = "~/Views/Shared/_AdminLayout.cshtml";
+                break;
+            }
+        default:
+            {
+                ViewBag.Title = "Default User";
+                Layout = "~/Views/Shared/_UserLayout.cshtml";
+                break;
+            }
+    }
+    DMCTimesheet.Models.C02_Members loginUser = Session["UserLogin"] as DMCTimesheet.Models.C02_Members;
+
+    List<DMCTimesheet.Models.C01_Projects> myProject = ViewBag.Projects as List<DMCTimesheet.Models.C01_Projects>;
+    //List<DMCTimesheet.Models.C07_WorkType> WorkType = ViewBag.WorkType as List<DMCTimesheet.Models.C07_WorkType>;
+    List<DMCTimesheet.Models.C13_ProjectType> projectType = ViewBag.ProjectType as List<DMCTimesheet.Models.C13_ProjectType>;
+    List<DMCTimesheet.Models.C16_Status> status = ViewBag.Status as List<DMCTimesheet.Models.C16_Status>;
+    List<DMCTimesheet.Models.C11_Location> locations = ViewBag.Location as List<DMCTimesheet.Models.C11_Location>;
+    List<DMCTimesheet.Models.C10_Owner> owners = ViewBag.Owner as List<DMCTimesheet.Models.C10_Owner>;
+}
+
+
+@* Modal create new *@
+<div>
+    <button type="button" class="btn btn-info btn-small text-right" data-toggle="modal" data-target="#newProject">Thêm dự án</button>
+</div>
+@* Form nhập liệu *@
+<div id="newProject" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-m">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Thêm dự án mới</h3>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("CreateNewProject", "Project", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <form>
+                        @* WorkType *@
+                        <div class="form-group row text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Mã dự án</lable>
+                            <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" name="ProjectId" placeholder="" required="" value="" />
+                        </div>
+                        <div class="form-group row text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên dự án</lable>
+                            <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" name="ProjectName" placeholder="" required="" value="" />
+                        </div>
+                        <div class="form-group row text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên khác dự án</lable>
+                            <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" name="ProjectOtherName" placeholder="" required="" value="" />
+                        </div>
+                        <div class="form-group row">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Ngày bắt đầu</lable>
+                            <input type="date" class="form-control col-md-7 col-sm-9 col-xs-9" name="StartDate" placeholder="" required="" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                        </div>
+                        <div class="form-group row text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Năm</lable>
+                            <input type="number" class="form-control col-md-7 col-sm-9 col-xs-9" name="Year" value="@DateTime.Now.Year" />
+                        </div>
+
+                        @* ProjectTypeID *@
+                        <div class="form-group row  text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Loại hình dự án</lable>
+                            <select name="ProjectTypeId" class="form-control col-md-7 col-sm-9 col-xs-9">
+                                @foreach (var item in projectType)
+                                {
+                                    <option value=@item.TypeId>@item.TypeName</option>
+                                }
+                            </select>
+                        </div>
+                        @* StatusID *@
+                        <div class="form-group row  text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tình trạng</lable>
+                            <select name="ProjectStatusId" class="form-control col-md-7 col-sm-9 col-xs-9">
+                                @foreach (var item in status)
+                                {
+                                    <option value=@item.Id>@item.StatusName</option>
+                                }
+                            </select>
+                        </div>
+                        @* LocationID *@
+                        <div class="form-group row  text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Vị trí</lable>
+                            <select name="LocationId" class="form-control col-md-7 col-sm-9 col-xs-9">
+                                @foreach (var item in locations)
+                                {
+                                    <option value=@item.LocationId>@item.LocationName</option>
+                                }
+                            </select>
+                        </div>
+                        @* OwnerID *@
+                        <div class="form-group row  text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chủ đầu tư</lable>
+                            <select name="OwnerId" class="form-control col-md-7 col-sm-9 col-xs-9">
+                                @foreach (var item in owners)
+                                {
+                                    <option value=@item.OnwerId>@item.OwnerName</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
+                            <input type="submit" value="Save" class="btn btn-success col-md-7" />
+                        </div>
+                    </form>
+                }
+            </div>
+            <div class="modal-footer">
+                <div>
+                    <p class="text-danger">@ViewBag.Error</p>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+@* End Form nhập liệu *@
+
+<div class="clearfix"></div>
+<h3>DANH SÁCH DỰ ÁN </h3>
+
+<div class="form-group">
+    <table class="table table-hover table-condensed">
+        <thead class="text-dark">
+            <tr class="row">
+                <td class="col-md-1">Mã dự án</td>
+                <td class="col-md-2">Tên dự án</td>
+                <td class="col-md-2">Chủ đầu tư</td>
+                <td class="col-md-1">Ngày bắt đầu</td>
+                <td class="col-md-1">Năm</td>
+                <td class="col-md-2">Loại hình</td>
+                <td class="col-md-2">Địa điểm</td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model == null || Model.Count() == 0)
+            {
+                <tr class="row">
+                    <td>Chưa có dự án được tạo</td>
+                </tr>
+            }
+            else
+            {
+                @foreach (var item in Model)
+                {
+                    <tr class="row text-dark">
+                        <td class="col-md-1">@item.ProjectID</td>
+                        @*<td class="col-md-2">@item.ProjectName</td>*@
+                        <td class="col-md-2"><b>@Html.ActionLink(item.ProjectName, "Detail", "Project", new { id = item.ProjectID.Trim() }, new { @class = "text-primary" })</b></td>
+                        <td class="col-md-2"><b>@owners.FirstOrDefault(s => s.OnwerId == item.OwnerId).ShortName</b></td>
+                        <td class="col-md-1">@DateTime.Parse(item.StartDate.ToString()).ToShortDateString()</td>
+                        <td class="col-md-1">@item.Year</td>
+                        <td class="col-md-2">@projectType.FirstOrDefault(s => s.TypeId == item.ProjectTypeId).TypeName</td>
+                        <td class="col-md-2">@locations.FirstOrDefault(s => s.LocationId == item.LocationId).LocationName</td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>
+

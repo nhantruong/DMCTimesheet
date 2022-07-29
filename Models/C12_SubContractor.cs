@@ -19,15 +19,19 @@ namespace DMCTimesheet.Models
         {
             this.C09_ProjectSubCon = new HashSet<C09_ProjectSubCon>();
             this.C15_SubConServices = new HashSet<C15_SubConServices>();
+            this.C09_ProjectSubCon1 = new HashSet<C09_ProjectSubCon>();
         }
     
         public int SubConId { get; set; }
         public string ContractorName { get; set; }
         public Nullable<int> ContractorLocation { get; set; }
+        public string ShortName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<C09_ProjectSubCon> C09_ProjectSubCon { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<C15_SubConServices> C15_SubConServices { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<C09_ProjectSubCon> C09_ProjectSubCon1 { get; set; }
     }
 }

@@ -4,12 +4,11 @@
     Layout = "~/Views/Shared/_UserLayout.cshtml";
     List<DMCTimesheet.Models.C01_Projects> myProject = ViewBag.MyProjects as List<DMCTimesheet.Models.C01_Projects>;
     List<DMCTimesheet.Models.C08_Timesheet> myWorks = ViewBag.MyWorks as List<DMCTimesheet.Models.C08_Timesheet>;
-
+    List<DMCTimesheet.Models.C07_WorkType> Worktype = ViewBag.WorkType as List<DMCTimesheet.Models.C07_WorkType>;
+    
 }
-
-<h2>UserPage</h2>
-
-<h3>Danh mục dự án đang tham gia</h3>
+<div class="clearfix"></div>
+<h2 class="text-primary">Danh mục dự án đang tham gia</h2>
 <div class="form-group-lg">
     <table class="table table-bordered table-condensed">
         <thead class="table-dark">
@@ -20,7 +19,7 @@
                 <td class="col-md-2">Ngày bắt đầu</td>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="text-dark">
             @if (myProject.Count() > 0)
             {
                 foreach (DMCTimesheet.Models.C01_Projects item in myProject)
@@ -35,45 +34,54 @@
             }
             else
             {
-                <tr class="row">Bạn chưa có dự án</tr>
+                <tr>
+                    <td class="row">Bạn chưa có dự án</td>
+                </tr>
             }
         </tbody>
     </table>
 
 </div>
 
+<div class="clearfix"></div>
 
-<h3>Danh sách công việc đã triển khai</h3>
+<h2 class="text-danger">Danh sách công việc đã triển khai</h2>
 <div class="form-group-lg">
     <table class="table table-bordered table-info">
-        <thead class="table-dark">
+        <thead class="table-dark text-white">
             <tr class="row-fluid">
                 <td class="col-md-1">Ngày</td>
                 <td class="col-md-2">Tên dự án</td>
                 <td class="col-md-1">Loại công việc</td>
                 <td class="col-md-1">Thời gian</td>
                 <td class="col-md-1">Tăng ca</td>
-                <td class="col-md-6">Chi tiết</td>
+                <td class="col-md-5">Chi tiết</td>
+                <td class="col-md-1">#</td>
             </tr>
         </thead>
-        <tbody>
+        <tbody class="text-dark">
             @if (myProject.Count() > 0)
             {
                 foreach (DMCTimesheet.Models.C08_Timesheet item in myWorks)
                 {
                     <tr>
-                        <td class="col-md-1">Ngày</td>
-                        <td class="col-md-2">Tên dự án</td>
-                        <td class="col-md-1">Loại công việc</td>
-                        <td class="col-md-1">Thời gian</td>
-                        <td class="col-md-1">Tăng ca</td>
-                        <td class="col-md-6">Chi tiết</td>
+                        <td class="col-md-1">@item.RecordDate.HasValue??"Chưa cập nhật"</td>
+                        <td class="col-md-2">@item.ProjectId - @myProject.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectName</td>
+                        <td class="col-md-1">@Worktype.FirstOrDefault(s=>s.ID == item.WorkType).WorkName</td>
+                        <td class="col-md-1">@item.Hour</td>
+                        <td class="col-md-1">@item.OT</td>
+                        <td class="col-md-5">@item.Description</td>
+                        <td class="col-md-1">
+                            @Html.ActionLink(" ", "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "fa fa-edit btn-success" })
+                            @Html.ActionLink(" ", "UserDelete", "Timesheet", new { id = item.Id }, new { @class = " fa fa-remove btn-danger" })
+                        </td>
                     </tr>
                 }
             }
             else
             {
-                <tr class="row">Bạn chưa có dự án</tr>
+                <tr>
+                    <td class="row">Bạn chưa record công việc</td></tr>
             }
         </tbody>
     </table>

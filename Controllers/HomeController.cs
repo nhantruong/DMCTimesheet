@@ -149,8 +149,8 @@ namespace DMCTimesheet.Controllers
         /// <summary>
         /// Mã hóa password
         /// </summary>
-        /// <param name="password">Chuỗi Pass đã mã hóa</param>
-        /// <returns></returns>
+        /// <param name="password">Chuỗi cần mã hóa</param>
+        /// <returns>Chuỗi Pass đã mã hóa</returns>
         private string MaHoaPass(string password)
         {
             MD5 mD5 = MD5.Create();
@@ -182,15 +182,15 @@ namespace DMCTimesheet.Controllers
                         context.Database.Connection.ConnectionString = conn;
                         var mem = context.C02_Members.Where(s => s.UserName.ToLower() == UserName.ToLower()).FirstOrDefault();
                         if (mem != null && mem.Deactived == false)
-                        {
-                            mem.Pass = ConfirmPass;
+                        {                            
+                            mem.Pass = MaHoaPass(ConfirmPass);
                             context.Entry(mem).State = System.Data.Entity.EntityState.Modified;
                             context.SaveChanges();
                             ViewBag.LoginNote = "Cập nhật password thành công!";
                             Session["UserLogin"] = mem;
                         }
                     }
-                    return RedirectToAction("Index");
+                    return RedirectToAction("Login");
                 }
                 catch (Exception ex)
                 {
@@ -338,7 +338,6 @@ namespace DMCTimesheet.Controllers
                         ViewBag.LoginNote = "User không tồn tại, vui lòng liên hệ admin";
                         return View("Login");
                     }
-                    //Lấy danh sách dự án theo User ID
                     List<string> projectsAssigned = db.C03_ProjectMembers.Where(s => s.ChuTriKienTruc == logUser.UserID || s.ChuTriChinh == logUser.UserID ||
                     s.ChuTriKetCau == logUser.UserID || s.ChuTriMEP == logUser.UserID || s.LegalManager == logUser.UserID).Select(p => p.ProjectID).ToList();
                     List<C01_Projects> myProjects = new List<C01_Projects>();
@@ -346,10 +345,15 @@ namespace DMCTimesheet.Controllers
                     {
                         myProjects.AddRange(db.C01_Projects.Where(s => s.ProjectID == item && s.ProjectStatusId == 1).ToList());
                     }
-                    //Lấy danh sách timesheet đã làm
-                    List<C08_Timesheet> myWorks = db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).OrderByDescending(p=>p.RecordDate).ToList();
+
+                    //Lấy danh sách dự án theo User ID - đang chạy
+                    //ViewBag.MyProjects = CollectModelData.GetProjectsByUserId(logUser.UserID).Where(s=>s.ProjectStatusId == 1);
                     ViewBag.MyProjects = myProjects;
-                    ViewBag.MyWorks = myWorks;
+
+                    //Lấy danh sách timesheet đã làm
+                    ViewBag.MyWorks = db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).OrderByDescending(p => p.RecordDate).ToList().Take(10); ;
+                    
+                    ViewBag.WorkType = db.C07_WorkType.ToList();
                     return View();
                 }
                 catch (Exception ex)

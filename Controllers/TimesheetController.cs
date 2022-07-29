@@ -12,80 +12,148 @@ namespace DMCTimesheet.Controllers
     {
 
         private readonly dmcDbcontext db = new dmcDbcontext();
-        string conn = "server = 103.27.60.66; user id=dmcAdmin;password=DmcNewVision@2022#; persistsecurityinfo = True; database =cbimtech_dmc";
+        //string conn = "server = 103.27.60.66; user id=dmcAdmin;password=DmcNewVision@2022#; persistsecurityinfo = True; database =cbimtech_dmc";
 
-        #region AutoCode
-
-        // GET: Timesheet
-        public ActionResult Index()
+        #region General
+        public ActionResult ProjectTimesheet()
         {
-            return View();
+
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            C02_Members logUser = Session["UserLogin"] as C02_Members;
+            ViewBag.projects = CollectModelData.GetProjectsByUserId(logUser.UserID);
+            List<C08_Timesheet> mytimesheet = db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).ToList();
+            return View(mytimesheet);
         }
 
-        // GET: Timesheet/Details/5
-        public ActionResult Details(int id)
+
+        public ActionResult MemberTimesheet()
         {
-            return View();
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            C02_Members logUser = Session["UserLogin"] as C02_Members;
+
+            ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
+            ViewBag.Projects = db.C01_Projects.ToList();
+            ViewBag.WorkGroup = db.C07_WorkType.ToList();
+            List<C08_Timesheet> mytimesheet = db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).ToList();
+            return View(mytimesheet);
         }
 
-        // GET: Timesheet/Create
-        //public ActionResult Create()
-        //{
-        //    return View();
-        //}
-
-
-
-        // GET: Timesheet/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: Timesheet/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateTimesheet(string ProjectID, string RecordDate, int WorkID, string Hour, string OvertimeHour, string Description)
         {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            C02_Members logUser = Session["UserLogin"] as C02_Members;
+            DateTime inputDate = DateTime.Parse(RecordDate);
+            DateTime recordDate = DateTime.Compare(inputDate, DateTime.Now) > 0 ? DateTime.Now : inputDate;
+
+            //           var WorkName = db.C07_WorkType.Where(s => s.ID == WorkID).FirstOrDefault().WorkName;
+
+            int Hours = int.Parse(Hour);
+            int _OT = int.Parse(OvertimeHour);
+
+            C08_Timesheet enity = new C08_Timesheet
+            {
+                MemberID = logUser.UserID,
+                RecordDate = recordDate,
+                ProjectId = ProjectID,
+                WorkType = WorkID,
+                Description = Description,
+                Hour = Hours,
+                OT = _OT
+            };
             try
             {
-                // TODO: Add update logic here
-
-                return RedirectToAction("Index");
+                using (dmcDbcontext dbcontext = new dmcDbcontext())
+                {
+                    dbcontext.C08_Timesheet.Add(enity);
+                    dbcontext.SaveChanges();
+                }
+                return RedirectToAction("MemberTimesheet");
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                ViewBag.WorkAlert = "Lưu công việc thất bại do lỗi " + ex.Message;
+                return View("MemberTimesheet");
             }
+
         }
 
-        // GET: Timesheet/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
 
-        // POST: Timesheet/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
-        }
         #endregion
 
-        #region Project Timesheet
+
+
+        #region Admin Timesheet
 
         #endregion
+
+
+
+
+
 
         #region User Timesheet
+
+        public ActionResult UserEdit(int? _Id)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            C02_Members logUser = Session["UserLogin"] as C02_Members;
+            try
+            {
+                C08_Timesheet item = db.C08_Timesheet.FirstOrDefault(s => s.Id == _Id);
+                if (item == null)
+                {
+                    ViewBag.WorkAlert = "Không tìm thấy thông tin Timesheet này";
+                    return View();
+                }
+                List<C01_Projects> myProject = CollectModelData.GetProjectsByUserId(logUser.UserID);
+                if (myProject == null || myProject.Count()==0)
+                {
+                    ViewBag.WorkAlert = "Bạn chưa được chỉ định dự án nào";
+                    return View("MemberTimesheet");
+                }                
+                ViewBag.MyProjects = myProject;                
+                ViewBag.WorkType = db.C07_WorkType.ToList();
+                return View(item);
+            }
+            catch (Exception ex)
+            {
+                ViewBag.WorkAlert = $"Lưu Thất bại do {ex.Message}";
+                return View("MemberTimesheet");
+            }
+
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UserEdit(int id, DateTime date, int workId, int hour, int ot, string des)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    C08_Timesheet item = db.C08_Timesheet.FirstOrDefault(s => s.Id == id);
+                    item.Description = des;
+                    item.OT = ot;
+                    item.Hour = hour;
+                    item.WorkType = workId;
+                    item.RecordDate = date;
+
+                    db.C08_Timesheet.Add(item);
+                    db.SaveChanges();
+                }
+                return RedirectToAction("UserPage", "Home");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.WorkAlert = $"Có lỗi khi cập nhật timesheet số {id} do {ex.Message}";
+                return View();
+            }
+
+        }
+
 
         #endregion
 
@@ -97,6 +165,7 @@ namespace DMCTimesheet.Controllers
         public ActionResult Worktype()
         {
             //db.Database.Connection.ConnectionString = conn;
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
             List<C07_WorkType> worktypeList = db.C07_WorkType.ToList();
             ViewBag.Worklist = worktypeList;
             return View(worktypeList);
@@ -117,9 +186,11 @@ namespace DMCTimesheet.Controllers
                 if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
                 if (ModelState.IsValid)
                 {
-                    C07_WorkType item = new C07_WorkType();
-                    item.WorkName = WorkName;
-                    item.WorkGroup = WorkGroup;
+                    C07_WorkType item = new C07_WorkType
+                    {
+                        WorkName = WorkName,
+                        WorkGroup = WorkGroup
+                    };
                     db.C07_WorkType.Add(item);
                     db.SaveChanges();
                 }
@@ -221,7 +292,6 @@ namespace DMCTimesheet.Controllers
         }
 
 
-
         public JsonResult GetWorktypebyID(int WorktypeId)
         {
             try
@@ -229,7 +299,7 @@ namespace DMCTimesheet.Controllers
                 var worktype = db.C07_WorkType.Where(a => a.ID == WorktypeId).FirstOrDefault();
                 return Json(worktype, JsonRequestBehavior.AllowGet);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return Json(null, JsonRequestBehavior.AllowGet);
             }

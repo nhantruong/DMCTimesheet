@@ -89,8 +89,13 @@
     <EntitySetMapping Name="C09_ProjectSubCon">
       <EntityTypeMapping TypeName="DmcTimesheet.Models.C09_ProjectSubCon">
         <MappingFragment StoreEntitySet="09_ProjectSubCon">
+          <ScalarProperty Name="LegalId" ColumnName="LegalId" />
+          <ScalarProperty Name="LandscapeId" ColumnName="LandscapeId" />
+          <ScalarProperty Name="MEPid" ColumnName="MEPid" />
+          <ScalarProperty Name="StructureId" ColumnName="StructureId" />
+          <ScalarProperty Name="InteriorId" ColumnName="InteriorId" />
+          <ScalarProperty Name="ArcId" ColumnName="ArcId" />
           <ScalarProperty Name="Date" ColumnName="Date" />
-          <ScalarProperty Name="SubconId" ColumnName="SubconId" />
           <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
@@ -99,6 +104,10 @@
     <EntitySetMapping Name="C10_Owner">
       <EntityTypeMapping TypeName="DmcTimesheet.Models.C10_Owner">
         <MappingFragment StoreEntitySet="10_Owner">
+          <ScalarProperty Name="Active" ColumnName="Active" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="KeyPerson" ColumnName="KeyPerson" />
+          <ScalarProperty Name="ShortName" ColumnName="ShortName" />
           <ScalarProperty Name="OnwerDescription" ColumnName="OnwerDescription" />
           <ScalarProperty Name="OnwerLocation" ColumnName="OnwerLocation" />
           <ScalarProperty Name="OwnerName" ColumnName="OwnerName" />
@@ -117,6 +126,7 @@
     <EntitySetMapping Name="C12_SubContractor">
       <EntityTypeMapping TypeName="DmcTimesheet.Models.C12_SubContractor">
         <MappingFragment StoreEntitySet="12_SubContractor">
+          <ScalarProperty Name="ShortName" ColumnName="ShortName" />
           <ScalarProperty Name="ContractorLocation" ColumnName="ContractorLocation" />
           <ScalarProperty Name="ContractorName" ColumnName="ContractorName" />
           <ScalarProperty Name="SubConId" ColumnName="SubConId" />
@@ -162,6 +172,14 @@
           <ScalarProperty Name="ProjectOtherName" ColumnName="ProjectOtherName" />
           <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
           <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="C16_Status">
+      <EntityTypeMapping TypeName="DmcTimesheet.Models.C16_Status">
+        <MappingFragment StoreEntitySet="16_Status">
+          <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

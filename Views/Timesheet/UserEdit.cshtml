@@ -1,0 +1,91 @@
+﻿@model DMCTimesheet.Models.C08_Timesheet
+@{
+    ViewBag.Title = "Trang edit Timesheet";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+    List<DMCTimesheet.Models.C01_Projects> myProject = ViewBag.MyProjects as List<DMCTimesheet.Models.C01_Projects>;
+    List<DMCTimesheet.Models.C07_WorkType> WorkType = ViewBag.WorkType as List<DMCTimesheet.Models.C07_WorkType>;
+    string projectName = myProject.FirstOrDefault(s => s.ProjectID == Model.ProjectId).ProjectName;
+}
+
+<h2>@ViewBag.Title</h2>
+<div class="nav navbar-fixed-top row">
+    @Html.ActionLink(" Home", "UserPage", "Home", null, new { @class = "fa fa-home btn btn-round btn-dark" })
+    @*@Html.ActionLink(" Interner List", "GetInternList", "ThucTapSinh", null, new { @class = "fa fa-plus-square-o btn btn-round btn-success" })*@
+</div>
+
+
+@using (Html.BeginForm("UserEdit","Home",FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <h4>Cập nhật công việc  - số công tác <b class="text-danger">#@Model.Id</b></h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.Id)
+
+        @Html.HiddenFor(model => model.MemberID)
+
+        @Html.HiddenFor(model => model.ProjectId)
+
+        @* Project Name *@
+        <div class="form-group row">
+            <lable class="control-label col-md-2 text-left">Tên dự án</lable>
+            <input type="text" class="form-control col-md-4 text-danger" readonly name="ProjectName" placeholder="" required="" value="@projectName" />
+        </div>
+        @* Date *@
+        <div class="form-group row">
+            <lable class="control-label col-md-2 text-left">Ngày báo cáo</lable>
+            <input type="date" class="form-control col-md-4" name="RecordDate" placeholder="" required="" value="@Model.RecordDate??@DateTime.Today.ToString("yyyy-MM-dd")" />
+        </div>
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.WorkType, "Loại hình Công việc", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="form-control col-md-4">
+                @*@Html.EditorFor(model => model.WorkType, new { htmlAttributes = new { @class = "form-control" } })*@
+                <select name="WorkType" class="label col-md-12">
+                    @foreach (var item in WorkType)
+                    {
+                        <option value="@item.ID">@item.WorkName</option>
+                    }
+                </select>
+                @Html.ValidationMessageFor(model => model.WorkType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="control-label col-md-2">Thời gian</label>
+            <div class="col-md-4 control-group">
+                <div class="form-group col-sm-6">
+                    @Html.LabelFor(model => model.Hour, htmlAttributes: new { @class = "control-label col-md-1 text-left" })
+                    <div class="form-group">
+                        @Html.EditorFor(model => model.Hour, "Số giờ làm", new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Hour, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group col-sm-6">
+                    @Html.LabelFor(model => model.OT, "Tăng ca (nếu có)", htmlAttributes: new { @class = "control-label text-right" })
+                    <div class="form-group">
+                        @Html.EditorFor(model => model.OT, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.OT, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.Description, "Chú thích công việc", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="form-group col-md-4">
+                <textarea class="form-control col-md-12" rows="3" name="Description" placeholder="Ghi ngắn gọn nội dung công việc" required>@Model.Description</textarea>
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-md-offset-2 col-md-2">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+            <div class="text-danger">@ViewBag.WorkAlert</div>
+        </div>
+    </div>
+}
+

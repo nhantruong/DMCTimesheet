@@ -97,9 +97,14 @@
       <PropertyRef Name="Id" />
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="ProjectId" Type="nchar" MaxLength="10" />
-    <Property Name="SubconId" Type="int" />
     <Property Name="Date" Type="date" />
+    <Property Name="ProjectId" Type="nchar" MaxLength="10" />
+    <Property Name="ArcId" Type="int" />
+    <Property Name="InteriorId" Type="int" />
+    <Property Name="StructureId" Type="int" />
+    <Property Name="MEPid" Type="int" />
+    <Property Name="LandscapeId" Type="int" />
+    <Property Name="LegalId" Type="int" />
   </EntityType>
   <EntityType Name="10_Owner">
     <Key>
@@ -109,6 +114,10 @@
     <Property Name="OwnerName" Type="nvarchar" MaxLength="250" />
     <Property Name="OnwerLocation" Type="int" />
     <Property Name="OnwerDescription" Type="nvarchar(max)" />
+    <Property Name="ShortName" Type="nvarchar" MaxLength="50" />
+    <Property Name="KeyPerson" Type="nvarchar" MaxLength="50" />
+    <Property Name="Email" Type="nvarchar" MaxLength="100" />
+    <Property Name="Active" Type="bit" />
   </EntityType>
   <EntityType Name="11_Location">
     <Key>
@@ -123,6 +132,7 @@
     </Key>
     <Property Name="SubConId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ContractorName" Type="nvarchar" MaxLength="250" />
+    <Property Name="ShortName" Type="nvarchar" MaxLength="50" />
     <Property Name="ContractorLocation" Type="int" />
   </EntityType>
   <EntityType Name="13_ProjectType">
@@ -148,6 +158,13 @@
     <Property Name="SubConId" Type="int" />
     <Property Name="ServiceId" Type="int" />
     <Property Name="Date" Type="date" />
+  </EntityType>
+  <EntityType Name="16_Status">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StatusName" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <Association Name="FK_05_PermissionDetail_04_Permission">
     <End Role="04_Permission" Type="Self.04_Permission" Multiplicity="0..1" />
@@ -241,7 +258,7 @@
         <PropertyRef Name="SubConId" />
       </Principal>
       <Dependent Role="09_ProjectSubCon">
-        <PropertyRef Name="SubconId" />
+        <PropertyRef Name="ArcId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -309,6 +326,7 @@
     <EntitySet Name="13_ProjectType" EntityType="Self.13_ProjectType" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="14_Services" EntityType="Self.14_Services" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="15_SubConServices" EntityType="Self.15_SubConServices" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="16_Status" EntityType="Self.16_Status" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_05_PermissionDetail_04_Permission" Association="Self.FK_05_PermissionDetail_04_Permission">
       <End Role="04_Permission" EntitySet="04_Permission" />
       <End Role="05_PermissionDetail" EntitySet="05_PermissionDetail" />
