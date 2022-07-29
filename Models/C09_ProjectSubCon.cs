@@ -15,9 +15,8 @@ namespace DMCTimesheet.Models
     public partial class C09_ProjectSubCon
     {
         public int Id { get; set; }
-        public string ProjectId { get; set; }
-        public Nullable<int> SubconId { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
+        public string ProjectId { get; set; }
         public Nullable<int> ArcId { get; set; }
         public Nullable<int> InteriorId { get; set; }
         public Nullable<int> StructureId { get; set; }
@@ -25,8 +24,7 @@ namespace DMCTimesheet.Models
         public Nullable<int> LandscapeId { get; set; }
         public Nullable<int> LegalId { get; set; }
     
-        public virtual C12_SubContractor C12_SubContractor { get; set; }
         public virtual C01_Projects C01_Projects { get; set; }
-        public virtual C12_SubContractor C12_SubContractor1 { get; set; }
+        public virtual C12_SubContractor C12_SubContractor { get; set; }
     }
 }

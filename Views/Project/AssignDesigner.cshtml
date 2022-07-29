@@ -181,7 +181,7 @@
             }
             else
             {
-                @foreach (var item in Model)
+                foreach (var item in Model)
                 {
                     <tr class="row text-dark">
                         <td class="col-md-1">@DateTime.Parse(item.Date.ToString()).ToShortDateString()</td>

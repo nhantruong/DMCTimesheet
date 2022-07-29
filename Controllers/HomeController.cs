@@ -70,6 +70,7 @@ namespace DMCTimesheet.Controllers
                     {
                         string SercurityPass = MaHoaPass(Password);
                         db.Database.Connection.ConnectionString = conn;
+                        db.Database.Connection.Open();
 
                         C02_Members logUser = db.C02_Members.FirstOrDefault(s => s.UserName == Username.Trim());
                         if (logUser == null || logUser.Deactived == true)

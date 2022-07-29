@@ -86,21 +86,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="C09_ProjectSubCon">
-      <EntityTypeMapping TypeName="DmcTimesheet.Models.C09_ProjectSubCon">
-        <MappingFragment StoreEntitySet="09_ProjectSubCon">
-          <ScalarProperty Name="LegalId" ColumnName="LegalId" />
-          <ScalarProperty Name="LandscapeId" ColumnName="LandscapeId" />
-          <ScalarProperty Name="MEPid" ColumnName="MEPid" />
-          <ScalarProperty Name="StructureId" ColumnName="StructureId" />
-          <ScalarProperty Name="InteriorId" ColumnName="InteriorId" />
-          <ScalarProperty Name="ArcId" ColumnName="ArcId" />
-          <ScalarProperty Name="Date" ColumnName="Date" />
-          <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="C10_Owner">
       <EntityTypeMapping TypeName="DmcTimesheet.Models.C10_Owner">
         <MappingFragment StoreEntitySet="10_Owner">
@@ -179,6 +164,21 @@
       <EntityTypeMapping TypeName="DmcTimesheet.Models.C16_Status">
         <MappingFragment StoreEntitySet="16_Status">
           <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="C09_ProjectSubCon">
+      <EntityTypeMapping TypeName="DmcTimesheet.Models.C09_ProjectSubCon">
+        <MappingFragment StoreEntitySet="09_ProjectSubCon">
+          <ScalarProperty Name="LegalId" ColumnName="LegalId" />
+          <ScalarProperty Name="LandscapeId" ColumnName="LandscapeId" />
+          <ScalarProperty Name="MEPid" ColumnName="MEPid" />
+          <ScalarProperty Name="StructureId" ColumnName="StructureId" />
+          <ScalarProperty Name="InteriorId" ColumnName="InteriorId" />
+          <ScalarProperty Name="ArcId" ColumnName="ArcId" />
+          <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+          <ScalarProperty Name="Date" ColumnName="Date" />
           <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>

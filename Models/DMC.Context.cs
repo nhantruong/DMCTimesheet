@@ -33,7 +33,6 @@ namespace DMCTimesheet.Models
         public virtual DbSet<C02_Members> C02_Members { get; set; }
         public virtual DbSet<C07_WorkType> C07_WorkType { get; set; }
         public virtual DbSet<C08_Timesheet> C08_Timesheet { get; set; }
-        public virtual DbSet<C09_ProjectSubCon> C09_ProjectSubCon { get; set; }
         public virtual DbSet<C10_Owner> C10_Owner { get; set; }
         public virtual DbSet<C11_Location> C11_Location { get; set; }
         public virtual DbSet<C12_SubContractor> C12_SubContractor { get; set; }
@@ -42,5 +41,6 @@ namespace DMCTimesheet.Models
         public virtual DbSet<C15_SubConServices> C15_SubConServices { get; set; }
         public virtual DbSet<C01_Projects> C01_Projects { get; set; }
         public virtual DbSet<C16_Status> C16_Status { get; set; }
+        public virtual DbSet<C09_ProjectSubCon> C09_ProjectSubCon { get; set; }
     }
 }

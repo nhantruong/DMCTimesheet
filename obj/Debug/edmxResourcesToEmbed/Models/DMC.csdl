@@ -32,17 +32,12 @@
       <End Role="C07_WorkType" EntitySet="C07_WorkType" />
       <End Role="C08_Timesheet" EntitySet="C08_Timesheet" />
     </AssociationSet>
-    <EntitySet Name="C09_ProjectSubCon" EntityType="DmcTimesheet.Models.C09_ProjectSubCon" />
     <EntitySet Name="C10_Owner" EntityType="DmcTimesheet.Models.C10_Owner" />
     <EntitySet Name="C11_Location" EntityType="DmcTimesheet.Models.C11_Location" />
     <EntitySet Name="C12_SubContractor" EntityType="DmcTimesheet.Models.C12_SubContractor" />
     <EntitySet Name="C13_ProjectType" EntityType="DmcTimesheet.Models.C13_ProjectType" />
     <EntitySet Name="C14_Services" EntityType="DmcTimesheet.Models.C14_Services" />
     <EntitySet Name="C15_SubConServices" EntityType="DmcTimesheet.Models.C15_SubConServices" />
-    <AssociationSet Name="FK_09_ProjectSubCon_12_SubContractor" Association="DmcTimesheet.Models.FK_09_ProjectSubCon_12_SubContractor">
-      <End Role="C12_SubContractor" EntitySet="C12_SubContractor" />
-      <End Role="C09_ProjectSubCon" EntitySet="C09_ProjectSubCon" />
-    </AssociationSet>
     <AssociationSet Name="FK_15_SubConServices_12_SubContractor" Association="DmcTimesheet.Models.FK_15_SubConServices_12_SubContractor">
       <End Role="C12_SubContractor" EntitySet="C12_SubContractor" />
       <End Role="C15_SubConServices" EntitySet="C15_SubConServices" />
@@ -56,16 +51,17 @@
       <End Role="C01_Projects" EntitySet="C01_Projects" />
       <End Role="C08_Timesheet" EntitySet="C08_Timesheet" />
     </AssociationSet>
-    <AssociationSet Name="FK_09_ProjectSubCon_01_Projects" Association="DmcTimesheet.Models.FK_09_ProjectSubCon_01_Projects">
-      <End Role="C01_Projects" EntitySet="C01_Projects" />
-      <End Role="C09_ProjectSubCon" EntitySet="C09_ProjectSubCon" />
-    </AssociationSet>
     <AssociationSet Name="FK_3_ChonNhansu_01_Projects" Association="DmcTimesheet.Models.FK_3_ChonNhansu_01_Projects">
       <End Role="C01_Projects" EntitySet="C01_Projects" />
       <End Role="C03_ProjectMembers" EntitySet="C03_ProjectMembers" />
     </AssociationSet>
     <EntitySet Name="C16_Status" EntityType="DmcTimesheet.Models.C16_Status" />
-    <AssociationSet Name="FK_09_ProjectSubCon_12_SubContractor1" Association="DmcTimesheet.Models.FK_09_ProjectSubCon_12_SubContractor1">
+    <EntitySet Name="C09_ProjectSubCon" EntityType="DmcTimesheet.Models.C09_ProjectSubCon" />
+    <AssociationSet Name="FK_09_ProjectSubCon_01_Projects" Association="DmcTimesheet.Models.FK_09_ProjectSubCon_01_Projects">
+      <End Role="C01_Projects" EntitySet="C01_Projects" />
+      <End Role="C09_ProjectSubCon" EntitySet="C09_ProjectSubCon" />
+    </AssociationSet>
+    <AssociationSet Name="FK_09_ProjectSubCon_12_SubContractor" Association="DmcTimesheet.Models.FK_09_ProjectSubCon_12_SubContractor">
       <End Role="C12_SubContractor" EntitySet="C12_SubContractor" />
       <End Role="C09_ProjectSubCon" EntitySet="C09_ProjectSubCon" />
     </AssociationSet>
@@ -234,24 +230,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="C09_ProjectSubCon">
-    <Key>
-      <PropertyRef Name="Id" />
-    </Key>
-    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ProjectId" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-    <Property Name="SubconId" Type="Int32" />
-    <Property Name="Date" Type="DateTime" Precision="0" />
-    <NavigationProperty Name="C12_SubContractor" Relationship="DmcTimesheet.Models.FK_09_ProjectSubCon_12_SubContractor" FromRole="C09_ProjectSubCon" ToRole="C12_SubContractor" />
-    <NavigationProperty Name="C01_Projects" Relationship="DmcTimesheet.Models.FK_09_ProjectSubCon_01_Projects" FromRole="C09_ProjectSubCon" ToRole="C01_Projects" />
-    <Property Name="ArcId" Type="Int32" />
-    <Property Name="InteriorId" Type="Int32" />
-    <Property Name="StructureId" Type="Int32" />
-    <Property Name="MEPid" Type="Int32" />
-    <Property Name="LandscapeId" Type="Int32" />
-    <Property Name="LegalId" Type="Int32" />
-    <NavigationProperty Name="C12_SubContractor1" Relationship="DmcTimesheet.Models.FK_09_ProjectSubCon_12_SubContractor1" FromRole="C09_ProjectSubCon" ToRole="C12_SubContractor" />
-  </EntityType>
   <EntityType Name="C10_Owner">
     <Key>
       <PropertyRef Name="OnwerId" />
@@ -279,10 +257,9 @@
     <Property Name="SubConId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="ContractorName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
     <Property Name="ContractorLocation" Type="Int32" />
-    <NavigationProperty Name="C09_ProjectSubCon" Relationship="DmcTimesheet.Models.FK_09_ProjectSubCon_12_SubContractor" FromRole="C12_SubContractor" ToRole="C09_ProjectSubCon" />
     <NavigationProperty Name="C15_SubConServices" Relationship="DmcTimesheet.Models.FK_15_SubConServices_12_SubContractor" FromRole="C12_SubContractor" ToRole="C15_SubConServices" />
     <Property Name="ShortName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="C09_ProjectSubCon1" Relationship="DmcTimesheet.Models.FK_09_ProjectSubCon_12_SubContractor1" FromRole="C12_SubContractor" ToRole="C09_ProjectSubCon" />
+    <NavigationProperty Name="C09_ProjectSubCon" Relationship="DmcTimesheet.Models.FK_09_ProjectSubCon_12_SubContractor" FromRole="C12_SubContractor" ToRole="C09_ProjectSubCon" />
   </EntityType>
   <EntityType Name="C13_ProjectType">
     <Key>
@@ -311,18 +288,6 @@
     <NavigationProperty Name="C12_SubContractor" Relationship="DmcTimesheet.Models.FK_15_SubConServices_12_SubContractor" FromRole="C15_SubConServices" ToRole="C12_SubContractor" />
     <NavigationProperty Name="C14_Services" Relationship="DmcTimesheet.Models.FK_15_SubConServices_14_Services" FromRole="C15_SubConServices" ToRole="C14_Services" />
   </EntityType>
-  <Association Name="FK_09_ProjectSubCon_12_SubContractor">
-    <End Type="DmcTimesheet.Models.C12_SubContractor" Role="C12_SubContractor" Multiplicity="0..1" />
-    <End Type="DmcTimesheet.Models.C09_ProjectSubCon" Role="C09_ProjectSubCon" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="C12_SubContractor">
-        <PropertyRef Name="SubConId" />
-      </Principal>
-      <Dependent Role="C09_ProjectSubCon">
-        <PropertyRef Name="SubconId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_15_SubConServices_12_SubContractor">
     <End Type="DmcTimesheet.Models.C12_SubContractor" Role="C12_SubContractor" Multiplicity="0..1" />
     <End Type="DmcTimesheet.Models.C15_SubConServices" Role="C15_SubConServices" Multiplicity="*" />
@@ -361,8 +326,8 @@
     <Property Name="LocationId" Type="Int32" />
     <Property Name="OwnerId" Type="Int32" />
     <NavigationProperty Name="C08_Timesheet" Relationship="DmcTimesheet.Models.FK_08_Timesheet_01_Projects" FromRole="C01_Projects" ToRole="C08_Timesheet" />
-    <NavigationProperty Name="C09_ProjectSubCon" Relationship="DmcTimesheet.Models.FK_09_ProjectSubCon_01_Projects" FromRole="C01_Projects" ToRole="C09_ProjectSubCon" />
     <NavigationProperty Name="C03_ProjectMembers" Relationship="DmcTimesheet.Models.FK_3_ChonNhansu_01_Projects" FromRole="C01_Projects" ToRole="C03_ProjectMembers" />
+    <NavigationProperty Name="C09_ProjectSubCon" Relationship="DmcTimesheet.Models.FK_09_ProjectSubCon_01_Projects" FromRole="C01_Projects" ToRole="C09_ProjectSubCon" />
   </EntityType>
   <Association Name="FK_08_Timesheet_01_Projects">
     <End Type="DmcTimesheet.Models.C01_Projects" Role="C01_Projects" Multiplicity="0..1" />
@@ -372,18 +337,6 @@
         <PropertyRef Name="ProjectID" />
       </Principal>
       <Dependent Role="C08_Timesheet">
-        <PropertyRef Name="ProjectId" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_09_ProjectSubCon_01_Projects">
-    <End Type="DmcTimesheet.Models.C01_Projects" Role="C01_Projects" Multiplicity="0..1" />
-    <End Type="DmcTimesheet.Models.C09_ProjectSubCon" Role="C09_ProjectSubCon" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="C01_Projects">
-        <PropertyRef Name="ProjectID" />
-      </Principal>
-      <Dependent Role="C09_ProjectSubCon">
         <PropertyRef Name="ProjectId" />
       </Dependent>
     </ReferentialConstraint>
@@ -407,7 +360,35 @@
     <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
   </EntityType>
-  <Association Name="FK_09_ProjectSubCon_12_SubContractor1">
+  <EntityType Name="C09_ProjectSubCon">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Date" Type="DateTime" Precision="0" />
+    <Property Name="ProjectId" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="ArcId" Type="Int32" />
+    <Property Name="InteriorId" Type="Int32" />
+    <Property Name="StructureId" Type="Int32" />
+    <Property Name="MEPid" Type="Int32" />
+    <Property Name="LandscapeId" Type="Int32" />
+    <Property Name="LegalId" Type="Int32" />
+    <NavigationProperty Name="C01_Projects" Relationship="DmcTimesheet.Models.FK_09_ProjectSubCon_01_Projects" FromRole="C09_ProjectSubCon" ToRole="C01_Projects" />
+    <NavigationProperty Name="C12_SubContractor" Relationship="DmcTimesheet.Models.FK_09_ProjectSubCon_12_SubContractor" FromRole="C09_ProjectSubCon" ToRole="C12_SubContractor" />
+  </EntityType>
+  <Association Name="FK_09_ProjectSubCon_01_Projects">
+    <End Type="DmcTimesheet.Models.C01_Projects" Role="C01_Projects" Multiplicity="0..1" />
+    <End Type="DmcTimesheet.Models.C09_ProjectSubCon" Role="C09_ProjectSubCon" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="C01_Projects">
+        <PropertyRef Name="ProjectID" />
+      </Principal>
+      <Dependent Role="C09_ProjectSubCon">
+        <PropertyRef Name="ProjectId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_09_ProjectSubCon_12_SubContractor">
     <End Type="DmcTimesheet.Models.C12_SubContractor" Role="C12_SubContractor" Multiplicity="0..1" />
     <End Type="DmcTimesheet.Models.C09_ProjectSubCon" Role="C09_ProjectSubCon" Multiplicity="*" />
     <ReferentialConstraint>

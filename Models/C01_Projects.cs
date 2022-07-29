@@ -18,8 +18,8 @@ namespace DMCTimesheet.Models
         public C01_Projects()
         {
             this.C08_Timesheet = new HashSet<C08_Timesheet>();
-            this.C09_ProjectSubCon = new HashSet<C09_ProjectSubCon>();
             this.C03_ProjectMembers = new HashSet<C03_ProjectMembers>();
+            this.C09_ProjectSubCon = new HashSet<C09_ProjectSubCon>();
         }
     
         public string ProjectID { get; set; }
@@ -35,8 +35,8 @@ namespace DMCTimesheet.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<C08_Timesheet> C08_Timesheet { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<C09_ProjectSubCon> C09_ProjectSubCon { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<C03_ProjectMembers> C03_ProjectMembers { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<C09_ProjectSubCon> C09_ProjectSubCon { get; set; }
     }
 }
