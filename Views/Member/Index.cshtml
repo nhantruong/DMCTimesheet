@@ -1,0 +1,203 @@
+﻿@model IEnumerable<DMCTimesheet.Models.C02_Members>
+@{
+    DMCTimesheet.Models.C06_UserPermisRelationship Userpermiss = Session["UserPermission"] as DMCTimesheet.Models.C06_UserPermisRelationship;
+    switch (Userpermiss.idPer)
+    {
+        case 1://WebAdmin
+            {
+                ViewBag.Title = "Web Admin";
+                Layout = "~/Views/Shared/_AdminLayout.cshtml";
+                break;
+            }
+        case 2://User
+            {
+                ViewBag.Title = "User";
+                Layout = "~/Views/Shared/_UserLayout.cshtml";
+                break;
+            }
+        case 3: //System Admin
+            {
+                ViewBag.Title = "Sys admin";
+                Layout = "~/Views/Shared/_AdminLayout.cshtml";
+                break;
+            }
+        case 4: //System Mod
+            {
+                ViewBag.Title = "Mod";
+                Layout = "~/Views/Shared/_AdminLayout.cshtml";
+                break;
+            }
+        default:
+            {
+                ViewBag.Title = "Default User";
+                Layout = "~/Views/Shared/_UserLayout.cshtml";
+                break;
+            }
+    }
+    DMCTimesheet.Models.C02_Members loginUser = Session["UserLogin"] as DMCTimesheet.Models.C02_Members;
+    //Data from controller
+    List<DMCTimesheet.Models.C01_Projects> myProject = ViewBag.Projects as List<DMCTimesheet.Models.C01_Projects>;
+    List<DMCTimesheet.Models.C07_WorkType> WorkType = ViewBag.WorkType as List<DMCTimesheet.Models.C07_WorkType>;
+    List<DMCTimesheet.Models.C13_ProjectType> projectType = ViewBag.ProjectType as List<DMCTimesheet.Models.C13_ProjectType>;
+    List<DMCTimesheet.Models.C16_Status> status = ViewBag.Status as List<DMCTimesheet.Models.C16_Status>;
+    List<DMCTimesheet.Models.C11_Location> locations = ViewBag.Location as List<DMCTimesheet.Models.C11_Location>;
+    List<DMCTimesheet.Models.C10_Owner> owners = ViewBag.Owner as List<DMCTimesheet.Models.C10_Owner>;
+
+    List<DMCTimesheet.Models.C17_Position> Positions = ViewBag.Position as List<DMCTimesheet.Models.C17_Position>;
+    List<DMCTimesheet.Models.C18_Descipline> desciplines = ViewBag.Descipline as List<DMCTimesheet.Models.C18_Descipline>;
+    int stt = 1;
+
+    //
+}
+
+@* Modal create new *@
+
+<div>
+    <button type="button" class="btn btn-info btn-small text-right" data-toggle="modal" data-target="#newMember">Thêm thành viên</button>
+</div>
+
+
+
+
+@* Form nhập liệu *@
+<div id="newMember" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-m">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Thêm Nhân sự mới</h3>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("CreateMember", "Member", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <form>
+                        @* WorkType *@
+                        <div class="form-group row text-left">
+                            <lable class="control-label col-sm-3 col-sm-3 col-xs-3">Tên đầy đủ</lable>
+                            <input type="text" class="form-control col-sm-7 col-sm-9 col-xs-9" name="FullName" placeholder="Tên đầy đủ" required="" value="" />
+                        </div>
+                        @*<div class="form-group row text-left">
+                                <lable class="control-label col-sm-3 col-sm-3 col-xs-3">Tên ngắn gọn</lable>
+                                <input type="text" class="form-control col-sm-7 col-sm-9 col-xs-9" name="ShortName" placeholder="Tên ngắn gọn" required="" value="" />
+                            </div>*@
+                        <div class="form-group row text-left">
+                            <lable class="control-label col-sm-3 col-sm-3 col-xs-3">Username</lable>
+                            <input type="text" class="form-control col-sm-7 col-sm-9 col-xs-9" name="UserName" placeholder="Thường dùng theo email CTC" required="" value="" />
+                        </div>
+                        <div class="form-group row text-left">
+                            <lable class="control-label col-sm-3 col-sm-3 col-xs-3">Mật khẩu</lable>
+                            <input type="password" class="form-control col-sm-7 col-sm-9 col-xs-9" name="Pass" placeholder="password" disabled value="X03MO1qnZdYdgyfeuILPmQ==" />
+                        </div>
+
+                        <div class="form-group row">
+                            <lable class="control-label col-sm-3 col-sm-3 col-xs-3 text-left">Email</lable>
+                            <input type="email" class="form-control col-sm-7 col-sm-9 col-xs-9" name="Email" placeholder="" value="" />
+                        </div>
+
+                        @* PositionID *@
+                        <div class="form-group row  text-left">
+                            <lable class="control-label col-sm-3 col-sm-3 col-xs-3">Chức vụ</lable>
+                            <select name="Position" class="form-control col-sm-7 col-sm-9 col-xs-9">
+                                @foreach (var item in Positions)
+                                {
+                                    <option value=@item.Id>@item.PositionName</option>
+                                }
+                            </select>
+                        </div>
+
+                        @* Chuyen Mon ID *@
+                        <div class="form-group row  text-left">
+                            <lable class="control-label col-sm-3 col-sm-3 col-xs-3">Chuyên môn</lable>
+                            <select name="Descipline" class="form-control col-sm-7 col-sm-9 col-xs-9">
+                                @foreach (var item in desciplines)
+                                {
+                                    <option value=@item.Id>@item.DesciplineName</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group text-left">
+                            <lable class="control-label col-sm-3 col-sm-3 col-xs-3 text-left"></lable>
+                            <input type="submit" value="Save" class="btn btn-success col-sm-7" />
+                        </div>
+                    </form>
+                }
+            </div>
+            <div class="modal-footer">
+                <div>
+                    <p class="text-danger">@ViewBag.Error</p>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+@* End Form nhập liệu *@
+
+<div class="clearfix btn-sm"></div>
+<h3>DANH SÁCH NHÂN SỰ</h3>
+
+<div class="form-group">
+    <table class="table table-hover table-condensed">
+        <thead class="text-dark table-active ">
+            <tr class="row">
+                <td class="col-sm-1">STT</td>
+                <td class="col-sm-1">UserName</td>
+                <td class="col-sm-2">Tên đầy đủ</td>
+                @*<td class="col-sm-1">Tên ngắn gọn</td>*@
+                <td class="col-sm-1">Chức vụ</td>
+                <td class="col-sm-1">Chuyên môn</td>
+                <td class="col-sm-2">Email</td>
+
+                <td class="col-sm-1">Tình trạng</td>
+                <td class="col-sm-1 ">#</td>
+
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model == null || Model.Count() == 0)
+            {
+                <tr class="row">
+                    <td>Chưa có nhân sự</td>
+                </tr>
+            }
+            else
+            {
+                string background = "default";
+                background = stt % 2 == 1 ? "success" : "default";
+                foreach (var item in Model)
+                {
+                    <tr class="row text-dark text-success">
+                        <td class="col-sm-1">@stt</td>
+                        <td class="col-sm-1"><b class="text-primary">@item.UserName</b></td>
+                        <td class="col-sm-2"><b>@item.FullName</b></td>
+                        @*<td class="col-sm-1">@item.ShortName</td>*@
+                        <td class="col-sm-1">@Positions.FirstOrDefault(s => s.Id == item.Position).PositionName</td>
+
+                        <td class="col-sm-1">@desciplines.FirstOrDefault(s => s.Id == item.Descipline).DesciplineName</td>
+                        <td class="col-sm-2">@item.Email</td>
+
+                        @if (item.Deactived == true)
+                        {
+                            <td class="col-sm-1">Offline</td>
+                        }
+                        else
+                        {
+                            <td class="col-sm-1 ">Online</td>
+                        }
+                        <td>
+                            @Html.ActionLink(" ", "Edit", "Member", new { Id = item.UserID }, new { @class = "fa fa-pencil" })
+                            @Html.ActionLink(" ", "OnOffline", "Member", new { Id = item.UserID }, new { @class = "fa fa-remove btn" })
+                        </td>
+                    </tr>
+                }
+                stt++;
+            }
+            }
+
+        </tbody>
+    </table>
+</div>
+
+

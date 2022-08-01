@@ -27,7 +27,7 @@
     <Property Name="Leader" Type="bit" />
     <Property Name="Email" Type="nvarchar" MaxLength="100" />
     <Property Name="Descipline" Type="int" />
-    <Property Name="Position" Type="nvarchar" MaxLength="100" />
+    <Property Name="Position" Type="int" />
     <Property Name="Deactived" Type="bit" />
   </EntityType>
   <EntityType Name="03_ProjectMembers">
@@ -165,6 +165,22 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="StatusName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="17_Position">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PositionName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Active" Type="bit" />
+  </EntityType>
+  <EntityType Name="18_Descipline">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DesciplineName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Active" Type="bit" />
   </EntityType>
   <Association Name="FK_05_PermissionDetail_04_Permission">
     <End Role="04_Permission" Type="Self.04_Permission" Multiplicity="0..1" />
@@ -327,6 +343,8 @@
     <EntitySet Name="14_Services" EntityType="Self.14_Services" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="15_SubConServices" EntityType="Self.15_SubConServices" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="16_Status" EntityType="Self.16_Status" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="17_Position" EntityType="Self.17_Position" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="18_Descipline" EntityType="Self.18_Descipline" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_05_PermissionDetail_04_Permission" Association="Self.FK_05_PermissionDetail_04_Permission">
       <End Role="04_Permission" EntitySet="04_Permission" />
       <End Role="05_PermissionDetail" EntitySet="05_PermissionDetail" />

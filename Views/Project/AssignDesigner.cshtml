@@ -66,7 +66,7 @@
                         </div>
                         @* ProjectTypeID *@
                         <div class="form-group row  text-left">
-                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Loại hình dự án</lable>
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên dự án</lable>
                             <select name="ProjectID" class="form-control col-md-7 col-sm-9 col-xs-9">
                                 @foreach (var item in Project.Where(s => s.ProjectStatusId == 1))
                                 {
@@ -80,7 +80,7 @@
                             <select name="ArcId" class="form-control col-md-7 col-sm-9 col-xs-9">
                                 @foreach (var item in SubCons)
                                 {
-                                    <option value=@item.SubConId>@item.ContractorName</option>
+                                    <option value=@item.SubConId>@item.ShortName</option>
                                 }
                             </select>
                         </div>
@@ -90,7 +90,7 @@
                             <select name="InteriorId" class="form-control col-md-7 col-sm-9 col-xs-9">
                                 @foreach (var item in SubCons)
                                 {
-                                    <option value=@item.SubConId>@item.ContractorName</option>
+                                    <option value=@item.SubConId>@item.ShortName</option>
                                 }
                             </select>
                         </div>
@@ -100,7 +100,7 @@
                             <select name="StructureId" class="form-control col-md-7 col-sm-9 col-xs-9">
                                 @foreach (var item in SubCons)
                                 {
-                                    <option value=@item.SubConId>@item.ContractorName</option>
+                                    <option value=@item.SubConId>@item.ShortName</option>
                                 }
                             </select>
                         </div>
@@ -111,7 +111,7 @@
                             <select name="MEPid" class="form-control col-md-7 col-sm-9 col-xs-9">
                                 @foreach (var item in SubCons)
                                 {
-                                    <option value=@item.SubConId>@item.ContractorName</option>
+                                    <option value=@item.SubConId>@item.ShortName</option>
                                 }
                             </select>
                         </div>
@@ -122,7 +122,7 @@
                             <select name="LandscapeId" class="form-control col-md-7 col-sm-9 col-xs-9">
                                 @foreach (var item in SubCons)
                                 {
-                                    <option value=@item.SubConId>@item.ContractorName</option>
+                                    <option value=@item.SubConId>@item.ShortName</option>
                                 }
                             </select>
                         </div>
@@ -132,7 +132,7 @@
                             <select name="LegalId" class="form-control col-md-7 col-sm-9 col-xs-9">
                                 @foreach (var item in SubCons)
                                 {
-                                    <option value=@item.SubConId>@item.ContractorName</option>
+                                    <option value=@item.SubConId>@item.ShortName</option>
                                 }
                             </select>
                         </div>
@@ -161,14 +161,14 @@
 <div class="form-group">
     <table class="table table-hover table-condensed">
         <thead class="text-dark">
-            <tr class="row">
+            <tr class="row text-center table-primary">
                 <td class="col-md-1">Ngày</td>
                 <td class="col-md-2">Dự án</td>
-                <td class="col-md-2">Thiết kế Kiến trúc</td>
-                <td class="col-md-1">Thiết kế Nội thất</td>
-                <td class="col-md-2">Thiết kế Kết cấu</td>
-                <td class="col-md-2">Thiết kế MEP</td>
-                <td class="col-md-1">Thiết kế Landscape</td>
+                <td class="col-md-2">TK Kiến trúc</td>
+                <td class="col-md-1">TK Nội thất</td>
+                <td class="col-md-2">TK Kết cấu</td>
+                <td class="col-md-2">TK MEP</td>
+                <td class="col-md-1">TK Landscape</td>
                 <td class="col-md-1">Pháp lý</td>
             </tr>
         </thead>
@@ -176,22 +176,22 @@
             @if (Model == null || Model.Count() == 0)
             {
                 <tr class="row">
-                    <td>Chưa có dự án chỉ định thầu phụ</td>
+                    <td>Chưa chỉ định thầu phụ chi dự án</td>
                 </tr>
             }
             else
             {
                 foreach (var item in Model)
                 {
-                    <tr class="row text-dark">
+                    <tr class="row text-dark table-bordered">
                         <td class="col-md-1">@DateTime.Parse(item.Date.ToString()).ToShortDateString()</td>
                         <td class="col-md-2"><b>@item.ProjectId - @Project.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectName</b></td>
-                        <td class="col-md-1">@SubCons.FirstOrDefault(s => s.SubConId == item.ArcId).ContractorName</td>
-                        <td class="col-md-2">@SubCons.FirstOrDefault(s => s.SubConId == item.InteriorId).ContractorName</td>
-                        <td class="col-md-2">@SubCons.FirstOrDefault(s => s.SubConId == item.StructureId).ContractorName</td>
-                        <td class="col-md-2">@SubCons.FirstOrDefault(s => s.SubConId == item.MEPid).ContractorName</td>
-                        <td class="col-md-1">@SubCons.FirstOrDefault(s => s.SubConId == item.LandscapeId).ContractorName</td>
-                        <td class="col-md-1">@SubCons.FirstOrDefault(s => s.SubConId == item.LegalId).ContractorName</td>
+                        <td class="col-md-2">@SubCons.FirstOrDefault(s => s.SubConId == item.ArcId).ShortName</td>
+                        <td class="col-md-1">@SubCons.FirstOrDefault(s => s.SubConId == item.InteriorId).ShortName</td>
+                        <td class="col-md-2">@SubCons.FirstOrDefault(s => s.SubConId == item.StructureId).ShortName</td>
+                        <td class="col-md-2">@SubCons.FirstOrDefault(s => s.SubConId == item.MEPid).ShortName</td>
+                        <td class="col-md-1">@SubCons.FirstOrDefault(s => s.SubConId == item.LandscapeId).ShortName</td>
+                        <td class="col-md-1">@SubCons.FirstOrDefault(s => s.SubConId == item.LegalId).ShortName</td>
                     </tr>
                 }
             }

@@ -5,23 +5,19 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="7124f95bb97c44879f27610578baaf4a" Name="Diagram1">
-        <EntityTypeShape EntityType="DmcTimesheet.Models.C03_ProjectMembers" Width="1.5" PointX="8" PointY="3.375" />
-        <EntityTypeShape EntityType="DmcTimesheet.Models.C04_Permission" Width="1.5" PointX="7.75" PointY="6.875" />
+        <EntityTypeShape EntityType="DmcTimesheet.Models.C03_ProjectMembers" Width="1.5" PointX="7.875" PointY="3.375" />
+        <EntityTypeShape EntityType="DmcTimesheet.Models.C04_Permission" Width="1.5" PointX="7.875" PointY="6.875" />
         <EntityTypeShape EntityType="DmcTimesheet.Models.C05_PermissionDetail" Width="1.5" PointX="9.875" PointY="8.25" />
         <EntityTypeShape EntityType="DmcTimesheet.Models.C06_UserPermisRelationship" Width="1.5" PointX="10" PointY="5.75" />
         <AssociationConnector Association="DmcTimesheet.Models.FK_05_PermissionDetail_04_Permission" />
         <AssociationConnector Association="DmcTimesheet.Models.FK_06_UserPermisRelationship_04_Permission" />
-        <EntityTypeShape EntityType="DmcTimesheet.Models.C02_Members" Width="1.5" PointX="11.75" PointY="2.125" />
-        <AssociationConnector Association="DmcTimesheet.Models.FK_06_UserPermisRelationship_02_Members" />
-        <AssociationConnector Association="DmcTimesheet.Models.FK_3_ChonNhansu_02_Members_Main" />
         <EntityTypeShape EntityType="DmcTimesheet.Models.C07_WorkType" Width="1.5" PointX="13.375" PointY="0.875" />
         <EntityTypeShape EntityType="DmcTimesheet.Models.C08_Timesheet" Width="1.5" PointX="9.875" PointY="0.75" />
-        <AssociationConnector Association="DmcTimesheet.Models.FK_08_Timesheet_02_Members" />
         <AssociationConnector Association="DmcTimesheet.Models.FK_08_Timesheet_07_WorkType" />
-        <EntityTypeShape EntityType="DmcTimesheet.Models.C10_Owner" Width="1.5" PointX="0.75" PointY="6.375" />
-        <EntityTypeShape EntityType="DmcTimesheet.Models.C11_Location" Width="1.5" PointX="2.375" PointY="6.375" />
+        <EntityTypeShape EntityType="DmcTimesheet.Models.C10_Owner" Width="1.5" PointX="0.625" PointY="6.25" />
+        <EntityTypeShape EntityType="DmcTimesheet.Models.C11_Location" Width="1.5" PointX="2.25" PointY="6.25" />
         <EntityTypeShape EntityType="DmcTimesheet.Models.C12_SubContractor" Width="1.5" PointX="0.625" PointY="1.125" />
-        <EntityTypeShape EntityType="DmcTimesheet.Models.C13_ProjectType" Width="1.5" PointX="4" PointY="6.375" />
+        <EntityTypeShape EntityType="DmcTimesheet.Models.C13_ProjectType" Width="1.5" PointX="3.875" PointY="6.25" />
         <EntityTypeShape EntityType="DmcTimesheet.Models.C14_Services" Width="1.5" PointX="2.625" PointY="4.125" />
         <EntityTypeShape EntityType="DmcTimesheet.Models.C15_SubConServices" Width="1.5" PointX="0.625" PointY="3.625" />
         <AssociationConnector Association="DmcTimesheet.Models.FK_15_SubConServices_12_SubContractor" />
@@ -29,10 +25,16 @@
         <EntityTypeShape EntityType="DmcTimesheet.Models.C01_Projects" Width="1.5" PointX="5.5" PointY="0.875" />
         <AssociationConnector Association="DmcTimesheet.Models.FK_08_Timesheet_01_Projects" />
         <AssociationConnector Association="DmcTimesheet.Models.FK_3_ChonNhansu_01_Projects" />
-        <EntityTypeShape EntityType="DmcTimesheet.Models.C16_Status" Width="1.5" PointX="5.625" PointY="6.375" />
+        <EntityTypeShape EntityType="DmcTimesheet.Models.C16_Status" Width="1.5" PointX="3.875" PointY="7.875" />
         <EntityTypeShape EntityType="DmcTimesheet.Models.C09_ProjectSubCon" Width="1.5" PointX="2.5" PointY="0.5" />
         <AssociationConnector Association="DmcTimesheet.Models.FK_09_ProjectSubCon_01_Projects" />
         <AssociationConnector Association="DmcTimesheet.Models.FK_09_ProjectSubCon_12_SubContractor" />
+        <EntityTypeShape EntityType="DmcTimesheet.Models.C17_Position" Width="1.5" PointX="5.5" PointY="6.25" />
+        <EntityTypeShape EntityType="DmcTimesheet.Models.C18_Descipline" Width="1.5" PointX="2.25" PointY="7.75" />
+        <EntityTypeShape EntityType="DmcTimesheet.Models.C02_Members" Width="1.5" PointX="12.125" PointY="2.875" />
+        <AssociationConnector Association="DmcTimesheet.Models.FK_06_UserPermisRelationship_02_Members" />
+        <AssociationConnector Association="DmcTimesheet.Models.FK_08_Timesheet_02_Members" />
+        <AssociationConnector Association="DmcTimesheet.Models.FK_3_ChonNhansu_02_Members_Main" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -23,8 +23,8 @@ namespace DMCTimesheet.Models
         public string Description { get; set; }
         public Nullable<System.DateTime> RecordDate { get; set; }
     
-        public virtual C02_Members C02_Members { get; set; }
         public virtual C07_WorkType C07_WorkType { get; set; }
         public virtual C01_Projects C01_Projects { get; set; }
+        public virtual C02_Members C02_Members { get; set; }
     }
 }

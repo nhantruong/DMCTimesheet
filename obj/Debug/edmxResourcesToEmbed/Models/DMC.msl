@@ -46,23 +46,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="C02_Members">
-      <EntityTypeMapping TypeName="DmcTimesheet.Models.C02_Members">
-        <MappingFragment StoreEntitySet="02_Members">
-          <ScalarProperty Name="Deactived" ColumnName="Deactived" />
-          <ScalarProperty Name="Position" ColumnName="Position" />
-          <ScalarProperty Name="Descipline" ColumnName="Descipline" />
-          <ScalarProperty Name="Email" ColumnName="Email" />
-          <ScalarProperty Name="Leader" ColumnName="Leader" />
-          <ScalarProperty Name="Image" ColumnName="Image" />
-          <ScalarProperty Name="ShortName" ColumnName="ShortName" />
-          <ScalarProperty Name="FullName" ColumnName="FullName" />
-          <ScalarProperty Name="Pass" ColumnName="Pass" />
-          <ScalarProperty Name="UserName" ColumnName="UserName" />
-          <ScalarProperty Name="UserID" ColumnName="UserID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="C07_WorkType">
       <EntityTypeMapping TypeName="DmcTimesheet.Models.C07_WorkType">
         <MappingFragment StoreEntitySet="07_WorkType">
@@ -180,6 +163,41 @@
           <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
           <ScalarProperty Name="Date" ColumnName="Date" />
           <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="C17_Position">
+      <EntityTypeMapping TypeName="DmcTimesheet.Models.C17_Position">
+        <MappingFragment StoreEntitySet="17_Position">
+          <ScalarProperty Name="Active" ColumnName="Active" />
+          <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="C18_Descipline">
+      <EntityTypeMapping TypeName="DmcTimesheet.Models.C18_Descipline">
+        <MappingFragment StoreEntitySet="18_Descipline">
+          <ScalarProperty Name="Active" ColumnName="Active" />
+          <ScalarProperty Name="DesciplineName" ColumnName="DesciplineName" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="C02_Members">
+      <EntityTypeMapping TypeName="DmcTimesheet.Models.C02_Members">
+        <MappingFragment StoreEntitySet="02_Members">
+          <ScalarProperty Name="Deactived" ColumnName="Deactived" />
+          <ScalarProperty Name="Position" ColumnName="Position" />
+          <ScalarProperty Name="Descipline" ColumnName="Descipline" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Leader" ColumnName="Leader" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
+          <ScalarProperty Name="ShortName" ColumnName="ShortName" />
+          <ScalarProperty Name="FullName" ColumnName="FullName" />
+          <ScalarProperty Name="Pass" ColumnName="Pass" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

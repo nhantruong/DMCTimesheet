@@ -13,21 +13,8 @@
       <End Role="C04_Permission" EntitySet="C04_Permission" />
       <End Role="C06_UserPermisRelationship" EntitySet="C06_UserPermisRelationship" />
     </AssociationSet>
-    <EntitySet Name="C02_Members" EntityType="DmcTimesheet.Models.C02_Members" />
-    <AssociationSet Name="FK_06_UserPermisRelationship_02_Members" Association="DmcTimesheet.Models.FK_06_UserPermisRelationship_02_Members">
-      <End Role="C02_Members" EntitySet="C02_Members" />
-      <End Role="C06_UserPermisRelationship" EntitySet="C06_UserPermisRelationship" />
-    </AssociationSet>
-    <AssociationSet Name="FK_3_ChonNhansu_02_Members_Main" Association="DmcTimesheet.Models.FK_3_ChonNhansu_02_Members_Main">
-      <End Role="C02_Members" EntitySet="C02_Members" />
-      <End Role="C03_ProjectMembers" EntitySet="C03_ProjectMembers" />
-    </AssociationSet>
     <EntitySet Name="C07_WorkType" EntityType="DmcTimesheet.Models.C07_WorkType" />
     <EntitySet Name="C08_Timesheet" EntityType="DmcTimesheet.Models.C08_Timesheet" />
-    <AssociationSet Name="FK_08_Timesheet_02_Members" Association="DmcTimesheet.Models.FK_08_Timesheet_02_Members">
-      <End Role="C02_Members" EntitySet="C02_Members" />
-      <End Role="C08_Timesheet" EntitySet="C08_Timesheet" />
-    </AssociationSet>
     <AssociationSet Name="FK_08_Timesheet_07_WorkType" Association="DmcTimesheet.Models.FK_08_Timesheet_07_WorkType">
       <End Role="C07_WorkType" EntitySet="C07_WorkType" />
       <End Role="C08_Timesheet" EntitySet="C08_Timesheet" />
@@ -65,6 +52,21 @@
       <End Role="C12_SubContractor" EntitySet="C12_SubContractor" />
       <End Role="C09_ProjectSubCon" EntitySet="C09_ProjectSubCon" />
     </AssociationSet>
+    <EntitySet Name="C17_Position" EntityType="DmcTimesheet.Models.C17_Position" />
+    <EntitySet Name="C18_Descipline" EntityType="DmcTimesheet.Models.C18_Descipline" />
+    <EntitySet Name="C02_Members" EntityType="DmcTimesheet.Models.C02_Members" />
+    <AssociationSet Name="FK_06_UserPermisRelationship_02_Members" Association="DmcTimesheet.Models.FK_06_UserPermisRelationship_02_Members">
+      <End Role="C02_Members" EntitySet="C02_Members" />
+      <End Role="C06_UserPermisRelationship" EntitySet="C06_UserPermisRelationship" />
+    </AssociationSet>
+    <AssociationSet Name="FK_08_Timesheet_02_Members" Association="DmcTimesheet.Models.FK_08_Timesheet_02_Members">
+      <End Role="C02_Members" EntitySet="C02_Members" />
+      <End Role="C08_Timesheet" EntitySet="C08_Timesheet" />
+    </AssociationSet>
+    <AssociationSet Name="FK_3_ChonNhansu_02_Members_Main" Association="DmcTimesheet.Models.FK_3_ChonNhansu_02_Members_Main">
+      <End Role="C02_Members" EntitySet="C02_Members" />
+      <End Role="C03_ProjectMembers" EntitySet="C03_ProjectMembers" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="C03_ProjectMembers">
     <Key>
@@ -77,10 +79,10 @@
     <Property Name="ChuTriKetCau" Type="Int32" />
     <Property Name="ChuTriMEP" Type="Int32" />
     <Property Name="Ngay" Type="DateTime" Precision="0" />
-    <NavigationProperty Name="C02_Members" Relationship="DmcTimesheet.Models.FK_3_ChonNhansu_02_Members_Main" FromRole="C03_ProjectMembers" ToRole="C02_Members" />
     <Property Name="BIMManager" Type="Int32" />
     <Property Name="LegalManager" Type="Int32" />
     <NavigationProperty Name="C01_Projects" Relationship="DmcTimesheet.Models.FK_3_ChonNhansu_01_Projects" FromRole="C03_ProjectMembers" ToRole="C01_Projects" />
+    <NavigationProperty Name="C02_Members" Relationship="DmcTimesheet.Models.FK_3_ChonNhansu_02_Members_Main" FromRole="C03_ProjectMembers" ToRole="C02_Members" />
   </EntityType>
   <EntityType Name="C04_Permission">
     <Key>
@@ -138,49 +140,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityType Name="C02_Members">
-    <Key>
-      <PropertyRef Name="UserID" />
-    </Key>
-    <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Pass" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-    <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-    <Property Name="ShortName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-    <Property Name="Image" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-    <Property Name="Leader" Type="Boolean" />
-    <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="Descipline" Type="Int32" />
-    <Property Name="Position" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-    <Property Name="Deactived" Type="Boolean" />
-    <NavigationProperty Name="C06_UserPermisRelationship" Relationship="DmcTimesheet.Models.FK_06_UserPermisRelationship_02_Members" FromRole="C02_Members" ToRole="C06_UserPermisRelationship" />
-    <NavigationProperty Name="C03_ProjectMembers" Relationship="DmcTimesheet.Models.FK_3_ChonNhansu_02_Members_Main" FromRole="C02_Members" ToRole="C03_ProjectMembers" />
-    <NavigationProperty Name="C08_Timesheet" Relationship="DmcTimesheet.Models.FK_08_Timesheet_02_Members" FromRole="C02_Members" ToRole="C08_Timesheet" />
-  </EntityType>
-  <Association Name="FK_06_UserPermisRelationship_02_Members">
-    <End Type="DmcTimesheet.Models.C02_Members" Role="C02_Members" Multiplicity="0..1" />
-    <End Type="DmcTimesheet.Models.C06_UserPermisRelationship" Role="C06_UserPermisRelationship" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="C02_Members">
-        <PropertyRef Name="UserID" />
-      </Principal>
-      <Dependent Role="C06_UserPermisRelationship">
-        <PropertyRef Name="idUser" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="FK_3_ChonNhansu_02_Members_Main">
-    <End Type="DmcTimesheet.Models.C02_Members" Role="C02_Members" Multiplicity="0..1" />
-    <End Type="DmcTimesheet.Models.C03_ProjectMembers" Role="C03_ProjectMembers" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="C02_Members">
-        <PropertyRef Name="UserID" />
-      </Principal>
-      <Dependent Role="C03_ProjectMembers">
-        <PropertyRef Name="ChuTriChinh" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <EntityType Name="C07_WorkType">
     <Key>
       <PropertyRef Name="ID" />
@@ -201,23 +160,11 @@
     <Property Name="Hour" Type="Double" />
     <Property Name="OT" Type="Double" />
     <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-    <NavigationProperty Name="C02_Members" Relationship="DmcTimesheet.Models.FK_08_Timesheet_02_Members" FromRole="C08_Timesheet" ToRole="C02_Members" />
     <NavigationProperty Name="C07_WorkType" Relationship="DmcTimesheet.Models.FK_08_Timesheet_07_WorkType" FromRole="C08_Timesheet" ToRole="C07_WorkType" />
     <NavigationProperty Name="C01_Projects" Relationship="DmcTimesheet.Models.FK_08_Timesheet_01_Projects" FromRole="C08_Timesheet" ToRole="C01_Projects" />
     <Property Name="RecordDate" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="C02_Members" Relationship="DmcTimesheet.Models.FK_08_Timesheet_02_Members" FromRole="C08_Timesheet" ToRole="C02_Members" />
   </EntityType>
-  <Association Name="FK_08_Timesheet_02_Members">
-    <End Type="DmcTimesheet.Models.C02_Members" Role="C02_Members" Multiplicity="0..1" />
-    <End Type="DmcTimesheet.Models.C08_Timesheet" Role="C08_Timesheet" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="C02_Members">
-        <PropertyRef Name="UserID" />
-      </Principal>
-      <Dependent Role="C08_Timesheet">
-        <PropertyRef Name="MemberID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_08_Timesheet_07_WorkType">
     <End Type="DmcTimesheet.Models.C07_WorkType" Role="C07_WorkType" Multiplicity="0..1" />
     <End Type="DmcTimesheet.Models.C08_Timesheet" Role="C08_Timesheet" Multiplicity="*" />
@@ -397,6 +344,77 @@
       </Principal>
       <Dependent Role="C09_ProjectSubCon">
         <PropertyRef Name="ArcId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="C17_Position">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="PositionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Active" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="C18_Descipline">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="DesciplineName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Active" Type="Boolean" />
+  </EntityType>
+  <EntityType Name="C02_Members">
+    <Key>
+      <PropertyRef Name="UserID" />
+    </Key>
+    <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Pass" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <Property Name="ShortName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Image" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Leader" Type="Boolean" />
+    <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Descipline" Type="Int32" />
+    <Property Name="Position" Type="Int32" />
+    <Property Name="Deactived" Type="Boolean" />
+    <NavigationProperty Name="C06_UserPermisRelationship" Relationship="DmcTimesheet.Models.FK_06_UserPermisRelationship_02_Members" FromRole="C02_Members" ToRole="C06_UserPermisRelationship" />
+    <NavigationProperty Name="C08_Timesheet" Relationship="DmcTimesheet.Models.FK_08_Timesheet_02_Members" FromRole="C02_Members" ToRole="C08_Timesheet" />
+    <NavigationProperty Name="C03_ProjectMembers" Relationship="DmcTimesheet.Models.FK_3_ChonNhansu_02_Members_Main" FromRole="C02_Members" ToRole="C03_ProjectMembers" />
+  </EntityType>
+  <Association Name="FK_06_UserPermisRelationship_02_Members">
+    <End Type="DmcTimesheet.Models.C02_Members" Role="C02_Members" Multiplicity="0..1" />
+    <End Type="DmcTimesheet.Models.C06_UserPermisRelationship" Role="C06_UserPermisRelationship" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="C02_Members">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="C06_UserPermisRelationship">
+        <PropertyRef Name="idUser" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_08_Timesheet_02_Members">
+    <End Type="DmcTimesheet.Models.C02_Members" Role="C02_Members" Multiplicity="0..1" />
+    <End Type="DmcTimesheet.Models.C08_Timesheet" Role="C08_Timesheet" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="C02_Members">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="C08_Timesheet">
+        <PropertyRef Name="MemberID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_3_ChonNhansu_02_Members_Main">
+    <End Type="DmcTimesheet.Models.C02_Members" Role="C02_Members" Multiplicity="0..1" />
+    <End Type="DmcTimesheet.Models.C03_ProjectMembers" Role="C03_ProjectMembers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="C02_Members">
+        <PropertyRef Name="UserID" />
+      </Principal>
+      <Dependent Role="C03_ProjectMembers">
+        <PropertyRef Name="ChuTriChinh" />
       </Dependent>
     </ReferentialConstraint>
   </Association>

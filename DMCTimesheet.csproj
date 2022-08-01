@@ -122,6 +122,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\CollectModelData.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MemberController.cs" />
     <Compile Include="Controllers\ProjectController.cs" />
     <Compile Include="Controllers\TimesheetController.cs" />
     <Compile Include="Global.asax.cs">
@@ -173,6 +174,12 @@
       <DependentUpon>DMC.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\C16_Status.cs">
+      <DependentUpon>DMC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C17_Position.cs">
+      <DependentUpon>DMC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C18_Descipline.cs">
       <DependentUpon>DMC.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DMC.Context.cs">
@@ -3154,6 +3161,7 @@
     <Content Include="Scripts\popper-utils.js.map" />
     <Content Include="Views\Project\Index.cshtml" />
     <Content Include="Views\Project\AssignDesigner.cshtml" />
+    <Content Include="Views\Member\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

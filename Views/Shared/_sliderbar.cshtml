@@ -55,8 +55,7 @@
                     <a><i class="fa fa-desktop"></i> DỰ ÁN <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li>@Html.ActionLink("Quản lý dự án", "Index", "Project")</li>
-
-                        <li>@Html.ActionLink("QL Thầu phụ thiết kế", "AssignDesigner", "Project")</li>
+                        <li>@Html.ActionLink("Điều phối NTP Thiết Kế", "AssignDesigner", "Project")</li>
                     </ul>
                 </li>
 
@@ -65,7 +64,7 @@
                     <a><i class="fa fa-user"></i> NHÂN SỰ <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                         <li>@Html.ActionLink("Quản lý nhân sự", "Index", "Member")</li>
-                        <li>@Html.ActionLink("Điều phối nhân sự", "AssignMember", "Project")</li>
+                        <li>@Html.ActionLink("Điều phối nhân sự", "AssignMember", "Member")</li>
                         @switch (Userpermiss.idPer)
                         {
                             case 3:// System Administrator
@@ -91,7 +90,7 @@
                 <a><i class="fa fa-table"></i> CÔNG VIỆC <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                     <li>@Html.ActionLink("Timesheet hàng ngày", "MemberTimesheet", "Timesheet")</li>
-                    <li>@Html.ActionLink("Thống kê theo dự án", "ProjectTimesheet", "Timesheet")</li>
+                    @*<li>@Html.ActionLink("Thống kê theo dự án", "ProjectTimesheet", "Timesheet")</li>*@
                 </ul>
 
             </li>
@@ -102,13 +101,13 @@
             <a><i class="fa fa-database"></i> TỔNG HỢP <span class="fa fa-chevron-down"></span></a>
             <ul class="nav child_menu">
                 <li>@Html.ActionLink("Loại công việc", "Worktype", "Timesheet")</li>
-                <li>@Html.ActionLink("Chủ đầu tư", "Owners", "Project")</li>
+                @*<li>@Html.ActionLink("Chủ đầu tư", "Owners", "Project")</li>
                 <li>@Html.ActionLink("Thầu phụ thiết kế", "Designer", "Project")</li>
                 <li>@Html.ActionLink("Điều chỉnh dịch vụ NTP", "AssignServices", "Project")</li>
                 <li>@Html.ActionLink("Dịch vụ", "Services", "Project")</li>
                 <li>@Html.ActionLink("Tình trạng", "Status", "Project")</li>
                 <li>@Html.ActionLink("Loại hình dự án", "ProjectType", "Project")</li>
-                <li>@Html.ActionLink("Địa điểm", "Locations", "Project")</li>
+                <li>@Html.ActionLink("Địa điểm", "Locations", "Project")</li>*@
 
             </ul>
             <a class="text-info"></a>
