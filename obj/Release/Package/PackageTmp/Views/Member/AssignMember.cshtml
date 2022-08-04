@@ -1,0 +1,362 @@
+﻿@model IEnumerable<DMCTimesheet.Models.C03_ProjectMembers>
+@{
+    DMCTimesheet.Models.C06_UserPermisRelationship Userpermiss = Session["UserPermission"] as DMCTimesheet.Models.C06_UserPermisRelationship;
+    switch (Userpermiss.idPer)
+    {
+        case 1://WebAdmin
+            {
+                ViewBag.Title = "Web Admin";
+                Layout = "~/Views/Shared/_AdminLayout.cshtml";
+                break;
+            }
+        case 2://User
+            {
+                ViewBag.Title = "User";
+                Layout = "~/Views/Shared/_UserLayout.cshtml";
+                break;
+            }
+        case 3: //System Admin
+            {
+                ViewBag.Title = "Sys admin";
+                Layout = "~/Views/Shared/_AdminLayout.cshtml";
+                break;
+            }
+        case 4: //System Mod
+            {
+                ViewBag.Title = "Mod";
+                Layout = "~/Views/Shared/_AdminLayout.cshtml";
+                break;
+            }
+        default:
+            {
+                ViewBag.Title = "Default User";
+                Layout = "~/Views/Shared/_UserLayout.cshtml";
+                break;
+            }
+    }
+    DMCTimesheet.Models.C02_Members loginUser = Session["UserLogin"] as DMCTimesheet.Models.C02_Members;
+
+    List<DMCTimesheet.Models.C01_Projects> Projects = ViewBag.Projects as List<DMCTimesheet.Models.C01_Projects>;
+    List<DMCTimesheet.Models.C02_Members> _Members = ViewBag.Members as List<DMCTimesheet.Models.C02_Members>;
+    List<DMCTimesheet.Models.C02_Members> Members = _Members.OrderBy(s => s.FullName).ToList();
+    List<DMCTimesheet.com.cbimtech.MemberServices.MemberOutput> BIMer = ViewBag.BIMer as List<DMCTimesheet.com.cbimtech.MemberServices.MemberOutput>;
+    string Error = Session["MemberAssignError"] as string ?? "";
+    List<KeyValuePair<int, List<string>>> ProjectOfMember = new List<KeyValuePair<int, List<string>>>();
+    List<string> ChartLabels = new List<string>();
+    List<double> ChartValue = new List<double>();
+
+    //Lấy dự án của từng người
+    if (Model != null)
+    {
+        foreach (var mem in Members)
+        {
+            KeyValuePair<int, List<string>> keyValuePair = new KeyValuePair<int, List<string>>(mem.UserID, Model.Where(s => s.ChuTriChinh == mem.UserID
+            || s.ChuTriKienTruc == mem.UserID
+            || s.ChuTriKetCau == mem.UserID
+            || s.ChuTriMEP == mem.UserID
+            || s.LegalManager == mem.UserID).Select(p => p.ProjectID).ToList());
+            ProjectOfMember.Add(keyValuePair);
+        }
+
+        //Chart data
+
+
+        foreach (var item in ProjectOfMember)
+        {
+            ChartLabels.Add(Members.First(s => s.UserID == item.Key).FullName);
+            ChartValue.Add(item.Value.Count());
+        }
+    }
+
+
+}
+<script src="~/UserStyles/Chart.js/dist/Chart.min.js"></script>
+
+@* Modal create new *@
+<div>
+    <button type="button" class="btn btn-warning btn-small text-right" data-toggle="modal" data-target="#newAssignMember"><i class="fa fa-plus"></i> Thêm điều phối Thành viên cho dự án mới</button>
+</div>
+@* Form nhập liệu *@
+<div id="newAssignMember" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-m">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Thêm Thành viên cho dự án mới</h3>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("NewAssignMember", "Member", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <form>
+                        <div class="form-group row">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Ngày</lable>
+                            <input type="date" class="form-control col-md-7 col-sm-9 col-xs-9" name="Ngay" placeholder="" required="" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                        </div>
+                        @* ProjectTypeID *@
+                        <div class="form-group row  text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3"><b class="text-danger">Tên dự án</b></lable>
+                            <select name="ProjectID" class="form-control col-md-7 col-sm-9 col-xs-9">
+                                @foreach (var item in Projects)
+                                {
+                                    <option value=@item.ProjectID>@item.ProjectName</option>
+                                }
+                            </select>
+                        </div>
+                        @* ARC ID *@
+                        <div class="form-group row  text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3"><b>Chủ trì Dự án</b></lable>
+                            <select name="ChuTriChinh" class="form-control col-md-7 col-sm-9 col-xs-9">
+                                <option value="2">Chưa cập nhật</option>
+                                @foreach (var item in Members)
+                                {
+                                    <option value=@item.UserID>@item.FullName</option>
+                                }
+                            </select>
+                        </div>
+                        @* interior ID *@
+                        <div class="form-group row  text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chủ trì bộ môn <b class="text-primary">Kiến trúc</b></lable>
+                            <select name="ChuTriKienTruc" class="form-control col-md-7 col-sm-9 col-xs-9">
+                                <option value="5">Chưa cập nhật</option>
+                                @foreach (var item in Members)
+                                {
+                                    <option value=@item.UserID>@item.FullName</option>
+                                }
+                            </select>
+                        </div>
+                        @* Structure ID *@
+                        <div class="form-group row  text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chủ trì bộ môn <b class="text-primary">Kết cấu</b></lable>
+                            <select name="ChuTriKetCau" class="form-control col-md-7 col-sm-9 col-xs-9">
+                                <option value="6">Chưa cập nhật</option>
+                                @foreach (var item in Members)
+                                {
+                                    <option value=@item.UserID>@item.FullName</option>
+                                }
+                            </select>
+                        </div>
+
+                        @* MEP ID *@
+                        <div class="form-group row  text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chủ trì bộ môn <b class="text-primary">Cơ điện - MEPF</b></lable>
+                            <select name="ChuTriMEP" class="form-control col-md-7 col-sm-9 col-xs-9">
+                                <option value="7">Chưa cập nhật</option>
+                                @foreach (var item in Members)
+                                {
+                                    <option value=@item.UserID>@item.FullName</option>
+                                }
+                            </select>
+                        </div>
+
+                        @* Landscape ID *@
+                        <div class="form-group row  text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Quản lý <b class="text-primary">BIM</b></lable>
+                            <select name="BIMManager" class="form-control col-md-7 col-sm-9 col-xs-9">
+                                <option value="2">Chưa cập nhật</option>
+                                @foreach (var item in BIMer)
+                                {
+                                    <option value=@item.ID>@item.SoftName</option>
+                                }
+                            </select>
+                        </div>
+                        @* Legal ID *@
+                        <div class="form-group row  text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3"><b class="text-primary">Pháp lý</b></lable>
+                            <select name="LegalManager" class="form-control col-md-7 col-sm-9 col-xs-9">
+                                <option value="2">Chưa cập nhật</option>
+                                @foreach (var item in Members)
+                                {
+                                    <option value=@item.UserID>@item.FullName</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="form-group text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
+                            <input type="submit" value="Save" class="btn btn-success col-md-7" />
+                        </div>
+                    </form>
+                }
+            </div>
+            <div class="modal-footer">
+                <div>
+                    <p class="text-danger">@ViewBag.Error</p>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+@* End Form nhập liệu *@
+<div class="clearfix"></div>
+<h3 class="text-danger"><i>@Error</i></h3>
+<div class="clearfix"></div>
+
+
+<div class="clearfix"></div>
+<h3 class="text-center">DANH SÁCH THÀNH VIÊN THEO DỰ ÁN</h3>
+<div class="clearfix"></div>
+<div class="row">
+    <table class="table table-hover table-bordered table-striped">
+        <caption>Số lượng dự án <b class="text-danger">@Model.Count()</b></caption>
+        <thead class="text-white" style="background-color:#000000">
+            <tr class="row text-center">
+                <td class="col-md-1"><b>Ngày lập</b></td>
+                <td class="col-md-2"><b>Dự án</b></td>
+                <td class="col-md-2"><b>Chủ trì dự án</b></td>
+                <td class="col-md-2"><b>Chủ trì Kiến trúc</b></td>
+                <td class="col-md-2"><b>Chủ trì Kết cấu</b></td>
+                <td class="col-md-1"><b>Chủ trì MEP</b></td>
+                <td class="col-md-1"><b>Pháp lý</b></td>
+                <td class="col-md-1"><b>Quản lý BIM</b></td>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model == null || Model.Count() == 0)
+            {
+                <tr class="row">
+                    <td>Chưa chỉ định Nhân sự cho dự án</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var item in Model)
+                {
+                    string name = @item.ProjectID + @Projects.FirstOrDefault(s => s.ProjectID == item.ProjectID).ProjectName;
+
+                    <tr class="row text-dark table-bordered text-center">
+                        <td class="col-md-1">@DateTime.Parse(item.Ngay.ToString()).ToShortDateString()</td>
+                        <td class="col-md-2"><b>@Html.ActionLink(name, "EditAssign", "Member", new { Id = item.ID }, new { @class = "text-primary" })</b></td>
+                        <td class="col-md-2"><b class="text-danger">@Members.FirstOrDefault(s => s.UserID == item.ChuTriChinh).FullName</b></td>
+                        <td class="col-md-2">@Members.FirstOrDefault(s => s.UserID == item.ChuTriKienTruc).FullName</td>
+                        <td class="col-md-2">@Members.FirstOrDefault(s => s.UserID == item.ChuTriKetCau).FullName</td>
+                        <td class="col-md-1">@Members.FirstOrDefault(s => s.UserID == item.ChuTriMEP).FullName</td>
+                        <td class="col-md-1">@Members.FirstOrDefault(s => s.UserID == item.LegalManager).FullName</td>
+                        <td class="col-md-1">@BIMer.FirstOrDefault(s => s.ID == item.BIMManager).SoftName</td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>
+
+
+
+<h3 class="text-center">DỰ ÁN THEO THÀNH VIÊN</h3>
+<div>
+    @* Bản thống kê *@
+    <div class="col-md-6">
+        <h5 class="text-center">Bảng thống kê số lượng dự án theo thành viên</h5>
+        <div class="table-responsive-sm">
+            <table class="table table-bordered table-condensed table-striped">
+                <thead class="text-center">
+                    <tr class="text-white" style="background-color:#808080">
+                        <td class="col-md-4">Tên thành viên</td>
+                        <td class="col-md-3">SL dự án</td>
+                        <td class="col-md-5">Tên dự án</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model == null || Model.Count() == 0)
+                    {
+                        <tr class="row">
+                            <td>Chưa có thông tin</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        foreach (var item in ProjectOfMember)
+                        {
+                            if (item.Value.Count() != 0)
+                            {
+                                <tr class="text-dark text-center">
+                                    <td class="col-md-4">@Members.FirstOrDefault(s => s.UserID == item.Key).FullName</td>
+                                    <td class="col-md-3">@item.Value.Count()</td>
+                                    <td class="col-md-5">
+                                        @foreach (var itm in item.Value.ToList())
+                                        {
+                                            <b>@Projects.FirstOrDefault(s => s.ProjectID == itm).ProjectName</b>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    @* Biểu đồ dự án theo nhân sự *@
+    <div class="col-md-6">
+        <h5 class="text-center">Biểu đồ số lượng dự án theo thành viên</h5>
+        <div>
+            <canvas id="ProjectOfMemberSummary"></canvas>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            function searchFailed() {
+                $("#searchResult").html("Không thấy dữ liệu.");
+            }
+        });
+    </script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+}
+
+@* Chart code *@
+<script>
+    var ctx = document.getElementById('ProjectOfMemberSummary').getContext('2d');
+    var lable = @Html.Raw(Json.Encode(ChartLabels));
+    var data =@Html.Raw(Json.Encode(ChartValue));
+   var myChart = new Chart(ctx, {
+       type: 'bar',
+                        data: {
+                        labels:  lable,
+                            datasets: [{
+                                label: '',
+                                data: data,
+                                backgroundColor: 'rgba(255, 128, 64, 1)',
+                                borderColor:'rgba(255, 128, 128, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+       options: {
+           scales: {
+               yAxes: [{
+                   ticks: {
+                       beginAtZero: true
+                       //lables: lablesVlue type: 'category',
+                   }
+               }]
+           },
+           showToolTips: true,
+           legend: { display: false },
+           animation:
+           {
+               duration: 0,
+               onComplete: function () {
+                   var ctx = this.chart.ctx;
+                   ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, 'normal', Chart.defaults.global.defaultFontFamily);
+                   ctx.fillStyle = this.chart.config.options.defaultFontColor;
+                   ctx.textAlign = 'middle';
+                   ctx.textBaseline = 'top';
+                   this.data.datasets.forEach(function (dataset) {
+                       for (var i = 0; i < dataset.data.length; i++) {
+                           var model = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model;
+                           ctx.fillText(dataset.data[i], model.x, model.y - 5);
+                       }
+                   });
+               }
+           }
+       }
+                    });
+</script>

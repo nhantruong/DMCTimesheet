@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:tns="http://services.cbimtech.com/WebServices/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" targetNamespace="http://services.cbimtech.com/WebServices/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://services.cbimtech.com/WebServices/">
+      <s:element name="DanhSachMember">
+        <s:complexType />
+      </s:element>
+      <s:element name="DanhSachMemberResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DanhSachMemberResult" type="tns:ArrayOfMemberOutput" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfMemberOutput">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="MemberOutput" nillable="true" type="tns:MemberOutput" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="MemberOutput">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="ID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="SoftName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="UserName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="UserType" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Department" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="UserStatus" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Image" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="MemberbyID">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="id" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MemberbyIDResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="MemberbyIDResult" type="tns:MemberOutput" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MemberByName">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="name" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MemberByNameResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="MemberByNameResult" type="tns:MemberOutput" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MemberbyUsername">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="username" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MemberbyUsernameResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="MemberbyUsernameResult" type="tns:MemberOutput" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MemberbyTinhtrangLamViec">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="tinhtrang" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="MemberbyTinhtrangLamViecResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="MemberbyTinhtrangLamViecResult" type="tns:ArrayOfMemberOutput" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Login">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="userName" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="LoginResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="LoginResult" type="tns:MemberOutput" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="DanhSachMemberSoapIn">
+    <wsdl:part name="parameters" element="tns:DanhSachMember" />
+  </wsdl:message>
+  <wsdl:message name="DanhSachMemberSoapOut">
+    <wsdl:part name="parameters" element="tns:DanhSachMemberResponse" />
+  </wsdl:message>
+  <wsdl:message name="MemberbyIDSoapIn">
+    <wsdl:part name="parameters" element="tns:MemberbyID" />
+  </wsdl:message>
+  <wsdl:message name="MemberbyIDSoapOut">
+    <wsdl:part name="parameters" element="tns:MemberbyIDResponse" />
+  </wsdl:message>
+  <wsdl:message name="MemberByNameSoapIn">
+    <wsdl:part name="parameters" element="tns:MemberByName" />
+  </wsdl:message>
+  <wsdl:message name="MemberByNameSoapOut">
+    <wsdl:part name="parameters" element="tns:MemberByNameResponse" />
+  </wsdl:message>
+  <wsdl:message name="MemberbyUsernameSoapIn">
+    <wsdl:part name="parameters" element="tns:MemberbyUsername" />
+  </wsdl:message>
+  <wsdl:message name="MemberbyUsernameSoapOut">
+    <wsdl:part name="parameters" element="tns:MemberbyUsernameResponse" />
+  </wsdl:message>
+  <wsdl:message name="MemberbyTinhtrangLamViecSoapIn">
+    <wsdl:part name="parameters" element="tns:MemberbyTinhtrangLamViec" />
+  </wsdl:message>
+  <wsdl:message name="MemberbyTinhtrangLamViecSoapOut">
+    <wsdl:part name="parameters" element="tns:MemberbyTinhtrangLamViecResponse" />
+  </wsdl:message>
+  <wsdl:message name="LoginSoapIn">
+    <wsdl:part name="parameters" element="tns:Login" />
+  </wsdl:message>
+  <wsdl:message name="LoginSoapOut">
+    <wsdl:part name="parameters" element="tns:LoginResponse" />
+  </wsdl:message>
+  <wsdl:portType name="MemberServiceSoap">
+    <wsdl:operation name="DanhSachMember">
+      <wsdl:input message="tns:DanhSachMemberSoapIn" />
+      <wsdl:output message="tns:DanhSachMemberSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MemberbyID">
+      <wsdl:input message="tns:MemberbyIDSoapIn" />
+      <wsdl:output message="tns:MemberbyIDSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MemberByName">
+      <wsdl:input message="tns:MemberByNameSoapIn" />
+      <wsdl:output message="tns:MemberByNameSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MemberbyUsername">
+      <wsdl:input message="tns:MemberbyUsernameSoapIn" />
+      <wsdl:output message="tns:MemberbyUsernameSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="MemberbyTinhtrangLamViec">
+      <wsdl:input message="tns:MemberbyTinhtrangLamViecSoapIn" />
+      <wsdl:output message="tns:MemberbyTinhtrangLamViecSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Login">
+      <wsdl:input message="tns:LoginSoapIn" />
+      <wsdl:output message="tns:LoginSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="MemberServiceSoap" type="tns:MemberServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="DanhSachMember">
+      <soap:operation soapAction="http://services.cbimtech.com/WebServices/DanhSachMember" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MemberbyID">
+      <soap:operation soapAction="http://services.cbimtech.com/WebServices/MemberbyID" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MemberByName">
+      <soap:operation soapAction="http://services.cbimtech.com/WebServices/MemberByName" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MemberbyUsername">
+      <soap:operation soapAction="http://services.cbimtech.com/WebServices/MemberbyUsername" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MemberbyTinhtrangLamViec">
+      <soap:operation soapAction="http://services.cbimtech.com/WebServices/MemberbyTinhtrangLamViec" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Login">
+      <soap:operation soapAction="http://services.cbimtech.com/WebServices/Login" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="MemberServiceSoap12" type="tns:MemberServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="DanhSachMember">
+      <soap12:operation soapAction="http://services.cbimtech.com/WebServices/DanhSachMember" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MemberbyID">
+      <soap12:operation soapAction="http://services.cbimtech.com/WebServices/MemberbyID" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MemberByName">
+      <soap12:operation soapAction="http://services.cbimtech.com/WebServices/MemberByName" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MemberbyUsername">
+      <soap12:operation soapAction="http://services.cbimtech.com/WebServices/MemberbyUsername" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MemberbyTinhtrangLamViec">
+      <soap12:operation soapAction="http://services.cbimtech.com/WebServices/MemberbyTinhtrangLamViec" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Login">
+      <soap12:operation soapAction="http://services.cbimtech.com/WebServices/Login" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MemberService">
+    <wsdl:port name="MemberServiceSoap" binding="tns:MemberServiceSoap">
+      <soap:address location="https://services.cbimtech.com/WebServices/MemberService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="MemberServiceSoap12" binding="tns:MemberServiceSoap12">
+      <soap12:address location="https://services.cbimtech.com/WebServices/MemberService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

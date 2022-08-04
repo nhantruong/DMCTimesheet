@@ -1,0 +1,120 @@
+﻿@model DMCTimesheet.Models.C03_ProjectMembers
+@{
+    ViewBag.Title = "Project Assignment edit";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    //Thông tin từ Controller gửi lên
+    List<DMCTimesheet.Models.C01_Projects> Projects = ViewBag.Projects as List<DMCTimesheet.Models.C01_Projects>;
+    List<DMCTimesheet.Models.C02_Members> _Members = ViewBag.Members as List<DMCTimesheet.Models.C02_Members>;
+    List<DMCTimesheet.Models.C02_Members> Members = _Members.OrderBy(s => s.FullName).ToList();
+    List<DMCTimesheet.com.cbimtech.MemberServices.MemberOutput> BIMer = ViewBag.BIMer as List<DMCTimesheet.com.cbimtech.MemberServices.MemberOutput>;
+    string Error = Session["MemberAssignError"] as string ?? "";
+}
+<h3><i>@Error</i></h3>
+
+<div class="modal-body">
+    @using (Html.BeginForm("EditAssignMember", "Member", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <form>
+            <div class="form-group row">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Mã điều phối</lable>
+                <input type="number" class="form-control col-md-7 col-sm-9 col-xs-9" name="ID" placeholder="" readonly="" value="@Model.ID" />
+            </div>
+            
+            <div class="form-group row">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Ngày điều phối</lable>
+                <input type="date" class="form-control col-md-7 col-sm-9 col-xs-9" name="Ngay" placeholder="" required="" value="@DateTime.Parse(Model.Ngay.ToString()).ToString("yyyy-MM-dd")" />
+            </div>
+            @* ProjectTypeID *@
+            <div class="form-group row  text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3"><b class="text-danger">Tên dự án</b></lable>
+                <select name="ProjectID" class="form-control col-md-7 col-sm-9 col-xs-9">
+                    <option value=@Model.ProjectID>@Projects.FirstOrDefault(s=>s.ProjectID == Model.ProjectID).ProjectName</option>
+                    @foreach (var item in Projects)
+                    {
+                        <option value=@item.ProjectID>@item.ProjectName</option>
+                    }
+                </select>
+            </div>
+            @* ARC ID *@
+            <div class="form-group row  text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3"><b>Chủ trì Dự án</b></lable>
+                <select name="ChuTriChinh" class="form-control col-md-7 col-sm-9 col-xs-9">
+                    <option value="@Model.ChuTriChinh">@Members.FirstOrDefault(s=>s.UserID == Model.ChuTriChinh).FullName</option>
+                    @foreach (var item in Members)
+                    {
+                        <option value=@item.UserID>@item.FullName</option>
+                    }
+                </select>
+            </div>
+            @* interior ID *@
+            <div class="form-group row  text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chủ trì bộ môn <b class="text-primary">Kiến trúc</b></lable>
+                <select name="ChuTriKienTruc" class="form-control col-md-7 col-sm-9 col-xs-9">
+                    <option value="@Model.ChuTriKienTruc">@Members.FirstOrDefault(s => s.UserID == Model.ChuTriKienTruc).FullName</option>
+                    @foreach (var item in Members)
+                    {
+                        <option value=@item.UserID>@item.FullName</option>
+                    }
+                </select>
+            </div>
+            @* Structure ID *@
+            <div class="form-group row  text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chủ trì bộ môn <b class="text-primary">Kết cấu</b></lable>
+                <select name="ChuTriKetCau" class="form-control col-md-7 col-sm-9 col-xs-9">
+                    <option value="@Model.ChuTriKetCau">@Members.FirstOrDefault(s => s.UserID == Model.ChuTriKetCau).FullName</option>
+                    @foreach (var item in Members)
+                    {
+                        <option value=@item.UserID>@item.FullName</option>
+                    }
+                </select>
+            </div>
+
+            @* MEP ID *@
+            <div class="form-group row  text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chủ trì bộ môn <b class="text-primary">Cơ điện - MEPF</b></lable>
+                <select name="ChuTriMEP" class="form-control col-md-7 col-sm-9 col-xs-9">
+                    <option value="@Model.ChuTriMEP">@Members.FirstOrDefault(s => s.UserID == Model.ChuTriMEP).FullName</option>
+                    @foreach (var item in Members)
+                    {
+                        <option value=@item.UserID>@item.FullName</option>
+                    }
+                </select>
+            </div>
+
+            @* Landscape ID *@
+            <div class="form-group row  text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Quản lý <b class="text-primary">BIM</b></lable>
+                <select name="BIMManager" class="form-control col-md-7 col-sm-9 col-xs-9">
+                    <option value="@Model.BIMManager">@BIMer.FirstOrDefault(s => s.ID == Model.BIMManager).SoftName</option>
+                    @foreach (var item in BIMer)
+                    {
+                        <option value=@item.ID>@item.SoftName</option>
+                    }
+                </select>
+            </div>
+            @* Legal ID *@
+            <div class="form-group row  text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3"><b class="text-primary">Pháp lý</b></lable>
+                <select name="LegalManager" class="form-control col-md-7 col-sm-9 col-xs-9">
+                    <option value="@Model.LegalManager">@Members.FirstOrDefault(s => s.UserID == Model.LegalManager).FullName</option>
+                    @foreach (var item in Members)
+                    {
+                        <option value=@item.UserID>@item.FullName</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
+                <input type="submit" value="Save" class="btn btn-success col-md-7" />
+            </div>
+        </form>
+    }
+</div>
+<div class="modal-footer">
+    <div>
+        <p class="text-danger">@ViewBag.Error</p>
+    </div>
+    <div class="clearfix"></div>
+</div>

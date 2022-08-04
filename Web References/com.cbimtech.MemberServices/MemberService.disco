@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<discovery xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.xmlsoap.org/disco/">
+  <contractRef ref="https://services.cbimtech.com/WebServices/MemberService.asmx?wsdl" docRef="https://services.cbimtech.com/WebServices/MemberService.asmx" xmlns="http://schemas.xmlsoap.org/disco/scl/" />
+  <soap address="https://services.cbimtech.com/WebServices/MemberService.asmx" xmlns:q1="http://services.cbimtech.com/WebServices/" binding="q1:MemberServiceSoap" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+  <soap address="https://services.cbimtech.com/WebServices/MemberService.asmx" xmlns:q2="http://services.cbimtech.com/WebServices/" binding="q2:MemberServiceSoap12" xmlns="http://schemas.xmlsoap.org/disco/soap/" />
+</discovery>

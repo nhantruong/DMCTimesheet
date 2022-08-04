@@ -34,9 +34,9 @@
                     <div class="dropdown-menu dropdown-usermenu pull-right" aria-labelledby="navbarDropdown">
                         @if (loginUser != null)
                         {
-                            @Html.ActionLink(" Profile", "UserProfile", "Member", new { id = loginUser.UserID }, new { @class = "dropdown-item fa fa-user-md pull-right" })
+                            @Html.ActionLink(" Profile", "Details", "Member", new { id = loginUser.UserID }, new { @class = "dropdown-item fa fa-user-md pull-right" })
                         }
-                        @Html.ActionLink(" Log Out", "Logout", "Home", null, new { @class = "dropdown-item fa fa-sign-out pull-right" })
+                        @Html.ActionLink(" Logout", "Logout", "Home", null, new { @class = "dropdown-item fa fa-sign-out pull-right" })
                     </div>
                 </li>
             </ul>

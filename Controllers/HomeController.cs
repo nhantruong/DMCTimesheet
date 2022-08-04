@@ -152,7 +152,7 @@ namespace DMCTimesheet.Controllers
         /// </summary>
         /// <param name="password">Chuỗi cần mã hóa</param>
         /// <returns>Chuỗi Pass đã mã hóa</returns>
-        private string MaHoaPass(string password)
+        public static string MaHoaPass(string password)
         {
             MD5 mD5 = MD5.Create();
             byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(password);
@@ -344,17 +344,18 @@ namespace DMCTimesheet.Controllers
                     List<C01_Projects> myProjects = new List<C01_Projects>();
                     foreach (var item in projectsAssigned)
                     {
-                        myProjects.AddRange(db.C01_Projects.Where(s => s.ProjectID == item && s.ProjectStatusId == 1).ToList());
+                        myProjects.AddRange(db.C01_Projects.Where(s => s.ProjectID == item).ToList());
                     }
 
                     //Lấy danh sách dự án theo User ID - đang chạy
                     //ViewBag.MyProjects = CollectModelData.GetProjectsByUserId(logUser.UserID).Where(s=>s.ProjectStatusId == 1);
                     ViewBag.MyProjects = myProjects;
+                    ViewBag.AssignedProjects = db.C03_ProjectMembers.ToList();
 
                     //Lấy danh sách timesheet đã làm
-                    ViewBag.MyWorks = db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).OrderByDescending(p => p.RecordDate).ToList().Take(10); ;
-                    
+                    ViewBag.MyWorks = db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).OrderByDescending(p => p.RecordDate).ToList();                    
                     ViewBag.WorkType = db.C07_WorkType.ToList();
+
                     return View();
                 }
                 catch (Exception ex)

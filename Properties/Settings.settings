@@ -1,0 +1,9 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="DMCTimesheet.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="DMCTimesheet_com_cbimtech_MemberServices_MemberService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">https://services.cbimtech.com/WebServices/MemberService.asmx</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

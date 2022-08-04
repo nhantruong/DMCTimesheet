@@ -1,0 +1,82 @@
+﻿@model DMCTimesheet.Models.C08_Timesheet
+@{
+    ViewBag.Title = "Delete Timesheet";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+    List<DMCTimesheet.Models.C01_Projects> Projects = ViewBag.Projects as List<DMCTimesheet.Models.C01_Projects>;
+    List<DMCTimesheet.Models.C07_WorkType> WorkType = ViewBag.WorkType as List<DMCTimesheet.Models.C07_WorkType>;
+    string Error = "";
+    Error = Session["Error"] as string;
+}
+
+<h2>@ViewBag.Title</h2>
+<div class="nav navbar-fixed-top row">
+    @Html.ActionLink(" Home", "UserPage", "Home", null, new { @class = "fa fa-home btn btn-round btn-dark" })
+    @*@Html.ActionLink(" Interner List", "GetInternList", "ThucTapSinh", null, new { @class = "fa fa-plus-square-o btn btn-round btn-success" })*@
+</div>
+
+<div><i class="text-danger">@Error</i></div>
+
+@using (Html.BeginForm("DeleteConfirmed", "Timesheet", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+<div class="form-horizontal">
+    <h3 class="text-center text-danger col-md-6">Bạn có chắc sẽ Xóa công việc này chứ?</h3>
+    <br />
+    <div class="clearfix"></div>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-group row">
+        <lable class="control-label col-md-2 text-left">Mã công việc</lable>
+        <input type="text" class="form-control col-md-4 text-danger" readonly name="Id" placeholder="" required="" value="@Model.Id" />
+    </div>
+    @* Date *@
+    <div class="form-group row">
+        <lable class="control-label col-md-2 text-left">Ngày báo cáo</lable>
+        <input type="date" class="form-control col-md-4" name="RecordDate" readonly value="@DateTime.Parse(Model.RecordDate.ToString()).ToString("yyyy-MM-dd")" />
+    </div>
+
+    @* ProjectTypeID *@
+    <div class="form-group row  text-left">
+        <lable class="control-label col-md-2 text-left"><b class="text-danger">Tên dự án</b></lable>
+        <select name="ProjectId" class="form-control col-md-4">
+            <option value=@Model.ProjectId>@Projects.FirstOrDefault(s => s.ProjectID == Model.ProjectId).ProjectName</option>
+        </select>
+    </div>
+
+    <div class="form-group row">
+        @Html.LabelFor(model => model.WorkType, "Loại hình Công việc", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="form-control col-md-4">
+            <select name="WorkType" class="label col-md-12">
+                <option value="@Model.WorkType">@WorkType.FirstOrDefault(s => s.ID == Model.WorkType).WorkName</option>
+            </select>
+            @Html.ValidationMessageFor(model => model.WorkType, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="control-label col-md-2">Thời gian</label>
+        <div class="col-md-6 control-group">
+            <div class="form-group row">
+                <lable class="control-label col-md-2 text-left">Số giờ làm</lable>
+                <input type="number" class="form-control col-md-2" readonly name="Hour" value="@Model.Hour" />
+            </div>
+            <div class="form-group row">
+                <lable class="control-label col-md-2 text-left">Tăng ca (nếu có)</lable>
+                <input type="number" class="form-control col-md-2" readonly name="OT" value="@Model.OT" />
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <lable class="control-label col-md-2 text-left">Chú thích công việc</lable>
+        <textarea class="form-control col-md-4" rows="3" name="Description" readonly >@Model.Description</textarea>
+    </div>    
+
+    <div class="form-group row">
+        <div class="col-md-offset-2 col-md-2">
+            <input type="submit" value="Xóa công việc" class="btn btn-danger" />
+        </div>
+        <div class="text-danger">@ViewBag.WorkAlert</div>
+    </div>
+</div>
+}
+
+
