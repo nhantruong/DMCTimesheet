@@ -25,6 +25,14 @@ namespace DMCTimesheet.Models
         public string ContractorName { get; set; }
         public Nullable<int> ContractorLocation { get; set; }
         public string ShortName { get; set; }
+        public Nullable<bool> ARC { get; set; }
+        public Nullable<bool> STR { get; set; }
+        public Nullable<bool> MEP { get; set; }
+        public Nullable<bool> Interior { get; set; }
+        public Nullable<bool> Infrastructure { get; set; }
+        public Nullable<bool> DTM { get; set; }
+        public Nullable<bool> Render { get; set; }
+        public Nullable<bool> Landscape { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<C15_SubConServices> C15_SubConServices { get; set; }

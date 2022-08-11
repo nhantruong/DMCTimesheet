@@ -1,0 +1,371 @@
+﻿@model IEnumerable<DMCTimesheet.Models.C08_Timesheet>
+@{
+    DMCTimesheet.Models.C06_UserPermisRelationship Userpermiss = Session["UserPermission"] as DMCTimesheet.Models.C06_UserPermisRelationship;
+
+    DMCTimesheet.Models.C02_Members loginUser = Session["UserLogin"] as DMCTimesheet.Models.C02_Members;
+    int stt = 0;
+    List<DMCTimesheet.Models.C02_Members> Members = ViewBag.Members as List<DMCTimesheet.Models.C02_Members>;
+    List<DMCTimesheet.Models.C01_Projects> Projects = ViewBag.Projects as List<DMCTimesheet.Models.C01_Projects>;
+    List<DMCTimesheet.Models.C07_WorkType> Works = ViewBag.WorkGroup as List<DMCTimesheet.Models.C07_WorkType>;
+    List<DMCTimesheet.Models.C03_ProjectMembers> MyProjects = ViewBag.ProjectMember as List<DMCTimesheet.Models.C03_ProjectMembers>;
+    //Tính toán ngày
+    DateTime CurrentDate = DateTime.Parse(DateTime.Now.ToShortDateString());
+    int startDay = CurrentDate.Day - 7;
+    int endDay = CurrentDate.Day + 3;
+    DateTime fromWeeklyDate = DateTime.Parse(startDay.ToString() + "/" + DateTime.Now.Month.ToString() + "/" + DateTime.Now.Year.ToString());
+    DateTime endWeeklyDate = DateTime.Parse(endDay.ToString() + "/" + DateTime.Now.Month.ToString() + "/" + DateTime.Now.Year.ToString());
+    //Công việc trong ngày
+    List<DMCTimesheet.Models.C08_Timesheet> ViecTrongNgay = Model.Where(s => s.RecordDate == CurrentDate).ToList();
+    double tongsogio = 0;
+    double tongsogioOT = 0;
+    double SoGioTrongNgay = 0;
+    foreach (var item in ViecTrongNgay)
+    {
+        tongsogio += (double)item.Hour;
+        tongsogioOT += (double)item.OT;
+
+    }
+    SoGioTrongNgay = tongsogio + tongsogioOT * 1.5;
+    //Công việc trong tuần
+    List<DMCTimesheet.Models.C08_Timesheet> _ViecTrongTuan = new List<DMCTimesheet.Models.C08_Timesheet>();
+    foreach (var item in Model)
+    {
+        int value = DateTime.Parse(item.RecordDate.ToString()).Day - fromWeeklyDate.Day;
+        if (value <= 7)
+        {
+            _ViecTrongTuan.Add(item);
+        }
+    }
+    //string error = Session["OverHourError"] == null ? "" : Session["OverHourError"] as string;
+    //Chart data
+    List<string> ChartLabels = new List<string>();
+    List<double> ChartValue = new List<double>();
+    var chartData = Model.GroupBy(s => s.WorkType);
+    foreach (var item in chartData)
+    {
+        ChartLabels.Add(Works.FirstOrDefault(s => s.ID == item.Key).WorkName);
+        double hour = (double)item.Select(s => s.Hour).Sum() + 1.5 * (double)item.Select(s => s.OT).Sum();
+        ChartValue.Add(hour);
+    }
+}
+<script src="~/UserStyles/Chart.js/dist/Chart.min.js"></script>
+
+@*<div class="nav navbar-fixed-top row">
+        @Html.ActionLink(" Home", "UserPage", "Home", null, new { @class = "fa fa-home btn btn-round btn-dark" })
+    </div>*@
+
+<br />
+<div class="clearfix"></div>
+
+
+@* Danh sách Timesheet đã làm *@
+<div class="row">
+    <div class="col-md-12">
+        <div class="col-md-5">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2 class="text-warning"><b class="text-success">Dailywork</b></h2>
+                    <ul class="nav navbar-right panel_toolbox">
+                        <li>
+                            <a class="collapse-link"><i class="fa fa-chevron-up text-primary"></i></a>
+                        </li>
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    @* Form nhập liệu *@
+                    <div>
+                        @using (Html.BeginForm("CreateTimesheet", "Timesheet", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <form class="text-dark">
+                                <h2 class="text-left text-danger">Add daily work</h2>
+                                <div class="clearfix"></div>
+                                @* memberID *@
+                                <div class="form-group row">
+                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Tên thành viên</lable>
+                                    <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" readonly name="MemberName" placeholder="" required="" value="@loginUser.FullName" />
+                                </div>
+
+                                @* Date *@
+                                <div class="form-group row">
+                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Ngày ghi</lable>
+                                    <input type="date" class="form-control col-md-7 col-sm-9 col-xs-9" name="RecordDate" placeholder="" required="" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                                </div>
+                                @* ProjectID *@
+                                <div class="form-group row  text-left">
+                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3">Dự án được phân công</lable>
+                                    <select name="ProjectId" required data-toggle="tooltip" data-placement="left" title="Dự án được phân công sẽ xuất hiện ở đây, vui lòng liên hệ Admin nếu chưa có dự án" class="form-control col-md-7 col-sm-9 col-xs-9">
+                                        @if (MyProjects != null || MyProjects.Count() > 0)
+                                        {
+                                            foreach (var item in MyProjects.OrderBy(s => s.Ngay))
+                                            {
+                                                <option value=@item.ProjectID>@Projects.FirstOrDefault(s => s.ProjectID == item.ProjectID).ProjectOtherName</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+
+                                @* WorkType *@
+                                <div class="form-group row  text-left">
+                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chọn Công việc</lable>
+                                    <select name="WorkID" required data-toggle="tooltip" data-placement="left" title="Chọn loại hình công việc của bạn" class="form-control col-md-7 col-sm-9 col-xs-9">
+                                        @foreach (var item in Works.GroupBy(s => s.WorkName))
+                                        {
+                                            <option value=@Works.Where(s=>s.WorkName == item.Key).FirstOrDefault().ID>@item.Key</option>
+                                        }
+                                    </select>
+                                </div>
+                                @* Hour *@
+                                <div class="form-group row text-left">
+                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thời gian</lable>
+                                    <div class="col-md-7 col-sm-9 col-xs-9">
+                                        <div class="col-md-6 text-success inline">
+                                            <lable class="control-label col-md-5 text-left">Giờ</lable>
+                                            <input type="number" class="form-control col-md-6" name="Hour" required value="4" />
+                                        </div>
+                                        <div class="col-md-6 text-danger inline">
+                                            <lable class="control-label col-md-6 text-left">Tăng ca</lable>
+                                            <input type="number" class="form-control col-md-6" name="OvertimeHour" value="0" />
+                                        </div>
+                                    </div>
+                                </div>
+                                @* Description *@
+                                <div class="form-group row">
+                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Ghi chú chi tiết</lable>
+                                    <textarea class="form-control col-md-7 col-sm-9 col-xs-9 " rows="3" name="Description" placeholder="Nhập ngắn gọn nội dung công việc" required></textarea>
+                                </div>
+                                <div class="form-group text-left">
+                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
+                                    <input type="submit" value="Save" class="btn btn-success col-md-7" />
+
+                                </div>
+
+                                <div>
+                                    <p class="text-danger">@ViewBag.WorkAlert</p>
+                                </div>
+                                <div class="clearfix"></div>
+
+                            </form>
+                        }
+                    </div>
+                    <div>
+                        <h4 class="text-danger">@ViewBag.WorkAlert</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="row">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2 class="text-warning"><b class="text-success">Daily Timesheet record</b></h2>
+                        <ul class="nav navbar-right panel_toolbox">
+                            <li>
+                                <a class="collapse-link"><i class="fa fa-chevron-up text-primary"></i></a>
+                            </li>
+                        </ul>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div class="x_content table-responsive">
+                            <div id="ajax-loader"></div>
+                            <p>Công việc trong ngày - <b class="text-primary">@CurrentDate.ToShortDateString()</b></p>
+                            <table class="table table-hover table-bordered table-striped">
+                                <caption><h6>Tổng số giờ trong trong ngày <b class="text-danger">@SoGioTrongNgay</b></h6></caption>
+                                <thead class="bg-dark text-center text-white">
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Record date</th>
+                                        <th>Project</th>
+                                        <th>Workdone</th>
+                                        <th>Hours</th>
+                                        <th>Overtime</th>
+                                        <th>Description</th>
+                                        <th>#</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="seachResult" class="text-dark">
+                                    @if (ViecTrongNgay != null)
+                                    {
+                                        foreach (var item in ViecTrongNgay)
+                                        {
+                                            stt++;
+                                            <tr>
+                                                <td>@stt</td>
+                                                <td>@DateTime.Parse(item.RecordDate.ToString()).ToShortDateString()</td>
+                                                <td>@item.ProjectId - @Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName</td>
+                                                <td>@Works.FirstOrDefault(s => s.ID == item.WorkType).WorkName</td>
+                                                <td>@item.Hour</td>
+                                                <td>@item.OT</td>
+                                                <td>@item.Description</td>
+                                                <td>
+                                                    @Html.ActionLink(" ", "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "fa fa-edit btn" })
+                                                    @Html.ActionLink(" ", "Delete", "Timesheet", new { id = item.Id }, new { @class = " fa fa-remove btn" })
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td class="row text-danger">Hôm nay chưa có công việc nào được ghi nhận</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="clearfix"></div>
+
+<div class="text-center">
+    @using (Html.BeginForm("GetTimesheetbyTimeRange", "Timesheet", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <form>
+            <div class="row text-white" style="background-color:black">
+                <table class="col-md-12">
+                    <tr class="row">
+                        <td class="col-md-2">Khoảng thời gian từ ngày</td>
+                        <td class="col-md-1">
+                            <input type="date" class="form-control" name="fromDate" required value="@fromWeeklyDate.ToString("yyyy-MM-dd")" />
+                        </td>
+                        <td class="col-md-1">đến ngày</td>
+                        <td class="col-md-1">
+                            <input type="date" class="form-control" name="endDate" required value="@CurrentDate.ToString("yyyy-MM-dd")" />
+                        </td>
+                        <td class="col-md-1">
+                            <input type="submit" value="Xem" disabled class="btn btn-success" />
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </form>
+    }
+
+</div>
+
+@* Theo tuần *@
+<div>
+    @* Bieu do Timesheet *@
+    <div class="col-md-5">
+        <div class="clearfix"></div>
+        <h2 class="text-left text-danger">BIỂU ĐỒ CÁC CÔNG VIỆC</h2>
+        @* Biểu đồ timesheet *@
+        <div>
+            <canvas id="TimeSheetSummary"></canvas>
+        </div>
+    </div>
+    <div class="col-md-7">
+        @* bảng cong việc trong tuan *@
+        <div class="x_content table-responsive">
+            <div class="clearfix"></div>
+            <h2 class="text-left text-danger">CÔNG VIỆC TRONG TUẦN</h2>
+            <div id="ajax-loader"></div>
+            <table class="table table-hover table-bordered table-striped">
+                <caption><h5>Tổng số công việc trong tuần <b class="text-primary">@_ViecTrongTuan.Count()</b></h5></caption>
+                <thead class="bg-dark text-center text-white">
+                    <tr>
+                        <th>No</th>
+                        <th>Record date</th>
+                        <th>Project</th>
+                        <th>Workdone</th>
+                        <th>Hours</th>
+                        <th>Overtime</th>
+                        <th>Description</th>
+                        <th>#</th>
+                    </tr>
+                </thead>
+                <tbody id="seachResult" class="text-dark">
+                    @foreach (var item in _ViecTrongTuan.OrderByDescending(s => s.RecordDate))
+                    {
+                        stt++;
+                        <tr>
+                            <td>@stt</td>
+                            <td>@DateTime.Parse(item.RecordDate.ToString()).ToShortDateString()</td>
+                            <td>@item.ProjectId - @Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName</td>
+                            <td>@Works.FirstOrDefault(s => s.ID == item.WorkType).WorkName</td>
+                            <td>@item.Hour</td>
+                            <td>@item.OT</td>
+                            <td>@item.Description</td>
+                            <td>
+                                @Html.ActionLink(" ", "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "fa fa-edit btn" })
+                                @Html.ActionLink(" ", "Delete", "Timesheet", new { id = item.Id }, new { @class = " fa fa-remove btn" })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            function searchFailed() {
+                $("#searchResult").html("Không thấy dữ liệu.");
+            }
+        });
+    </script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
+}
+
+@* Chart code *@
+<script>
+    var ctx = document.getElementById('TimeSheetSummary').getContext('2d');
+    var lable = @Html.Raw(Json.Encode(ChartLabels));
+    var data =@Html.Raw(Json.Encode(ChartValue));
+   var myChart = new Chart(ctx, {
+       type: 'horizontalBar',
+                        data: {
+                        labels:  lable,
+                            datasets: [{
+                                label: '',
+                                data: data,
+                                backgroundColor: 'rgba(255, 128, 64, 1)',
+                                borderColor:'rgba(255, 128, 128, 1)',
+                                borderWidth: 1
+                            }]
+                        },
+       options: {
+           scales: {
+               yAxes: [{
+                   ticks: {
+                       beginAtZero: true
+                       //lables: lablesVlue type: 'category',
+                   }
+               }]
+           },
+           showToolTips: true,
+           legend: { display: false },
+           animation:
+           {
+               duration: 0,
+               onComplete: function () {
+                   var ctx = this.chart.ctx;
+                   ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, 'normal', Chart.defaults.global.defaultFontFamily);
+                   ctx.fillStyle = this.chart.config.options.defaultFontColor;
+                   ctx.textAlign = 'middle';
+                   ctx.textBaseline = 'top';
+                   this.data.datasets.forEach(function (dataset) {
+                       for (var i = 0; i < dataset.data.length; i++) {
+                           var model = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model;
+                           ctx.fillText(dataset.data[i], model.x, model.y - 5);
+                       }
+                   });
+               }
+           }
+       }
+                    });
+</script>

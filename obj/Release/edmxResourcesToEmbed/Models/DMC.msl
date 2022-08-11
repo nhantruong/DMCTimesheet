@@ -94,6 +94,14 @@
     <EntitySetMapping Name="C12_SubContractor">
       <EntityTypeMapping TypeName="DmcTimesheet.Models.C12_SubContractor">
         <MappingFragment StoreEntitySet="12_SubContractor">
+          <ScalarProperty Name="Landscape" ColumnName="Landscape" />
+          <ScalarProperty Name="Render" ColumnName="Render" />
+          <ScalarProperty Name="DTM" ColumnName="DTM" />
+          <ScalarProperty Name="Infrastructure" ColumnName="Infrastructure" />
+          <ScalarProperty Name="Interior" ColumnName="Interior" />
+          <ScalarProperty Name="MEP" ColumnName="MEP" />
+          <ScalarProperty Name="STR" ColumnName="STR" />
+          <ScalarProperty Name="ARC" ColumnName="ARC" />
           <ScalarProperty Name="ShortName" ColumnName="ShortName" />
           <ScalarProperty Name="ContractorLocation" ColumnName="ContractorLocation" />
           <ScalarProperty Name="ContractorName" ColumnName="ContractorName" />
@@ -131,6 +139,7 @@
     <EntitySetMapping Name="C01_Projects">
       <EntityTypeMapping TypeName="DmcTimesheet.Models.C01_Projects">
         <MappingFragment StoreEntitySet="01_Projects">
+          <ScalarProperty Name="MaDuAn" ColumnName="MaDuAn" />
           <ScalarProperty Name="OwnerId" ColumnName="OwnerId" />
           <ScalarProperty Name="LocationId" ColumnName="LocationId" />
           <ScalarProperty Name="ProjectStatusId" ColumnName="ProjectStatusId" />
@@ -187,6 +196,7 @@
     <EntitySetMapping Name="C02_Members">
       <EntityTypeMapping TypeName="DmcTimesheet.Models.C02_Members">
         <MappingFragment StoreEntitySet="02_Members">
+          <ScalarProperty Name="SystemMember" ColumnName="SystemMember" />
           <ScalarProperty Name="Deactived" ColumnName="Deactived" />
           <ScalarProperty Name="Position" ColumnName="Position" />
           <ScalarProperty Name="Descipline" ColumnName="Descipline" />

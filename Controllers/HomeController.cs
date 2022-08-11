@@ -19,19 +19,40 @@ namespace DMCTimesheet.Controllers
 
         public ActionResult Index()
         {
-            if (Session["UserLogin"] != null)
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            C02_Members logUser = Session["UserLogin"] as C02_Members;
+            C06_UserPermisRelationship userper = db.C06_UserPermisRelationship.FirstOrDefault(s => s.idUser == logUser.UserID);
+
+            switch (userper.idPer)
             {
-                db.Database.Connection.ConnectionString = conn;
-                ViewBag.Projectlist = db.C01_Projects.ToList();
-                ViewBag.Permission = db.C04_Permission.ToList();
-                ViewBag.Members = db.C02_Members.ToList();
-                ViewBag.UserPermRelate = db.C06_UserPermisRelationship.ToList();
-                return View();
+                case 1: //WebAdmin
+                    {
+                        Session["UserLogin"] = logUser;
+                        Session["UserPermission"] = userper;
+                        return RedirectToAction("WebAdminPage", "Home");
+                    }
+                case 2: //WebUser
+                    {
+                        Session["UserLogin"] = logUser;
+                        Session["UserPermission"] = userper;
+                        return RedirectToAction("UserPage", "Home");
+                    }
+                case 3: //SysAdmin
+                    {
+                        Session["UserLogin"] = logUser;
+                        Session["UserPermission"] = userper;
+                        return RedirectToAction("SysAdminPage", "Home");
+                    }
+                case 4: //SysMod
+                    {
+                        Session["UserLogin"] = logUser;
+                        Session["UserPermission"] = userper;
+                        return RedirectToAction("SysModPage", "Home");
+                    }
+                default: return RedirectToAction("UserPage");
+
             }
-            else
-            {
-                return RedirectToAction("Login");
-            }
+            return RedirectToAction("Login");
         }
         #region Login
 
@@ -183,7 +204,7 @@ namespace DMCTimesheet.Controllers
                         context.Database.Connection.ConnectionString = conn;
                         var mem = context.C02_Members.Where(s => s.UserName.ToLower() == UserName.ToLower()).FirstOrDefault();
                         if (mem != null && mem.Deactived == false)
-                        {                            
+                        {
                             mem.Pass = MaHoaPass(ConfirmPass);
                             context.Entry(mem).State = System.Data.Entity.EntityState.Modified;
                             context.SaveChanges();
@@ -224,7 +245,7 @@ namespace DMCTimesheet.Controllers
         #endregion
 
         #region SysAdmin - System Administrator
-        
+
         /// <summary>
         /// Quyền quản trị cao nhất
         /// </summary>
@@ -350,10 +371,11 @@ namespace DMCTimesheet.Controllers
                     //Lấy danh sách dự án theo User ID - đang chạy
                     //ViewBag.MyProjects = CollectModelData.GetProjectsByUserId(logUser.UserID).Where(s=>s.ProjectStatusId == 1);
                     ViewBag.MyProjects = myProjects;
+                    ViewBag.AllProject = db.C01_Projects.ToList();
                     ViewBag.AssignedProjects = db.C03_ProjectMembers.ToList();
 
                     //Lấy danh sách timesheet đã làm
-                    ViewBag.MyWorks = db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).OrderByDescending(p => p.RecordDate).ToList();                    
+                    ViewBag.MyWorks = db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).OrderByDescending(p => p.RecordDate).ToList();
                     ViewBag.WorkType = db.C07_WorkType.ToList();
 
                     return View();

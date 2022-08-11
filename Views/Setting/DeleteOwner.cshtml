@@ -1,0 +1,60 @@
+﻿@model DMCTimesheet.Models.C10_Owner
+@{
+    ViewBag.Title = "WorkType Page";
+    //Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    string updateInfo = ViewBag.SaveContent;
+    List<DMCTimesheet.Models.C11_Location> Locations = ViewBag.Location as List<DMCTimesheet.Models.C11_Location>;
+}
+<h3>XÓA THÔNG TIN CHỦ ĐẦU TƯ</h3>
+<div class="modal-body">
+    @using (Html.BeginForm("DeleteConfirmed", "Setting", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <form>
+
+            @* WorkType *@
+            <div class="form-group row text-left">
+                <lable hidden class="control-label col-md-3 col-sm-3 col-xs-3">Id</lable>
+                <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" name="OnwerId" hidden placeholder="Tên theo Hợp đồng" readonly value="@Model.OnwerId" />
+            </div>
+            <div class="form-group row text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên đầy đủ của CDT</lable>
+                <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" disabled name="OwnerName" placeholder="Tên theo Hợp đồng" required="" value="@Model.OwnerName" />
+            </div>
+            <div class="form-group row text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên rút gọn</lable>
+                <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" disabled name="ShortName" placeholder="Tên rút gọn" value="@Model.ShortName" />
+            </div>
+            <div class="form-group row text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Người đại diện</lable>
+                <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" disabled name="KeyPerson" placeholder="Tên người đại diện" value="@Model.KeyPerson" />
+            </div>
+            <div class="form-group row text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Email người đại diện</lable>
+                <input type="email" class="form-control col-md-7 col-sm-9 col-xs-9" disabled name="Email" placeholder="" value="@Model.Email" />
+            </div>
+
+            <div class="form-group row  text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Vị trí</lable>
+                <select name="OnwerLocation" disabled class="form-control col-md-7 col-sm-9 col-xs-9">
+                    <option value="@Model.OnwerLocation">@Locations.FirstOrDefault(s => s.LocationId == Model.OnwerLocation).LocationName</option>                    
+                </select>
+            </div>
+
+            <div class="form-group row text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Mô tả</lable>
+                <textarea type="text" class="form-control col-md-7 col-sm-9 col-xs-9" name="OnwerDescription" placeholder="Mô tả ngắn gọn" value="@Model.OnwerDescription"></textarea>
+            </div>
+            <div class="form-group text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
+                <input type="submit" value="Xóa CDT" class="btn btn-danger col-md-7" />
+            </div>
+        </form>
+    }
+</div>
+<div class="modal-footer">
+    <div>
+        <p class="text-danger">@ViewBag.Error</p>
+    </div>
+    <div class="clearfix"></div>
+</div>

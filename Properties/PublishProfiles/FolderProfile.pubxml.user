@@ -4,44 +4,45 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 -->
 <Project>
   <PropertyGroup>
-    <_PublishTargetUrl>C:\Users\truon\OneDrive\MyApp\DMCTimesheet\Publish\ver1.0</_PublishTargetUrl>
+    <_PublishTargetUrl>C:\Users\truon\OneDrive\MyApp\DMCTimesheet\Publish\ver1.1</_PublishTargetUrl>
+    <History>True|2022-08-11T09:26:10.3937430Z;True|2022-08-11T08:49:03.3468756+07:00;True|2022-08-11T08:21:12.7539599+07:00;True|2022-08-10T19:48:23.7808778+07:00;True|2022-08-10T19:22:10.1896120+07:00;</History>
   </PropertyGroup>
   <ItemGroup>
     <File Include="Assets/Chi tiết dự án DRAGON BAY VIEW %281646%29 - Coteccons Group.htm">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>07/19/2022 15:36:00</publishTime>
     </File>
     <File Include="Assets/Chi tiết dự án DRAGON BAY VIEW %281646%29 - Coteccons Group_files/bootstrap">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>07/19/2022 15:36:00</publishTime>
     </File>
     <File Include="Assets/Chi tiết dự án DRAGON BAY VIEW %281646%29 - Coteccons Group_files/ckeditor.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>07/19/2022 15:36:00</publishTime>
     </File>
     <File Include="Assets/Chi tiết dự án DRAGON BAY VIEW %281646%29 - Coteccons Group_files/csst.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>07/19/2022 15:36:00</publishTime>
     </File>
     <File Include="Assets/Chi tiết dự án DRAGON BAY VIEW %281646%29 - Coteccons Group_files/intro.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>07/19/2022 15:36:00</publishTime>
     </File>
     <File Include="Assets/Chi tiết dự án DRAGON BAY VIEW %281646%29 - Coteccons Group_files/introjs.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>07/19/2022 15:36:00</publishTime>
     </File>
     <File Include="Assets/Chi tiết dự án DRAGON BAY VIEW %281646%29 - Coteccons Group_files/intro_002.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>07/19/2022 15:36:00</publishTime>
     </File>
     <File Include="Assets/Chi tiết dự án DRAGON BAY VIEW %281646%29 - Coteccons Group_files/jquery">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>07/19/2022 15:36:00</publishTime>
     </File>
     <File Include="Assets/Chi tiết dự án DRAGON BAY VIEW %281646%29 - Coteccons Group_files/kendo">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>07/19/2022 15:36:00</publishTime>
     </File>
     <File Include="Assets/Chi tiết dự án DRAGON BAY VIEW %281646%29 - Coteccons Group_files/kendo.common.min.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>07/19/2022 15:36:00</publishTime>
     </File>
     <File Include="Assets/Chi tiết dự án DRAGON BAY VIEW %281646%29 - Coteccons Group_files/kendo.moonlight.min.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>07/19/2022 15:36:00</publishTime>
     </File>
     <File Include="Assets/Chi tiết dự án DRAGON BAY VIEW %281646%29 - Coteccons Group_files/kendo.moonlight.mobile.min.css">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>07/19/2022 15:36:00</publishTime>
     </File>
     <File Include="Assets/LogoCTC_New.png">
       <publishTime>06/28/2022 18:28:47</publishTime>
@@ -293,13 +294,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>09/10/2013 16:29:20</publishTime>
     </File>
     <File Include="bin/DMCTimesheet.dll">
-      <publishTime>08/04/2022 15:21:33</publishTime>
+      <publishTime>08/11/2022 16:25:45</publishTime>
     </File>
     <File Include="bin/DMCTimesheet.pdb">
-      <publishTime>08/04/2022 15:21:33</publishTime>
+      <publishTime>08/11/2022 16:25:45</publishTime>
     </File>
     <File Include="bin/DMCTimesheet.XmlSerializers.dll">
-      <publishTime>08/04/2022 15:21:34</publishTime>
+      <publishTime>08/11/2022 16:25:52</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>04/17/2020 03:38:42</publishTime>
@@ -532,6 +533,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Content/Chart.min.css">
       <publishTime>08/21/2020 13:53:24</publishTime>
     </File>
+    <File Include="Content/cscpda-scrollbar.css">
+      <publishTime>08/11/2022 15:47:46</publishTime>
+    </File>
     <File Include="Content/Site.css">
       <publishTime>06/24/2022 13:13:17</publishTime>
     </File>
@@ -542,7 +546,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>06/24/2022 13:13:17</publishTime>
     </File>
     <File Include="Models/DMC.edmx.diagram">
-      <publishTime>08/01/2022 16:27:58</publishTime>
+      <publishTime>08/08/2022 17:50:22</publishTime>
+    </File>
+    <File Include="Scripts/bootstrap-table-multiple-sort.min.js">
+      <publishTime>08/08/2022 13:07:16</publishTime>
     </File>
     <File Include="Scripts/bootstrap.bundle.js">
       <publishTime>06/28/2022 19:03:49</publishTime>
@@ -567,6 +574,18 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     </File>
     <File Include="Scripts/bootstrap.min.js.map">
       <publishTime>06/28/2022 19:03:48</publishTime>
+    </File>
+    <File Include="Scripts/Chart.bundle.js">
+      <publishTime>08/11/2022 08:04:47</publishTime>
+    </File>
+    <File Include="Scripts/Chart.bundle.min.js">
+      <publishTime>08/11/2022 08:04:47</publishTime>
+    </File>
+    <File Include="Scripts/Chart.js">
+      <publishTime>08/11/2022 08:04:47</publishTime>
+    </File>
+    <File Include="Scripts/Chart.min.js">
+      <publishTime>08/11/2022 08:04:47</publishTime>
     </File>
     <File Include="Scripts/esm/popper-utils.js">
       <publishTime>07/29/2022 10:37:58</publishTime>
@@ -4568,199 +4587,199 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/19/2020 10:49:59</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-lv-LV.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-mi-NZ.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-mk-MK.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-mn-MN.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-mr-IN.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-ms-BN.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-ms-MY.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-mt-MT.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-nb-NO.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-nl-BE.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-nl-NL.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-nn-NO.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-ns-ZA.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-pa-IN.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-pl-PL.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-pt-BR.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-pt-PT.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-quz-BO.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-quz-EC.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-quz-PE.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-ro-RO.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-ru-RU.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-sa-IN.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-se-FI.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-se-NO.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-se-SE.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-sk-SK.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-sl-SI.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-sma-NO.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-sma-SE.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-smj-NO.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-smj-SE.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-smn-FI.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-sms-FI.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-sq-AL.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-sr-Cyrl-BA.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-sr-Cyrl-CS.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-sr-Latn-BA.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-sr-Latn-CS.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-sv-FI.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-sv-SE.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-sw-KE.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-syr-SY.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-ta-IN.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-te-IN.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-th-TH.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-tn-ZA.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-tr-TR.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-tt-RU.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-uk-UA.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-ur-PK.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-uz-Cyrl-UZ.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-uz-Latn-UZ.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-vi-VN.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-xh-ZA.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-zh-CN.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-zh-HK.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-zh-MO.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-zh-SG.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-zh-TW.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date-zu-ZA.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/date.min.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/i18n/af-ZA.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/i18n/ar-AE.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/i18n/ar-BH.js">
-      <publishTime>01/01/0001 00:00:00</publishTime>
+      <publishTime>08/19/2020 10:50:00</publishTime>
     </File>
     <File Include="UserStyles/DateJS/build/production/i18n/ar-DZ.js">
       <publishTime>08/19/2020 10:50:01</publishTime>
@@ -5796,6 +5815,1776 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     </File>
     <File Include="UserStyles/DateJS/src/i18n/zu-ZA.js">
       <publishTime>08/19/2020 10:50:04</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/.bower.json">
+      <publishTime>08/19/2020 10:50:04</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/.editorconfig">
+      <publishTime>08/19/2020 10:50:04</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/.github/CONTRIBUTING.md">
+      <publishTime>08/19/2020 10:50:04</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/.github/ISSUE_TEMPLATE.md">
+      <publishTime>08/19/2020 10:50:04</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/.gitignore">
+      <publishTime>08/19/2020 10:50:04</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/.jshintrc">
+      <publishTime>08/19/2020 10:50:04</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/.npmignore">
+      <publishTime>08/19/2020 10:50:04</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/asset/logo.png">
+      <publishTime>08/19/2020 10:50:04</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/build/amd2common.js">
+      <publishTime>08/19/2020 10:50:04</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/build/build.sh">
+      <publishTime>08/19/2020 10:50:04</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/build/mangleString.js">
+      <publishTime>08/19/2020 10:50:04</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/build/optimize.js">
+      <publishTime>08/19/2020 10:50:04</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/dist/echarts.common.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/dist/echarts.common.min.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/dist/echarts.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/dist/echarts.min.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/dist/echarts.simple.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/dist/echarts.simple.min.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/dist/extension/bmap.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/dist/extension/bmap.min.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/dist/extension/dataTool.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/dist/extension/dataTool.min.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/extension/bmap/bmap.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/extension/bmap/BMapCoordSys.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/extension/bmap/BMapModel.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/extension/bmap/BMapView.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/extension/dataTool/gexf.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/extension/dataTool/index.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/extension/dataTool/prepareBoxplotData.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/extension/dataTool/quantile.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/extension/echarts.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/extension/webpack.config.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/index.common.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/index.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/index.simple.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/LICENSE">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/china-contour.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/china.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/anhui.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/aomen.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/beijing.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/chongqing.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/fujian.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/gansu.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/guangdong.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/guangxi.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/guizhou.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/hainan.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/hebei.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/heilongjiang.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/henan.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/hubei.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/hunan.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/jiangsu.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/jiangxi.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/jilin.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/liaoning.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/neimenggu.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/ningxia.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/qinghai.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/shandong.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/shanghai.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/shanxi.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/shanxi1.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/sichuan.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/tianjin.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/xianggang.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/xinjiang.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/xizang.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/yunnan.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/province/zhejiang.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/js/world.js">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/china-contour.json">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/china.json">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/anhui.json">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/aomen.json">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/beijing.json">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/chongqing.json">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/fujian.json">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/gansu.json">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/guangdong.json">
+      <publishTime>08/19/2020 10:50:05</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/guangxi.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/guizhou.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/hainan.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/hebei.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/heilongjiang.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/henan.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/hubei.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/hunan.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/jiangsu.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/jiangxi.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/jilin.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/liaoning.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/neimenggu.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/ningxia.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/qinghai.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/shandong.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/shanghai.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/shanxi.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/shanxi1.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/sichuan.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/tianjin.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/xianggang.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/xinjiang.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/xizang.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/yunnan.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/province/zhejiang.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/map/json/world.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/package.json">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/README.md">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/action/createDataSelectAction.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/action/geoRoam.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/action/roamHelper.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/bar.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/bar/barItemStyle.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/bar/BarSeries.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/bar/BarView.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/boxplot.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/boxplot/boxplotLayout.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/boxplot/BoxplotSeries.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/boxplot/BoxplotView.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/boxplot/boxplotVisual.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/candlestick.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/candlestick/candlestickLayout.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/candlestick/CandlestickSeries.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/candlestick/CandlestickView.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/candlestick/candlestickVisual.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/candlestick/preprocessor.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/chord.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/chord/chordCircularLayout.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/chord/ChordSeries.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/chord/ChordView.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/chord/Ribbon.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/effectScatter.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/effectScatter/EffectScatterSeries.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/effectScatter/EffectScatterView.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/funnel.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/funnel/funnelLayout.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/funnel/FunnelSeries.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/funnel/FunnelView.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/gauge.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/gauge/GaugeSeries.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/gauge/GaugeView.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/gauge/PointerPath.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/graph.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/graph/adjustEdge.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/graph/backwardCompat.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/graph/categoryFilter.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/graph/categoryVisual.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/graph/circularLayout.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/graph/circularLayoutHelper.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/graph/createView.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/graph/edgeVisual.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/graph/forceHelper.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/graph/forceLayout.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/graph/GraphSeries.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/graph/GraphView.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/graph/roamAction.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/graph/simpleLayout.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/graph/simpleLayoutEdge.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/graph/simpleLayoutHelper.js">
+      <publishTime>08/19/2020 10:50:06</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/heatmap.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/heatmap/HeatmapLayer.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/heatmap/HeatmapSeries.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/heatmap/HeatmapView.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/helper/createGraphFromNodeEdge.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/helper/createGraphFromNodeMatrix.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/helper/createListFromArray.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/helper/EffectLine.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/helper/EffectSymbol.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/helper/LargeSymbolDraw.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/helper/Line.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/helper/LineDraw.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/helper/LinePath.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/helper/Symbol.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/helper/SymbolDraw.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/helper/whiskerBoxCommon.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/helper/WhiskerBoxDraw.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/line.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/line/lineAnimationDiff.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/line/LineSeries.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/line/LineView.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/line/poly.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/lines.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/lines/linesLayout.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/lines/LinesSeries.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/lines/LinesView.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/map.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/map/backwardCompat.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/map/mapDataStatistic.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/map/MapSeries.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/map/mapSymbolLayout.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/map/MapView.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/map/mapVisual.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/parallel.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/parallel/ParallelSeries.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/parallel/ParallelView.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/parallel/parallelVisual.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/pie.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/pie/labelLayout.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/pie/pieLayout.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/pie/PieSeries.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/pie/PieView.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/radar.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/radar/backwardCompat.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/radar/radarLayout.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/radar/RadarSeries.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/radar/RadarView.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/sankey.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/sankey/sankeyLayout.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/sankey/SankeySeries.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/sankey/SankeyView.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/sankey/sankeyVisual.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/scatter.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/scatter/ScatterSeries.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/scatter/ScatterView.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/themeRiver.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/themeRiver/themeRiverLayout.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/themeRiver/ThemeRiverSeries.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/themeRiver/ThemeRiverView.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/themeRiver/themeRiverVisual.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/treemap.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/treemap/Breadcrumb.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/treemap/helper.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/treemap/treemapAction.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/treemap/treemapLayout.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/treemap/TreemapSeries.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/treemap/TreemapView.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/chart/treemap/treemapVisual.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/angleAxis.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/axis.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/axis/AngleAxisView.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/axis/AxisBuilder.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/axis/AxisView.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/axis/parallelAxisAction.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/axis/ParallelAxisView.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/axis/RadiusAxisView.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/axis/SingleAxisView.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/dataZoom.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/dataZoom/AxisProxy.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/dataZoom/dataZoomAction.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/dataZoom/DataZoomModel.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/dataZoom/dataZoomProcessor.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/dataZoom/DataZoomView.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/dataZoom/history.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/dataZoom/InsideZoomModel.js">
+      <publishTime>08/19/2020 10:50:07</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/dataZoom/InsideZoomView.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/dataZoom/roams.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/dataZoom/SelectZoomModel.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/dataZoom/SelectZoomView.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/dataZoom/SliderZoomModel.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/dataZoom/SliderZoomView.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/dataZoom/typeDefaulter.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/dataZoomInside.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/dataZoomSelect.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/geo.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/geo/GeoView.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/grid.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/helper/interactionMutex.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/helper/listComponent.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/helper/MapDraw.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/helper/RoamController.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/helper/selectableMixin.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/helper/SelectController.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/helper/sliderMove.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/legend.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/legend/legendAction.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/legend/legendFilter.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/legend/LegendModel.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/legend/LegendView.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/marker/markerHelper.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/marker/MarkLineModel.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/marker/MarkLineView.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/marker/MarkPointModel.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/marker/MarkPointView.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/markLine.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/markPoint.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/parallel.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/parallelAxis.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/polar.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/radar.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/radar/RadarView.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/radiusAxis.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/single.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/singleAxis.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/timeline.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/timeline/preprocessor.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/timeline/SliderTimelineModel.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/timeline/SliderTimelineView.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/timeline/timelineAction.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/timeline/TimelineAxis.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/timeline/TimelineModel.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/timeline/TimelineView.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/timeline/typeDefaulter.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/title.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/toolbox.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/toolbox/feature/DataView.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/toolbox/feature/DataZoom.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/toolbox/feature/MagicType.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/toolbox/feature/Restore.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/toolbox/feature/SaveAsImage.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/toolbox/featureManager.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/toolbox/ToolboxModel.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/toolbox/ToolboxView.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/tooltip.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/tooltip/TooltipContent.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/tooltip/TooltipModel.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/tooltip/TooltipView.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/visualMap.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/visualMap/ContinuousModel.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/visualMap/ContinuousView.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/visualMap/helper.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/visualMap/PiecewiseModel.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/visualMap/PiecewiseView.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/visualMap/preprocessor.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/visualMap/typeDefaulter.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/visualMap/visualCoding.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/visualMap/visualMapAction.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/visualMap/VisualMapModel.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/visualMap/VisualMapView.js">
+      <publishTime>08/19/2020 10:50:08</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/visualMapContinuous.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/component/visualMapPiecewise.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/Axis.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/axisDefault.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/axisHelper.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/axisModelCommonMixin.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/axisModelCreator.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/cartesian/Axis2D.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/cartesian/axisLabelInterval.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/cartesian/AxisModel.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/cartesian/Cartesian.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/cartesian/Cartesian2D.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/cartesian/Grid.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/cartesian/GridModel.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/geo/fix/geoCoord.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/geo/fix/nanhai.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/geo/fix/textCoord.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/geo/Geo.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/geo/geoCreator.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/geo/GeoModel.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/geo/parseGeoJson.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/geo/Region.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/parallel/AxisModel.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/parallel/Parallel.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/parallel/ParallelAxis.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/parallel/parallelCreator.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/parallel/ParallelModel.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/parallel/parallelPreprocessor.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/polar/AngleAxis.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/polar/AxisModel.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/polar/Polar.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/polar/polarCreator.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/polar/PolarModel.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/polar/RadiusAxis.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/radar/IndicatorAxis.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/radar/Radar.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/radar/RadarModel.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/single/AxisModel.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/single/Single.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/single/SingleAxis.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/single/singleCreator.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/coord/View.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/CoordinateSystem.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/data/DataDiffer.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/data/Graph.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/data/helper/completeDimensions.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/data/helper/linkList.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/data/List.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/data/Tree.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/echarts.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/ExtensionAPI.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/layout/barGrid.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/layout/points.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/loading/default.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/model/Component.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/model/Global.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/model/globalDefault.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/model/mixin/areaStyle.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/model/mixin/boxLayout.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/model/mixin/itemStyle.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/model/mixin/lineStyle.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/model/mixin/makeStyleMapper.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/model/mixin/textStyle.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/model/Model.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/model/OptionManager.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/model/Series.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/preprocessor/backwardCompat.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/preprocessor/helper/compatStyle.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/processor/dataFilter.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/processor/dataSample.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/scale/Interval.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/scale/Log.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/scale/Ordinal.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/scale/Scale.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/scale/Time.js">
+      <publishTime>08/19/2020 10:50:09</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/util/animation.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/util/array/nest.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/util/clazz.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/util/component.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/util/format.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/util/graphic.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/util/KDTree.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/util/layout.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/util/model.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/util/number.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/util/quickSelect.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/util/symbol.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/util/throttle.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/view/Chart.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/view/Component.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/visual/dataColor.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/visual/seriesColor.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/visual/symbol.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/visual/visualDefault.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/src/visual/VisualMapping.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/area.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/area2.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/axes.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/axis.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/bar-large.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/bar.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/bar2.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/bmap.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/boxplot-multi.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/boxplot.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/candlestick.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/candlestickConnect.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/chord.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/color-mix-aqi.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/config.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/connect.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/connect2.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/data/aqi/BJdata.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/data/aqi/GZdata.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/data/aqi/processAQI.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/data/aqi/SHdata.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/data/disk.tree.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/data/energy.json">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/data/les-miserables.gexf">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/data/masterPainterColorChoice.json">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/data/Michelson-Morley.json.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/data/obama_budget_proposal_2012.tree.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/data/option-view.json">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/data/option-view2.json">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/data/product.json">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/data/rainfall.json.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/data/security-sh-2013.json.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/data/timelineGDP.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/dataView.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/dataZoom-axes.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/dataZoom-axis-type.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/dataZoom-cartesian-h.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/dataZoom-cartesian-v.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/dataZoom-dataShadow.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/dataZoom-dataShadow0.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/dataZoom-dataShadow1.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/dataZoom-dataShadow2.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/dataZoom-dynamic.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/dataZoom-rainfall-connect.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/dataZoom-rainfall-inside.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/dataZoom-rainfall.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/dataZoom-scatter-category.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/dataZoom-scatter-hv-polar.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/dataZoom-scatter-hv.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/dataZoom-scatter-toolbox.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/dataZoomHighPrecision.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/diff.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/dynamicData.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/effectScatter.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/esl.js">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/force.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/force2.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/force3.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/funnel.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/gauge.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/geoLine.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/geoScatter.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/getOption.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/graph-grid.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/graph-simple.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/graph.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/heatmap-map.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/heatmap.html">
+      <publishTime>08/19/2020 10:50:10</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ie8.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/largeLine.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/lib/dat.gui.min.js">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/lib/draggable.js">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/lib/facePrint.js">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/lib/jquery.min.js">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/line.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/loading.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/logScale.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/map-contour.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/map.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/mapWorld.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/markLine.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/markPoint.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/masterPainterColorChoice.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/media-dataZoom.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/media-finance.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/media-pie.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/mix.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/mobileBench.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/multipleGrid.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/parallel-aqi.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/pie.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/pie2.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/pie3.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/pieDynamic.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/polarLine.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/polarLine2.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/polarScatter.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/punchCard.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/radar.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/radar2.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/radar3.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/radar4.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/README.md">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/reset.css">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/roseType.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/sankey.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/scale-integer.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/scatter.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/selectedMode.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/showTip.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/symbol.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/theme.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/themeRiver.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/timeline-finance.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/timeline-layout.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/timeScale.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/tooltip.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/treemap-disk.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/treemap-obama.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/treemap-option.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/treemap-option2.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/treemap-simple.html">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/.jshintrc">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/config.js">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/configure">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/core/uiHelper.js">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/core/utHelper.js">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/lib/canteen.js">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/lib/imagediff.js">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/lib/jasmine-2.3.4/boot.js">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/lib/jasmine-2.3.4/console.js">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/lib/jasmine-2.3.4/jasmine-html.js">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/lib/jasmine-2.3.4/jasmine.css">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/lib/jasmine-2.3.4/jasmine.js">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/lib/jasmine-2.3.4/jasmine_favicon.png">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/MIT.LICENSE">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/spec/component/visualMap/setOption.js">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/spec/data/List.js">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/spec/model/Component.js">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/spec/model/Global.js">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/spec/model/timelineOptions.js">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/spec/ui/config.js">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/spec/ui/legend.js">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/spec/ui/title.js">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/spec/ui/title.subtextStyle.js">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/spec/ui/title.textStyle.js">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/spec/util/graphic.js">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/spec/util/model.js">
+      <publishTime>08/19/2020 10:50:11</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/spec/util/number.js">
+      <publishTime>08/19/2020 10:50:12</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/ui.html">
+      <publishTime>08/19/2020 10:50:12</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/ut.html">
+      <publishTime>08/19/2020 10:50:12</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/ut/ut.js">
+      <publishTime>08/19/2020 10:50:12</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/visualMap-categories.html">
+      <publishTime>08/19/2020 10:50:12</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/visualMap-continuous.html">
+      <publishTime>08/19/2020 10:50:12</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/visualMap-layout.html">
+      <publishTime>08/19/2020 10:50:12</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/visualMap-opacity.html">
+      <publishTime>08/19/2020 10:50:12</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/visualMap-pieces.html">
+      <publishTime>08/19/2020 10:50:12</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/visualMap-scatter-colorAndSymbol.html">
+      <publishTime>08/19/2020 10:50:12</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/visualMap-scatter-symbolSize.html">
+      <publishTime>08/19/2020 10:50:12</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/webkit-dep.html">
+      <publishTime>08/19/2020 10:50:12</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/test/worldPopulationBubble.html">
+      <publishTime>08/19/2020 10:50:12</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/theme/dark.js">
+      <publishTime>08/19/2020 10:50:12</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/theme/infographic.js">
+      <publishTime>08/19/2020 10:50:12</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/theme/macarons.js">
+      <publishTime>08/19/2020 10:50:12</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/theme/roma.js">
+      <publishTime>08/19/2020 10:50:12</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/theme/shine.js">
+      <publishTime>08/19/2020 10:50:12</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/theme/tool/option/area.js">
+      <publishTime>08/19/2020 10:50:12</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/theme/tool/option/bar.js">
+      <publishTime>08/19/2020 10:50:12</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/theme/tool/option/graph.js">
+      <publishTime>08/19/2020 10:50:12</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/theme/tool/option/map.js">
+      <publishTime>08/19/2020 10:50:12</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/theme/tool/option/pie.js">
+      <publishTime>08/19/2020 10:50:12</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/theme/tool/option/scatter.js">
+      <publishTime>08/19/2020 10:50:12</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/theme/tool/thumb.js">
+      <publishTime>08/19/2020 10:50:12</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/theme/vintage.js">
+      <publishTime>08/19/2020 10:50:12</publishTime>
+    </File>
+    <File Include="UserStyles/echarts/webpack.config.js">
+      <publishTime>08/19/2020 10:50:12</publishTime>
     </File>
     <File Include="UserStyles/fastclick/.bower.json">
       <publishTime>08/19/2020 10:50:12</publishTime>
@@ -8918,58 +10707,88 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/20/2022 15:10:19</publishTime>
     </File>
     <File Include="Views/Home/UserPage.cshtml">
-      <publishTime>04/08/2022 14:24:06</publishTime>
+      <publishTime>08/10/2022 17:21:26</publishTime>
     </File>
     <File Include="Views/Home/WebAdminPage.cshtml">
       <publishTime>07/27/2022 13:17:17</publishTime>
     </File>
     <File Include="Views/Member/AssignMember.cshtml">
-      <publishTime>04/08/2022 13:48:24</publishTime>
+      <publishTime>08/11/2022 16:22:49</publishTime>
+    </File>
+    <File Include="Views/Member/DeleteAssigned.cshtml">
+      <publishTime>08/10/2022 09:14:06</publishTime>
+    </File>
+    <File Include="Views/Member/DeleteMember.cshtml">
+      <publishTime>08/09/2022 11:37:18</publishTime>
     </File>
     <File Include="Views/Member/Details.cshtml">
-      <publishTime>04/08/2022 08:27:31</publishTime>
+      <publishTime>08/11/2022 16:08:41</publishTime>
     </File>
     <File Include="Views/Member/EditAssign.cshtml">
-      <publishTime>08/03/2022 11:29:44</publishTime>
+      <publishTime>08/10/2022 09:02:03</publishTime>
     </File>
     <File Include="Views/Member/EditPermission.cshtml">
-      <publishTime>08/03/2022 18:11:12</publishTime>
+      <publishTime>08/09/2022 08:15:06</publishTime>
     </File>
     <File Include="Views/Member/Index.cshtml">
-      <publishTime>04/08/2022 13:38:50</publishTime>
+      <publishTime>08/11/2022 16:04:21</publishTime>
     </File>
     <File Include="Views/Member/OnOffline.cshtml">
-      <publishTime>08/02/2022 23:40:20</publishTime>
+      <publishTime>08/09/2022 14:10:59</publishTime>
     </File>
     <File Include="Views/Project/AssignDesigner.cshtml">
-      <publishTime>08/03/2022 09:53:04</publishTime>
+      <publishTime>08/10/2022 19:17:37</publishTime>
+    </File>
+    <File Include="Views/Project/DeleteAssign.cshtml">
+      <publishTime>08/10/2022 13:52:13</publishTime>
+    </File>
+    <File Include="Views/Project/DeleteProject.cshtml">
+      <publishTime>08/10/2022 13:53:23</publishTime>
     </File>
     <File Include="Views/Project/Edit.cshtml">
-      <publishTime>08/02/2022 14:00:28</publishTime>
+      <publishTime>08/10/2022 17:19:25</publishTime>
     </File>
     <File Include="Views/Project/EditAssign.cshtml">
-      <publishTime>08/04/2022 14:57:36</publishTime>
+      <publishTime>08/09/2022 13:21:38</publishTime>
     </File>
     <File Include="Views/Project/Index.cshtml">
-      <publishTime>08/02/2022 14:01:50</publishTime>
+      <publishTime>08/10/2022 19:03:26</publishTime>
+    </File>
+    <File Include="Views/Setting/DeleteOwner.cshtml">
+      <publishTime>08/11/2022 15:42:07</publishTime>
+    </File>
+    <File Include="Views/Setting/DeleteWorktype.cshtml">
+      <publishTime>08/11/2022 09:28:09</publishTime>
+    </File>
+    <File Include="Views/Setting/EditOwner.cshtml">
+      <publishTime>08/11/2022 15:49:58</publishTime>
+    </File>
+    <File Include="Views/Setting/EditWorktype.cshtml">
+      <publishTime>08/11/2022 09:28:18</publishTime>
+    </File>
+    <File Include="Views/Setting/Ownerlist.cshtml">
+      <publishTime>08/11/2022 15:48:07</publishTime>
+    </File>
+    <File Include="Views/Setting/Worktype.cshtml">
+      <publishTime>08/11/2022 09:37:46</publishTime>
     </File>
     <File Include="Views/Shared/Error.cshtml">
       <publishTime>07/29/2022 15:26:44</publishTime>
     </File>
     <File Include="Views/Shared/_AdminLayout.cshtml">
-      <publishTime>04/08/2022 08:25:40</publishTime>
+      <publishTime>08/04/2022 08:25:40</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
       <publishTime>06/28/2022 19:05:14</publishTime>
     </File>
     <File Include="Views/Shared/_sliderbar.cshtml">
-      <publishTime>08/03/2022 18:12:16</publishTime>
+      <publishTime>08/11/2022 12:07:52</publishTime>
     </File>
     <File Include="Views/Shared/_TopNav.cshtml">
-      <publishTime>04/08/2022 07:58:14</publishTime>
+      <publishTime>08/04/2022 07:58:14</publishTime>
     </File>
     <File Include="Views/Shared/_UserLayout.cshtml">
-      <publishTime>04/08/2022 07:55:41</publishTime>
+      <publishTime>08/04/2022 07:55:41</publishTime>
     </File>
     <File Include="Views/Shared/_UserLeftSliderBar.cshtml">
       <publishTime>07/27/2022 15:19:28</publishTime>
@@ -8978,28 +10797,28 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/20/2022 10:03:05</publishTime>
     </File>
     <File Include="Views/Shared/_UserTopNavBar.cshtml">
-      <publishTime>04/08/2022 08:12:23</publishTime>
+      <publishTime>08/04/2022 08:12:23</publishTime>
     </File>
     <File Include="Views/Timesheet/Delete.cshtml">
-      <publishTime>08/03/2022 16:56:26</publishTime>
+      <publishTime>08/08/2022 13:51:42</publishTime>
     </File>
     <File Include="Views/Timesheet/DeleteWorktype.cshtml">
-      <publishTime>07/28/2022 15:56:19</publishTime>
+      <publishTime>08/08/2022 13:51:42</publishTime>
     </File>
     <File Include="Views/Timesheet/EditWorktype.cshtml">
-      <publishTime>07/28/2022 15:18:29</publishTime>
+      <publishTime>08/08/2022 13:51:42</publishTime>
     </File>
     <File Include="Views/Timesheet/MemberTimesheet.cshtml">
-      <publishTime>04/08/2022 13:59:08</publishTime>
+      <publishTime>08/11/2022 14:25:21</publishTime>
     </File>
     <File Include="Views/Timesheet/ProjectTimesheet.cshtml">
-      <publishTime>07/29/2022 10:17:37</publishTime>
+      <publishTime>08/11/2022 10:05:07</publishTime>
     </File>
     <File Include="Views/Timesheet/UserEdit.cshtml">
-      <publishTime>08/03/2022 15:53:50</publishTime>
+      <publishTime>08/08/2022 13:51:42</publishTime>
     </File>
     <File Include="Views/Timesheet/Worktype.cshtml">
-      <publishTime>08/03/2022 12:21:39</publishTime>
+      <publishTime>08/08/2022 13:51:42</publishTime>
     </File>
     <File Include="Views/Timesheet/_TimeSheetAjaxSearch.cshtml">
       <publishTime>08/03/2022 14:14:15</publishTime>
@@ -9008,7 +10827,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>06/24/2022 13:13:17</publishTime>
     </File>
     <File Include="Views/_ViewStart.cshtml">
-      <publishTime>06/24/2022 13:13:17</publishTime>
+      <publishTime>08/08/2022 13:53:42</publishTime>
     </File>
     <File Include="Web References/com.cbimtech.MemberServices/MemberOutput.datasource">
       <publishTime>08/03/2022 08:16:09</publishTime>
@@ -9017,7 +10836,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/03/2022 08:16:02</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>08/03/2022 18:14:19</publishTime>
+      <publishTime>08/10/2022 19:48:05</publishTime>
     </File>
   </ItemGroup>
 </Project>

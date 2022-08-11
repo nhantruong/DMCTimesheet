@@ -1,67 +1,22 @@
 ﻿@model IEnumerable<DMCTimesheet.Models.C08_Timesheet>
-
 @{
     DMCTimesheet.Models.C06_UserPermisRelationship Userpermiss = Session["UserPermission"] as DMCTimesheet.Models.C06_UserPermisRelationship;
-    switch (Userpermiss.idPer)
-    {
-        case 1://WebAdmin
-            {
-                ViewBag.Title = "Web Admin";
-                Layout = "~/Views/Shared/_AdminLayout.cshtml";
-                break;
-            }
-        case 2://User
-            {
-                ViewBag.Title = "User";
-                Layout = "~/Views/Shared/_UserLayout.cshtml";
-                break;
-            }
-        case 3: //System Admin
-            {
-                ViewBag.Title = "Sys admin";
-                Layout = "~/Views/Shared/_AdminLayout.cshtml";
-                break;
-            }
-        case 4: //System Mod
-            {
-                ViewBag.Title = "Mod";
-                Layout = "~/Views/Shared/_AdminLayout.cshtml";
-                break;
-            }
-        default:
-            {
-                ViewBag.Title = "Default User";
-                Layout = "~/Views/Shared/_UserLayout.cshtml";
-                break;
-            }
-    }
+
     DMCTimesheet.Models.C02_Members loginUser = Session["UserLogin"] as DMCTimesheet.Models.C02_Members;
     int stt = 0;
     List<DMCTimesheet.Models.C02_Members> Members = ViewBag.Members as List<DMCTimesheet.Models.C02_Members>;
     List<DMCTimesheet.Models.C01_Projects> Projects = ViewBag.Projects as List<DMCTimesheet.Models.C01_Projects>;
     List<DMCTimesheet.Models.C07_WorkType> Works = ViewBag.WorkGroup as List<DMCTimesheet.Models.C07_WorkType>;
-
     List<DMCTimesheet.Models.C03_ProjectMembers> MyProjects = ViewBag.ProjectMember as List<DMCTimesheet.Models.C03_ProjectMembers>;
-
-    List<string> ChartLabels = new List<string>();
-    List<double> ChartValue = new List<double>();
-    var chartData = Model.GroupBy(s => s.WorkType);
-    foreach (var item in chartData)
-    {
-        ChartLabels.Add(Works.FirstOrDefault(s => s.ID == item.Key).WorkName);
-        double hour = (double)item.Select(s => s.Hour).Sum() + 1.5 * (double)item.Select(s => s.OT).Sum();
-        ChartValue.Add(hour);
-    }
+    
 }
-<script src="~/UserStyles/Chart.js/dist/Chart.min.js"></script>
 
-<div class="nav navbar-fixed-top row">
-    @Html.ActionLink(" Home", "UserPage", "Home", null, new { @class = "fa fa-home btn btn-round btn-dark" })
-</div>
 
 @* Danh sách Timesheet đã làm *@
+@*<h3 class="text-danger">@ViewBag.WorkAlert</h3>*@
 <div class="row">
     <div class="col-md-12">
+        @* Form tạo timesheet *@
         <div class="col-md-5">
             <div class="x_panel">
                 <div class="x_title">
@@ -69,9 +24,6 @@
                     <ul class="nav navbar-right panel_toolbox">
                         <li>
                             <a class="collapse-link"><i class="fa fa-chevron-up text-primary"></i></a>
-                        </li>
-                        <li>
-                            <a class="close-link"><i class="fa fa-close"></i></a>
                         </li>
                     </ul>
                     <div class="clearfix"></div>
@@ -101,10 +53,10 @@
                                     <lable class="control-label col-md-3 col-sm-3 col-xs-3">Dự án được phân công</lable>
                                     <select name="ProjectId" required data-toggle="tooltip" data-placement="left" title="Dự án được phân công sẽ xuất hiện ở đây, vui lòng liên hệ Admin nếu chưa có dự án" class="form-control col-md-7 col-sm-9 col-xs-9">
                                         @if (MyProjects != null || MyProjects.Count() > 0)
-                                        {                                       
-                                            foreach (var item in MyProjects)
+                                        {
+                                            foreach (var item in MyProjects.OrderBy(s => s.Ngay))
                                             {
-                                                <option value=@item.ProjectID>@Projects.FirstOrDefault(s => s.ProjectID == item.ProjectID).ProjectName</option>
+                                                <option value=@item.ProjectID>@Projects.FirstOrDefault(s => s.ProjectID == item.ProjectID).ProjectOtherName</option>
                                             }
                                         }
                                     </select>
@@ -113,10 +65,10 @@
                                 @* WorkType *@
                                 <div class="form-group row  text-left">
                                     <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chọn Công việc</lable>
-                                    <select name="WorkID" required data-toggle="tooltip" data-placement="left" title="Chọn loại hình công việc của bạn"  class="form-control col-md-7 col-sm-9 col-xs-9">
-                                        @foreach (var item in Works.GroupBy(s => s.WorkName))
+                                    <select name="WorkID" required data-toggle="tooltip" data-placement="left" title="Chọn loại hình công việc của bạn" class="form-control col-md-7 col-sm-9 col-xs-9">
+                                        @foreach (var item in Works.OrderBy(s=>s.WorkGroup))
                                         {
-                                            <option value=@Works.Where(s=>s.WorkName == item.Key).FirstOrDefault().ID>@item.Key</option>
+                                            <option value=@item.ID>@item.WorkName</option>
                                         }
                                     </select>
                                 </div>
@@ -142,88 +94,38 @@
                                 <div class="form-group text-left">
                                     <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
                                     <input type="submit" value="Save" class="btn btn-success col-md-7" />
-
                                 </div>
 
-                                <div>
-                                    <p class="text-danger">@ViewBag.WorkAlert</p>
-                                </div>
                                 <div class="clearfix"></div>
 
                             </form>
                         }
                     </div>
-
-                    <br />
-                    <div class="clearfix"></div>
-                    <h2 class="text-left text-danger">Chart for Working type</h2>
-                    @* Biểu đồ timesheet *@
-                    <div>
-                        <canvas id="TimeSheetSummary"></canvas>
+                    <div class="text-center">
+                        <h4 class="text-danger">@ViewBag.WorkAlert</h4>
                     </div>
-
                 </div>
             </div>
         </div>
+
         <div class="col-md-7">
             <div class="row">
                 <div class="x_panel">
                     <div class="x_title">
-                        <h2 class="text-warning"><b class="text-success">Timesheet record</b></h2>
+                        <h2 class="text-warning"><b class="text-success">Daily Timesheet record</b></h2>
                         <ul class="nav navbar-right panel_toolbox">
                             <li>
                                 <a class="collapse-link"><i class="fa fa-chevron-up text-primary"></i></a>
-                            </li>
-                            <li>
-                                <a class="close-link"><i class="fa fa-close"></i></a>
                             </li>
                         </ul>
                         <div class="clearfix"></div>
                     </div>
                     <div class="x_content">
-                        @using (Ajax.BeginForm("TimeSheetAjaxSearch", "Timesheet", new AjaxOptions
-                        {
-                            InsertionMode = InsertionMode.Replace,
-                            HttpMethod = "GET",
-                            OnFailure = "searchFailed",
-                            LoadingElementId = "ajax-loader",
-                            UpdateTargetId = "seachResult"
-                        }))
-                        {
-                            <div class="page-title">
-                                <div class="title_left">
-                                    <h4><b class="text-danger">@Model.Count()</b> records / <b class="text-success">@Model.Select(s => s.ProjectId).Distinct().Count()</b> project</h4>
-                                </div>
-                                <div class="title_right">
-                                    <div class="col-md-5 col-sm-5  form-group pull-right top_search">
-                                        @*
-        <div class="input-group">
-            <select class="form-control bg-dark text-white" name="UserSearch">
-                <option value="All">All</option>
-                @foreach (var item in Model.Where(s => s.MemberID == loginUser.UserID).GroupBy(s => s.ProjectId).Distinct())
-                {
-                    <option value="@item.Key">@item.Key</option>
-                }
-            </select>
-            <span class="input-group-btn">
-                <button class="btn btn-secondary bg-dark text-white" type="submit" value="Search">Go!</button>
-            </span>
-        </div>*@
-                                    </div>
-                                </div>
-                                <div class="x_title">
-                                    <ul class="nav navbar-right panel_toolbox">
-                                        <li>
-                                            <a class="collapse-link"><i class="fa fa-chevron-up text-danger"></i></a>
-                                        </li>
-                                    </ul>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </div>
-                        }
                         <div class="x_content table-responsive">
                             <div id="ajax-loader"></div>
+                            <p>Công việc trong ngày - <b class="text-primary">@DateTime.Today.ToShortDateString()</b></p>
                             <table class="table table-hover table-bordered table-striped">
+                                @*<caption><h6>Tổng số giờ trong trong ngày <b class="text-danger"></b></h6></caption>*@
                                 <thead class="bg-dark text-center text-white">
                                     <tr>
                                         <th>No</th>
@@ -237,26 +139,36 @@
                                     </tr>
                                 </thead>
                                 <tbody id="seachResult" class="text-dark">
-                                    @foreach (var item in Model.OrderByDescending(s => s.RecordDate))
+                                    @if (Model != null)
                                     {
-                                        stt++;
+                                        foreach (var item in Model.OrderByDescending(s=>s.RecordDate))
+                                        {
+                                            stt++;
+                                            <tr>
+                                                <td>@stt</td>
+                                                <td>@DateTime.Parse(item.RecordDate.ToString()).ToShortDateString()</td>
+                                                <td>@item.ProjectId - @Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName</td>
+                                                <td>@Works.FirstOrDefault(s => s.ID == item.WorkType).WorkName</td>
+                                                <td>@item.Hour</td>
+                                                <td>@item.OT</td>
+                                                <td>@item.Description</td>
+                                                <td>
+                                                    @Html.ActionLink(" ", "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "fa fa-edit btn" })
+                                                    @Html.ActionLink(" ", "Delete", "Timesheet", new { id = item.Id }, new { @class = " fa fa-remove btn" })
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
                                         <tr>
-                                            <td>@stt</td>
-                                            <td>@DateTime.Parse(item.RecordDate.ToString()).ToShortDateString()</td>
-                                            <td>@item.ProjectId - @Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectName</td>
-                                            <td>@Works.FirstOrDefault(s=>s.ID== item.WorkType).WorkName</td>
-                                            <td>@item.Hour</td>
-                                            <td>@item.OT</td>
-                                            <td>@item.Description</td>
-                                            <td>
-                                                @Html.ActionLink(" ", "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "fa fa-edit btn" })
-                                                @Html.ActionLink(" ", "Delete", "Timesheet", new { id = item.Id }, new { @class = " fa fa-remove btn" })
-                                            </td>
+                                            <td class="row text-danger">Hôm nay chưa có công việc nào được ghi nhận</td>
                                         </tr>
                                     }
                                 </tbody>
                             </table>
                         </div>
+
                     </div>
                 </div>
             </div>
@@ -265,63 +177,4 @@
     </div>
 </div>
 
-
-@section Scripts {
-    <script>
-        $(document).ready(function () {
-            function searchFailed() {
-                $("#searchResult").html("Không thấy dữ liệu.");
-            }
-        });
-    </script>
-    <script src="~/Scripts/jquery.unobtrusive-ajax.min.js"></script>
-}
-
-@* Chart code *@
-<script>
-    var ctx = document.getElementById('TimeSheetSummary').getContext('2d');
-    var lable = @Html.Raw(Json.Encode(ChartLabels));
-    var data =@Html.Raw(Json.Encode(ChartValue));
-   var myChart = new Chart(ctx, {
-       type: 'horizontalBar',
-                        data: {
-                        labels:  lable,
-                            datasets: [{
-                                label: '',
-                                data: data,
-                                backgroundColor: 'rgba(255, 128, 64, 1)',
-                                borderColor:'rgba(255, 128, 128, 1)',
-                                borderWidth: 1
-                            }]
-                        },
-       options: {
-           scales: {
-               yAxes: [{
-                   ticks: {
-                       beginAtZero: true
-                       //lables: lablesVlue type: 'category',
-                   }
-               }]
-           },
-           showToolTips: true,
-           legend: { display: false },
-           animation:
-           {
-               duration: 0,
-               onComplete: function () {
-                   var ctx = this.chart.ctx;
-                   ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, 'normal', Chart.defaults.global.defaultFontFamily);
-                   ctx.fillStyle = this.chart.config.options.defaultFontColor;
-                   ctx.textAlign = 'middle';
-                   ctx.textBaseline = 'top';
-                   this.data.datasets.forEach(function (dataset) {
-                       for (var i = 0; i < dataset.data.length; i++) {
-                           var model = dataset._meta[Object.keys(dataset._meta)[0]].data[i]._model;
-                           ctx.fillText(dataset.data[i], model.x, model.y - 5);
-                       }
-                   });
-               }
-           }
-       }
-                    });
-</script>
+<div class="clearfix"></div>

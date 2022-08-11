@@ -10,6 +10,7 @@
             <PropertyRef Name="ProjectID" />
           </Key>
           <Property Name="ProjectID" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="MaDuAn" Type="nchar" MaxLength="10" />
           <Property Name="ProjectName" Type="nvarchar" MaxLength="250" />
           <Property Name="ProjectOtherName" Type="nvarchar" MaxLength="250" />
           <Property Name="StartDate" Type="date" />
@@ -34,6 +35,7 @@
           <Property Name="Descipline" Type="int" />
           <Property Name="Position" Type="int" />
           <Property Name="Deactived" Type="bit" />
+          <Property Name="SystemMember" Type="bit" />
         </EntityType>
         <EntityType Name="03_ProjectMembers">
           <Key>
@@ -139,6 +141,14 @@
           <Property Name="ContractorName" Type="nvarchar" MaxLength="250" />
           <Property Name="ShortName" Type="nvarchar" MaxLength="50" />
           <Property Name="ContractorLocation" Type="int" />
+          <Property Name="ARC" Type="bit" />
+          <Property Name="STR" Type="bit" />
+          <Property Name="MEP" Type="bit" />
+          <Property Name="Interior" Type="bit" />
+          <Property Name="Infrastructure" Type="bit" />
+          <Property Name="DTM" Type="bit" />
+          <Property Name="Render" Type="bit" />
+          <Property Name="Landscape" Type="bit" />
         </EntityType>
         <EntityType Name="13_ProjectType">
           <Key>
@@ -610,6 +620,14 @@
           <NavigationProperty Name="C15_SubConServices" Relationship="DmcTimesheet.Models.FK_15_SubConServices_12_SubContractor" FromRole="C12_SubContractor" ToRole="C15_SubConServices" />
           <Property Name="ShortName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="C09_ProjectSubCon" Relationship="DmcTimesheet.Models.FK_09_ProjectSubCon_12_SubContractor" FromRole="C12_SubContractor" ToRole="C09_ProjectSubCon" />
+          <Property Name="ARC" Type="Boolean" />
+          <Property Name="STR" Type="Boolean" />
+          <Property Name="MEP" Type="Boolean" />
+          <Property Name="Interior" Type="Boolean" />
+          <Property Name="Infrastructure" Type="Boolean" />
+          <Property Name="DTM" Type="Boolean" />
+          <Property Name="Render" Type="Boolean" />
+          <Property Name="Landscape" Type="Boolean" />
         </EntityType>
         <EntityType Name="C13_ProjectType">
           <Key>
@@ -678,6 +696,7 @@
           <NavigationProperty Name="C08_Timesheet" Relationship="DmcTimesheet.Models.FK_08_Timesheet_01_Projects" FromRole="C01_Projects" ToRole="C08_Timesheet" />
           <NavigationProperty Name="C03_ProjectMembers" Relationship="DmcTimesheet.Models.FK_3_ChonNhansu_01_Projects" FromRole="C01_Projects" ToRole="C03_ProjectMembers" />
           <NavigationProperty Name="C09_ProjectSubCon" Relationship="DmcTimesheet.Models.FK_09_ProjectSubCon_01_Projects" FromRole="C01_Projects" ToRole="C09_ProjectSubCon" />
+          <Property Name="MaDuAn" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
         </EntityType>
         <Association Name="FK_08_Timesheet_01_Projects">
           <End Type="DmcTimesheet.Models.C01_Projects" Role="C01_Projects" Multiplicity="0..1" />
@@ -784,6 +803,7 @@
           <NavigationProperty Name="C06_UserPermisRelationship" Relationship="DmcTimesheet.Models.FK_06_UserPermisRelationship_02_Members" FromRole="C02_Members" ToRole="C06_UserPermisRelationship" />
           <NavigationProperty Name="C08_Timesheet" Relationship="DmcTimesheet.Models.FK_08_Timesheet_02_Members" FromRole="C02_Members" ToRole="C08_Timesheet" />
           <NavigationProperty Name="C03_ProjectMembers" Relationship="DmcTimesheet.Models.FK_3_ChonNhansu_02_Members_Main" FromRole="C02_Members" ToRole="C03_ProjectMembers" />
+          <Property Name="SystemMember" Type="Boolean" />
         </EntityType>
         <Association Name="FK_06_UserPermisRelationship_02_Members">
           <End Type="DmcTimesheet.Models.C02_Members" Role="C02_Members" Multiplicity="0..1" />
@@ -920,6 +940,14 @@
           <EntitySetMapping Name="C12_SubContractor">
             <EntityTypeMapping TypeName="DmcTimesheet.Models.C12_SubContractor">
               <MappingFragment StoreEntitySet="12_SubContractor">
+                <ScalarProperty Name="Landscape" ColumnName="Landscape" />
+                <ScalarProperty Name="Render" ColumnName="Render" />
+                <ScalarProperty Name="DTM" ColumnName="DTM" />
+                <ScalarProperty Name="Infrastructure" ColumnName="Infrastructure" />
+                <ScalarProperty Name="Interior" ColumnName="Interior" />
+                <ScalarProperty Name="MEP" ColumnName="MEP" />
+                <ScalarProperty Name="STR" ColumnName="STR" />
+                <ScalarProperty Name="ARC" ColumnName="ARC" />
                 <ScalarProperty Name="ShortName" ColumnName="ShortName" />
                 <ScalarProperty Name="ContractorLocation" ColumnName="ContractorLocation" />
                 <ScalarProperty Name="ContractorName" ColumnName="ContractorName" />
@@ -957,6 +985,7 @@
           <EntitySetMapping Name="C01_Projects">
             <EntityTypeMapping TypeName="DmcTimesheet.Models.C01_Projects">
               <MappingFragment StoreEntitySet="01_Projects">
+                <ScalarProperty Name="MaDuAn" ColumnName="MaDuAn" />
                 <ScalarProperty Name="OwnerId" ColumnName="OwnerId" />
                 <ScalarProperty Name="LocationId" ColumnName="LocationId" />
                 <ScalarProperty Name="ProjectStatusId" ColumnName="ProjectStatusId" />
@@ -1013,6 +1042,7 @@
           <EntitySetMapping Name="C02_Members">
             <EntityTypeMapping TypeName="DmcTimesheet.Models.C02_Members">
               <MappingFragment StoreEntitySet="02_Members">
+                <ScalarProperty Name="SystemMember" ColumnName="SystemMember" />
                 <ScalarProperty Name="Deactived" ColumnName="Deactived" />
                 <ScalarProperty Name="Position" ColumnName="Position" />
                 <ScalarProperty Name="Descipline" ColumnName="Descipline" />

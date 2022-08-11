@@ -33,6 +33,7 @@ namespace DMCTimesheet.Models
         public Nullable<int> Descipline { get; set; }
         public Nullable<int> Position { get; set; }
         public Nullable<bool> Deactived { get; set; }
+        public Nullable<bool> SystemMember { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<C06_UserPermisRelationship> C06_UserPermisRelationship { get; set; }

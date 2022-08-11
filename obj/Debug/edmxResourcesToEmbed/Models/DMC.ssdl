@@ -5,6 +5,7 @@
       <PropertyRef Name="ProjectID" />
     </Key>
     <Property Name="ProjectID" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="MaDuAn" Type="nchar" MaxLength="10" />
     <Property Name="ProjectName" Type="nvarchar" MaxLength="250" />
     <Property Name="ProjectOtherName" Type="nvarchar" MaxLength="250" />
     <Property Name="StartDate" Type="date" />
@@ -29,6 +30,7 @@
     <Property Name="Descipline" Type="int" />
     <Property Name="Position" Type="int" />
     <Property Name="Deactived" Type="bit" />
+    <Property Name="SystemMember" Type="bit" />
   </EntityType>
   <EntityType Name="03_ProjectMembers">
     <Key>
@@ -134,6 +136,14 @@
     <Property Name="ContractorName" Type="nvarchar" MaxLength="250" />
     <Property Name="ShortName" Type="nvarchar" MaxLength="50" />
     <Property Name="ContractorLocation" Type="int" />
+    <Property Name="ARC" Type="bit" />
+    <Property Name="STR" Type="bit" />
+    <Property Name="MEP" Type="bit" />
+    <Property Name="Interior" Type="bit" />
+    <Property Name="Infrastructure" Type="bit" />
+    <Property Name="DTM" Type="bit" />
+    <Property Name="Render" Type="bit" />
+    <Property Name="Landscape" Type="bit" />
   </EntityType>
   <EntityType Name="13_ProjectType">
     <Key>

@@ -207,6 +207,14 @@
     <NavigationProperty Name="C15_SubConServices" Relationship="DmcTimesheet.Models.FK_15_SubConServices_12_SubContractor" FromRole="C12_SubContractor" ToRole="C15_SubConServices" />
     <Property Name="ShortName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
     <NavigationProperty Name="C09_ProjectSubCon" Relationship="DmcTimesheet.Models.FK_09_ProjectSubCon_12_SubContractor" FromRole="C12_SubContractor" ToRole="C09_ProjectSubCon" />
+    <Property Name="ARC" Type="Boolean" />
+    <Property Name="STR" Type="Boolean" />
+    <Property Name="MEP" Type="Boolean" />
+    <Property Name="Interior" Type="Boolean" />
+    <Property Name="Infrastructure" Type="Boolean" />
+    <Property Name="DTM" Type="Boolean" />
+    <Property Name="Render" Type="Boolean" />
+    <Property Name="Landscape" Type="Boolean" />
   </EntityType>
   <EntityType Name="C13_ProjectType">
     <Key>
@@ -275,6 +283,7 @@
     <NavigationProperty Name="C08_Timesheet" Relationship="DmcTimesheet.Models.FK_08_Timesheet_01_Projects" FromRole="C01_Projects" ToRole="C08_Timesheet" />
     <NavigationProperty Name="C03_ProjectMembers" Relationship="DmcTimesheet.Models.FK_3_ChonNhansu_01_Projects" FromRole="C01_Projects" ToRole="C03_ProjectMembers" />
     <NavigationProperty Name="C09_ProjectSubCon" Relationship="DmcTimesheet.Models.FK_09_ProjectSubCon_01_Projects" FromRole="C01_Projects" ToRole="C09_ProjectSubCon" />
+    <Property Name="MaDuAn" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
   </EntityType>
   <Association Name="FK_08_Timesheet_01_Projects">
     <End Type="DmcTimesheet.Models.C01_Projects" Role="C01_Projects" Multiplicity="0..1" />
@@ -381,6 +390,7 @@
     <NavigationProperty Name="C06_UserPermisRelationship" Relationship="DmcTimesheet.Models.FK_06_UserPermisRelationship_02_Members" FromRole="C02_Members" ToRole="C06_UserPermisRelationship" />
     <NavigationProperty Name="C08_Timesheet" Relationship="DmcTimesheet.Models.FK_08_Timesheet_02_Members" FromRole="C02_Members" ToRole="C08_Timesheet" />
     <NavigationProperty Name="C03_ProjectMembers" Relationship="DmcTimesheet.Models.FK_3_ChonNhansu_02_Members_Main" FromRole="C02_Members" ToRole="C03_ProjectMembers" />
+    <Property Name="SystemMember" Type="Boolean" />
   </EntityType>
   <Association Name="FK_06_UserPermisRelationship_02_Members">
     <End Type="DmcTimesheet.Models.C02_Members" Role="C02_Members" Multiplicity="0..1" />

@@ -1,39 +1,6 @@
 ﻿@model IEnumerable<DMCTimesheet.Models.C08_Timesheet>
 @{
-    DMCTimesheet.Models.C06_UserPermisRelationship Userpermiss = Session["UserPermission"] as DMCTimesheet.Models.C06_UserPermisRelationship;
-    switch (Userpermiss.idPer)
-    {
-        case 1://WebAdmin
-            {
-                ViewBag.Title = "Web Admin";
-                Layout = "~/Views/Shared/_AdminLayout.cshtml";
-                break;
-            }
-        case 2://User
-            {
-                ViewBag.Title = "User";
-                Layout = "~/Views/Shared/_UserLayout.cshtml";
-                break;
-            }
-        case 3: //System Admin
-            {
-                ViewBag.Title = "Sys admin";
-                Layout = "~/Views/Shared/_AdminLayout.cshtml";
-                break;
-            }
-        case 4: //System Mod
-            {
-                ViewBag.Title = "Mod";
-                Layout = "~/Views/Shared/_AdminLayout.cshtml";
-                break;
-            }
-        default:
-            {
-                ViewBag.Title = "Default User";
-                Layout = "~/Views/Shared/_UserLayout.cshtml";
-                break;
-            }
-    }
+    DMCTimesheet.Models.C06_UserPermisRelationship Userpermiss = Session["UserPermission"] as DMCTimesheet.Models.C06_UserPermisRelationship;    
     DMCTimesheet.Models.C02_Members loginUser = Session["UserLogin"] as DMCTimesheet.Models.C02_Members;
 
     List<DMCTimesheet.Models.C01_Projects> myProject = ViewBag.MyProjects as List<DMCTimesheet.Models.C01_Projects>;

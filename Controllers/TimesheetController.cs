@@ -36,12 +36,13 @@ namespace DMCTimesheet.Controllers
             ViewBag.Projects = db.C01_Projects.ToList();
             ViewBag.WorkGroup = db.C07_WorkType.ToList();
 
-            ViewBag.ProjectMember = db.C03_ProjectMembers.Where(s => s.ChuTriKienTruc == logUser.UserID
-            || s.ChuTriChinh == logUser.UserID
-            || s.ChuTriKetCau == logUser.UserID
-            || s.ChuTriMEP == logUser.UserID
-            || s.LegalManager == logUser.UserID
-            ).ToList();
+            ViewBag.ProjectMember = db.C03_ProjectMembers.Where(
+              s => s.ChuTriKienTruc == logUser.UserID
+                || s.ChuTriChinh == logUser.UserID
+                || s.ChuTriKetCau == logUser.UserID
+                || s.ChuTriMEP == logUser.UserID
+                || s.LegalManager == logUser.UserID
+                ).ToList();
 
             List<C08_Timesheet> mytimesheet = db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).ToList();
             return View(mytimesheet);
@@ -55,80 +56,130 @@ namespace DMCTimesheet.Controllers
             C02_Members logUser = Session["UserLogin"] as C02_Members;
             if (string.IsNullOrEmpty(ProjectID) || ProjectID == "notset")
             {
+                ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
+                ViewBag.Projects = db.C01_Projects.ToList();
+                ViewBag.WorkGroup = db.C07_WorkType.ToList();
+
+                ViewBag.ProjectMember = db.C03_ProjectMembers.Where(
+                  s => s.ChuTriKienTruc == logUser.UserID
+                    || s.ChuTriChinh == logUser.UserID
+                    || s.ChuTriKetCau == logUser.UserID
+                    || s.ChuTriMEP == logUser.UserID
+                    || s.LegalManager == logUser.UserID
+                    ).ToList();
+
+                List<C08_Timesheet> mytimesheet = db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).ToList();
                 ViewBag.WorkAlert = "Lưu công việc thất bại do chưa được chỉ định dự án ";
-                return View("MemberTimesheet");
+                return View("MemberTimesheet", mytimesheet);
             }
             try
             {
-                DateTime inputDate = DateTime.Parse(RecordDate);
-                DateTime recordDate = DateTime.Compare(inputDate, DateTime.Now) > 0 ? DateTime.Now : inputDate;
-                int Hours = int.Parse(Hour);
-                int _OT = int.Parse(OvertimeHour);
+                //Kiem tra số giờ thực hiện
+                double sogioTrongNgay = 0;
+                sogioTrongNgay = GetTimesheetDone(ProjectID, RecordDate, logUser.UserID) + double.Parse(Hour);
+                if (sogioTrongNgay > 8)
+                {
+                    ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
+                    ViewBag.Projects = db.C01_Projects.ToList();
+                    ViewBag.WorkGroup = db.C07_WorkType.ToList();
 
-                C08_Timesheet enity = new C08_Timesheet
-                {
-                    MemberID = logUser.UserID,
-                    RecordDate = recordDate,
-                    ProjectId = ProjectID,
-                    WorkType = WorkID,
-                    Description = Description,
-                    Hour = Hours,
-                    OT = _OT
-                };
-                using (dmcDbcontext dbcontext = new dmcDbcontext())
-                {
-                    dbcontext.C08_Timesheet.Add(enity);
-                    dbcontext.SaveChanges();
+                    ViewBag.ProjectMember = db.C03_ProjectMembers.Where(s => s.ChuTriKienTruc == logUser.UserID
+                    || s.ChuTriChinh == logUser.UserID
+                    || s.ChuTriKetCau == logUser.UserID
+                    || s.ChuTriMEP == logUser.UserID
+                    || s.LegalManager == logUser.UserID
+                    ).ToList();
+                    ViewBag.WorkAlert = "Số giờ làm việc trong ngày đã nhiều hơn 8h, cần chọn qua ô tăng ca";
+                    return View("MemberTimesheet", db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).ToList());
                 }
+                else
+                {
+                    DateTime inputDate = DateTime.Parse(RecordDate);
+                    DateTime recordDate = DateTime.Compare(inputDate, DateTime.Now) > 0 ? DateTime.Now : inputDate;
+                    int Hours = int.Parse(Hour);
+                    int _OT = int.Parse(OvertimeHour);
+
+                    C08_Timesheet enity = new C08_Timesheet
+                    {
+                        MemberID = logUser.UserID,
+                        RecordDate = recordDate,
+                        ProjectId = ProjectID,
+                        WorkType = WorkID,
+                        Description = Description,
+                        Hour = Hours,
+                        OT = _OT
+                    };
+                    using (dmcDbcontext dbcontext = new dmcDbcontext())
+                    {
+                        dbcontext.C08_Timesheet.Add(enity);
+                        dbcontext.SaveChanges();
+                    }
+                }
+                //Session["OverHourError"] = "Lưu thành công";
+                ViewBag.WorkAlert = "Lưu thành công";
                 return RedirectToAction("MemberTimesheet");
             }
             catch (Exception ex)
             {
+                ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
+                ViewBag.Projects = db.C01_Projects.ToList();
+                ViewBag.WorkGroup = db.C07_WorkType.ToList();
+
+                ViewBag.ProjectMember = db.C03_ProjectMembers.Where(s => s.ChuTriKienTruc == logUser.UserID
+                || s.ChuTriChinh == logUser.UserID
+                || s.ChuTriKetCau == logUser.UserID
+                || s.ChuTriMEP == logUser.UserID
+                || s.LegalManager == logUser.UserID
+                ).ToList();
+
                 ViewBag.WorkAlert = "Lưu công việc thất bại do lỗi " + ex.Message;
-                return View("MemberTimesheet");
+                return View("MemberTimesheet", db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).ToList());
             }
 
         }
 
+        private double GetTimesheetDone(string projectID, string recordDate, int userID)
+        {
+            double kq = 0;
 
-        #endregion
+            List<C08_Timesheet> data = db.C08_Timesheet.Where(s => s.ProjectId == projectID && s.MemberID == userID).ToList();
+            if (data == null) return 0;
+            try
+            {
+                foreach (var item in data)
+                {
+                    if (DateTime.Compare(DateTime.Parse(item.RecordDate.ToString()), DateTime.Parse(recordDate)) == 0)
+                    {
+                        kq += item.Hour.Value;
 
+                    }
+                }
+                return kq;
+            }
+            catch (Exception)
+            {
+                return 0;
+            }
+        }
 
-
-        #region Admin Timesheet
-
-        #endregion
-
-
-
-
-
-
-        #region User Timesheet
 
         public ActionResult UserEdit(int Id)
         {
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
             C02_Members logUser = Session["UserLogin"] as C02_Members;
-            try
-            {
-                C08_Timesheet item = db.C08_Timesheet.FirstOrDefault(s => s.Id == Id);
-                if (item == null)
-                {
-                    ViewBag.WorkAlert = "Không tìm thấy thông tin Timesheet này";
-                    return View();
-                }
 
-                ViewBag.Projects = db.C01_Projects.ToList();
-                ViewBag.WorkType = db.C07_WorkType.ToList();
-
-                return View(item);
-            }
-            catch (Exception ex)
+            C08_Timesheet item = db.C08_Timesheet.FirstOrDefault(s => s.Id == Id);
+            if (item == null)
             {
-                ViewBag.WorkAlert = $"Lưu Thất bại do {ex.Message}";
-                return View("MemberTimesheet");
+                ViewBag.WorkAlert = "Không tìm thấy thông tin Timesheet này";
+                return View();
             }
+            ViewBag.Projects = db.C01_Projects.ToList();
+            ViewBag.WorkType = db.C07_WorkType.ToList();
+
+            return View(item);
+
+
 
         }
 
@@ -151,11 +202,14 @@ namespace DMCTimesheet.Controllers
                     db.Entry(item).State = EntityState.Modified;
                     db.SaveChanges();
                 }
-               // return RedirectToAction("UserPage", "Home");
+                // return RedirectToAction("UserPage", "Home");
                 return RedirectToAction("MemberTimesheet");
             }
             catch (Exception ex)
             {
+                ViewBag.Projects = db.C01_Projects.ToList();
+                ViewBag.WorkType = db.C07_WorkType.ToList();
+
                 ViewBag.WorkAlert = $"Có lỗi khi cập nhật timesheet số {Id} do {ex.Message}";
                 return View();
             }
@@ -178,11 +232,17 @@ namespace DMCTimesheet.Controllers
 
 
         // POST: TimeSheet/Delete/5
+        /// <summary>
+        /// Xóa Timesheet
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpPost, ActionName("DeleteConfirmed")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+
             try
             {
                 C08_Timesheet c15_TimeSheet = db.C08_Timesheet.FirstOrDefault(s => s.Id == id);
@@ -195,8 +255,11 @@ namespace DMCTimesheet.Controllers
             }
             catch (Exception ex)
             {
-                Session["Error"] = $"Lưu Thất bại do {ex.Message}";
-                return RedirectToAction("Delete");
+                ViewBag.Projects = db.C01_Projects.ToList();
+                ViewBag.WorkType = db.C07_WorkType.ToList();
+
+                ViewBag.WorkAlert = $"Xóa Thất bại do {ex.Message}";
+                return RedirectToAction("Delete", db.C08_Timesheet.FirstOrDefault(s => s.Id == id));
             }
 
         }
@@ -292,7 +355,6 @@ namespace DMCTimesheet.Controllers
             }
         }
 
-
         /// <summary>
         /// Page hiển thị thông tin Xóa
         /// </summary>
@@ -386,5 +448,6 @@ namespace DMCTimesheet.Controllers
 
 
         #endregion
+
     }
 }

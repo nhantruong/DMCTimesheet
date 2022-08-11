@@ -1,0 +1,204 @@
+﻿@model IEnumerable<DMCTimesheet.Models.C07_WorkType>
+@{
+    ViewBag.Title = "WorkType Page";
+    //Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    string updateInfo = ViewBag.SaveContent;
+    List<DMCTimesheet.Models.C07_WorkType> Worklist = ViewBag.Worklist as List<DMCTimesheet.Models.C07_WorkType>;
+}
+<h3>DANH MỤC CÔNG VIỆC</h3>
+@* Modal create new *@
+<div>
+    <button type="button" class="btn btn-info btn-small text-right" data-toggle="modal" data-target="#form">Thêm mới</button>
+</div>
+@* Form nhập liệu *@
+<div id="form" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-m">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Thêm loại hình công việc</h3>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("CreateWorktype", "Setting", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <form>
+                        @* WorkType *@
+                        <div class="form-group row text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên</lable>
+                            <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" name="WorkName" placeholder="" required="" value="" />
+                        </div>
+                        <div class="form-group row text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Nhóm</lable>
+                            <input type="number" class="form-control col-md-7 col-sm-9 col-xs-9" name="WorkGroup" value="1" />
+                        </div>
+                        <div class="form-group text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
+                            <input type="submit" value="Save" class="btn btn-success col-md-7" />
+                        </div>
+                    </form>
+                }
+            </div>
+            <div class="modal-footer">
+                <div>
+                    <p class="text-danger">@ViewBag.SaveContent</p>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+@* End Form nhập liệu *@
+
+
+
+@* Worktype table *@
+<table class="table table-condensed table-hover tab-pane">
+    <thead class="bg-dark text-white">
+        <tr>
+            <th>Mã công việc</th>
+            <th>Tên công việc</th>
+            <th>Nhóm công việc</th>
+            <th>#</th>
+        </tr>
+    </thead>
+
+    @if (Worklist.Count() != 0)
+    {
+        foreach (var item in Worklist)
+        {
+            <tr class="table tab-content">
+                <td>@item.ID</td>
+                <td><b>@Html.ActionLink(item.WorkName.ToString(), "EditWorktype", "Setting", new { id = item.ID }, new { @class = "text-primary" })</b></td>
+            <td>@item.WorkGroup.ToString()</td>
+            <td class="row">               
+                <div>
+                    @Html.ActionLink(" ", "DeleteWorktype", "Setting", new { id = item.ID }, new { @class = "btn fa fa-remove" })
+                </div>
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr>
+        <td>Chưa có danh mục công việc được tạo</td>
+    </tr>
+}
+</table>
+
+@* Modal sửa data *@
+<div id="AddUpdateModel" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-m">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Chỉnh sửa loại hình công việc</h3>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("EditWorktype", "Setting", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <form>
+                        @* WorkType *@
+                        <div class="form-group row text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">ID</lable>
+                            <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" id="txtId" enable="false" required="" value="" />
+                        </div>
+                        <div class="form-group row text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên</lable>
+                            <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" id="txtWorkName" placeholder="" required="" value="" />
+                        </div>
+                        <div class="form-group row text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Nhóm</lable>
+                            <input type="number" class="form-control col-md-7 col-sm-9 col-xs-9" id="txtWorkGroup" value="1" />
+                        </div>
+                        <div class="form-group text-left">
+                            <input type="submit" value="Update" id="btnUpdate" class="btn btn-warning col-md-7" />
+                            <input type="submit" value="Delete" id="btnDelete" class="btn btn-danger col-md-7" />
+                        </div>
+                    </form>
+                }
+            </div>
+            <div class="modal-footer">
+                <div>
+                    <p class="text-danger">@ViewBag.SaveContent</p>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    //function for updating Worktype record
+    function UpdateWorktype() {
+        var res = ValidateUserInput();
+        if (res == false) {
+            return false;
+        }
+        var WorkTypeObj = {
+            Id: $('#txtId').val(),
+            WorkName: $('#txtWorkName').val(),
+            WorkGroup: $('#txtWorkGroup').val(),
+        };
+        if (!WorkTypeObj.Id || WorkTypeObj.Id <= 0) {
+            alert("Invalid Id!");
+            return false;
+        }
+        $.ajax({
+            url: "/Timesheet/UpdateWorktype",
+            data: JSON.stringify(WorkTypeObj),
+            type: "POST",
+            contentType: "application/json;charset=utf-8",
+            dataType: "json",
+            success: function (result) {
+                BindWorktypeData();
+                ClearAllInput();
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+    }
+
+    function OpenEditPopup(ID) {
+        ClearAllInput();
+        $.ajax({
+            url: "/Timesheet/GetWorktypebyID?ID=" + ID,
+            typr: "GET",
+            contentType: "application/json;charset=UTF-8",
+            dataType: "json",
+            success: function (result) {
+                debugger;
+                /*$("#AddUpdateModelLabel").val("Update Patient Detail")*/
+                $('#txtId').val(result.Id);
+                $('#txtWorkName').val(result.PatientName);
+                $('#txtWorkGroup').val(result.PatientNumber);
+
+                $('#AddUpdateModel').modal('show');
+                $('#btnUpdate').show();
+                $('#btnDelete').hide();
+            },
+            error: function (errormessage) {
+                alert(errormessage.responseText);
+            }
+        });
+        return false;
+    }
+
+    function ClearAllInput() {
+        $('#txtId').val("");
+        $('#txtWorkName').val("");
+        $('#txtWorkGroup').val("");
+
+        $('#txtId').css('border-color', 'lightgrey');
+        $('#txtWorkName').css('border-color', 'lightgrey');
+        $('#txtWorkGroup').css('border-color', 'lightgrey');
+    }
+
+
+</script>
+
+

@@ -14,38 +14,48 @@
         <ul class="nav side-menu">
             @* Bảng thông báo chung *@
             <li>
-                <a><i class="fa fa-home"></i> Trang chủ <span class="fa fa-chevron-down"></span></a>
-                <ul class="nav child_menu">
-                    @switch (Userpermiss.idPer)
-                    {
-                        case 1://Admin
-                            {
-                                <li>@Html.ActionLink("Tổng quan", "WebAdminPage", "Home")</li>
+                @switch (Userpermiss.idPer)
+                {
+                    case 1://Admin
+                        {
+                            <a>
+                                <p class="text-white btn"><i class="fa fa-home"></i> @Html.ActionLink(" Trang chủ ", "WebAdminPage", "Home", null, new { @class = "text-white" }) <span class="text-reset"></span></p>
+                            </a>
+                            break;
+                        }
+                    case 2://User
+                        {
+                            <a>
+                                <p class="text-white btn"><i class="fa fa-home"></i> @Html.ActionLink(" Trang chủ ", "UserPage", "Home", null, new { @class = "text-white" }) <span class="text-reset"></span></p>
+                            </a>
 
-                                break;
-                            }
-                        case 2://User
-                            {
-                                <li>@Html.ActionLink("Tổng quan", "UserPage", "Home")</li>
-                                break;
-                            }
-                        case 3://SysAdmin
-                            {
-                                <li>@Html.ActionLink("Tổng quan", "SysAdminPage", "Home")</li>
-                                break;
-                            }
-                        case 4://SysMod
-                            {
-                                <li>@Html.ActionLink("Tổng quan", "SysModPage", "Home")</li>
-                                break;
-                            }
-                        default:
-                            {
-                                <li>@Html.ActionLink("Tổng quan", "UserPage", "Home")</li>
-                                break;
-                            }
-                    }
-                </ul>
+                            break;
+                        }
+                    case 3://SysAdmin
+                        {
+                            <a>
+                                <p class="text-white btn"><i class="fa fa-home"></i> @Html.ActionLink(" Trang chủ ", "SysAdminPage", "Home", null, new { @class = "text-white" }) <span class="text-reset"></span></p>
+                            </a>
+
+                            break;
+                        }
+                    case 4://SysMod
+                        {
+                            <a>
+                                <p class="text-white btn"><i class="fa fa-home"></i> @Html.ActionLink(" Trang chủ ", "SysModPage", "Home", null, new { @class = "text-white" }) <span class="text-reset"></span></p>
+                            </a>
+
+                            break;
+                        }
+                    default:
+                        {
+                            <a>
+                                <p class="text-white btn"><i class="fa fa-home"></i> @Html.ActionLink(" Trang chủ ", "UserPage", "Home", null, new { @class = "text-white" }) <span class="text-reset"></span></p>
+                            </a>
+
+                            break;
+                        }
+                }
             </li>
             @* Quản lý dự án *@
             @if (Userpermiss.idPer != 2)
@@ -69,8 +79,8 @@
                         {
                             case 3:// System Administrator
                                 {
-                                    <li>@Html.ActionLink("Cấp quyền", "SetPermission", "Member",null, new { @class = "text-info" })</li>
-                                    <li>@Html.ActionLink("Cập nhật quyền", "EditPermission", "Member",null, new { @class = "text-info" })</li>
+                                    <li>@Html.ActionLink("Cấp quyền", "SetPermission", "Member", null, new { @class = "text-info" })</li>
+                                    <li>@Html.ActionLink("Cập nhật quyền", "EditPermission", "Member", null, new { @class = "text-info" })</li>
                                     break;
                                 }
                             case 4://System Moderator
@@ -97,32 +107,31 @@
             @if (Userpermiss.idPer != 2)
             {
                 @* Linh tinh *@
-        <li>
-            <a><i class="fa fa-database"></i> TỔNG HỢP <span class="fa fa-chevron-down"></span></a>
-            <ul class="nav child_menu">
-                <li>@Html.ActionLink("Loại công việc", "Worktype", "Timesheet")</li>
-                @*<li>@Html.ActionLink("Chủ đầu tư", "Owners", "Project")</li>
-                <li>@Html.ActionLink("Thầu phụ thiết kế", "Designer", "Project")</li>
-                <li>@Html.ActionLink("Điều chỉnh dịch vụ NTP", "AssignServices", "Project")</li>
-                <li>@Html.ActionLink("Dịch vụ", "Services", "Project")</li>
-                <li>@Html.ActionLink("Tình trạng", "Status", "Project")</li>
-                <li>@Html.ActionLink("Loại hình dự án", "ProjectType", "Project")</li>
-                <li>@Html.ActionLink("Địa điểm", "Locations", "Project")</li>*@
+                <li>
+                    <a><i class="fa fa-gear"></i> CÀI ĐẶT <span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                        <li>@Html.ActionLink("Loại công việc", "Worktype", "Setting")</li>
+                        <li>@Html.ActionLink("Chủ đầu tư", "Ownerlist", "Setting")</li>
+                        @*<li>@Html.ActionLink("Thầu phụ thiết kế", "Designer", "Project")</li>
+                            <li>@Html.ActionLink("Điều chỉnh dịch vụ NTP", "AssignServices", "Project")</li>
+                            <li>@Html.ActionLink("Dịch vụ", "Services", "Project")</li>
+                            <li>@Html.ActionLink("Tình trạng", "Status", "Project")</li>
+                            <li>@Html.ActionLink("Loại hình dự án", "ProjectType", "Project")</li>
+                            <li>@Html.ActionLink("Địa điểm", "Locations", "Project")</li>*@
 
-            </ul>
-            <a class="text-info"></a>
-        </li>
+                    </ul>
+                    <a class="text-info"></a>
+                </li>
             }
-
 
         </ul>
     </div>
 
     <div class="menu_section">
         <h3 class="text-warning">TIN TỨC</h3>
-        <ul class="nav side-menu">           
+        <ul class="nav side-menu">
             <li>
-                <a href="https://mycoteccons.vn" ><i class="fa fa-asterisk"></i> myCoteccons.vn </a>
+                <a href="https://mycoteccons.vn"><i class="fa fa-asterisk"></i> myCoteccons.vn </a>
             </li>
             <li>
                 <a><i class="fa fa-newspaper-o"></i>  DMC News<span class="text-reset"></span></a>

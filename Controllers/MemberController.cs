@@ -29,7 +29,7 @@ namespace DMCTimesheet.Controllers
             ViewBag.Position = db.C17_Position.ToList();
             ViewBag.Descipline = db.C18_Descipline.ToList();
 
-            List<C02_Members> mem = db.C02_Members.Where(s => s.Deactived == false).ToList();
+            List<C02_Members> mem = db.C02_Members.ToList();
             return View(mem);
         }
 
@@ -72,6 +72,43 @@ namespace DMCTimesheet.Controllers
             catch (Exception ex)
             {
                 ViewBag.Error = $"Có lỗi khi cập nhật thông tin thành viên do {ex.Message}";
+                return View();
+            }
+        }
+
+        // GET: Member/Details/5
+        public ActionResult DeleteMember(int id)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (id < 0) return RedirectToAction("Index");
+
+            ViewBag.Position = db.C17_Position.ToList();
+            ViewBag.Descipline = db.C18_Descipline.ToList();
+            C02_Members enity = db.C02_Members.FirstOrDefault(s => s.UserID == id);
+            if (enity == null) return RedirectToAction("Index");
+            return View(enity);
+        }
+
+        [HttpPost, ActionName("DeleteMemberConfirmed")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteMemberConfirmed(int UserID)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (UserID < 0) return RedirectToAction("Index");
+            try
+            {
+                C02_Members enity = db.C02_Members.FirstOrDefault(s => s.UserID == UserID);
+                
+                if (ModelState.IsValid)
+                {
+                    db.Entry(enity).State = System.Data.Entity.EntityState.Deleted;
+                    db.SaveChanges();
+                }
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Có lỗi khi cập nhật Xóa thành viên do {ex.Message}";
                 return View();
             }
         }
@@ -151,8 +188,7 @@ namespace DMCTimesheet.Controllers
                 if (Session["UserLogin"] == null || id <= 0) return RedirectToAction("Login", "Home");
                 C02_Members enity = db.C02_Members.FirstOrDefault(s => s.UserID == id);
                 if (enity == null) return RedirectToAction("Index");
-                if (!Deactived) return RedirectToAction("Index");
-                enity.Deactived = true;
+                enity.Deactived = Deactived;
                 if (ModelState.IsValid)
                 {
                     db.Entry(enity).State = System.Data.Entity.EntityState.Modified;
@@ -200,7 +236,7 @@ namespace DMCTimesheet.Controllers
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
             try
             {
-                C03_ProjectMembers current = db.C03_ProjectMembers.First(s => s.ProjectID == ProjectID);
+                C03_ProjectMembers current = db.C03_ProjectMembers.FirstOrDefault(s => s.ProjectID == ProjectID);
                 if (current == null)
                 {
                     C03_ProjectMembers newAssignment = new C03_ProjectMembers()
@@ -222,15 +258,26 @@ namespace DMCTimesheet.Controllers
                 }
                 else
                 {
-                    Session["MemberAssignError"] = $"Đã có điều phối Thành viên cho dự án này";
-                    return RedirectToAction("AssignMember");
+                    //Session["MemberAssignError"] = $"Đã có điều phối Thành viên cho dự án này";
+                    ViewBag.Projects = db.C01_Projects.ToList();
+                    ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
+                    List<MemberOutput> BIMer = new List<MemberOutput>();
+
+                    using (MemberService memberService = new MemberService())
+                    {
+                        BIMer.AddRange(memberService.DanhSachMember().ToList());
+                    }
+                    ViewBag.BIMer = BIMer;
+                    ViewBag.Error = $"Đã có điều phối Thành viên cho dự án này";
+                    return View("AssignMember", db.C03_ProjectMembers.ToList());
+                    //return RedirectToAction("AssignMember");
                 }
                 return RedirectToAction("AssignMember");
             }
             catch (Exception ex)
             {
                 ViewBag.Error = $"Có lỗi trong quá trình tạo mới do {ex.Message}";
-                return View();
+                return View("AssignMember");
             }
 
 
@@ -299,6 +346,73 @@ namespace DMCTimesheet.Controllers
             {
                 ViewBag.Error = $"Có lỗi trong khi cập nhật data do {ex.Message}";
                 return View("EditAssign");
+            }
+
+
+        }
+
+        
+        public ActionResult DeleteAssigned(int ID)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (ID < 0) return RedirectToAction("AssignMember");
+            C03_ProjectMembers enity = db.C03_ProjectMembers.FirstOrDefault(s => s.ID == ID);
+            if (enity == null)
+            {
+                Session["MemberAssignError"] = $"Không tìm thấy dự án này";
+                return RedirectToAction("AssignMember");
+            }
+            ViewBag.Projects = db.C01_Projects.ToList();
+            ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
+            List<MemberOutput> BIMer = new List<MemberOutput>();
+
+            using (MemberService memberService = new MemberService())
+            {
+                BIMer.AddRange(memberService.DanhSachMember().ToList());
+            }
+            ViewBag.BIMer = BIMer;
+
+            return View(enity);
+        }
+
+        [HttpPost,ActionName("DeleteAssignConfirmed")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteAssignConfirmed(int ID)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (ID < 0) return RedirectToAction("AssignMember");
+            try
+            {
+                C03_ProjectMembers enity = db.C03_ProjectMembers.FirstOrDefault(s => s.ID == ID);
+                if (ModelState.IsValid)
+                {
+                    db.C03_ProjectMembers.Remove(enity);
+                    db.SaveChanges();
+                }
+                else
+                {
+                    ViewBag.Error = $"Không kết nối được server";
+                    return RedirectToAction("AssignMember");
+                }
+                return RedirectToAction("AssignMember");
+            }
+            catch (Exception ex)
+            {
+                Session["Error"] = $"Dự án còn dữ liệu liên quan cần xóa trước khi xóa dự án.";
+                ViewBag.SaveContent = $"{ex.Message}";
+                ViewBag.Bool = true;
+                ViewBag.Projects = db.C01_Projects.ToList();
+                ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
+                List<MemberOutput> BIMer = new List<MemberOutput>();
+
+                using (MemberService memberService = new MemberService())
+                {
+                    BIMer.AddRange(memberService.DanhSachMember().ToList());
+                }
+                ViewBag.BIMer = BIMer;
+
+                ViewBag.Error = $"Có lỗi trong khi cập nhật data do {ex.Message}";
+                return View("DeleteAssigned");
             }
 
 

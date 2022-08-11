@@ -111,7 +111,7 @@ namespace DMCTimesheet.Controllers
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");            
             try
             {
-                C09_ProjectSubCon current = db.C09_ProjectSubCon.First(s => s.ProjectId == ProjectId);
+                C09_ProjectSubCon current = db.C09_ProjectSubCon.FirstOrDefault(s => s.ProjectId == ProjectId);
                 if (current == null)
                 {
                     C09_ProjectSubCon assignProject = new C09_ProjectSubCon
@@ -133,8 +133,12 @@ namespace DMCTimesheet.Controllers
                 }
                 else
                 {
-                    Session["ProjectAssignError"] = $"Đã có điều phối NTP cho dự án này";
-                    RedirectToAction("AssignDesigner");
+                    //Session["ProjectAssignError"] = $"Đã có điều phối NTP cho dự án này";
+                    ViewBag.Projects = db.C01_Projects.ToList();
+                    ViewBag.SubCons = db.C12_SubContractor.ToList();
+                    ViewBag.AssignProject = db.C09_ProjectSubCon.ToList();
+                    ViewBag.Error = $"Đã có điều phối NTP cho dự án này";
+                    return View("AssignDesigner", db.C09_ProjectSubCon.ToList());
                 }
                 return RedirectToAction("AssignDesigner");
             }
@@ -283,6 +287,103 @@ namespace DMCTimesheet.Controllers
             }
 
         }
+
+
+        [HttpGet]
+        public ActionResult DeleteProject(string Id)
+        {
+            C01_Projects Enity = db.C01_Projects.FirstOrDefault(s => s.ProjectID == Id);
+            if (Enity == null) return RedirectToAction("Index");
+            //Thông tin chung
+            ViewBag.ProjectType = db.C13_ProjectType.ToList();
+            ViewBag.Status = db.C16_Status.ToList();
+            ViewBag.Location = db.C11_Location.ToList();
+            ViewBag.Owner = db.C10_Owner.ToList();
+
+            return View(Enity);
+        }
+
+
+        [HttpPost, ActionName("DeleteConfirmed")]
+       // [ValidateAntiForgeryToken]
+        public ActionResult DeleteConfirmed(string ProjectID)
+        {   
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (string.IsNullOrEmpty(ProjectID)) return RedirectToAction("Index");
+            try
+            {
+                C01_Projects Enity = db.C01_Projects.FirstOrDefault(s => s.ProjectID == ProjectID);
+                if (Enity == null) return RedirectToAction("DeleteProject");
+                //Thông tin chung
+                if(ModelState.IsValid)
+                {
+                    db.C01_Projects.Remove(Enity);
+                    db.SaveChanges();
+                }
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.ProjectType = db.C13_ProjectType.ToList();
+                ViewBag.Status = db.C16_Status.ToList();
+                ViewBag.Location = db.C11_Location.ToList();
+                ViewBag.Owner = db.C10_Owner.ToList();
+                Session["Error"] =  $"Dự án còn dữ liệu liên quan (Timesheet, Điều phối nhân sự) cần xóa trước khi xóa dự án.";
+                ViewBag.SaveContent = $"{ex.Message}";
+                ViewBag.Bool = true;
+                return View("DeleteProject");
+            }
+        }
+
+        
+        [HttpGet]
+        public ActionResult DeleteAssign(int Id)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            C09_ProjectSubCon enity = db.C09_ProjectSubCon.FirstOrDefault(s => s.Id == Id);
+            if (enity == null) return RedirectToAction("AssignDesigner");
+
+            ViewBag.Projects = db.C01_Projects.ToList();
+            ViewBag.SubCons = db.C12_SubContractor.ToList();
+            ViewBag.AssignProject = db.C09_ProjectSubCon.ToList();
+
+            return View(enity);
+        }
+
+
+        [HttpPost, ActionName("DeleteAssignConfirmed")]
+       // [ValidateAntiForgeryToken]
+        public ActionResult DeleteAssignConfirmed(int Id)
+        {   
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");            
+            try
+            {
+                C09_ProjectSubCon enity = db.C09_ProjectSubCon.FirstOrDefault(s => s.Id == Id);
+                if (enity == null) return RedirectToAction("AssignDesigner");
+                //Thông tin chung
+                if (ModelState.IsValid)
+                {
+                    db.C09_ProjectSubCon.Remove(enity);
+                    db.SaveChanges();
+                }
+                return RedirectToAction("AssignDesigner");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Projects = db.C01_Projects.ToList();
+                ViewBag.SubCons = db.C12_SubContractor.ToList();
+                ViewBag.AssignProject = db.C09_ProjectSubCon.ToList();
+                //Session["Error"] =  $"Dự án còn dữ liệu liên quan cần xóa trước khi xóa dự án.";
+
+
+                C09_ProjectSubCon enity = db.C09_ProjectSubCon.FirstOrDefault(s => s.Id == Id);
+
+                ViewBag.SaveContent = $"Dự án còn dữ liệu liên quan cần xóa trước khi xóa dự án - {ex.Message}";
+                ViewBag.Bool = true;
+                return View("DeleteAssign");
+            }
+        }
+
 
     }
 

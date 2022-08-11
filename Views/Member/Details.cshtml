@@ -2,7 +2,7 @@
 @{
     DMCTimesheet.Models.C06_UserPermisRelationship Userpermiss = Session["UserPermission"] as DMCTimesheet.Models.C06_UserPermisRelationship;
     ViewBag.Title = "Cập nhật thông tin thành viên";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    //Layout = "~/Views/Shared/_AdminLayout.cshtml";
 
     DMCTimesheet.Models.C02_Members loginUser = Session["UserLogin"] as DMCTimesheet.Models.C02_Members;
     string imgPath = "~/Assets/Photos/MemberImage/";
@@ -27,8 +27,11 @@
     List<DMCTimesheet.Models.C18_Descipline> desciplines = ViewBag.Descipline as List<DMCTimesheet.Models.C18_Descipline>;
 
 }
-<h3>@ViewBag.Title</h3>
+<div class="nav navbar-fixed-top row">
+    @Html.ActionLink(" Home", "Index", "Member", null, new { @class = "fa fa-home btn btn-round btn-dark" })
+</div>
 
+<h3>@ViewBag.Title</h3>
 
 <div class="form-group">
     <div class="col-md-3">
@@ -44,8 +47,8 @@
                 <form>
                     @* WorkType *@
                     <div class="form-group row text-left">
-                        <lable class="control-label col-sm-3 col-sm-3 col-xs-3">User ID</lable>
-                        <input type="number" class="form-control col-sm-7 col-sm-9 col-xs-9" name="UserID" readonly value="@Model.UserID" />
+                        <lable hidden class="control-label col-sm-3 col-sm-3 col-xs-3">User ID</lable>
+                        <input hidden type="number" class="form-control col-sm-7 col-sm-9 col-xs-9" name="UserID" readonly value="@Model.UserID" />
                     </div>
                     <div class="form-group row text-left">
                         <lable class="control-label col-sm-3 col-sm-3 col-xs-3">Tên đầy đủ</lable>

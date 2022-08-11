@@ -2,7 +2,7 @@
 @{
     DMCTimesheet.Models.C06_UserPermisRelationship Userpermiss = Session["UserPermission"] as DMCTimesheet.Models.C06_UserPermisRelationship;
     ViewBag.Title = "Thay đổi trạng thái";
-    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    //Layout = "~/Views/Shared/_AdminLayout.cshtml";
 
     DMCTimesheet.Models.C02_Members loginUser = Session["UserLogin"] as DMCTimesheet.Models.C02_Members;
 
@@ -26,8 +26,8 @@
         <div class="form-group form-control text-left form-inline" style="background:#000000">
             <label class="control-label text-danger col-md-2">TÌNH TRẠNG LÀM VIỆC</label>
             <select name="Deactived" class="form-control col-md-7 col-sm-9 col-xs-9">
-                <option value="False">Đang làm việc tại DMC</option>
-                <option value="True">Chuyển công tác</option>
+                <option value="false">Làm việc tại DMC</option>
+                <option value="true">Chuyển công tác</option>
             </select>
         </div>
 

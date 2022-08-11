@@ -1,27 +1,31 @@
 ﻿
 @{
     ViewBag.Title = "Trang chủ";
-    Layout = "~/Views/Shared/_UserLayout.cshtml";
+    //Layout = "~/Views/Shared/_UserLayout.cshtml";
     DMCTimesheet.Models.C02_Members loginUser = Session["UserLogin"] as DMCTimesheet.Models.C02_Members;
 
     List<DMCTimesheet.Models.C01_Projects> myProject = ViewBag.MyProjects as List<DMCTimesheet.Models.C01_Projects>;
+    List<DMCTimesheet.Models.C01_Projects> AllProject = ViewBag.AllProject as List<DMCTimesheet.Models.C01_Projects>;
+    int SLDA = myProject.Count == 0 ? 0 : myProject.Count;
     List<DMCTimesheet.Models.C08_Timesheet> myWorks = ViewBag.MyWorks as List<DMCTimesheet.Models.C08_Timesheet>;
     //List<DMCTimesheet.Models.C08_Timesheet> myWorks = _myWorks.Take(10);
     List<DMCTimesheet.Models.C07_WorkType> Worktype = ViewBag.WorkType as List<DMCTimesheet.Models.C07_WorkType>;
 
     List<DMCTimesheet.Models.C03_ProjectMembers> AssignedProjects = ViewBag.AssignedProjects as List<DMCTimesheet.Models.C03_ProjectMembers>;
+    string Vaitro = "";
 
 }
 <div class="clearfix"></div>
 <h2 class="text-primary">Danh mục dự án đang tham gia</h2>
 <div class="form-group-lg">
     <table class="table table-bordered table-condensed">
-        <caption class="text-primary">Số lượng dự án được giao <b class="text-danger">@myProject.Count()</b></caption>
+        <caption class="text-primary">Số lượng dự án được giao <b class="text-danger">@SLDA</b></caption>
         <thead class="table-dark">
             <tr class="row-fluid">
-                <td class="col-md-2">Mã dự án</td>
-                <td class="col-md-4">Tên dự án</td>
-                <td class="col-md-3">Tên khác dự án</td>
+                <td class="col-md-1">Mã dự án</td>
+                <td class="col-md-2">Tên dự án</td>
+                <td class="col-md-2">Tên khác dự án</td>
+                @*<td class="col-md-2">Vai trò trong Dự án</td>*@
                 <td class="col-md-2">Ngày bắt đầu</td>
             </tr>
         </thead>
@@ -32,8 +36,9 @@
                 {
                     <tr>
                         <td class="col-md-2">@item.ProjectID</td>
-                        <td class="col-md-4"><b class="text-danger">@item.ProjectName</b></td>
-                        <td class="col-md-3">@item.ProjectOtherName</td>
+                        <td class="col-md-2"><b class="text-danger">@item.ProjectOtherName</b></td>
+                        <td class="col-md-2">@item.ProjectOtherName</td>
+                        @*<td class="col-md-2">@Vaitro</td>*@
                         <td class="col-md-2">@item.StartDate</td>
                     </tr>
                 }
@@ -74,7 +79,7 @@
             </tr>
         </thead>
         <tbody class="text-dark">
-            @if (myWorks.Count() == 0)
+            @if (myWorks.Count() == 0 || SLDA == 0)
             {
                 <tr>
                     <td class="row">Bạn chưa record công việc</td>
@@ -86,7 +91,7 @@
                 {
                     <tr>
                         <td class="col-md-1">@DateTime.Parse(item.RecordDate.ToString()).ToShortDateString()</td>
-                        <td class="col-md-2">@item.ProjectId - @myProject.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectName</td>
+                        <td class="col-md-2">@item.ProjectId - @AllProject.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName</td>
                         <td class="col-md-2">@Worktype.FirstOrDefault(s => s.ID == item.WorkType).WorkName</td>
                         <td class="col-md-1">@item.Hour</td>
                         <td class="col-md-1">@item.OT</td>
@@ -179,19 +184,17 @@
                         <div class="form-group text-left">
                             <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
                             <input type="submit" value="Save" class="btn btn-success col-md-7" />
-
                         </div>
 
                         <div>
                             <p class="text-danger">@ViewBag.WorkAlert</p>
                         </div>
-                        <div class="clearfix"></div>
                     </form>
                 }
-            </div>           
+            </div>
         </div>
 
     </div>
 </div>
-</div>
+
 @* End Form nhập liệu *@

@@ -1,39 +1,7 @@
 ﻿@model IEnumerable<DMCTimesheet.Models.C01_Projects>
 @{
     DMCTimesheet.Models.C06_UserPermisRelationship Userpermiss = Session["UserPermission"] as DMCTimesheet.Models.C06_UserPermisRelationship;
-    switch (Userpermiss.idPer)
-    {
-        case 1://WebAdmin
-            {
-                ViewBag.Title = "Web Admin";
-                Layout = "~/Views/Shared/_AdminLayout.cshtml";
-                break;
-            }
-        case 2://User
-            {
-                ViewBag.Title = "User";
-                Layout = "~/Views/Shared/_UserLayout.cshtml";
-                break;
-            }
-        case 3: //System Admin
-            {
-                ViewBag.Title = "Sys admin";
-                Layout = "~/Views/Shared/_AdminLayout.cshtml";
-                break;
-            }
-        case 4: //System Mod
-            {
-                ViewBag.Title = "Mod";
-                Layout = "~/Views/Shared/_AdminLayout.cshtml";
-                break;
-            }
-        default:
-            {
-                ViewBag.Title = "Default User";
-                Layout = "~/Views/Shared/_UserLayout.cshtml";
-                break;
-            }
-    }
+
     DMCTimesheet.Models.C02_Members loginUser = Session["UserLogin"] as DMCTimesheet.Models.C02_Members;
     List<DMCTimesheet.Models.C01_Projects> myProject = ViewBag.Projects as List<DMCTimesheet.Models.C01_Projects>;
 
@@ -43,10 +11,14 @@
     List<DMCTimesheet.Models.C10_Owner> owners = ViewBag.Owner as List<DMCTimesheet.Models.C10_Owner>;
 }
 
+<script src="~/Scripts/bootstrap-table-multiple-sort.min.js"></script>
 
 @* Modal create new *@
 <div>
     <button type="button" class="btn btn-info btn-small text-right" data-toggle="modal" data-target="#newProject">Thêm dự án</button>
+</div>
+<div>
+    <p class="text-danger">@ViewBag.Error</p>
 </div>
 @* Form nhập liệu *@
 <div id="newProject" class="modal fade" role="dialog">
@@ -71,11 +43,11 @@
                             <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" name="ProjectId" placeholder="" required="" value="" />
                         </div>
                         <div class="form-group row text-left">
-                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên dự án</lable>
-                            <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" name="ProjectName" placeholder="" required="" value="" />
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-4">Tên dự án (Theo Hợp đồng)</lable>
+                            <input type="text" class="form-control col-md-7 col-sm-9 col-xs-8" name="ProjectName" placeholder="" required="" value="" />
                         </div>
                         <div class="form-group row text-left">
-                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên khác dự án</lable>
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên rút gọn</lable>
                             <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" name="ProjectOtherName" placeholder="" required="" value="" />
                         </div>
                         <div class="form-group row">
@@ -83,11 +55,12 @@
                             <input type="date" class="form-control col-md-7 col-sm-9 col-xs-9" name="StartDate" placeholder="" required="" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
                         </div>
 
+
                         @* ProjectTypeID *@
                         <div class="form-group row  text-left">
                             <lable class="control-label col-md-3 col-sm-3 col-xs-3">Loại hình dự án</lable>
                             <select name="ProjectTypeId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                                @foreach (var item in projectType)
+                                @foreach (var item in projectType.OrderBy(s => s.TypeName))
                                 {
                                     <option value=@item.TypeId>@item.TypeName</option>
                                 }
@@ -97,7 +70,7 @@
                         <div class="form-group row  text-left">
                             <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tình trạng</lable>
                             <select name="ProjectStatusId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                                @foreach (var item in status)
+                                @foreach (var item in status.OrderBy(s => s.StatusName))
                                 {
                                     <option value=@item.Id>@item.StatusName</option>
                                 }
@@ -107,7 +80,9 @@
                         <div class="form-group row  text-left">
                             <lable class="control-label col-md-3 col-sm-3 col-xs-3">Vị trí</lable>
                             <select name="LocationId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                                @foreach (var item in locations)
+                                <option value=1>Chưa cập nhật</option>
+                                <option value=1>-------------</option>
+                                @foreach (var item in locations.OrderBy(s => s.LocationName))
                                 {
                                     <option value=@item.LocationId>@item.LocationName</option>
                                 }
@@ -117,7 +92,9 @@
                         <div class="form-group row  text-left">
                             <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chủ đầu tư</lable>
                             <select name="OwnerId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                                @foreach (var item in owners)
+                                <option value=1>Chưa cập nhật</option>
+                                <option value=1>-------------</option>
+                                @foreach (var item in owners.OrderBy(s => s.ShortName))
                                 {
                                     <option value=@item.OnwerId>@item.ShortName</option>
                                 }
@@ -131,12 +108,6 @@
                     </form>
                 }
             </div>
-            <div class="modal-footer">
-                <div>
-                    <p class="text-danger">@ViewBag.Error</p>
-                </div>
-                <div class="clearfix"></div>
-            </div>
         </div>
     </div>
 </div>
@@ -145,17 +116,22 @@
 <div class="clearfix"></div>
 <h3>DANH SÁCH DỰ ÁN </h3>
 
-<div class="form-group">
-    <table class="table table-hover table-condensed">
+<div class="table-responsive">
+    <table class="table table-hover table-condensed table-striped">
         <thead class="table-dark">
             <tr>
                 <td class="col-sm-1">Năm</td>
                 <td class="col-md-1">Mã dự án</td>
-                <td class="col-md-2">Tên dự án</td>
-                <td class="col-md-2">Chủ đầu tư</td>
+                <td class="col-md-2">Tên rút gọn</td>
+
+                <td class="col-md-1">Chủ đầu tư</td>
+                <td class="col-md-1">Loại hình</td>
+                <td class="col-md-1">Tình trạng</td>
                 <td class="col-md-1">Ngày bắt đầu</td>
-                <td class="col-md-2">Loại hình</td>
-                <td class="col-md-2">Địa điểm</td>
+
+                <td class="col-md-2">Tên dự án theo Hợp đồng</td>
+                <td class="col-md-1">Địa điểm</td>
+                <td class="col-md-1">Xóa dự án</td>
             </tr>
         </thead>
         <tbody>
@@ -167,16 +143,21 @@
             }
             else
             {
-                foreach (var item in myProject)
+                foreach (var item in myProject.OrderByDescending(s => s.ProjectOtherName))
                 {
                     <tr class="row text-dark">
                         <td class="col-sm-1">@item.Year</td>
                         <td class="col-md-1"><b>@item.ProjectID</b></td>
-                        <td class="col-md-2"><b>@Html.ActionLink(item.ProjectName, "Edit", "Project", new { id = item.ProjectID.Trim() }, new { @class = "text-primary" })</b></td>
-                        <td class="col-md-2"><b>@owners.FirstOrDefault(s => s.OnwerId == item.OwnerId).ShortName</b></td>
+                        <td class="col-md-2"><b>@Html.ActionLink(item.ProjectOtherName, "Edit", "Project", new { id = item.ProjectID.Trim() }, new { @class = "text-primary" })</b></td>
+
+                        <td class="col-md-1"><b>@owners.FirstOrDefault(s => s.OnwerId == item.OwnerId).ShortName</b></td>
+                        <td class="col-md-1">@projectType.FirstOrDefault(s => s.TypeId == item.ProjectTypeId).TypeName</td>
+                        <td class="col-md-1">@status.FirstOrDefault(s => s.Id == item.ProjectStatusId).StatusName</td>
                         <td class="col-md-1">@DateTime.Parse(item.StartDate.ToString()).ToShortDateString()</td>
-                        <td class="col-md-2">@projectType.FirstOrDefault(s => s.TypeId == item.ProjectTypeId).TypeName</td>
-                        <td class="col-md-2">@locations.FirstOrDefault(s => s.LocationId == item.LocationId).LocationName</td>
+
+                        <td class="col-md-2"><b>@Html.ActionLink(item.ProjectName, "Edit", "Project", new { id = item.ProjectID.Trim() }, new { @class = "text-primary" })</b></td>
+                        <td class="col-md-1">@locations.FirstOrDefault(s => s.LocationId == item.LocationId).LocationName</td>
+                        <td class="col-md-1">@Html.ActionLink(" ", "DeleteProject", "Project", new { Id = item.ProjectID.Trim() }, new { @class = "fa fa-remove btn" })</td>
                     </tr>
                 }
             }
