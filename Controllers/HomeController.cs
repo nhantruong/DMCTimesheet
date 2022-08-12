@@ -360,8 +360,14 @@ namespace DMCTimesheet.Controllers
                         ViewBag.LoginNote = "User không tồn tại, vui lòng liên hệ admin";
                         return View("Login");
                     }
-                    List<string> projectsAssigned = db.C03_ProjectMembers.Where(s => s.ChuTriKienTruc == logUser.UserID || s.ChuTriChinh == logUser.UserID ||
-                    s.ChuTriKetCau == logUser.UserID || s.ChuTriMEP == logUser.UserID || s.LegalManager == logUser.UserID).Select(p => p.ProjectID).ToList();
+                    List<int?> projectsAssigned = db.C03_ProjectMembers.Where(
+                        s => s.ChuTriKienTruc == logUser.UserID 
+                        || s.ChuTriChinh == logUser.UserID 
+                        || s.ChuTriKetCau == logUser.UserID 
+                        || s.ChuTriMEP == logUser.UserID 
+                        || s.LegalManager == logUser.UserID
+                        || s.Admin == logUser.UserID
+                        ).Select(p => p.ProjectID).ToList();
                     List<C01_Projects> myProjects = new List<C01_Projects>();
                     foreach (var item in projectsAssigned)
                     {

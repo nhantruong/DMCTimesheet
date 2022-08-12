@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Schema Namespace="DmcTimesheet.Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+<Schema Namespace="DMCtimesheet.Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
   <EntityType Name="01_Projects">
     <Key>
       <PropertyRef Name="ProjectID" />
     </Key>
-    <Property Name="ProjectID" Type="nchar" MaxLength="10" Nullable="false" />
+    <Property Name="ProjectID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="MaDuAn" Type="nchar" MaxLength="10" />
     <Property Name="ProjectName" Type="nvarchar" MaxLength="250" />
     <Property Name="ProjectOtherName" Type="nvarchar" MaxLength="250" />
@@ -38,13 +38,14 @@
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Ngay" Type="date" />
-    <Property Name="ProjectID" Type="nchar" MaxLength="10" />
+    <Property Name="ProjectID" Type="int" />
     <Property Name="ChuTriChinh" Type="int" />
     <Property Name="ChuTriKienTruc" Type="int" />
     <Property Name="ChuTriKetCau" Type="int" />
     <Property Name="ChuTriMEP" Type="int" />
     <Property Name="BIMManager" Type="int" />
     <Property Name="LegalManager" Type="int" />
+    <Property Name="Admin" Type="int" />
   </EntityType>
   <EntityType Name="04_Permission">
     <Key>
@@ -88,7 +89,7 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="RecordDate" Type="date" />
     <Property Name="MemberID" Type="int" />
-    <Property Name="ProjectId" Type="nchar" MaxLength="10" />
+    <Property Name="ProjectId" Type="int" />
     <Property Name="WorkType" Type="int" />
     <Property Name="Hour" Type="float" />
     <Property Name="OT" Type="float" />
@@ -100,7 +101,7 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Date" Type="date" />
-    <Property Name="ProjectId" Type="nchar" MaxLength="10" />
+    <Property Name="ProjectId" Type="int" />
     <Property Name="ArcId" Type="int" />
     <Property Name="InteriorId" Type="int" />
     <Property Name="StructureId" Type="int" />
@@ -192,6 +193,18 @@
     <Property Name="DesciplineName" Type="nvarchar" MaxLength="50" />
     <Property Name="Active" Type="bit" />
   </EntityType>
+  <Association Name="FK_03_ProjectMembers_01_Projects">
+    <End Role="01_Projects" Type="Self.01_Projects" Multiplicity="0..1" />
+    <End Role="03_ProjectMembers" Type="Self.03_ProjectMembers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="01_Projects">
+        <PropertyRef Name="ProjectID" />
+      </Principal>
+      <Dependent Role="03_ProjectMembers">
+        <PropertyRef Name="ProjectID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_05_PermissionDetail_04_Permission">
     <End Role="04_Permission" Type="Self.04_Permission" Multiplicity="0..1" />
     <End Role="05_PermissionDetail" Type="Self.05_PermissionDetail" Multiplicity="*" />
@@ -312,18 +325,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FK_3_ChonNhansu_01_Projects">
-    <End Role="01_Projects" Type="Self.01_Projects" Multiplicity="0..1" />
-    <End Role="03_ProjectMembers" Type="Self.03_ProjectMembers" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="01_Projects">
-        <PropertyRef Name="ProjectID" />
-      </Principal>
-      <Dependent Role="03_ProjectMembers">
-        <PropertyRef Name="ProjectID" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="FK_3_ChonNhansu_02_Members_Main">
     <End Role="02_Members" Type="Self.02_Members" Multiplicity="0..1" />
     <End Role="03_ProjectMembers" Type="Self.03_ProjectMembers" Multiplicity="*" />
@@ -336,7 +337,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <EntityContainer Name="DmcTimesheetModelsStoreContainer">
+  <EntityContainer Name="DMCtimesheetModelsStoreContainer">
     <EntitySet Name="01_Projects" EntityType="Self.01_Projects" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="02_Members" EntityType="Self.02_Members" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="03_ProjectMembers" EntityType="Self.03_ProjectMembers" Schema="dbo" store:Type="Tables" />
@@ -355,6 +356,10 @@
     <EntitySet Name="16_Status" EntityType="Self.16_Status" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="17_Position" EntityType="Self.17_Position" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="18_Descipline" EntityType="Self.18_Descipline" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_03_ProjectMembers_01_Projects" Association="Self.FK_03_ProjectMembers_01_Projects">
+      <End Role="01_Projects" EntitySet="01_Projects" />
+      <End Role="03_ProjectMembers" EntitySet="03_ProjectMembers" />
+    </AssociationSet>
     <AssociationSet Name="FK_05_PermissionDetail_04_Permission" Association="Self.FK_05_PermissionDetail_04_Permission">
       <End Role="04_Permission" EntitySet="04_Permission" />
       <End Role="05_PermissionDetail" EntitySet="05_PermissionDetail" />
@@ -394,10 +399,6 @@
     <AssociationSet Name="FK_15_SubConServices_14_Services" Association="Self.FK_15_SubConServices_14_Services">
       <End Role="14_Services" EntitySet="14_Services" />
       <End Role="15_SubConServices" EntitySet="15_SubConServices" />
-    </AssociationSet>
-    <AssociationSet Name="FK_3_ChonNhansu_01_Projects" Association="Self.FK_3_ChonNhansu_01_Projects">
-      <End Role="01_Projects" EntitySet="01_Projects" />
-      <End Role="03_ProjectMembers" EntitySet="03_ProjectMembers" />
     </AssociationSet>
     <AssociationSet Name="FK_3_ChonNhansu_02_Members_Main" Association="Self.FK_3_ChonNhansu_02_Members_Main">
       <End Role="02_Members" EntitySet="02_Members" />

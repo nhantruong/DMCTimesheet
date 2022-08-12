@@ -230,10 +230,10 @@ namespace DMCTimesheet.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult NewAssignMember(string ProjectID, int ChuTriChinh, int ChuTriKienTruc, int ChuTriKetCau, int ChuTriMEP, DateTime Ngay,
-            int BIMManager, int LegalManager)
+        public ActionResult NewAssignMember(int? ProjectID, int? ChuTriChinh, int? ChuTriKienTruc, int? ChuTriKetCau, int? ChuTriMEP, DateTime Ngay,
+            int? BIMManager, int? LegalManager, int? Admin)
         {
-            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Session["UserLogin"] == null || ProjectID == null) return RedirectToAction("Login", "Home");            
             try
             {
                 C03_ProjectMembers current = db.C03_ProjectMembers.FirstOrDefault(s => s.ProjectID == ProjectID);
@@ -248,7 +248,8 @@ namespace DMCTimesheet.Controllers
                         ChuTriMEP = ChuTriMEP,
                         BIMManager = BIMManager,
                         LegalManager = LegalManager,
-                        Ngay = Ngay
+                        Ngay = Ngay,
+                        Admin = Admin
                     };
                     if (ModelState.IsValid)
                     {
@@ -308,10 +309,10 @@ namespace DMCTimesheet.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditAssignMember(int ID, string ProjectID, int ChuTriChinh, int ChuTriKienTruc, int ChuTriKetCau, int ChuTriMEP, DateTime Ngay,
-            int BIMManager, int LegalManager)
+        public ActionResult EditAssignMember(int? ID, int? ProjectID, int? ChuTriChinh, int? ChuTriKienTruc, int? ChuTriKetCau, int? ChuTriMEP, DateTime Ngay,
+            int? BIMManager, int? LegalManager, int? Admin)
         {
-            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Session["UserLogin"] == null || ID == null || ProjectID == null) return RedirectToAction("Login", "Home");
             if (ID < 0) return RedirectToAction("AssignMember");
             try
             {
@@ -329,6 +330,7 @@ namespace DMCTimesheet.Controllers
                 enity.BIMManager = BIMManager;
                 enity.Ngay = Ngay;
                 enity.LegalManager = LegalManager;
+                enity.Admin = Admin;
 
                 if (ModelState.IsValid)
                 {
@@ -352,9 +354,9 @@ namespace DMCTimesheet.Controllers
         }
 
         
-        public ActionResult DeleteAssigned(int ID)
+        public ActionResult DeleteAssigned(int? ID)
         {
-            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Session["UserLogin"] == null || ID == null) return RedirectToAction("Login", "Home");
             if (ID < 0) return RedirectToAction("AssignMember");
             C03_ProjectMembers enity = db.C03_ProjectMembers.FirstOrDefault(s => s.ID == ID);
             if (enity == null)
@@ -377,9 +379,9 @@ namespace DMCTimesheet.Controllers
 
         [HttpPost,ActionName("DeleteAssignConfirmed")]
         [ValidateAntiForgeryToken]
-        public ActionResult DeleteAssignConfirmed(int ID)
+        public ActionResult DeleteAssignConfirmed(int? ID)
         {
-            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Session["UserLogin"] == null || ID == null) return RedirectToAction("Login", "Home");
             if (ID < 0) return RedirectToAction("AssignMember");
             try
             {

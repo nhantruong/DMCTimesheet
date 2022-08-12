@@ -11,14 +11,21 @@ namespace DMCTimesheet.Controllers
         private static readonly dmcDbcontext db = new dmcDbcontext();
         static string conn = "server = 103.27.60.66; user id=dmcAdmin;password=DmcNewVision@2022#; persistsecurityinfo = True; database =cbimtech_dmc";
 
-        public static List<C01_Projects> GetProjectsByUserId(int? userId)
-        {            
+        public static List<C01_Projects> GetProjectsByUserId(int userId)
+        {
             //if (!DbOpenConnection()) return null;
             //if (userId == null) return null;
-            
+
             //Lấy danh sách dự án theo User ID
-            List<string> projectsAssigned = db.C03_ProjectMembers.Where(s => s.ChuTriKienTruc == userId || s.ChuTriChinh == userId ||
-            s.ChuTriKetCau == userId || s.ChuTriMEP == userId || s.LegalManager == userId).Select(p => p.ProjectID).ToList();
+            List<int?> projectsAssigned = new List<int?>();
+            projectsAssigned = db.C03_ProjectMembers.Where(
+                s => s.ChuTriKienTruc == userId
+                || s.ChuTriChinh == userId
+                || s.ChuTriKetCau == userId
+            || s.ChuTriMEP == userId
+            || s.LegalManager == userId
+            || s.Admin == userId
+            ).Select(p => p.ProjectID).ToList();
             List<C01_Projects> myProjects = new List<C01_Projects>();
             foreach (var item in projectsAssigned)
             {

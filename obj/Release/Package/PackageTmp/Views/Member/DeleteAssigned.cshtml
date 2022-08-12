@@ -36,21 +36,32 @@
             <div class="form-group row  text-left">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3"><b>Chủ trì Dự án</b></lable>
                 <select name="ChuTriChinh" class="form-control col-md-7 col-sm-9 col-xs-9">
-                    <option value="@Model.ChuTriChinh">@Members.FirstOrDefault(s => s.UserID == Model.ChuTriChinh).FullName</option>                    
+                    @if (Model.ChuTriChinh != null)
+                    {
+                        <option value="@Model.ChuTriChinh">@Members.FirstOrDefault(s => s.UserID == Model.ChuTriChinh).FullName</option>
+                    }
                 </select>
             </div>
             @* interior ID *@
             <div class="form-group row  text-left">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chủ trì bộ môn <b class="text-primary">Kiến trúc</b></lable>
                 <select name="ChuTriKienTruc" class="form-control col-md-7 col-sm-9 col-xs-9">
-                    <option value="@Model.ChuTriKienTruc">@Members.FirstOrDefault(s => s.UserID == Model.ChuTriKienTruc).FullName</option>                    
+                    @if (Model.ChuTriKienTruc != null)
+                    {
+                        <option value="@Model.ChuTriKienTruc">@Members.FirstOrDefault(s => s.UserID == Model.ChuTriKienTruc).FullName</option>
+
+                    }
                 </select>
             </div>
             @* Structure ID *@
             <div class="form-group row  text-left">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chủ trì bộ môn <b class="text-primary">Kết cấu</b></lable>
                 <select name="ChuTriKetCau" class="form-control col-md-7 col-sm-9 col-xs-9">
-                    <option value="@Model.ChuTriKetCau">@Members.FirstOrDefault(s => s.UserID == Model.ChuTriKetCau).FullName</option>                    
+                    @if (Model.ChuTriKetCau != null)
+                    {
+                        <option value="@Model.ChuTriKetCau">@Members.FirstOrDefault(s => s.UserID == Model.ChuTriKetCau).FullName</option>
+
+                    }
                 </select>
             </div>
 
@@ -58,7 +69,11 @@
             <div class="form-group row  text-left">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chủ trì bộ môn <b class="text-primary">Cơ điện - MEPF</b></lable>
                 <select name="ChuTriMEP" class="form-control col-md-7 col-sm-9 col-xs-9">
-                    <option value="@Model.ChuTriMEP">@Members.FirstOrDefault(s => s.UserID == Model.ChuTriMEP).FullName</option>                    
+                    @if (Model.ChuTriMEP != null)
+                    {
+                        <option value="@Model.ChuTriMEP">@Members.FirstOrDefault(s => s.UserID == Model.ChuTriMEP).FullName</option>
+
+                    }
                 </select>
             </div>
 
@@ -66,14 +81,33 @@
             <div class="form-group row  text-left">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3">Quản lý <b class="text-primary">BIM</b></lable>
                 <select name="BIMManager" class="form-control col-md-7 col-sm-9 col-xs-9">
-                    <option value="@Model.BIMManager">@BIMer.FirstOrDefault(s => s.ID == Model.BIMManager).SoftName</option>                    
+                    @if (Model.BIMManager != null)
+                    {
+                        <option value="@Model.BIMManager">@BIMer.FirstOrDefault(s => s.ID == Model.BIMManager).SoftName</option>
+
+                    }
                 </select>
             </div>
             @* Legal ID *@
             <div class="form-group row  text-left">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3"><b class="text-primary">Pháp lý</b></lable>
                 <select name="LegalManager" class="form-control col-md-7 col-sm-9 col-xs-9">
-                    <option value="@Model.LegalManager">@Members.FirstOrDefault(s => s.UserID == Model.LegalManager).FullName</option>                    
+                    @if (Model.LegalManager != null)
+                    {
+                        <option value="@Model.LegalManager">@Members.FirstOrDefault(s => s.UserID == Model.LegalManager).FullName</option>
+
+                    }
+                </select>
+            </div> 
+            @* Legal ID *@
+            <div class="form-group row  text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3"><b class="text-primary">Admin</b></lable>
+                <select name="LegalManager" class="form-control col-md-7 col-sm-9 col-xs-9">
+                    @if (Model.Admin != null)
+                    {
+                        <option value="@Model.Admin">@Members.FirstOrDefault(s => s.UserID == Model.Admin).FullName</option>
+
+                    }
                 </select>
             </div>
 

@@ -15,14 +15,15 @@ namespace DMCTimesheet.Models
     public partial class C03_ProjectMembers
     {
         public int ID { get; set; }
-        public string ProjectID { get; set; }
+        public Nullable<System.DateTime> Ngay { get; set; }
+        public Nullable<int> ProjectID { get; set; }
         public Nullable<int> ChuTriChinh { get; set; }
         public Nullable<int> ChuTriKienTruc { get; set; }
         public Nullable<int> ChuTriKetCau { get; set; }
         public Nullable<int> ChuTriMEP { get; set; }
-        public Nullable<System.DateTime> Ngay { get; set; }
         public Nullable<int> BIMManager { get; set; }
         public Nullable<int> LegalManager { get; set; }
+        public Nullable<int> Admin { get; set; }
     
         public virtual C01_Projects C01_Projects { get; set; }
         public virtual C02_Members C02_Members { get; set; }

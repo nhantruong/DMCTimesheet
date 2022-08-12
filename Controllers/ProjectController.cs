@@ -43,14 +43,11 @@ namespace DMCTimesheet.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateNewProject(string ProjectId, string ProjectName, string ProjectOtherName, DateTime StartDate, int Year, int ProjectTypeId, int ProjectStatusId, int LocationId, int OwnerId)
+        public ActionResult CreateNewProject(string MaDuAn, string ProjectName, string ProjectOtherName, DateTime StartDate, int Year, int? ProjectTypeId, int? ProjectStatusId, int? LocationId, int? OwnerId)
         {
-            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
-            C02_Members logUser = Session["UserLogin"] as C02_Members;
-
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");            
             C01_Projects _Projects = new C01_Projects()
-            {
-                ProjectID = ProjectId,
+            {                
                 ProjectName = ProjectName,
                 ProjectOtherName = ProjectOtherName,
                 StartDate = StartDate,
@@ -58,7 +55,9 @@ namespace DMCTimesheet.Controllers
                 ProjectTypeId = ProjectTypeId,
                 LocationId = LocationId,
                 OwnerId = OwnerId,
-                ProjectStatusId = ProjectStatusId
+                ProjectStatusId = ProjectStatusId,
+                MaDuAn = MaDuAn
+
             };
             try
             {
@@ -72,7 +71,13 @@ namespace DMCTimesheet.Controllers
             catch (Exception ex)
             {
                 ViewBag.Error = $"Có lỗi trong quá trình tạo dự án do {ex.Message}";
-                return View("Index");
+                ViewBag.Projects = db.C01_Projects.ToList();
+                ViewBag.ProjectType = db.C13_ProjectType.ToList();
+                ViewBag.Status = db.C16_Status.ToList();
+                ViewBag.Location = db.C11_Location.ToList();
+                ViewBag.Owner = db.C10_Owner.ToList();
+
+                return View("Index", db.C01_Projects.ToList());
             }
 
         }
@@ -106,7 +111,7 @@ namespace DMCTimesheet.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AssignDesigner(DateTime Date, string ProjectId, int ArcId, int InteriorId, int StructureId, int MEPid, int LandscapeId, int LegalId)
+        public ActionResult AssignDesigner(DateTime Date, int ProjectId, int? ArcId, int? InteriorId, int? StructureId, int? MEPid, int? LandscapeId, int? LegalId)
         {
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");            
             try
@@ -156,10 +161,9 @@ namespace DMCTimesheet.Controllers
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        public ActionResult Edit(string Id)
+        public ActionResult Edit(int? Id)
         {
-            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
-            if (string.IsNullOrEmpty(Id)) return RedirectToAction("Index");
+            if (Session["UserLogin"] == null || Id == null) return RedirectToAction("Login", "Home");
             try
             {
                 C01_Projects Enity = db.C01_Projects.FirstOrDefault(s => s.ProjectID == Id);
@@ -194,14 +198,13 @@ namespace DMCTimesheet.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(string ProjectID, string ProjectName, string ProjectOtherName, DateTime StartDate, int Year,
-            int ProjectTypeId, int ProjectStatusId, int LocationId, int OwnerId)
+        public ActionResult Edit(int ProjectID,string MaDuAn, string ProjectName, string ProjectOtherName, DateTime StartDate, int Year,
+            int? ProjectTypeId, int? ProjectStatusId, int? LocationId, int? OwnerId)
         {
-            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
-            if (string.IsNullOrEmpty(ProjectID)) return RedirectToAction("Index");
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");            
             try
             {
-                C01_Projects enity = db.C01_Projects.First(s => s.ProjectID == ProjectID.Trim());
+                C01_Projects enity = db.C01_Projects.First(s => s.ProjectID == ProjectID);
                 if (enity == null)
                 {
                     ViewBag.SaveContent = $"Có lỗi trong do không tìm thấy dự án trong database";
@@ -231,15 +234,14 @@ namespace DMCTimesheet.Controllers
 
 
 
-
         /// <summary>
         /// Edit thông tin điều phối thầu phụ thiết kế cho dự án
         /// </summary>
         /// <param name="Id"></param>
         /// <returns></returns>
-        public ActionResult EditAssign(int Id)
+        public ActionResult EditAssign(int? Id)
         {
-            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Session["UserLogin"] == null || Id == null) return RedirectToAction("Login", "Home");
             C09_ProjectSubCon enity = db.C09_ProjectSubCon.FirstOrDefault(s => s.Id == Id);
             if (enity == null) return RedirectToAction("AssignDesigner");
 
@@ -252,9 +254,11 @@ namespace DMCTimesheet.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditAssign(int Id, DateTime Date, string ProjectId, int ArcId, int InteriorId, int StructureId, int MEPid, int LandscapeId, int LegalId)
+        public ActionResult EditAssign(int? Id, DateTime Date, int? ProjectId, int? ArcId, int? InteriorId, int? StructureId, int? MEPid, int? LandscapeId, int? LegalId)
         {
-            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Session["UserLogin"] == null || Id == null) return RedirectToAction("Login", "Home");
+            if (ProjectId == null) return RedirectToAction("EditAssign");
+            
             C09_ProjectSubCon enity = db.C09_ProjectSubCon.FirstOrDefault(s => s.Id == Id);
             if (enity == null) return RedirectToAction("AssignDesigner");
 
@@ -290,8 +294,9 @@ namespace DMCTimesheet.Controllers
 
 
         [HttpGet]
-        public ActionResult DeleteProject(string Id)
+        public ActionResult DeleteProject(int? Id)
         {
+            if (Session["UserLogin"] == null || Id == null) return RedirectToAction("Login", "Home");
             C01_Projects Enity = db.C01_Projects.FirstOrDefault(s => s.ProjectID == Id);
             if (Enity == null) return RedirectToAction("Index");
             //Thông tin chung
@@ -306,10 +311,9 @@ namespace DMCTimesheet.Controllers
 
         [HttpPost, ActionName("DeleteConfirmed")]
        // [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(string ProjectID)
+        public ActionResult DeleteConfirmed(int? ProjectID)
         {   
-            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
-            if (string.IsNullOrEmpty(ProjectID)) return RedirectToAction("Index");
+            if (Session["UserLogin"] == null || ProjectID == null) return RedirectToAction("Login", "Home");            
             try
             {
                 C01_Projects Enity = db.C01_Projects.FirstOrDefault(s => s.ProjectID == ProjectID);

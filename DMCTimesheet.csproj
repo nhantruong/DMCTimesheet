@@ -375,20 +375,13 @@
     <Content Include="Content\Site.css" />
     <Content Include="Models\DMC.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>DMC.Context.cs</LastGenOutput>
       <DependentUpon>DMC.edmx</DependentUpon>
+      <LastGenOutput>DMC.Context.cs</LastGenOutput>
     </Content>
     <Content Include="Models\DMC.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>DMC.edmx</DependentUpon>
       <LastGenOutput>DMC.cs</LastGenOutput>
-    </Content>
-    <EntityDeploy Include="Models\DMC.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>DMC.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\DMC.edmx.diagram">
-      <DependentUpon>DMC.edmx</DependentUpon>
     </Content>
     <Content Include="Scripts\bootstrap-table-multiple-sort.min.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
@@ -427,6 +420,13 @@
     <Content Include="Scripts\esm\popper.js.map" />
     <Content Include="Scripts\esm\popper-utils.min.js.map" />
     <Content Include="Scripts\esm\popper-utils.js.map" />
+    <EntityDeploy Include="Models\DMC.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>DMC.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\DMC.edmx.diagram">
+      <DependentUpon>DMC.edmx</DependentUpon>
+    </Content>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

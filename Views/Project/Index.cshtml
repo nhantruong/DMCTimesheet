@@ -12,11 +12,8 @@
 }
 
 <script src="~/Scripts/bootstrap-table-multiple-sort.min.js"></script>
-
+<link href="~/Content/cscpda-scrollbar.css" rel="stylesheet" />
 @* Modal create new *@
-<div>
-    <button type="button" class="btn btn-info btn-small text-right" data-toggle="modal" data-target="#newProject">Thêm dự án</button>
-</div>
 <div>
     <p class="text-danger">@ViewBag.Error</p>
 </div>
@@ -35,12 +32,12 @@
                     <form>
                         <div class="form-group row text-left">
                             <lable class="control-label col-md-3 col-sm-3 col-xs-3">Năm</lable>
-                            <input type="number" class="form-control col-md-7 col-sm-9 col-xs-9" name="Year" value="@DateTime.Now.Year" />
+                            <input type="number" class="text-dark form-control col-md-7 col-sm-9 col-xs-9" name="Year" value="@DateTime.Now.Year" />
                         </div>
-                        @* WorkType *@
+                        @*MADuAn *@
                         <div class="form-group row text-left">
                             <lable class="control-label col-md-3 col-sm-3 col-xs-3">Mã dự án</lable>
-                            <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" name="ProjectId" placeholder="" required="" value="" />
+                            <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" name="MaDuAn" placeholder="Nhập Mã dự án" value="" />
                         </div>
                         <div class="form-group row text-left">
                             <lable class="control-label col-md-3 col-sm-3 col-xs-4">Tên dự án (Theo Hợp đồng)</lable>
@@ -60,6 +57,7 @@
                         <div class="form-group row  text-left">
                             <lable class="control-label col-md-3 col-sm-3 col-xs-3">Loại hình dự án</lable>
                             <select name="ProjectTypeId" class="form-control col-md-7 col-sm-9 col-xs-9">
+                                <option value=""></option>
                                 @foreach (var item in projectType.OrderBy(s => s.TypeName))
                                 {
                                     <option value=@item.TypeId>@item.TypeName</option>
@@ -70,6 +68,7 @@
                         <div class="form-group row  text-left">
                             <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tình trạng</lable>
                             <select name="ProjectStatusId" class="form-control col-md-7 col-sm-9 col-xs-9">
+                                <option value=""></option>
                                 @foreach (var item in status.OrderBy(s => s.StatusName))
                                 {
                                     <option value=@item.Id>@item.StatusName</option>
@@ -80,8 +79,7 @@
                         <div class="form-group row  text-left">
                             <lable class="control-label col-md-3 col-sm-3 col-xs-3">Vị trí</lable>
                             <select name="LocationId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                                <option value=1>Chưa cập nhật</option>
-                                <option value=1>-------------</option>
+                                <option value=""></option>
                                 @foreach (var item in locations.OrderBy(s => s.LocationName))
                                 {
                                     <option value=@item.LocationId>@item.LocationName</option>
@@ -92,8 +90,7 @@
                         <div class="form-group row  text-left">
                             <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chủ đầu tư</lable>
                             <select name="OwnerId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                                <option value=1>Chưa cập nhật</option>
-                                <option value=1>-------------</option>
+                                <option value=""></option>
                                 @foreach (var item in owners.OrderBy(s => s.ShortName))
                                 {
                                     <option value=@item.OnwerId>@item.ShortName</option>
@@ -114,13 +111,17 @@
 @* End Form nhập liệu *@
 
 <div class="clearfix"></div>
-<h3>DANH SÁCH DỰ ÁN </h3>
-
-<div class="table-responsive">
-    <table class="table table-hover table-condensed table-striped">
+<div class="col-md-12">
+    <div class="col-md-10"><h3 class="text-primary">DANH SÁCH DỰ ÁN </h3></div>
+    <div class="col-md-2">
+        <button type="button" class="btn btn-success btn-small text-right" data-toggle="modal" data-target="#newProject"><i class="fa fa-plus-circle"></i> Thêm dự án</button>
+    </div>
+</div>
+<div class="table-responsive scrollbar">
+    <table class="table table-hover table-condensed table-striped ">
         <thead class="table-dark">
             <tr>
-                <td class="col-sm-1">Năm</td>
+                <td class="col-sm-1 text-center">Năm</td>
                 <td class="col-md-1">Mã dự án</td>
                 <td class="col-md-2">Tên rút gọn</td>
 
@@ -146,18 +147,41 @@
                 foreach (var item in myProject.OrderByDescending(s => s.ProjectOtherName))
                 {
                     <tr class="row text-dark">
-                        <td class="col-sm-1">@item.Year</td>
-                        <td class="col-md-1"><b>@item.ProjectID</b></td>
-                        <td class="col-md-2"><b>@Html.ActionLink(item.ProjectOtherName, "Edit", "Project", new { id = item.ProjectID.Trim() }, new { @class = "text-primary" })</b></td>
+                        <td class="col-sm-1 text-center">@item.Year</td>
+                        <td class="col-md-1"><b>@item.MaDuAn</b></td>
+                        <td class="col-md-2"><b>@Html.ActionLink(item.ProjectOtherName, "Edit", "Project", new { id = item.ProjectID }, new { @class = "text-primary" })</b></td>
 
-                        <td class="col-md-1"><b>@owners.FirstOrDefault(s => s.OnwerId == item.OwnerId).ShortName</b></td>
-                        <td class="col-md-1">@projectType.FirstOrDefault(s => s.TypeId == item.ProjectTypeId).TypeName</td>
-                        <td class="col-md-1">@status.FirstOrDefault(s => s.Id == item.ProjectStatusId).StatusName</td>
+                        <td class="col-md-1">
+                            @if (item.OwnerId != null)
+                            {
+                                <b>@owners.FirstOrDefault(s => s.OnwerId == item.OwnerId).ShortName</b>
+                            }
+                        </td>
+                        <td class="col-md-1">
+                            @if (item.ProjectTypeId != null)
+                            {
+                                @projectType.FirstOrDefault(s => s.TypeId == item.ProjectTypeId).TypeName
+                            }
+
+                        </td>
+
+                        <td class="col-md-1">
+                            @if (item.ProjectStatusId != null)
+                            {
+                                @status.FirstOrDefault(s => s.Id == item.ProjectStatusId).StatusName
+                            }
+
+                        </td>
                         <td class="col-md-1">@DateTime.Parse(item.StartDate.ToString()).ToShortDateString()</td>
+                        <td class="col-md-2"><b>@Html.ActionLink(item.ProjectName, "Edit", "Project", new { id = item.ProjectID }, new { @class = "text-primary" })</b></td>
+                        <td class="col-md-1">
+                            @if (item.LocationId != null)
+                            {
+                                @locations.FirstOrDefault(s => s.LocationId == item.LocationId).LocationName
+                            }
 
-                        <td class="col-md-2"><b>@Html.ActionLink(item.ProjectName, "Edit", "Project", new { id = item.ProjectID.Trim() }, new { @class = "text-primary" })</b></td>
-                        <td class="col-md-1">@locations.FirstOrDefault(s => s.LocationId == item.LocationId).LocationName</td>
-                        <td class="col-md-1">@Html.ActionLink(" ", "DeleteProject", "Project", new { Id = item.ProjectID.Trim() }, new { @class = "fa fa-remove btn" })</td>
+                        </td>
+                        <td class="col-md-1">@Html.ActionLink(" ", "DeleteProject", "Project", new { Id = item.ProjectID }, new { @class = "fa fa-remove btn" })</td>
                     </tr>
                 }
             }

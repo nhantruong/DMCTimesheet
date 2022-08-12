@@ -3,7 +3,7 @@
     DMCTimesheet.Models.C06_UserPermisRelationship Userpermiss = Session["UserPermission"] as DMCTimesheet.Models.C06_UserPermisRelationship;
     DMCTimesheet.Models.C02_Members loginUser = Session["UserLogin"] as DMCTimesheet.Models.C02_Members;
 
-    List<DMCTimesheet.Models.C01_Projects> Project = ViewBag.Projects as List<DMCTimesheet.Models.C01_Projects>;
+    List<DMCTimesheet.Models.C01_Projects> Projects = ViewBag.Projects as List<DMCTimesheet.Models.C01_Projects>;
     List<DMCTimesheet.Models.C12_SubContractor> SubCons = ViewBag.SubCons as List<DMCTimesheet.Models.C12_SubContractor>;
     List<DMCTimesheet.Models.C09_ProjectSubCon> AssignProject = ViewBag.AssignProject as List<DMCTimesheet.Models.C09_ProjectSubCon>;
 
@@ -14,6 +14,7 @@
 <br>
 <div class="clearfix"></div>
 
+<h4 class="text-center">ĐIỀU CHỈNH THÔNG TIN NHÀ THẦU PHỤ CHO DỰ ÁN <b class="text-danger">@Projects.FirstOrDefault(s => s.ProjectID == Model.ProjectId).ProjectName</b></h4>
 @* Form nhập liệu *@
 <div>
     @using (Html.BeginForm("EditAssign", "Project", FormMethod.Post))
@@ -22,8 +23,8 @@
         <form>
             @* ID *@
             <div class="form-group row">
-                <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Id</lable>
-                <input type="number" class="form-control col-md-7 col-sm-9 col-xs-9" name="Id" placeholder="" readonly value="@Model.Id" />
+                <lable hidden class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Id</lable>
+                <input hidden type="number" class="form-control col-md-7 col-sm-9 col-xs-9" name="Id" placeholder="" readonly value="@Model.Id" />
             </div>
 
             <div class="form-group row">
@@ -32,24 +33,19 @@
             </div>
             @* ProjectTypeID *@
             <div class="form-group row  text-left">
-                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên dự án</lable>
-                <select name="ProjectID" class="form-control col-md-7 col-sm-9 col-xs-9">
-                    <option value=@Model.ProjectId>@Project.FirstOrDefault(s => s.ProjectID == Model.ProjectId).ProjectName</option>
-                    <option value=@Model.ProjectId>----------</option>
-
-                    @foreach (var item in Project.Where(s => s.ProjectStatusId == 1).OrderBy(s => s.ProjectOtherName))
-                    {
-                        <option value=@item.ProjectID>@item.ProjectName</option>
-                    }
-                </select>
+                <lable hidden class="control-label col-md-3 col-sm-3 col-xs-3 text-danger">Tên dự án</lable>
+                <input type="number" name="ProjectID" hidden value="@Model.ProjectId" />               
             </div>
             @* ARC ID *@
             <div class="form-group row  text-left">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thiết kế Kiến trúc</lable>
                 <select name="ArcId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                    <option value=@Model.ArcId>@SubCons.FirstOrDefault(s => s.SubConId == Model.ArcId).ShortName</option>
-                    <option value=@Model.ArcId>-----------</option>
-                    @foreach (var item in SubCons.OrderBy(s => s.ContractorName))
+                    @if (Model.ArcId != null)
+                    {
+                        <option value=@Model.ArcId>@SubCons.FirstOrDefault(s => s.SubConId == Model.ArcId).ShortName</option>
+                    }
+                    <option value=""></option>
+                    @foreach (var item in SubCons.Where(s => s.SubConId != 160).OrderBy(s => s.ContractorName))
                     {
                         <option value=@item.SubConId>@item.ShortName</option>
                     }
@@ -59,24 +55,33 @@
             <div class="form-group row  text-left">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thiết kế Nội thất</lable>
                 <select name="InteriorId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                    <option value=@Model.InteriorId>@SubCons.FirstOrDefault(s => s.SubConId == Model.InteriorId).ShortName</option>
-                    <option value=@Model.InteriorId>-----------</option>
+                    @if (Model.InteriorId != null)
+                    {
+                        <option value=@Model.InteriorId>@SubCons.FirstOrDefault(s => s.SubConId == Model.InteriorId).ShortName</option>
+                    }
+                    <option value=""></option>
                     @foreach (var item in SubCons.OrderBy(s => s.ContractorName))
                     {
                         <option value=@item.SubConId>@item.ShortName</option>
                     }
+
                 </select>
             </div>
             @* Structure ID *@
             <div class="form-group row  text-left">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thiết kế Kết cấu</lable>
                 <select name="StructureId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                    <option value=@Model.StructureId>@SubCons.FirstOrDefault(s => s.SubConId == Model.StructureId).ShortName</option>
-                    <option value=@Model.StructureId>-----------</option>
+                    @if (Model.StructureId != null)
+                    {
+                        <option value=@Model.StructureId>@SubCons.FirstOrDefault(s => s.SubConId == Model.StructureId).ShortName</option>
+                    }
+                    <option value=""></option>
                     @foreach (var item in SubCons.OrderBy(s => s.ContractorName))
                     {
                         <option value=@item.SubConId>@item.ShortName</option>
                     }
+
+
                 </select>
             </div>
 
@@ -84,12 +89,17 @@
             <div class="form-group row  text-left">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thiết kế Cơ điện - MEPF</lable>
                 <select name="MEPid" class="form-control col-md-7 col-sm-9 col-xs-9">
-                    <option value=@Model.MEPid>@SubCons.FirstOrDefault(s => s.SubConId == Model.MEPid).ShortName</option>
-                    <option value=@Model.MEPid>-----------</option>
+                    @if (Model.MEPid != null)
+                    {
+                        <option value=@Model.MEPid>@SubCons.FirstOrDefault(s => s.SubConId == Model.MEPid).ShortName</option>
+                    }
+                    <option value=""></option>
                     @foreach (var item in SubCons.OrderBy(s => s.ContractorName))
                     {
                         <option value=@item.SubConId>@item.ShortName</option>
                     }
+
+
                 </select>
             </div>
 
@@ -97,24 +107,34 @@
             <div class="form-group row  text-left">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thiết kế Cảnh quan</lable>
                 <select name="LandscapeId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                    <option value=@Model.LandscapeId>@SubCons.FirstOrDefault(s => s.SubConId == Model.LandscapeId).ShortName</option>
-                    <option value=@Model.LandscapeId>-----------</option>
+                    @if (Model.LandscapeId != null)
+                    {
+                        <option value=@Model.LandscapeId>@SubCons.FirstOrDefault(s => s.SubConId == Model.LandscapeId).ShortName</option>
+                    }
+                    <option value=""></option>
                     @foreach (var item in SubCons.OrderBy(s => s.ContractorName))
                     {
                         <option value=@item.SubConId>@item.ShortName</option>
                     }
+
+
                 </select>
             </div>
             @* Legal ID *@
             <div class="form-group row  text-left">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3">Pháp lý</lable>
                 <select name="LegalId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                    <option value=@Model.LegalId>@SubCons.FirstOrDefault(s => s.SubConId == Model.LegalId).ShortName</option>
-                    <option value=@Model.LegalId>-----------</option>
+                    @if (Model.LegalId != null)
+                    {
+                        <option value=@Model.LegalId>@SubCons.FirstOrDefault(s => s.SubConId == Model.LegalId).ShortName</option>
+                    }
+                    <option value=""></option>
                     @foreach (var item in SubCons.OrderBy(s => s.ContractorName))
                     {
                         <option value=@item.SubConId>@item.ShortName</option>
                     }
+
+
                 </select>
             </div>
 

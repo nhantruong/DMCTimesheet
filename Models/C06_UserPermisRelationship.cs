@@ -19,7 +19,7 @@ namespace DMCTimesheet.Models
         public Nullable<int> idPer { get; set; }
         public Nullable<bool> actived { get; set; }
     
-        public virtual C04_Permission C04_Permission { get; set; }
         public virtual C02_Members C02_Members { get; set; }
+        public virtual C04_Permission C04_Permission { get; set; }
     }
 }

@@ -45,9 +45,9 @@
                         </div>
                         @* ProjectTypeID *@
                         <div class="form-group row  text-left">
-                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên dự án</lable>
-                            <select name="ProjectID" class="form-control col-md-7 col-sm-9 col-xs-9">
-
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-danger">Tên dự án</lable>
+                            <select name="ProjectID" required class="form-control col-md-7 col-sm-9 col-xs-9">
+                                <option value=""></option>
                                 @foreach (var item in Project.OrderBy(s => s.ProjectOtherName))
                                 {
                                     <option value=@item.ProjectID>@item.ProjectOtherName</option>
@@ -58,8 +58,7 @@
                         <div class="form-group row  text-left">
                             <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thiết kế Kiến trúc</lable>
                             <select name="ArcId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                                <option value="160"> </option>
-                                <option value="160">-----------</option>
+                                <option value=""></option>
                                 @foreach (var item in SubCons.OrderBy(s => s.ShortName))
                                 {
                                     <option value=@item.SubConId>@item.ShortName</option>
@@ -70,8 +69,7 @@
                         <div class="form-group row  text-left">
                             <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thiết kế Nội thất</lable>
                             <select name="InteriorId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                                <option value="160"> </option>
-                                <option value="160">-----------</option>
+                                <option value=""></option>
                                 @foreach (var item in SubCons.OrderBy(s => s.ShortName))
                                 {
                                     <option value=@item.SubConId>@item.ShortName</option>
@@ -82,8 +80,7 @@
                         <div class="form-group row  text-left">
                             <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thiết kế Kết cấu</lable>
                             <select name="StructureId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                                <option value="160"> </option>
-                                <option value="160">-----------</option>
+                                <option value=""></option>
                                 @foreach (var item in SubCons.OrderBy(s => s.ShortName))
                                 {
                                     <option value=@item.SubConId>@item.ShortName</option>
@@ -95,8 +92,7 @@
                         <div class="form-group row  text-left">
                             <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thiết kế Cơ điện - MEPF</lable>
                             <select name="MEPid" class="form-control col-md-7 col-sm-9 col-xs-9">
-                                <option value="160"> </option>
-                                <option value="160">-----------</option>
+                                <option value=""></option>
                                 @foreach (var item in SubCons.OrderBy(s => s.ShortName))
                                 {
                                     <option value=@item.SubConId>@item.ShortName</option>
@@ -108,8 +104,7 @@
                         <div class="form-group row  text-left">
                             <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thiết kế Cảnh quan</lable>
                             <select name="LandscapeId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                                <option value="160"> </option>
-                                <option value="160">-----------</option>
+                                <option value=""></option>
                                 @foreach (var item in SubCons.OrderBy(s => s.ShortName))
                                 {
                                     <option value=@item.SubConId>@item.ShortName</option>
@@ -120,8 +115,7 @@
                         <div class="form-group row  text-left">
                             <lable class="control-label col-md-3 col-sm-3 col-xs-3">Pháp lý</lable>
                             <select name="LegalId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                                <option value="160"> </option>
-                                <option value="160">-----------</option>
+                                <option value=""></option>
                                 @foreach (var item in SubCons.OrderBy(s => s.ShortName))
                                 {
                                     <option value=@item.SubConId>@item.ShortName</option>
@@ -171,18 +165,48 @@
             {
                 foreach (var item in Model.OrderByDescending(s => s.Date))
                 {
-                    string name = @item.ProjectId + @Project.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName;
+                    string name = Project.FirstOrDefault(s => s.ProjectID == item.ProjectId).MaDuAn + " - " + Project.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName;
 
                     <tr class="row text-dark table-bordered">
                         <td class="col-md-1">@DateTime.Parse(item.Date.ToString()).ToShortDateString()</td>
                         @*  <td class="col-md-2"><b>@item.ProjectId - @Project.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectName</b></td>*@
                         <td class="col-md-2"><b>@Html.ActionLink(name, "EditAssign", "Project", new { Id = item.Id }, new { @class = "text-primary" })</b></td>
-                        <td class="col-md-1">@SubCons.FirstOrDefault(s => s.SubConId == item.ArcId).ShortName</td>
-                        <td class="col-md-1">@SubCons.FirstOrDefault(s => s.SubConId == item.InteriorId).ShortName</td>
-                        <td class="col-md-1">@SubCons.FirstOrDefault(s => s.SubConId == item.StructureId).ShortName</td>
-                        <td class="col-md-1">@SubCons.FirstOrDefault(s => s.SubConId == item.MEPid).ShortName</td>
-                        <td class="col-md-1">@SubCons.FirstOrDefault(s => s.SubConId == item.LandscapeId).ShortName</td>
-                        <td class="col-md-1">@SubCons.FirstOrDefault(s => s.SubConId == item.LegalId).ShortName</td>
+                        <td class="col-md-1">
+                            @if (item.ArcId != null)
+                            {
+                                @SubCons.FirstOrDefault(s => s.SubConId == item.ArcId).ShortName
+                            }
+                        </td>
+                        <td class="col-md-1">
+                            @if (item.InteriorId != null)
+                            {
+                                @SubCons.FirstOrDefault(s => s.SubConId == item.InteriorId).ShortName
+                            }
+                        </td>
+                        <td class="col-md-1">
+                            @if (item.StructureId != null)
+                            {
+                                @SubCons.FirstOrDefault(s => s.SubConId == item.StructureId).ShortName
+                            }
+                        </td>
+                        <td class="col-md-1">
+                            @if (item.MEPid != null)
+                            {
+                                @SubCons.FirstOrDefault(s => s.SubConId == item.MEPid).ShortName
+                            }
+                        </td>
+                        <td class="col-md-1">
+                            @if (item.LandscapeId != null)
+                            {
+                                @SubCons.FirstOrDefault(s => s.SubConId == item.LandscapeId).ShortName
+                            }
+                        </td>
+                        <td class="col-md-1">
+                            @if (item.LegalId != null)
+                            {
+                                @SubCons.FirstOrDefault(s => s.SubConId == item.LegalId).ShortName
+                            }
+                        </td>  
                         <td class="col-md-1">@Html.ActionLink(" ", "DeleteAssign", "Project", new { Id = item.Id }, new { @class = "fa fa-remove btn" })</td>
                     </tr>
                 }

@@ -17,12 +17,13 @@ namespace DMCTimesheet.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public C01_Projects()
         {
-            this.C08_Timesheet = new HashSet<C08_Timesheet>();
             this.C03_ProjectMembers = new HashSet<C03_ProjectMembers>();
+            this.C08_Timesheet = new HashSet<C08_Timesheet>();
             this.C09_ProjectSubCon = new HashSet<C09_ProjectSubCon>();
         }
     
-        public string ProjectID { get; set; }
+        public int ProjectID { get; set; }
+        public string MaDuAn { get; set; }
         public string ProjectName { get; set; }
         public string ProjectOtherName { get; set; }
         public Nullable<System.DateTime> StartDate { get; set; }
@@ -31,12 +32,11 @@ namespace DMCTimesheet.Models
         public Nullable<int> ProjectStatusId { get; set; }
         public Nullable<int> LocationId { get; set; }
         public Nullable<int> OwnerId { get; set; }
-        public string MaDuAn { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<C08_Timesheet> C08_Timesheet { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<C03_ProjectMembers> C03_ProjectMembers { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<C08_Timesheet> C08_Timesheet { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<C09_ProjectSubCon> C09_ProjectSubCon { get; set; }
     }

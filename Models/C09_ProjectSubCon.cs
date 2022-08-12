@@ -16,7 +16,7 @@ namespace DMCTimesheet.Models
     {
         public int Id { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
-        public string ProjectId { get; set; }
+        public Nullable<int> ProjectId { get; set; }
         public Nullable<int> ArcId { get; set; }
         public Nullable<int> InteriorId { get; set; }
         public Nullable<int> StructureId { get; set; }

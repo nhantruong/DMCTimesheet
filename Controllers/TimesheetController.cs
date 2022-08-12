@@ -50,28 +50,28 @@ namespace DMCTimesheet.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateTimesheet(string ProjectID, string RecordDate, int WorkID, string Hour, string OvertimeHour, string Description)
+        public ActionResult CreateTimesheet(int ProjectID, string RecordDate, int WorkID, string Hour, string OvertimeHour, string Description)
         {
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
             C02_Members logUser = Session["UserLogin"] as C02_Members;
-            if (string.IsNullOrEmpty(ProjectID) || ProjectID == "notset")
-            {
-                ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
-                ViewBag.Projects = db.C01_Projects.ToList();
-                ViewBag.WorkGroup = db.C07_WorkType.ToList();
+            //if (string.IsNullOrEmpty(ProjectID) || ProjectID == "notset")
+            //{
+            //    ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
+            //    ViewBag.Projects = db.C01_Projects.ToList();
+            //    ViewBag.WorkGroup = db.C07_WorkType.ToList();
 
-                ViewBag.ProjectMember = db.C03_ProjectMembers.Where(
-                  s => s.ChuTriKienTruc == logUser.UserID
-                    || s.ChuTriChinh == logUser.UserID
-                    || s.ChuTriKetCau == logUser.UserID
-                    || s.ChuTriMEP == logUser.UserID
-                    || s.LegalManager == logUser.UserID
-                    ).ToList();
+            //    ViewBag.ProjectMember = db.C03_ProjectMembers.Where(
+            //      s => s.ChuTriKienTruc == logUser.UserID
+            //        || s.ChuTriChinh == logUser.UserID
+            //        || s.ChuTriKetCau == logUser.UserID
+            //        || s.ChuTriMEP == logUser.UserID
+            //        || s.LegalManager == logUser.UserID
+            //        ).ToList();
 
-                List<C08_Timesheet> mytimesheet = db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).ToList();
-                ViewBag.WorkAlert = "Lưu công việc thất bại do chưa được chỉ định dự án ";
-                return View("MemberTimesheet", mytimesheet);
-            }
+            //    List<C08_Timesheet> mytimesheet = db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).ToList();
+            //    ViewBag.WorkAlert = "Lưu công việc thất bại do chưa được chỉ định dự án ";
+            //    return View("MemberTimesheet", mytimesheet);
+            //}
             try
             {
                 //Kiem tra số giờ thực hiện
@@ -138,7 +138,7 @@ namespace DMCTimesheet.Controllers
 
         }
 
-        private double GetTimesheetDone(string projectID, string recordDate, int userID)
+        private double GetTimesheetDone(int projectID, string recordDate, int userID)
         {
             double kq = 0;
 
@@ -400,16 +400,15 @@ namespace DMCTimesheet.Controllers
         }
 
 
-        public ActionResult TimeSheetAjaxSearch(string UserSearch)
+        public ActionResult TimeSheetAjaxSearch(int UserSearch)
         {
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
-            if (UserSearch == null) return PartialView("_TimeSheetAjaxSearch", null);
             var userLogin = Session["UserLogin"] as C02_Members;
             ViewBag.Members = db.C02_Members.ToList();
             ViewBag.Projects = db.C01_Projects.ToList();
 
-            if (UserSearch == "All") return PartialView("_TimeSheetAjaxSearch", db.C08_Timesheet.Where(s => s.MemberID == userLogin.UserID).OrderByDescending(s => s.RecordDate).ToList());
-            List<C08_Timesheet> data = db.C08_Timesheet.Where(s => s.ProjectId.Contains(UserSearch)).OrderByDescending(s => s.RecordDate).ToList();
+            if (UserSearch == -1) return PartialView("_TimeSheetAjaxSearch", db.C08_Timesheet.Where(s => s.MemberID == userLogin.UserID).OrderByDescending(s => s.RecordDate).ToList());
+            List<C08_Timesheet> data = db.C08_Timesheet.Where(s => s.ProjectId == UserSearch).OrderByDescending(s => s.RecordDate).ToList();
             if (data == null) return PartialView("_TimeSheetAjaxSearch", null);
             return PartialView("_TimeSheetAjaxSearch", data);
 

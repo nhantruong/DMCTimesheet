@@ -31,6 +31,10 @@
             <lable hidden class="control-label col-md-3 col-sm-3 col-xs-3">Mã dự án</lable>
             <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" name="ProjectID" placeholder="" hidden readonly value="@Model.ProjectID" />
         </div>
+        <div class="form-group row text-left">
+            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Mã dự án</lable>
+            <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9 text-danger" name="MaDuAn" placeholder="" value="@Model.MaDuAn" />
+        </div>
 
         <div class="form-group row text-left">
             <lable class="control-label col-md-3 col-sm-3 col-xs-3">Năm</lable>
@@ -39,12 +43,12 @@
 
         <div class="form-group row text-left">
             <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên dự án theo Hợp đồng</lable>
-            <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" name="ProjectName" placeholder="" required="" value="@Model.ProjectName" />
+            <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9 text-primary" name="ProjectName" placeholder="" required="" value="@Model.ProjectName" />
         </div>
 
         <div class="form-group row text-left">
             <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên dự án rút gọn</lable>
-            <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" name="ProjectOtherName" placeholder="" required="" value="@Model.ProjectOtherName" />
+            <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9 text-danger" name="ProjectOtherName" placeholder="" required="" value="@Model.ProjectOtherName" />
         </div>
 
         <div class="form-group row">
@@ -56,9 +60,13 @@
         <div class="form-group row  text-left">
             <lable class="control-label col-md-3 col-sm-3 col-xs-3">Loại hình dự án</lable>
             <select name="ProjectTypeId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                <option value=@Model.ProjectTypeId>@projectType.FirstOrDefault(s => s.TypeId == Model.ProjectTypeId).TypeName</option>
-                <option value=@Model.ProjectTypeId>--------------</option>
-                @foreach (var item in projectType)
+                @if (Model.ProjectTypeId != null)
+                {
+                    <option value=@Model.ProjectTypeId>@projectType.FirstOrDefault(s => s.TypeId == Model.ProjectTypeId).TypeName</option>
+                }
+                <option value=""></option>
+                @*<option value="">-Chưa chọn-</option>*@
+                @foreach (var item in projectType.OrderBy(s=>s.TypeName))
                 {
                     <option value=@item.TypeId>@item.TypeName</option>
                 }
@@ -68,8 +76,12 @@
         <div class="form-group row  text-left">
             <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tình trạng</lable>
             <select name="ProjectStatusId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                <option value=@Model.ProjectStatusId>@status.FirstOrDefault(s => s.Id == Model.ProjectStatusId).StatusName</option>
-                <option value=@Model.ProjectStatusId>--------------</option>
+                @if (Model.ProjectStatusId != null)
+                {
+                    <option value=@Model.ProjectStatusId>@status.FirstOrDefault(s => s.Id == Model.ProjectStatusId).StatusName</option>
+                }
+                <option value=""></option>
+                @*<option value="">-Chưa chọn-</option>*@
                 @foreach (var item in status)
                 {
                     <option value=@item.Id>@item.StatusName</option>
@@ -80,9 +92,12 @@
         <div class="form-group row  text-left">
             <lable class="control-label col-md-3 col-sm-3 col-xs-3">Vị trí</lable>
             <select name="LocationId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                <option value=@Model.LocationId>@locations.FirstOrDefault(s => s.LocationId == Model.LocationId).LocationName</option>
-                <option value=@Model.LocationId>--------------</option>
-
+                @if (Model.LocationId != null)
+                {
+                    <option value=@Model.LocationId>@locations.FirstOrDefault(s => s.LocationId == Model.LocationId).LocationName</option>
+                }
+                <option value=""></option>
+                @*<option value="">-Chưa chọn-</option>*@
                 @foreach (var item in locations)
                 {
                     <option value=@item.LocationId>@item.LocationName</option>
@@ -93,8 +108,12 @@
         <div class="form-group row  text-left">
             <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chủ đầu tư</lable>
             <select name="OwnerId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                <option value=@Model.OwnerId>@owners.FirstOrDefault(s => s.OnwerId == Model.OwnerId).ShortName</option>
-                <option value=@Model.OwnerId>--------------</option>
+                @if (Model.OwnerId != null)
+                {
+                    <option value=@Model.OwnerId>@owners.FirstOrDefault(s => s.OnwerId == Model.OwnerId).ShortName</option>
+                }
+                <option value=""></option>
+                @*<option value="">-Chưa chọn-</option>*@
                 @foreach (var item in owners)
                 {
                     <option value=@item.OnwerId>@item.ShortName</option>

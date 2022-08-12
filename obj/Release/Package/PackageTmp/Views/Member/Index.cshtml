@@ -19,9 +19,6 @@
 
 @* Modal create new *@
 <link href="~/Content/cscpda-scrollbar.css" rel="stylesheet" />
-<div>
-    <button type="button" class="btn btn-info btn-small text-right" data-toggle="modal" data-target="#newMember">Thêm thành viên</button>
-</div>
 
 @* Form nhập liệu *@
 <div id="newMember" class="modal fade" role="dialog">
@@ -100,21 +97,30 @@
 @* End Form nhập liệu *@
 
 <div class="clearfix btn-sm"></div>
-<h3>DANH SÁCH NHÂN SỰ</h3>
+<div class="col-md-12">
+    <div class="col-md-9">
+        <h3>DANH SÁCH NHÂN SỰ</h3>
 
-<div class="table-responsive ">
-    <table class="table table-bordered table-striped">
+    </div>
+    <div class="col-md-3 text-right">
+        <button type="button" class="btn btn-info btn-small text-right" data-toggle="modal" data-target="#newMember"><i class="fa fa-plug"></i>  Thêm thành viên</button>
+
+    </div>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped table-hover">
         <caption>Số lượng thành viên đang làm việc: <b class="text-danger">@Model.Count(s => s.Deactived == false && s.SystemMember == false)</b></caption>
         <thead class="table-dark">
             <tr>
-                <td class="col-1">STT</td>
-                <td class="col-1">UserName</td>
-                <td class="col-1">Tên đầy đủ</td>
-                <td class="col-1">Chức vụ</td>
-                <td class="col-1">Chuyên môn</td>
-                <td class="col-1">Email</td>
-                <td class="col-1">Tình trạng</td>
-                <td class="col-1">On/Offline</td>
+                <td class="col-sm-1">STT</td>
+                <td class="col-md-1">UserName</td>
+                <td class="col-md-2">Tên đầy đủ</td>
+                <td class="col-md-1">Chức vụ</td>
+                <td class="col-md-1">Chuyên môn</td>
+                <td class="col-md-2">Email</td>
+                <td class="col-md-1">Tình trạng</td>
+                <td class="col-md-1">On/Offline</td>
             </tr>
         </thead>
         <tbody>
@@ -128,14 +134,14 @@
             {
                 foreach (var item in Model.Where(s => s.Deactived == false && s.SystemMember == false).OrderBy(s => s.UserName))
                 {
-                    <tr>
-                        <td class="col-1">@stt</td>
-                        <td class="col-1"><b>@Html.ActionLink(@item.UserName, "Details", "Member", new { Id = item.UserID }, new { @class = "text-primary" }) </b></td>
-                        <td class="col-1"><b>@Html.ActionLink(@item.FullName, "Details", "Member", new { Id = item.UserID }, new { @class = "text-primary" }) </b></td>
-                        <td class="col-1">@Positions.FirstOrDefault(s => s.Id == item.Position).PositionName</td>
-                        <td class="col-1">@desciplines.FirstOrDefault(s => s.Id == item.Descipline).DesciplineName</td>
-                        <td class="col-1">@item.Email</td>
-                        <td class="col-1">Online</td>
+                    <tr class="row">
+                        <td class="col-sm-1">@stt</td>
+                        <td class="col-md-1"><b>@Html.ActionLink(@item.UserName, "Details", "Member", new { Id = item.UserID }, new { @class = "text-primary" }) </b></td>
+                        <td class="col-md-2"><b>@Html.ActionLink(@item.FullName, "Details", "Member", new { Id = item.UserID }, new { @class = "text-primary" }) </b></td>
+                        <td class="col-md-1">@Positions.FirstOrDefault(s => s.Id == item.Position).PositionName</td>
+                        <td class="col-md-1">@desciplines.FirstOrDefault(s => s.Id == item.Descipline).DesciplineName</td>
+                        <td class="col-md-2">@item.Email</td>
+                        <td class="col-md-1">Online</td>
                         <td>
                             @Html.ActionLink(" ", "OnOffline", "Member", new { Id = item.UserID }, new { @class = "fa fa-adjust btn" })
                             @*@Html.ActionLink(" ", "DeleteMember", "Member", new { Id = item.UserID }, new { @class = "fa fa-remove btn" })*@
@@ -156,14 +162,14 @@
         <caption>Số lượng thành viên chuyển công tác: <b class="text-danger">@Model.Count(s => s.Deactived == true && s.SystemMember == false)</b></caption>
         <thead class="table-dark">
             <tr>
-                <td class="col-1">STT</td>
-                <td class="col-1">UserName</td>
-                <td class="col-1">Tên đầy đủ</td>
-                <td class="col-1">Chức vụ</td>
-                <td class="col-1">Chuyên môn</td>
-                <td class="col-1">Email</td>
-                <td class="col-1">Tình trạng</td>
-                <td class="col-1">#</td>
+                <td class="col-md-1">STT</td>
+                <td class="col-md-1">UserName</td>
+                <td class="col-md-1">Tên đầy đủ</td>
+                <td class="col-md-1">Chức vụ</td>
+                <td class="col-md-1">Chuyên môn</td>
+                <td class="col-md-1">Email</td>
+                <td class="col-md-1">Tình trạng</td>
+                <td class="col-md-1">#</td>
             </tr>
         </thead>
         <tbody>
@@ -178,13 +184,13 @@
                 foreach (var item in Model.Where(s => s.Deactived == true && s.SystemMember == false).OrderBy(s => s.FullName))
                 {
                     <tr>
-                        <td class="col-1">@stt</td>
-                        <td class="col-1"><b>@Html.ActionLink(@item.UserName, "Details", "Member", new { Id = item.UserID }, new { @class = "text-primary" }) </b></td>
-                        <td class="col-1"><b>@Html.ActionLink(@item.FullName, "Details", "Member", new { Id = item.UserID }, new { @class = "text-primary" }) </b></td>
-                        <td class="col-1">@Positions.FirstOrDefault(s => s.Id == item.Position).PositionName</td>
-                        <td class="col-1">@desciplines.FirstOrDefault(s => s.Id == item.Descipline).DesciplineName</td>
-                        <td class="col-1">@item.Email</td>
-                        <td class="col-1">Offline</td>
+                        <td class="col-md-1">@stt</td>
+                        <td class="col-md-1"><b>@Html.ActionLink(@item.UserName, "Details", "Member", new { Id = item.UserID }, new { @class = "text-primary" }) </b></td>
+                        <td class="col-md-1"><b>@Html.ActionLink(@item.FullName, "Details", "Member", new { Id = item.UserID }, new { @class = "text-primary" }) </b></td>
+                        <td class="col-md-1">@Positions.FirstOrDefault(s => s.Id == item.Position).PositionName</td>
+                        <td class="col-md-1">@desciplines.FirstOrDefault(s => s.Id == item.Descipline).DesciplineName</td>
+                        <td class="col-md-1">@item.Email</td>
+                        <td class="col-md-1">Offline</td>
                         <td>
                             @Html.ActionLink(" ", "OnOffline", "Member", new { Id = item.UserID }, new { @class = "fa fa-adjust btn" })
                         </td>

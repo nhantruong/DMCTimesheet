@@ -4,12 +4,12 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="DmcTimesheet.Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="DMCtimesheet.Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="01_Projects">
           <Key>
             <PropertyRef Name="ProjectID" />
           </Key>
-          <Property Name="ProjectID" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="ProjectID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="MaDuAn" Type="nchar" MaxLength="10" />
           <Property Name="ProjectName" Type="nvarchar" MaxLength="250" />
           <Property Name="ProjectOtherName" Type="nvarchar" MaxLength="250" />
@@ -43,13 +43,14 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Ngay" Type="date" />
-          <Property Name="ProjectID" Type="nchar" MaxLength="10" />
+          <Property Name="ProjectID" Type="int" />
           <Property Name="ChuTriChinh" Type="int" />
           <Property Name="ChuTriKienTruc" Type="int" />
           <Property Name="ChuTriKetCau" Type="int" />
           <Property Name="ChuTriMEP" Type="int" />
           <Property Name="BIMManager" Type="int" />
           <Property Name="LegalManager" Type="int" />
+          <Property Name="Admin" Type="int" />
         </EntityType>
         <EntityType Name="04_Permission">
           <Key>
@@ -93,7 +94,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="RecordDate" Type="date" />
           <Property Name="MemberID" Type="int" />
-          <Property Name="ProjectId" Type="nchar" MaxLength="10" />
+          <Property Name="ProjectId" Type="int" />
           <Property Name="WorkType" Type="int" />
           <Property Name="Hour" Type="float" />
           <Property Name="OT" Type="float" />
@@ -105,7 +106,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Date" Type="date" />
-          <Property Name="ProjectId" Type="nchar" MaxLength="10" />
+          <Property Name="ProjectId" Type="int" />
           <Property Name="ArcId" Type="int" />
           <Property Name="InteriorId" Type="int" />
           <Property Name="StructureId" Type="int" />
@@ -197,6 +198,18 @@
           <Property Name="DesciplineName" Type="nvarchar" MaxLength="50" />
           <Property Name="Active" Type="bit" />
         </EntityType>
+        <Association Name="FK_03_ProjectMembers_01_Projects">
+          <End Role="01_Projects" Type="Self.01_Projects" Multiplicity="0..1" />
+          <End Role="03_ProjectMembers" Type="Self.03_ProjectMembers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="01_Projects">
+              <PropertyRef Name="ProjectID" />
+            </Principal>
+            <Dependent Role="03_ProjectMembers">
+              <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_05_PermissionDetail_04_Permission">
           <End Role="04_Permission" Type="Self.04_Permission" Multiplicity="0..1" />
           <End Role="05_PermissionDetail" Type="Self.05_PermissionDetail" Multiplicity="*" />
@@ -317,18 +330,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_3_ChonNhansu_01_Projects">
-          <End Role="01_Projects" Type="Self.01_Projects" Multiplicity="0..1" />
-          <End Role="03_ProjectMembers" Type="Self.03_ProjectMembers" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="01_Projects">
-              <PropertyRef Name="ProjectID" />
-            </Principal>
-            <Dependent Role="03_ProjectMembers">
-              <PropertyRef Name="ProjectID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_3_ChonNhansu_02_Members_Main">
           <End Role="02_Members" Type="Self.02_Members" Multiplicity="0..1" />
           <End Role="03_ProjectMembers" Type="Self.03_ProjectMembers" Multiplicity="*" />
@@ -341,7 +342,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="DmcTimesheetModelsStoreContainer">
+        <EntityContainer Name="DMCtimesheetModelsStoreContainer">
           <EntitySet Name="01_Projects" EntityType="Self.01_Projects" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="02_Members" EntityType="Self.02_Members" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="03_ProjectMembers" EntityType="Self.03_ProjectMembers" Schema="dbo" store:Type="Tables" />
@@ -360,6 +361,10 @@
           <EntitySet Name="16_Status" EntityType="Self.16_Status" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="17_Position" EntityType="Self.17_Position" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="18_Descipline" EntityType="Self.18_Descipline" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_03_ProjectMembers_01_Projects" Association="Self.FK_03_ProjectMembers_01_Projects">
+            <End Role="01_Projects" EntitySet="01_Projects" />
+            <End Role="03_ProjectMembers" EntitySet="03_ProjectMembers" />
+          </AssociationSet>
           <AssociationSet Name="FK_05_PermissionDetail_04_Permission" Association="Self.FK_05_PermissionDetail_04_Permission">
             <End Role="04_Permission" EntitySet="04_Permission" />
             <End Role="05_PermissionDetail" EntitySet="05_PermissionDetail" />
@@ -400,102 +405,70 @@
             <End Role="14_Services" EntitySet="14_Services" />
             <End Role="15_SubConServices" EntitySet="15_SubConServices" />
           </AssociationSet>
-          <AssociationSet Name="FK_3_ChonNhansu_01_Projects" Association="Self.FK_3_ChonNhansu_01_Projects">
-            <End Role="01_Projects" EntitySet="01_Projects" />
-            <End Role="03_ProjectMembers" EntitySet="03_ProjectMembers" />
-          </AssociationSet>
           <AssociationSet Name="FK_3_ChonNhansu_02_Members_Main" Association="Self.FK_3_ChonNhansu_02_Members_Main">
             <End Role="02_Members" EntitySet="02_Members" />
             <End Role="03_ProjectMembers" EntitySet="03_ProjectMembers" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="DmcTimesheet.Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityContainer Name="dmcDbcontext" annotation:LazyLoadingEnabled="false">
-          <EntitySet Name="C03_ProjectMembers" EntityType="DmcTimesheet.Models.C03_ProjectMembers" />
-          <EntitySet Name="C04_Permission" EntityType="DmcTimesheet.Models.C04_Permission" />
-          <EntitySet Name="C05_PermissionDetail" EntityType="DmcTimesheet.Models.C05_PermissionDetail" />
-          <EntitySet Name="C06_UserPermisRelationship" EntityType="DmcTimesheet.Models.C06_UserPermisRelationship" />
-          <AssociationSet Name="FK_05_PermissionDetail_04_Permission" Association="DmcTimesheet.Models.FK_05_PermissionDetail_04_Permission">
-            <End Role="C04_Permission" EntitySet="C04_Permission" />
-            <End Role="C05_PermissionDetail" EntitySet="C05_PermissionDetail" />
-          </AssociationSet>
-          <AssociationSet Name="FK_06_UserPermisRelationship_04_Permission" Association="DmcTimesheet.Models.FK_06_UserPermisRelationship_04_Permission">
-            <End Role="C04_Permission" EntitySet="C04_Permission" />
-            <End Role="C06_UserPermisRelationship" EntitySet="C06_UserPermisRelationship" />
-          </AssociationSet>
-          <EntitySet Name="C07_WorkType" EntityType="DmcTimesheet.Models.C07_WorkType" />
-          <EntitySet Name="C08_Timesheet" EntityType="DmcTimesheet.Models.C08_Timesheet" />
-          <AssociationSet Name="FK_08_Timesheet_07_WorkType" Association="DmcTimesheet.Models.FK_08_Timesheet_07_WorkType">
-            <End Role="C07_WorkType" EntitySet="C07_WorkType" />
-            <End Role="C08_Timesheet" EntitySet="C08_Timesheet" />
-          </AssociationSet>
-          <EntitySet Name="C10_Owner" EntityType="DmcTimesheet.Models.C10_Owner" />
-          <EntitySet Name="C11_Location" EntityType="DmcTimesheet.Models.C11_Location" />
-          <EntitySet Name="C12_SubContractor" EntityType="DmcTimesheet.Models.C12_SubContractor" />
-          <EntitySet Name="C13_ProjectType" EntityType="DmcTimesheet.Models.C13_ProjectType" />
-          <EntitySet Name="C14_Services" EntityType="DmcTimesheet.Models.C14_Services" />
-          <EntitySet Name="C15_SubConServices" EntityType="DmcTimesheet.Models.C15_SubConServices" />
-          <AssociationSet Name="FK_15_SubConServices_12_SubContractor" Association="DmcTimesheet.Models.FK_15_SubConServices_12_SubContractor">
-            <End Role="C12_SubContractor" EntitySet="C12_SubContractor" />
-            <End Role="C15_SubConServices" EntitySet="C15_SubConServices" />
-          </AssociationSet>
-          <AssociationSet Name="FK_15_SubConServices_14_Services" Association="DmcTimesheet.Models.FK_15_SubConServices_14_Services">
-            <End Role="C14_Services" EntitySet="C14_Services" />
-            <End Role="C15_SubConServices" EntitySet="C15_SubConServices" />
-          </AssociationSet>
-          <EntitySet Name="C01_Projects" EntityType="DmcTimesheet.Models.C01_Projects" />
-          <AssociationSet Name="FK_08_Timesheet_01_Projects" Association="DmcTimesheet.Models.FK_08_Timesheet_01_Projects">
-            <End Role="C01_Projects" EntitySet="C01_Projects" />
-            <End Role="C08_Timesheet" EntitySet="C08_Timesheet" />
-          </AssociationSet>
-          <AssociationSet Name="FK_3_ChonNhansu_01_Projects" Association="DmcTimesheet.Models.FK_3_ChonNhansu_01_Projects">
-            <End Role="C01_Projects" EntitySet="C01_Projects" />
-            <End Role="C03_ProjectMembers" EntitySet="C03_ProjectMembers" />
-          </AssociationSet>
-          <EntitySet Name="C16_Status" EntityType="DmcTimesheet.Models.C16_Status" />
-          <EntitySet Name="C09_ProjectSubCon" EntityType="DmcTimesheet.Models.C09_ProjectSubCon" />
-          <AssociationSet Name="FK_09_ProjectSubCon_01_Projects" Association="DmcTimesheet.Models.FK_09_ProjectSubCon_01_Projects">
-            <End Role="C01_Projects" EntitySet="C01_Projects" />
-            <End Role="C09_ProjectSubCon" EntitySet="C09_ProjectSubCon" />
-          </AssociationSet>
-          <AssociationSet Name="FK_09_ProjectSubCon_12_SubContractor" Association="DmcTimesheet.Models.FK_09_ProjectSubCon_12_SubContractor">
-            <End Role="C12_SubContractor" EntitySet="C12_SubContractor" />
-            <End Role="C09_ProjectSubCon" EntitySet="C09_ProjectSubCon" />
-          </AssociationSet>
-          <EntitySet Name="C17_Position" EntityType="DmcTimesheet.Models.C17_Position" />
-          <EntitySet Name="C18_Descipline" EntityType="DmcTimesheet.Models.C18_Descipline" />
-          <EntitySet Name="C02_Members" EntityType="DmcTimesheet.Models.C02_Members" />
-          <AssociationSet Name="FK_06_UserPermisRelationship_02_Members" Association="DmcTimesheet.Models.FK_06_UserPermisRelationship_02_Members">
-            <End Role="C02_Members" EntitySet="C02_Members" />
-            <End Role="C06_UserPermisRelationship" EntitySet="C06_UserPermisRelationship" />
-          </AssociationSet>
-          <AssociationSet Name="FK_08_Timesheet_02_Members" Association="DmcTimesheet.Models.FK_08_Timesheet_02_Members">
-            <End Role="C02_Members" EntitySet="C02_Members" />
-            <End Role="C08_Timesheet" EntitySet="C08_Timesheet" />
-          </AssociationSet>
-          <AssociationSet Name="FK_3_ChonNhansu_02_Members_Main" Association="DmcTimesheet.Models.FK_3_ChonNhansu_02_Members_Main">
-            <End Role="C02_Members" EntitySet="C02_Members" />
-            <End Role="C03_ProjectMembers" EntitySet="C03_ProjectMembers" />
-          </AssociationSet>
-        </EntityContainer>
+      <Schema Namespace="DMCtimesheet.Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="C01_Projects">
+          <Key>
+            <PropertyRef Name="ProjectID" />
+          </Key>
+          <Property Name="ProjectID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MaDuAn" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="ProjectName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ProjectOtherName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="DateTime" Precision="0" />
+          <Property Name="Year" Type="Int32" />
+          <Property Name="ProjectTypeId" Type="Int32" />
+          <Property Name="ProjectStatusId" Type="Int32" />
+          <Property Name="LocationId" Type="Int32" />
+          <Property Name="OwnerId" Type="Int32" />
+          <NavigationProperty Name="C03_ProjectMembers" Relationship="Self.FK_03_ProjectMembers_01_Projects" FromRole="C01_Projects" ToRole="C03_ProjectMembers" />
+          <NavigationProperty Name="C08_Timesheet" Relationship="Self.FK_08_Timesheet_01_Projects" FromRole="C01_Projects" ToRole="C08_Timesheet" />
+          <NavigationProperty Name="C09_ProjectSubCon" Relationship="Self.FK_09_ProjectSubCon_01_Projects" FromRole="C01_Projects" ToRole="C09_ProjectSubCon" />
+        </EntityType>
+        <EntityType Name="C02_Members">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Pass" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="ShortName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Image" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="Leader" Type="Boolean" />
+          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Descipline" Type="Int32" />
+          <Property Name="Position" Type="Int32" />
+          <Property Name="Deactived" Type="Boolean" />
+          <Property Name="SystemMember" Type="Boolean" />
+          <NavigationProperty Name="C06_UserPermisRelationship" Relationship="Self.FK_06_UserPermisRelationship_02_Members" FromRole="C02_Members" ToRole="C06_UserPermisRelationship" />
+          <NavigationProperty Name="C08_Timesheet" Relationship="Self.FK_08_Timesheet_02_Members" FromRole="C02_Members" ToRole="C08_Timesheet" />
+          <NavigationProperty Name="C03_ProjectMembers" Relationship="Self.FK_3_ChonNhansu_02_Members_Main" FromRole="C02_Members" ToRole="C03_ProjectMembers" />
+        </EntityType>
         <EntityType Name="C03_ProjectMembers">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="ProjectID" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Ngay" Type="DateTime" Precision="0" />
+          <Property Name="ProjectID" Type="Int32" />
           <Property Name="ChuTriChinh" Type="Int32" />
           <Property Name="ChuTriKienTruc" Type="Int32" />
           <Property Name="ChuTriKetCau" Type="Int32" />
           <Property Name="ChuTriMEP" Type="Int32" />
-          <Property Name="Ngay" Type="DateTime" Precision="0" />
           <Property Name="BIMManager" Type="Int32" />
           <Property Name="LegalManager" Type="Int32" />
-          <NavigationProperty Name="C01_Projects" Relationship="DmcTimesheet.Models.FK_3_ChonNhansu_01_Projects" FromRole="C03_ProjectMembers" ToRole="C01_Projects" />
-          <NavigationProperty Name="C02_Members" Relationship="DmcTimesheet.Models.FK_3_ChonNhansu_02_Members_Main" FromRole="C03_ProjectMembers" ToRole="C02_Members" />
+          <Property Name="Admin" Type="Int32" />
+          <NavigationProperty Name="C01_Projects" Relationship="Self.FK_03_ProjectMembers_01_Projects" FromRole="C03_ProjectMembers" ToRole="C01_Projects" />
+          <NavigationProperty Name="C02_Members" Relationship="Self.FK_3_ChonNhansu_02_Members_Main" FromRole="C03_ProjectMembers" ToRole="C02_Members" />
         </EntityType>
         <EntityType Name="C04_Permission">
           <Key>
@@ -504,8 +477,8 @@
           <Property Name="id_Per" Type="Int32" Nullable="false" />
           <Property Name="PermissionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="PerDescription" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="C05_PermissionDetail" Relationship="DmcTimesheet.Models.FK_05_PermissionDetail_04_Permission" FromRole="C04_Permission" ToRole="C05_PermissionDetail" />
-          <NavigationProperty Name="C06_UserPermisRelationship" Relationship="DmcTimesheet.Models.FK_06_UserPermisRelationship_04_Permission" FromRole="C04_Permission" ToRole="C06_UserPermisRelationship" />
+          <NavigationProperty Name="C05_PermissionDetail" Relationship="Self.FK_05_PermissionDetail_04_Permission" FromRole="C04_Permission" ToRole="C05_PermissionDetail" />
+          <NavigationProperty Name="C06_UserPermisRelationship" Relationship="Self.FK_06_UserPermisRelationship_04_Permission" FromRole="C04_Permission" ToRole="C06_UserPermisRelationship" />
         </EntityType>
         <EntityType Name="C05_PermissionDetail">
           <Key>
@@ -515,8 +488,8 @@
           <Property Name="id_per" Type="Int32" />
           <Property Name="Action_Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Action_code" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="C04_Permission" Relationship="DmcTimesheet.Models.FK_05_PermissionDetail_04_Permission" FromRole="C05_PermissionDetail" ToRole="C04_Permission" />
           <Property Name="ActionGroup" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="C04_Permission" Relationship="Self.FK_05_PermissionDetail_04_Permission" FromRole="C05_PermissionDetail" ToRole="C04_Permission" />
         </EntityType>
         <EntityType Name="C06_UserPermisRelationship">
           <Key>
@@ -526,33 +499,9 @@
           <Property Name="idUser" Type="Int32" />
           <Property Name="idPer" Type="Int32" />
           <Property Name="actived" Type="Boolean" />
-          <NavigationProperty Name="C04_Permission" Relationship="DmcTimesheet.Models.FK_06_UserPermisRelationship_04_Permission" FromRole="C06_UserPermisRelationship" ToRole="C04_Permission" />
-          <NavigationProperty Name="C02_Members" Relationship="DmcTimesheet.Models.FK_06_UserPermisRelationship_02_Members" FromRole="C06_UserPermisRelationship" ToRole="C02_Members" />
+          <NavigationProperty Name="C02_Members" Relationship="Self.FK_06_UserPermisRelationship_02_Members" FromRole="C06_UserPermisRelationship" ToRole="C02_Members" />
+          <NavigationProperty Name="C04_Permission" Relationship="Self.FK_06_UserPermisRelationship_04_Permission" FromRole="C06_UserPermisRelationship" ToRole="C04_Permission" />
         </EntityType>
-        <Association Name="FK_05_PermissionDetail_04_Permission">
-          <End Type="DmcTimesheet.Models.C04_Permission" Role="C04_Permission" Multiplicity="0..1" />
-          <End Type="DmcTimesheet.Models.C05_PermissionDetail" Role="C05_PermissionDetail" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="C04_Permission">
-              <PropertyRef Name="id_Per" />
-            </Principal>
-            <Dependent Role="C05_PermissionDetail">
-              <PropertyRef Name="id_per" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_06_UserPermisRelationship_04_Permission">
-          <End Type="DmcTimesheet.Models.C04_Permission" Role="C04_Permission" Multiplicity="0..1" />
-          <End Type="DmcTimesheet.Models.C06_UserPermisRelationship" Role="C06_UserPermisRelationship" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="C04_Permission">
-              <PropertyRef Name="id_Per" />
-            </Principal>
-            <Dependent Role="C06_UserPermisRelationship">
-              <PropertyRef Name="idPer" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="C07_WorkType">
           <Key>
             <PropertyRef Name="ID" />
@@ -560,36 +509,40 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="WorkName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="WorkGroup" Type="Int32" />
-          <NavigationProperty Name="C08_Timesheet" Relationship="DmcTimesheet.Models.FK_08_Timesheet_07_WorkType" FromRole="C07_WorkType" ToRole="C08_Timesheet" />
+          <NavigationProperty Name="C08_Timesheet" Relationship="Self.FK_08_Timesheet_07_WorkType" FromRole="C07_WorkType" ToRole="C08_Timesheet" />
         </EntityType>
         <EntityType Name="C08_Timesheet">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RecordDate" Type="DateTime" Precision="0" />
           <Property Name="MemberID" Type="Int32" />
-          <Property Name="ProjectId" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="ProjectId" Type="Int32" />
           <Property Name="WorkType" Type="Int32" />
           <Property Name="Hour" Type="Double" />
           <Property Name="OT" Type="Double" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="C07_WorkType" Relationship="DmcTimesheet.Models.FK_08_Timesheet_07_WorkType" FromRole="C08_Timesheet" ToRole="C07_WorkType" />
-          <NavigationProperty Name="C01_Projects" Relationship="DmcTimesheet.Models.FK_08_Timesheet_01_Projects" FromRole="C08_Timesheet" ToRole="C01_Projects" />
-          <Property Name="RecordDate" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="C02_Members" Relationship="DmcTimesheet.Models.FK_08_Timesheet_02_Members" FromRole="C08_Timesheet" ToRole="C02_Members" />
+          <NavigationProperty Name="C01_Projects" Relationship="Self.FK_08_Timesheet_01_Projects" FromRole="C08_Timesheet" ToRole="C01_Projects" />
+          <NavigationProperty Name="C02_Members" Relationship="Self.FK_08_Timesheet_02_Members" FromRole="C08_Timesheet" ToRole="C02_Members" />
+          <NavigationProperty Name="C07_WorkType" Relationship="Self.FK_08_Timesheet_07_WorkType" FromRole="C08_Timesheet" ToRole="C07_WorkType" />
         </EntityType>
-        <Association Name="FK_08_Timesheet_07_WorkType">
-          <End Type="DmcTimesheet.Models.C07_WorkType" Role="C07_WorkType" Multiplicity="0..1" />
-          <End Type="DmcTimesheet.Models.C08_Timesheet" Role="C08_Timesheet" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="C07_WorkType">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="C08_Timesheet">
-              <PropertyRef Name="WorkType" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
+        <EntityType Name="C09_ProjectSubCon">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Date" Type="DateTime" Precision="0" />
+          <Property Name="ProjectId" Type="Int32" />
+          <Property Name="ArcId" Type="Int32" />
+          <Property Name="InteriorId" Type="Int32" />
+          <Property Name="StructureId" Type="Int32" />
+          <Property Name="MEPid" Type="Int32" />
+          <Property Name="LandscapeId" Type="Int32" />
+          <Property Name="LegalId" Type="Int32" />
+          <NavigationProperty Name="C01_Projects" Relationship="Self.FK_09_ProjectSubCon_01_Projects" FromRole="C09_ProjectSubCon" ToRole="C01_Projects" />
+          <NavigationProperty Name="C12_SubContractor" Relationship="Self.FK_09_ProjectSubCon_12_SubContractor" FromRole="C09_ProjectSubCon" ToRole="C12_SubContractor" />
+        </EntityType>
         <EntityType Name="C10_Owner">
           <Key>
             <PropertyRef Name="OnwerId" />
@@ -616,10 +569,8 @@
           </Key>
           <Property Name="SubConId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ContractorName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="ContractorLocation" Type="Int32" />
-          <NavigationProperty Name="C15_SubConServices" Relationship="DmcTimesheet.Models.FK_15_SubConServices_12_SubContractor" FromRole="C12_SubContractor" ToRole="C15_SubConServices" />
           <Property Name="ShortName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="C09_ProjectSubCon" Relationship="DmcTimesheet.Models.FK_09_ProjectSubCon_12_SubContractor" FromRole="C12_SubContractor" ToRole="C09_ProjectSubCon" />
+          <Property Name="ContractorLocation" Type="Int32" />
           <Property Name="ARC" Type="Boolean" />
           <Property Name="STR" Type="Boolean" />
           <Property Name="MEP" Type="Boolean" />
@@ -628,6 +579,8 @@
           <Property Name="DTM" Type="Boolean" />
           <Property Name="Render" Type="Boolean" />
           <Property Name="Landscape" Type="Boolean" />
+          <NavigationProperty Name="C09_ProjectSubCon" Relationship="Self.FK_09_ProjectSubCon_12_SubContractor" FromRole="C12_SubContractor" ToRole="C09_ProjectSubCon" />
+          <NavigationProperty Name="C15_SubConServices" Relationship="Self.FK_15_SubConServices_12_SubContractor" FromRole="C12_SubContractor" ToRole="C15_SubConServices" />
         </EntityType>
         <EntityType Name="C13_ProjectType">
           <Key>
@@ -643,7 +596,7 @@
           </Key>
           <Property Name="ServiceId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ServiceName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="C15_SubConServices" Relationship="DmcTimesheet.Models.FK_15_SubConServices_14_Services" FromRole="C14_Services" ToRole="C15_SubConServices" />
+          <NavigationProperty Name="C15_SubConServices" Relationship="Self.FK_15_SubConServices_14_Services" FromRole="C14_Services" ToRole="C15_SubConServices" />
         </EntityType>
         <EntityType Name="C15_SubConServices">
           <Key>
@@ -653,75 +606,9 @@
           <Property Name="SubConId" Type="Int32" />
           <Property Name="ServiceId" Type="Int32" />
           <Property Name="Date" Type="DateTime" Precision="0" />
-          <NavigationProperty Name="C12_SubContractor" Relationship="DmcTimesheet.Models.FK_15_SubConServices_12_SubContractor" FromRole="C15_SubConServices" ToRole="C12_SubContractor" />
-          <NavigationProperty Name="C14_Services" Relationship="DmcTimesheet.Models.FK_15_SubConServices_14_Services" FromRole="C15_SubConServices" ToRole="C14_Services" />
+          <NavigationProperty Name="C12_SubContractor" Relationship="Self.FK_15_SubConServices_12_SubContractor" FromRole="C15_SubConServices" ToRole="C12_SubContractor" />
+          <NavigationProperty Name="C14_Services" Relationship="Self.FK_15_SubConServices_14_Services" FromRole="C15_SubConServices" ToRole="C14_Services" />
         </EntityType>
-        <Association Name="FK_15_SubConServices_12_SubContractor">
-          <End Type="DmcTimesheet.Models.C12_SubContractor" Role="C12_SubContractor" Multiplicity="0..1" />
-          <End Type="DmcTimesheet.Models.C15_SubConServices" Role="C15_SubConServices" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="C12_SubContractor">
-              <PropertyRef Name="SubConId" />
-            </Principal>
-            <Dependent Role="C15_SubConServices">
-              <PropertyRef Name="SubConId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_15_SubConServices_14_Services">
-          <End Type="DmcTimesheet.Models.C14_Services" Role="C14_Services" Multiplicity="0..1" />
-          <End Type="DmcTimesheet.Models.C15_SubConServices" Role="C15_SubConServices" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="C14_Services">
-              <PropertyRef Name="ServiceId" />
-            </Principal>
-            <Dependent Role="C15_SubConServices">
-              <PropertyRef Name="ServiceId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <EntityType Name="C01_Projects">
-          <Key>
-            <PropertyRef Name="ProjectID" />
-          </Key>
-          <Property Name="ProjectID" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="ProjectName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="ProjectOtherName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="StartDate" Type="DateTime" Precision="0" />
-          <Property Name="Year" Type="Int32" />
-          <Property Name="ProjectTypeId" Type="Int32" />
-          <Property Name="ProjectStatusId" Type="Int32" />
-          <Property Name="LocationId" Type="Int32" />
-          <Property Name="OwnerId" Type="Int32" />
-          <NavigationProperty Name="C08_Timesheet" Relationship="DmcTimesheet.Models.FK_08_Timesheet_01_Projects" FromRole="C01_Projects" ToRole="C08_Timesheet" />
-          <NavigationProperty Name="C03_ProjectMembers" Relationship="DmcTimesheet.Models.FK_3_ChonNhansu_01_Projects" FromRole="C01_Projects" ToRole="C03_ProjectMembers" />
-          <NavigationProperty Name="C09_ProjectSubCon" Relationship="DmcTimesheet.Models.FK_09_ProjectSubCon_01_Projects" FromRole="C01_Projects" ToRole="C09_ProjectSubCon" />
-          <Property Name="MaDuAn" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-        </EntityType>
-        <Association Name="FK_08_Timesheet_01_Projects">
-          <End Type="DmcTimesheet.Models.C01_Projects" Role="C01_Projects" Multiplicity="0..1" />
-          <End Type="DmcTimesheet.Models.C08_Timesheet" Role="C08_Timesheet" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="C01_Projects">
-              <PropertyRef Name="ProjectID" />
-            </Principal>
-            <Dependent Role="C08_Timesheet">
-              <PropertyRef Name="ProjectId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_3_ChonNhansu_01_Projects">
-          <End Type="DmcTimesheet.Models.C01_Projects" Role="C01_Projects" Multiplicity="0..1" />
-          <End Type="DmcTimesheet.Models.C03_ProjectMembers" Role="C03_ProjectMembers" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="C01_Projects">
-              <PropertyRef Name="ProjectID" />
-            </Principal>
-            <Dependent Role="C03_ProjectMembers">
-              <PropertyRef Name="ProjectID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="C16_Status">
           <Key>
             <PropertyRef Name="Id" />
@@ -729,46 +616,6 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
-        <EntityType Name="C09_ProjectSubCon">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Date" Type="DateTime" Precision="0" />
-          <Property Name="ProjectId" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
-          <Property Name="ArcId" Type="Int32" />
-          <Property Name="InteriorId" Type="Int32" />
-          <Property Name="StructureId" Type="Int32" />
-          <Property Name="MEPid" Type="Int32" />
-          <Property Name="LandscapeId" Type="Int32" />
-          <Property Name="LegalId" Type="Int32" />
-          <NavigationProperty Name="C01_Projects" Relationship="DmcTimesheet.Models.FK_09_ProjectSubCon_01_Projects" FromRole="C09_ProjectSubCon" ToRole="C01_Projects" />
-          <NavigationProperty Name="C12_SubContractor" Relationship="DmcTimesheet.Models.FK_09_ProjectSubCon_12_SubContractor" FromRole="C09_ProjectSubCon" ToRole="C12_SubContractor" />
-        </EntityType>
-        <Association Name="FK_09_ProjectSubCon_01_Projects">
-          <End Type="DmcTimesheet.Models.C01_Projects" Role="C01_Projects" Multiplicity="0..1" />
-          <End Type="DmcTimesheet.Models.C09_ProjectSubCon" Role="C09_ProjectSubCon" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="C01_Projects">
-              <PropertyRef Name="ProjectID" />
-            </Principal>
-            <Dependent Role="C09_ProjectSubCon">
-              <PropertyRef Name="ProjectId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_09_ProjectSubCon_12_SubContractor">
-          <End Type="DmcTimesheet.Models.C12_SubContractor" Role="C12_SubContractor" Multiplicity="0..1" />
-          <End Type="DmcTimesheet.Models.C09_ProjectSubCon" Role="C09_ProjectSubCon" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="C12_SubContractor">
-              <PropertyRef Name="SubConId" />
-            </Principal>
-            <Dependent Role="C09_ProjectSubCon">
-              <PropertyRef Name="ArcId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityType Name="C17_Position">
           <Key>
             <PropertyRef Name="Id" />
@@ -785,29 +632,45 @@
           <Property Name="DesciplineName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Active" Type="Boolean" />
         </EntityType>
-        <EntityType Name="C02_Members">
-          <Key>
-            <PropertyRef Name="UserID" />
-          </Key>
-          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="UserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Pass" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="FullName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
-          <Property Name="ShortName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="Image" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
-          <Property Name="Leader" Type="Boolean" />
-          <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
-          <Property Name="Descipline" Type="Int32" />
-          <Property Name="Position" Type="Int32" />
-          <Property Name="Deactived" Type="Boolean" />
-          <NavigationProperty Name="C06_UserPermisRelationship" Relationship="DmcTimesheet.Models.FK_06_UserPermisRelationship_02_Members" FromRole="C02_Members" ToRole="C06_UserPermisRelationship" />
-          <NavigationProperty Name="C08_Timesheet" Relationship="DmcTimesheet.Models.FK_08_Timesheet_02_Members" FromRole="C02_Members" ToRole="C08_Timesheet" />
-          <NavigationProperty Name="C03_ProjectMembers" Relationship="DmcTimesheet.Models.FK_3_ChonNhansu_02_Members_Main" FromRole="C02_Members" ToRole="C03_ProjectMembers" />
-          <Property Name="SystemMember" Type="Boolean" />
-        </EntityType>
+        <Association Name="FK_03_ProjectMembers_01_Projects">
+          <End Role="C01_Projects" Type="Self.C01_Projects" Multiplicity="0..1" />
+          <End Role="C03_ProjectMembers" Type="Self.C03_ProjectMembers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C01_Projects">
+              <PropertyRef Name="ProjectID" />
+            </Principal>
+            <Dependent Role="C03_ProjectMembers">
+              <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_08_Timesheet_01_Projects">
+          <End Role="C01_Projects" Type="Self.C01_Projects" Multiplicity="0..1" />
+          <End Role="C08_Timesheet" Type="Self.C08_Timesheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C01_Projects">
+              <PropertyRef Name="ProjectID" />
+            </Principal>
+            <Dependent Role="C08_Timesheet">
+              <PropertyRef Name="ProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_09_ProjectSubCon_01_Projects">
+          <End Role="C01_Projects" Type="Self.C01_Projects" Multiplicity="0..1" />
+          <End Role="C09_ProjectSubCon" Type="Self.C09_ProjectSubCon" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C01_Projects">
+              <PropertyRef Name="ProjectID" />
+            </Principal>
+            <Dependent Role="C09_ProjectSubCon">
+              <PropertyRef Name="ProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_06_UserPermisRelationship_02_Members">
-          <End Type="DmcTimesheet.Models.C02_Members" Role="C02_Members" Multiplicity="0..1" />
-          <End Type="DmcTimesheet.Models.C06_UserPermisRelationship" Role="C06_UserPermisRelationship" Multiplicity="*" />
+          <End Role="C02_Members" Type="Self.C02_Members" Multiplicity="0..1" />
+          <End Role="C06_UserPermisRelationship" Type="Self.C06_UserPermisRelationship" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="C02_Members">
               <PropertyRef Name="UserID" />
@@ -818,8 +681,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_08_Timesheet_02_Members">
-          <End Type="DmcTimesheet.Models.C02_Members" Role="C02_Members" Multiplicity="0..1" />
-          <End Type="DmcTimesheet.Models.C08_Timesheet" Role="C08_Timesheet" Multiplicity="*" />
+          <End Role="C02_Members" Type="Self.C02_Members" Multiplicity="0..1" />
+          <End Role="C08_Timesheet" Type="Self.C08_Timesheet" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="C02_Members">
               <PropertyRef Name="UserID" />
@@ -830,8 +693,8 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_3_ChonNhansu_02_Members_Main">
-          <End Type="DmcTimesheet.Models.C02_Members" Role="C02_Members" Multiplicity="0..1" />
-          <End Type="DmcTimesheet.Models.C03_ProjectMembers" Role="C03_ProjectMembers" Multiplicity="*" />
+          <End Role="C02_Members" Type="Self.C02_Members" Multiplicity="0..1" />
+          <End Role="C03_ProjectMembers" Type="Self.C03_ProjectMembers" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="C02_Members">
               <PropertyRef Name="UserID" />
@@ -841,219 +704,360 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        </Schema>
+        <Association Name="FK_05_PermissionDetail_04_Permission">
+          <End Role="C04_Permission" Type="Self.C04_Permission" Multiplicity="0..1" />
+          <End Role="C05_PermissionDetail" Type="Self.C05_PermissionDetail" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C04_Permission">
+              <PropertyRef Name="id_Per" />
+            </Principal>
+            <Dependent Role="C05_PermissionDetail">
+              <PropertyRef Name="id_per" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_06_UserPermisRelationship_04_Permission">
+          <End Role="C04_Permission" Type="Self.C04_Permission" Multiplicity="0..1" />
+          <End Role="C06_UserPermisRelationship" Type="Self.C06_UserPermisRelationship" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C04_Permission">
+              <PropertyRef Name="id_Per" />
+            </Principal>
+            <Dependent Role="C06_UserPermisRelationship">
+              <PropertyRef Name="idPer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_08_Timesheet_07_WorkType">
+          <End Role="C07_WorkType" Type="Self.C07_WorkType" Multiplicity="0..1" />
+          <End Role="C08_Timesheet" Type="Self.C08_Timesheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C07_WorkType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="C08_Timesheet">
+              <PropertyRef Name="WorkType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_09_ProjectSubCon_12_SubContractor">
+          <End Role="C12_SubContractor" Type="Self.C12_SubContractor" Multiplicity="0..1" />
+          <End Role="C09_ProjectSubCon" Type="Self.C09_ProjectSubCon" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C12_SubContractor">
+              <PropertyRef Name="SubConId" />
+            </Principal>
+            <Dependent Role="C09_ProjectSubCon">
+              <PropertyRef Name="ArcId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_15_SubConServices_12_SubContractor">
+          <End Role="C12_SubContractor" Type="Self.C12_SubContractor" Multiplicity="0..1" />
+          <End Role="C15_SubConServices" Type="Self.C15_SubConServices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C12_SubContractor">
+              <PropertyRef Name="SubConId" />
+            </Principal>
+            <Dependent Role="C15_SubConServices">
+              <PropertyRef Name="SubConId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_15_SubConServices_14_Services">
+          <End Role="C14_Services" Type="Self.C14_Services" Multiplicity="0..1" />
+          <End Role="C15_SubConServices" Type="Self.C15_SubConServices" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C14_Services">
+              <PropertyRef Name="ServiceId" />
+            </Principal>
+            <Dependent Role="C15_SubConServices">
+              <PropertyRef Name="ServiceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="dmcDbcontext" annotation:LazyLoadingEnabled="false">
+          <EntitySet Name="C01_Projects" EntityType="Self.C01_Projects" />
+          <EntitySet Name="C02_Members" EntityType="Self.C02_Members" />
+          <EntitySet Name="C03_ProjectMembers" EntityType="Self.C03_ProjectMembers" />
+          <EntitySet Name="C04_Permission" EntityType="Self.C04_Permission" />
+          <EntitySet Name="C05_PermissionDetail" EntityType="Self.C05_PermissionDetail" />
+          <EntitySet Name="C06_UserPermisRelationship" EntityType="Self.C06_UserPermisRelationship" />
+          <EntitySet Name="C07_WorkType" EntityType="Self.C07_WorkType" />
+          <EntitySet Name="C08_Timesheet" EntityType="Self.C08_Timesheet" />
+          <EntitySet Name="C09_ProjectSubCon" EntityType="Self.C09_ProjectSubCon" />
+          <EntitySet Name="C10_Owner" EntityType="Self.C10_Owner" />
+          <EntitySet Name="C11_Location" EntityType="Self.C11_Location" />
+          <EntitySet Name="C12_SubContractor" EntityType="Self.C12_SubContractor" />
+          <EntitySet Name="C13_ProjectType" EntityType="Self.C13_ProjectType" />
+          <EntitySet Name="C14_Services" EntityType="Self.C14_Services" />
+          <EntitySet Name="C15_SubConServices" EntityType="Self.C15_SubConServices" />
+          <EntitySet Name="C16_Status" EntityType="Self.C16_Status" />
+          <EntitySet Name="C17_Position" EntityType="Self.C17_Position" />
+          <EntitySet Name="C18_Descipline" EntityType="Self.C18_Descipline" />
+          <AssociationSet Name="FK_03_ProjectMembers_01_Projects" Association="Self.FK_03_ProjectMembers_01_Projects">
+            <End Role="C01_Projects" EntitySet="C01_Projects" />
+            <End Role="C03_ProjectMembers" EntitySet="C03_ProjectMembers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_08_Timesheet_01_Projects" Association="Self.FK_08_Timesheet_01_Projects">
+            <End Role="C01_Projects" EntitySet="C01_Projects" />
+            <End Role="C08_Timesheet" EntitySet="C08_Timesheet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_09_ProjectSubCon_01_Projects" Association="Self.FK_09_ProjectSubCon_01_Projects">
+            <End Role="C01_Projects" EntitySet="C01_Projects" />
+            <End Role="C09_ProjectSubCon" EntitySet="C09_ProjectSubCon" />
+          </AssociationSet>
+          <AssociationSet Name="FK_06_UserPermisRelationship_02_Members" Association="Self.FK_06_UserPermisRelationship_02_Members">
+            <End Role="C02_Members" EntitySet="C02_Members" />
+            <End Role="C06_UserPermisRelationship" EntitySet="C06_UserPermisRelationship" />
+          </AssociationSet>
+          <AssociationSet Name="FK_08_Timesheet_02_Members" Association="Self.FK_08_Timesheet_02_Members">
+            <End Role="C02_Members" EntitySet="C02_Members" />
+            <End Role="C08_Timesheet" EntitySet="C08_Timesheet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_3_ChonNhansu_02_Members_Main" Association="Self.FK_3_ChonNhansu_02_Members_Main">
+            <End Role="C02_Members" EntitySet="C02_Members" />
+            <End Role="C03_ProjectMembers" EntitySet="C03_ProjectMembers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_05_PermissionDetail_04_Permission" Association="Self.FK_05_PermissionDetail_04_Permission">
+            <End Role="C04_Permission" EntitySet="C04_Permission" />
+            <End Role="C05_PermissionDetail" EntitySet="C05_PermissionDetail" />
+          </AssociationSet>
+          <AssociationSet Name="FK_06_UserPermisRelationship_04_Permission" Association="Self.FK_06_UserPermisRelationship_04_Permission">
+            <End Role="C04_Permission" EntitySet="C04_Permission" />
+            <End Role="C06_UserPermisRelationship" EntitySet="C06_UserPermisRelationship" />
+          </AssociationSet>
+          <AssociationSet Name="FK_08_Timesheet_07_WorkType" Association="Self.FK_08_Timesheet_07_WorkType">
+            <End Role="C07_WorkType" EntitySet="C07_WorkType" />
+            <End Role="C08_Timesheet" EntitySet="C08_Timesheet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_09_ProjectSubCon_12_SubContractor" Association="Self.FK_09_ProjectSubCon_12_SubContractor">
+            <End Role="C12_SubContractor" EntitySet="C12_SubContractor" />
+            <End Role="C09_ProjectSubCon" EntitySet="C09_ProjectSubCon" />
+          </AssociationSet>
+          <AssociationSet Name="FK_15_SubConServices_12_SubContractor" Association="Self.FK_15_SubConServices_12_SubContractor">
+            <End Role="C12_SubContractor" EntitySet="C12_SubContractor" />
+            <End Role="C15_SubConServices" EntitySet="C15_SubConServices" />
+          </AssociationSet>
+          <AssociationSet Name="FK_15_SubConServices_14_Services" Association="Self.FK_15_SubConServices_14_Services">
+            <End Role="C14_Services" EntitySet="C14_Services" />
+            <End Role="C15_SubConServices" EntitySet="C15_SubConServices" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="DmcTimesheetModelsStoreContainer" CdmEntityContainer="dmcDbcontext">
-          <EntitySetMapping Name="C03_ProjectMembers">
-            <EntityTypeMapping TypeName="DmcTimesheet.Models.C03_ProjectMembers">
-              <MappingFragment StoreEntitySet="03_ProjectMembers">
-                <ScalarProperty Name="LegalManager" ColumnName="LegalManager" />
-                <ScalarProperty Name="BIMManager" ColumnName="BIMManager" />
-                <ScalarProperty Name="Ngay" ColumnName="Ngay" />
-                <ScalarProperty Name="ChuTriMEP" ColumnName="ChuTriMEP" />
-                <ScalarProperty Name="ChuTriKetCau" ColumnName="ChuTriKetCau" />
-                <ScalarProperty Name="ChuTriKienTruc" ColumnName="ChuTriKienTruc" />
-                <ScalarProperty Name="ChuTriChinh" ColumnName="ChuTriChinh" />
-                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="C04_Permission">
-            <EntityTypeMapping TypeName="DmcTimesheet.Models.C04_Permission">
-              <MappingFragment StoreEntitySet="04_Permission">
-                <ScalarProperty Name="PerDescription" ColumnName="PerDescription" />
-                <ScalarProperty Name="PermissionName" ColumnName="PermissionName" />
-                <ScalarProperty Name="id_Per" ColumnName="id_Per" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="C05_PermissionDetail">
-            <EntityTypeMapping TypeName="DmcTimesheet.Models.C05_PermissionDetail">
-              <MappingFragment StoreEntitySet="05_PermissionDetail">
-                <ScalarProperty Name="ActionGroup" ColumnName="ActionGroup" />
-                <ScalarProperty Name="Action_code" ColumnName="Action_code" />
-                <ScalarProperty Name="Action_Name" ColumnName="Action_Name" />
-                <ScalarProperty Name="id_per" ColumnName="id_per" />
-                <ScalarProperty Name="id_detail" ColumnName="id_detail" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="C06_UserPermisRelationship">
-            <EntityTypeMapping TypeName="DmcTimesheet.Models.C06_UserPermisRelationship">
-              <MappingFragment StoreEntitySet="06_UserPermisRelationship">
-                <ScalarProperty Name="actived" ColumnName="actived" />
-                <ScalarProperty Name="idPer" ColumnName="idPer" />
-                <ScalarProperty Name="idUser" ColumnName="idUser" />
-                <ScalarProperty Name="id_user_perm" ColumnName="id_user_perm" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="C07_WorkType">
-            <EntityTypeMapping TypeName="DmcTimesheet.Models.C07_WorkType">
-              <MappingFragment StoreEntitySet="07_WorkType">
-                <ScalarProperty Name="WorkGroup" ColumnName="WorkGroup" />
-                <ScalarProperty Name="WorkName" ColumnName="WorkName" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="C08_Timesheet">
-            <EntityTypeMapping TypeName="DmcTimesheet.Models.C08_Timesheet">
-              <MappingFragment StoreEntitySet="08_Timesheet">
-                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="OT" ColumnName="OT" />
-                <ScalarProperty Name="Hour" ColumnName="Hour" />
-                <ScalarProperty Name="WorkType" ColumnName="WorkType" />
-                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
-                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="C10_Owner">
-            <EntityTypeMapping TypeName="DmcTimesheet.Models.C10_Owner">
-              <MappingFragment StoreEntitySet="10_Owner">
-                <ScalarProperty Name="Active" ColumnName="Active" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="KeyPerson" ColumnName="KeyPerson" />
-                <ScalarProperty Name="ShortName" ColumnName="ShortName" />
-                <ScalarProperty Name="OnwerDescription" ColumnName="OnwerDescription" />
-                <ScalarProperty Name="OnwerLocation" ColumnName="OnwerLocation" />
-                <ScalarProperty Name="OwnerName" ColumnName="OwnerName" />
-                <ScalarProperty Name="OnwerId" ColumnName="OnwerId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="C11_Location">
-            <EntityTypeMapping TypeName="DmcTimesheet.Models.C11_Location">
-              <MappingFragment StoreEntitySet="11_Location">
-                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
-                <ScalarProperty Name="LocationId" ColumnName="LocationId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="C12_SubContractor">
-            <EntityTypeMapping TypeName="DmcTimesheet.Models.C12_SubContractor">
-              <MappingFragment StoreEntitySet="12_SubContractor">
-                <ScalarProperty Name="Landscape" ColumnName="Landscape" />
-                <ScalarProperty Name="Render" ColumnName="Render" />
-                <ScalarProperty Name="DTM" ColumnName="DTM" />
-                <ScalarProperty Name="Infrastructure" ColumnName="Infrastructure" />
-                <ScalarProperty Name="Interior" ColumnName="Interior" />
-                <ScalarProperty Name="MEP" ColumnName="MEP" />
-                <ScalarProperty Name="STR" ColumnName="STR" />
-                <ScalarProperty Name="ARC" ColumnName="ARC" />
-                <ScalarProperty Name="ShortName" ColumnName="ShortName" />
-                <ScalarProperty Name="ContractorLocation" ColumnName="ContractorLocation" />
-                <ScalarProperty Name="ContractorName" ColumnName="ContractorName" />
-                <ScalarProperty Name="SubConId" ColumnName="SubConId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="C13_ProjectType">
-            <EntityTypeMapping TypeName="DmcTimesheet.Models.C13_ProjectType">
-              <MappingFragment StoreEntitySet="13_ProjectType">
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
-                <ScalarProperty Name="TypeId" ColumnName="TypeId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="C14_Services">
-            <EntityTypeMapping TypeName="DmcTimesheet.Models.C14_Services">
-              <MappingFragment StoreEntitySet="14_Services">
-                <ScalarProperty Name="ServiceName" ColumnName="ServiceName" />
-                <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="C15_SubConServices">
-            <EntityTypeMapping TypeName="DmcTimesheet.Models.C15_SubConServices">
-              <MappingFragment StoreEntitySet="15_SubConServices">
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
-                <ScalarProperty Name="SubConId" ColumnName="SubConId" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
+        <EntityContainerMapping StorageEntityContainer="DMCtimesheetModelsStoreContainer" CdmEntityContainer="dmcDbcontext">
           <EntitySetMapping Name="C01_Projects">
-            <EntityTypeMapping TypeName="DmcTimesheet.Models.C01_Projects">
+            <EntityTypeMapping TypeName="DMCtimesheet.Models.C01_Projects">
               <MappingFragment StoreEntitySet="01_Projects">
-                <ScalarProperty Name="MaDuAn" ColumnName="MaDuAn" />
-                <ScalarProperty Name="OwnerId" ColumnName="OwnerId" />
-                <ScalarProperty Name="LocationId" ColumnName="LocationId" />
-                <ScalarProperty Name="ProjectStatusId" ColumnName="ProjectStatusId" />
-                <ScalarProperty Name="ProjectTypeId" ColumnName="ProjectTypeId" />
-                <ScalarProperty Name="Year" ColumnName="Year" />
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="ProjectOtherName" ColumnName="ProjectOtherName" />
-                <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
                 <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="C16_Status">
-            <EntityTypeMapping TypeName="DmcTimesheet.Models.C16_Status">
-              <MappingFragment StoreEntitySet="16_Status">
-                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="C09_ProjectSubCon">
-            <EntityTypeMapping TypeName="DmcTimesheet.Models.C09_ProjectSubCon">
-              <MappingFragment StoreEntitySet="09_ProjectSubCon">
-                <ScalarProperty Name="LegalId" ColumnName="LegalId" />
-                <ScalarProperty Name="LandscapeId" ColumnName="LandscapeId" />
-                <ScalarProperty Name="MEPid" ColumnName="MEPid" />
-                <ScalarProperty Name="StructureId" ColumnName="StructureId" />
-                <ScalarProperty Name="InteriorId" ColumnName="InteriorId" />
-                <ScalarProperty Name="ArcId" ColumnName="ArcId" />
-                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
-                <ScalarProperty Name="Date" ColumnName="Date" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="C17_Position">
-            <EntityTypeMapping TypeName="DmcTimesheet.Models.C17_Position">
-              <MappingFragment StoreEntitySet="17_Position">
-                <ScalarProperty Name="Active" ColumnName="Active" />
-                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="C18_Descipline">
-            <EntityTypeMapping TypeName="DmcTimesheet.Models.C18_Descipline">
-              <MappingFragment StoreEntitySet="18_Descipline">
-                <ScalarProperty Name="Active" ColumnName="Active" />
-                <ScalarProperty Name="DesciplineName" ColumnName="DesciplineName" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="MaDuAn" ColumnName="MaDuAn" />
+                <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+                <ScalarProperty Name="ProjectOtherName" ColumnName="ProjectOtherName" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="ProjectTypeId" ColumnName="ProjectTypeId" />
+                <ScalarProperty Name="ProjectStatusId" ColumnName="ProjectStatusId" />
+                <ScalarProperty Name="LocationId" ColumnName="LocationId" />
+                <ScalarProperty Name="OwnerId" ColumnName="OwnerId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="C02_Members">
-            <EntityTypeMapping TypeName="DmcTimesheet.Models.C02_Members">
+            <EntityTypeMapping TypeName="DMCtimesheet.Models.C02_Members">
               <MappingFragment StoreEntitySet="02_Members">
-                <ScalarProperty Name="SystemMember" ColumnName="SystemMember" />
-                <ScalarProperty Name="Deactived" ColumnName="Deactived" />
-                <ScalarProperty Name="Position" ColumnName="Position" />
-                <ScalarProperty Name="Descipline" ColumnName="Descipline" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="Leader" ColumnName="Leader" />
-                <ScalarProperty Name="Image" ColumnName="Image" />
-                <ScalarProperty Name="ShortName" ColumnName="ShortName" />
-                <ScalarProperty Name="FullName" ColumnName="FullName" />
-                <ScalarProperty Name="Pass" ColumnName="Pass" />
-                <ScalarProperty Name="UserName" ColumnName="UserName" />
                 <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="Pass" ColumnName="Pass" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="ShortName" ColumnName="ShortName" />
+                <ScalarProperty Name="Image" ColumnName="Image" />
+                <ScalarProperty Name="Leader" ColumnName="Leader" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Descipline" ColumnName="Descipline" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+                <ScalarProperty Name="Deactived" ColumnName="Deactived" />
+                <ScalarProperty Name="SystemMember" ColumnName="SystemMember" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C03_ProjectMembers">
+            <EntityTypeMapping TypeName="DMCtimesheet.Models.C03_ProjectMembers">
+              <MappingFragment StoreEntitySet="03_ProjectMembers">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Ngay" ColumnName="Ngay" />
+                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
+                <ScalarProperty Name="ChuTriChinh" ColumnName="ChuTriChinh" />
+                <ScalarProperty Name="ChuTriKienTruc" ColumnName="ChuTriKienTruc" />
+                <ScalarProperty Name="ChuTriKetCau" ColumnName="ChuTriKetCau" />
+                <ScalarProperty Name="ChuTriMEP" ColumnName="ChuTriMEP" />
+                <ScalarProperty Name="BIMManager" ColumnName="BIMManager" />
+                <ScalarProperty Name="LegalManager" ColumnName="LegalManager" />
+                <ScalarProperty Name="Admin" ColumnName="Admin" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C04_Permission">
+            <EntityTypeMapping TypeName="DMCtimesheet.Models.C04_Permission">
+              <MappingFragment StoreEntitySet="04_Permission">
+                <ScalarProperty Name="id_Per" ColumnName="id_Per" />
+                <ScalarProperty Name="PermissionName" ColumnName="PermissionName" />
+                <ScalarProperty Name="PerDescription" ColumnName="PerDescription" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C05_PermissionDetail">
+            <EntityTypeMapping TypeName="DMCtimesheet.Models.C05_PermissionDetail">
+              <MappingFragment StoreEntitySet="05_PermissionDetail">
+                <ScalarProperty Name="id_detail" ColumnName="id_detail" />
+                <ScalarProperty Name="id_per" ColumnName="id_per" />
+                <ScalarProperty Name="Action_Name" ColumnName="Action_Name" />
+                <ScalarProperty Name="Action_code" ColumnName="Action_code" />
+                <ScalarProperty Name="ActionGroup" ColumnName="ActionGroup" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C06_UserPermisRelationship">
+            <EntityTypeMapping TypeName="DMCtimesheet.Models.C06_UserPermisRelationship">
+              <MappingFragment StoreEntitySet="06_UserPermisRelationship">
+                <ScalarProperty Name="id_user_perm" ColumnName="id_user_perm" />
+                <ScalarProperty Name="idUser" ColumnName="idUser" />
+                <ScalarProperty Name="idPer" ColumnName="idPer" />
+                <ScalarProperty Name="actived" ColumnName="actived" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C07_WorkType">
+            <EntityTypeMapping TypeName="DMCtimesheet.Models.C07_WorkType">
+              <MappingFragment StoreEntitySet="07_WorkType">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="WorkName" ColumnName="WorkName" />
+                <ScalarProperty Name="WorkGroup" ColumnName="WorkGroup" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C08_Timesheet">
+            <EntityTypeMapping TypeName="DMCtimesheet.Models.C08_Timesheet">
+              <MappingFragment StoreEntitySet="08_Timesheet">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
+                <ScalarProperty Name="MemberID" ColumnName="MemberID" />
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+                <ScalarProperty Name="WorkType" ColumnName="WorkType" />
+                <ScalarProperty Name="Hour" ColumnName="Hour" />
+                <ScalarProperty Name="OT" ColumnName="OT" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C09_ProjectSubCon">
+            <EntityTypeMapping TypeName="DMCtimesheet.Models.C09_ProjectSubCon">
+              <MappingFragment StoreEntitySet="09_ProjectSubCon">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+                <ScalarProperty Name="ArcId" ColumnName="ArcId" />
+                <ScalarProperty Name="InteriorId" ColumnName="InteriorId" />
+                <ScalarProperty Name="StructureId" ColumnName="StructureId" />
+                <ScalarProperty Name="MEPid" ColumnName="MEPid" />
+                <ScalarProperty Name="LandscapeId" ColumnName="LandscapeId" />
+                <ScalarProperty Name="LegalId" ColumnName="LegalId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C10_Owner">
+            <EntityTypeMapping TypeName="DMCtimesheet.Models.C10_Owner">
+              <MappingFragment StoreEntitySet="10_Owner">
+                <ScalarProperty Name="OnwerId" ColumnName="OnwerId" />
+                <ScalarProperty Name="OwnerName" ColumnName="OwnerName" />
+                <ScalarProperty Name="OnwerLocation" ColumnName="OnwerLocation" />
+                <ScalarProperty Name="OnwerDescription" ColumnName="OnwerDescription" />
+                <ScalarProperty Name="ShortName" ColumnName="ShortName" />
+                <ScalarProperty Name="KeyPerson" ColumnName="KeyPerson" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C11_Location">
+            <EntityTypeMapping TypeName="DMCtimesheet.Models.C11_Location">
+              <MappingFragment StoreEntitySet="11_Location">
+                <ScalarProperty Name="LocationId" ColumnName="LocationId" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C12_SubContractor">
+            <EntityTypeMapping TypeName="DMCtimesheet.Models.C12_SubContractor">
+              <MappingFragment StoreEntitySet="12_SubContractor">
+                <ScalarProperty Name="SubConId" ColumnName="SubConId" />
+                <ScalarProperty Name="ContractorName" ColumnName="ContractorName" />
+                <ScalarProperty Name="ShortName" ColumnName="ShortName" />
+                <ScalarProperty Name="ContractorLocation" ColumnName="ContractorLocation" />
+                <ScalarProperty Name="ARC" ColumnName="ARC" />
+                <ScalarProperty Name="STR" ColumnName="STR" />
+                <ScalarProperty Name="MEP" ColumnName="MEP" />
+                <ScalarProperty Name="Interior" ColumnName="Interior" />
+                <ScalarProperty Name="Infrastructure" ColumnName="Infrastructure" />
+                <ScalarProperty Name="DTM" ColumnName="DTM" />
+                <ScalarProperty Name="Render" ColumnName="Render" />
+                <ScalarProperty Name="Landscape" ColumnName="Landscape" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C13_ProjectType">
+            <EntityTypeMapping TypeName="DMCtimesheet.Models.C13_ProjectType">
+              <MappingFragment StoreEntitySet="13_ProjectType">
+                <ScalarProperty Name="TypeId" ColumnName="TypeId" />
+                <ScalarProperty Name="TypeName" ColumnName="TypeName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C14_Services">
+            <EntityTypeMapping TypeName="DMCtimesheet.Models.C14_Services">
+              <MappingFragment StoreEntitySet="14_Services">
+                <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+                <ScalarProperty Name="ServiceName" ColumnName="ServiceName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C15_SubConServices">
+            <EntityTypeMapping TypeName="DMCtimesheet.Models.C15_SubConServices">
+              <MappingFragment StoreEntitySet="15_SubConServices">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="SubConId" ColumnName="SubConId" />
+                <ScalarProperty Name="ServiceId" ColumnName="ServiceId" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C16_Status">
+            <EntityTypeMapping TypeName="DMCtimesheet.Models.C16_Status">
+              <MappingFragment StoreEntitySet="16_Status">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="StatusName" ColumnName="StatusName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C17_Position">
+            <EntityTypeMapping TypeName="DMCtimesheet.Models.C17_Position">
+              <MappingFragment StoreEntitySet="17_Position">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="PositionName" ColumnName="PositionName" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C18_Descipline">
+            <EntityTypeMapping TypeName="DMCtimesheet.Models.C18_Descipline">
+              <MappingFragment StoreEntitySet="18_Descipline">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="DesciplineName" ColumnName="DesciplineName" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

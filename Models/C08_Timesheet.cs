@@ -15,16 +15,16 @@ namespace DMCTimesheet.Models
     public partial class C08_Timesheet
     {
         public int Id { get; set; }
+        public Nullable<System.DateTime> RecordDate { get; set; }
         public Nullable<int> MemberID { get; set; }
-        public string ProjectId { get; set; }
+        public Nullable<int> ProjectId { get; set; }
         public Nullable<int> WorkType { get; set; }
         public Nullable<double> Hour { get; set; }
         public Nullable<double> OT { get; set; }
         public string Description { get; set; }
-        public Nullable<System.DateTime> RecordDate { get; set; }
     
-        public virtual C07_WorkType C07_WorkType { get; set; }
         public virtual C01_Projects C01_Projects { get; set; }
         public virtual C02_Members C02_Members { get; set; }
+        public virtual C07_WorkType C07_WorkType { get; set; }
     }
 }
