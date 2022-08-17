@@ -14,6 +14,7 @@
     <Property Name="ProjectStatusId" Type="int" />
     <Property Name="LocationId" Type="int" />
     <Property Name="OwnerId" Type="int" />
+    <Property Name="ProjectStage" Type="int" />
   </EntityType>
   <EntityType Name="02_Members">
     <Key>
@@ -80,7 +81,7 @@
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="WorkName" Type="nvarchar" MaxLength="200" />
-    <Property Name="WorkGroup" Type="int" />
+    <Property Name="WorkGroup" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="08_Timesheet">
     <Key>
@@ -193,6 +194,20 @@
     <Property Name="DesciplineName" Type="nvarchar" MaxLength="50" />
     <Property Name="Active" Type="bit" />
   </EntityType>
+  <EntityType Name="19_Workgroup">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="GroupName" Type="nvarchar" MaxLength="150" />
+  </EntityType>
+  <EntityType Name="20_Stage">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="StageName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
   <Association Name="FK_03_ProjectMembers_01_Projects">
     <End Role="01_Projects" Type="Self.01_Projects" Multiplicity="0..1" />
     <End Role="03_ProjectMembers" Type="Self.03_ProjectMembers" Multiplicity="*" />
@@ -238,6 +253,18 @@
       </Principal>
       <Dependent Role="06_UserPermisRelationship">
         <PropertyRef Name="idPer" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_07_WorkType_19_Workgroup">
+    <End Role="19_Workgroup" Type="Self.19_Workgroup" Multiplicity="1" />
+    <End Role="07_WorkType" Type="Self.07_WorkType" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="19_Workgroup">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="07_WorkType">
+        <PropertyRef Name="WorkGroup" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -356,6 +383,8 @@
     <EntitySet Name="16_Status" EntityType="Self.16_Status" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="17_Position" EntityType="Self.17_Position" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="18_Descipline" EntityType="Self.18_Descipline" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="19_Workgroup" EntityType="Self.19_Workgroup" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="20_Stage" EntityType="Self.20_Stage" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_03_ProjectMembers_01_Projects" Association="Self.FK_03_ProjectMembers_01_Projects">
       <End Role="01_Projects" EntitySet="01_Projects" />
       <End Role="03_ProjectMembers" EntitySet="03_ProjectMembers" />
@@ -371,6 +400,10 @@
     <AssociationSet Name="FK_06_UserPermisRelationship_04_Permission" Association="Self.FK_06_UserPermisRelationship_04_Permission">
       <End Role="04_Permission" EntitySet="04_Permission" />
       <End Role="06_UserPermisRelationship" EntitySet="06_UserPermisRelationship" />
+    </AssociationSet>
+    <AssociationSet Name="FK_07_WorkType_19_Workgroup" Association="Self.FK_07_WorkType_19_Workgroup">
+      <End Role="19_Workgroup" EntitySet="19_Workgroup" />
+      <End Role="07_WorkType" EntitySet="07_WorkType" />
     </AssociationSet>
     <AssociationSet Name="FK_08_Timesheet_01_Projects" Association="Self.FK_08_Timesheet_01_Projects">
       <End Role="01_Projects" EntitySet="01_Projects" />

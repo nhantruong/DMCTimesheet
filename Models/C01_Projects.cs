@@ -32,6 +32,7 @@ namespace DMCTimesheet.Models
         public Nullable<int> ProjectStatusId { get; set; }
         public Nullable<int> LocationId { get; set; }
         public Nullable<int> OwnerId { get; set; }
+        public Nullable<int> ProjectStage { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<C03_ProjectMembers> C03_ProjectMembers { get; set; }

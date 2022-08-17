@@ -4,7 +4,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 -->
 <Project>
   <PropertyGroup>
-    <_PublishTargetUrl>C:\Users\truon\OneDrive\MyApp\DMCTimesheet\Publish\ver1.2</_PublishTargetUrl>
+    <_PublishTargetUrl>C:\Users\truon\OneDrive\MyApp\DMCTimesheet\Publish\ver1.3</_PublishTargetUrl>
     <History>True|2022-08-11T09:26:10.3937430Z;True|2022-08-11T08:49:03.3468756+07:00;True|2022-08-11T08:21:12.7539599+07:00;True|2022-08-10T19:48:23.7808778+07:00;True|2022-08-10T19:22:10.1896120+07:00;</History>
   </PropertyGroup>
   <ItemGroup>
@@ -294,13 +294,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>09/10/2013 16:29:20</publishTime>
     </File>
     <File Include="bin/DMCTimesheet.dll">
-      <publishTime>08/12/2022 17:45:59</publishTime>
+      <publishTime>08/17/2022 17:58:12</publishTime>
     </File>
     <File Include="bin/DMCTimesheet.pdb">
-      <publishTime>08/12/2022 17:45:59</publishTime>
+      <publishTime>08/17/2022 17:58:12</publishTime>
     </File>
     <File Include="bin/DMCTimesheet.XmlSerializers.dll">
-      <publishTime>08/12/2022 17:46:06</publishTime>
+      <publishTime>08/17/2022 17:58:18</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>04/17/2020 03:38:42</publishTime>
@@ -546,7 +546,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>06/24/2022 13:13:17</publishTime>
     </File>
     <File Include="Models/DMC.edmx.diagram">
-      <publishTime>08/12/2022 13:24:25</publishTime>
+      <publishTime>08/17/2022 16:50:52</publishTime>
     </File>
     <File Include="Scripts/bootstrap-table-multiple-sort.min.js">
       <publishTime>08/08/2022 13:07:16</publishTime>
@@ -10713,7 +10713,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/12/2022 15:47:46</publishTime>
     </File>
     <File Include="Views/Member/AssignMember.cshtml">
-      <publishTime>08/12/2022 17:31:43</publishTime>
+      <publishTime>08/17/2022 15:31:08</publishTime>
     </File>
     <File Include="Views/Member/DeleteAssigned.cshtml">
       <publishTime>08/12/2022 17:38:59</publishTime>
@@ -10731,13 +10731,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/09/2022 08:15:06</publishTime>
     </File>
     <File Include="Views/Member/Index.cshtml">
-      <publishTime>08/12/2022 17:30:46</publishTime>
+      <publishTime>08/17/2022 16:57:35</publishTime>
     </File>
     <File Include="Views/Member/OnOffline.cshtml">
       <publishTime>08/09/2022 14:10:59</publishTime>
     </File>
     <File Include="Views/Project/AssignDesigner.cshtml">
-      <publishTime>08/12/2022 15:16:45</publishTime>
+      <publishTime>08/16/2022 15:06:22</publishTime>
     </File>
     <File Include="Views/Project/DeleteAssign.cshtml">
       <publishTime>08/12/2022 16:06:19</publishTime>
@@ -10746,13 +10746,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/12/2022 15:06:25</publishTime>
     </File>
     <File Include="Views/Project/Edit.cshtml">
-      <publishTime>08/12/2022 15:54:45</publishTime>
+      <publishTime>08/17/2022 17:54:49</publishTime>
     </File>
     <File Include="Views/Project/EditAssign.cshtml">
       <publishTime>08/12/2022 16:22:05</publishTime>
     </File>
     <File Include="Views/Project/Index.cshtml">
-      <publishTime>08/12/2022 16:33:56</publishTime>
+      <publishTime>08/17/2022 17:37:41</publishTime>
     </File>
     <File Include="Views/Setting/DeleteOwner.cshtml">
       <publishTime>08/11/2022 15:42:07</publishTime>
@@ -10782,7 +10782,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>06/28/2022 19:05:14</publishTime>
     </File>
     <File Include="Views/Shared/_sliderbar.cshtml">
-      <publishTime>08/11/2022 12:07:52</publishTime>
+      <publishTime>08/13/2022 13:03:04</publishTime>
     </File>
     <File Include="Views/Shared/_TopNav.cshtml">
       <publishTime>08/04/2022 07:58:14</publishTime>
@@ -10809,13 +10809,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/08/2022 13:51:42</publishTime>
     </File>
     <File Include="Views/Timesheet/MemberTimesheet.cshtml">
-      <publishTime>08/11/2022 14:25:21</publishTime>
+      <publishTime>08/17/2022 15:40:27</publishTime>
     </File>
     <File Include="Views/Timesheet/ProjectTimesheet.cshtml">
-      <publishTime>08/11/2022 10:05:07</publishTime>
+      <publishTime>08/17/2022 15:56:38</publishTime>
     </File>
     <File Include="Views/Timesheet/UserEdit.cshtml">
-      <publishTime>08/08/2022 13:51:42</publishTime>
+      <publishTime>08/17/2022 15:55:24</publishTime>
     </File>
     <File Include="Views/Timesheet/Worktype.cshtml">
       <publishTime>08/08/2022 13:51:42</publishTime>

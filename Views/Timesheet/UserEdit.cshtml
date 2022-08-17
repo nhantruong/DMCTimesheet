@@ -4,6 +4,7 @@
     //Layout = "~/Views/Shared/_UserLayout.cshtml";
     List<DMCTimesheet.Models.C01_Projects> Projects = ViewBag.Projects as List<DMCTimesheet.Models.C01_Projects>;
     List<DMCTimesheet.Models.C07_WorkType> WorkType = ViewBag.WorkType as List<DMCTimesheet.Models.C07_WorkType>;
+
 }
 
 <h2>@ViewBag.Title</h2>
@@ -13,82 +14,104 @@
 </div>
 
 
-@using (Html.BeginForm("UserEdit","Timesheet",FormMethod.Post))
+@using (Html.BeginForm("UserEdit", "Timesheet", FormMethod.Post))
 {
     @Html.AntiForgeryToken()
-<div class="form-horizontal">
-    <br />
-    <h4>Cập nhật công việc</h4>
-    <br />
-    <div class="clearfix"></div>
-    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-horizontal">
+        <br />
+        <h4>Cập nhật công việc</h4>
+        <br />
+        <div class="clearfix"></div>
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-    <div class="form-group row">
-        <lable class="control-label col-md-2 text-left">mã công việc</lable>
-        <input type="text" class="form-control col-md-4 text-danger" readonly name="Id" placeholder="" required="" value="@Model.Id" />
-    </div>
-    @* Date *@
-    <div class="form-group row">
-        <lable class="control-label col-md-2 text-left">Ngày báo cáo</lable>
-        <input type="date" class="form-control col-md-4" name="RecordDate" placeholder="" required="" value="@DateTime.Parse(Model.RecordDate.ToString()).ToString("yyyy-MM-dd")" />
-    </div>
+        <div class="form-group row">
+            <lable class="control-label col-md-2 text-left">mã công việc</lable>
+            <input type="text" class="form-control col-md-4 text-danger" readonly name="Id" placeholder="" required="" value="@Model.Id" />
+        </div>
+        @* Date *@
+        <div class="form-group row">
+            <lable class="control-label col-md-2 text-left">Ngày báo cáo</lable>
+            <input type="date" class="form-control col-md-4" name="RecordDate" placeholder="" required="" value="@DateTime.Parse(Model.RecordDate.ToString()).ToString("yyyy-MM-dd")" />
+        </div>
 
-    @* ProjectTypeID *@
-    <div class="form-group row  text-left">
-        <lable class="control-label col-md-2 text-left"><b class="text-danger">Tên dự án</b></lable>
-        <select name="ProjectId" class="form-control col-md-4">
-            <option value=@Model.ProjectId>@Projects.FirstOrDefault(s => s.ProjectID == Model.ProjectId).ProjectName</option>
-            <option value=@Model.ProjectId>----------</option>
-            @foreach (var item in Projects)
-            {
-                <option value=@item.ProjectID>@item.ProjectName</option>
-            }
-        </select>
-    </div>
-
-    <div class="form-group row">
-        @Html.LabelFor(model => model.WorkType, "Loại hình Công việc", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="form-control col-md-4">
-            <select name="WorkType" class="label col-md-12">
-                <option value="@Model.WorkType">@WorkType.FirstOrDefault(s=>s.ID == Model.WorkType).WorkName</option>
-                <option value="@Model.WorkType">---------</option>
-                @foreach (var item in WorkType)
+        @* ProjectTypeID *@
+        <div class="form-group row  text-left">
+            <lable class="control-label col-md-2 text-left"><b class="text-danger">Tên dự án/Công việc</b></lable>
+            <select name="ProjectId" class="form-control col-md-4">
+                @if (Model.ProjectId != null)
                 {
-                    <option value="@item.ID">@item.WorkName</option>
+                    <option value=@Model.ProjectId>@Projects.FirstOrDefault(s => s.ProjectID == Model.ProjectId).ProjectOtherName</option>
+                    @*<option value=@Model.ProjectId>----------</option>
+                        foreach (var item in Projects)
+                        {
+                            <option value=@item.ProjectID>@item.ProjectOtherName</option>
+                        }*@
                 }
+                <option value="">Công việc chung</option>
+            </select>
+        </div>
+
+        <div class="form-group row  text-left">
+            <lable class="control-label col-md-2 text-left"><b class="text-danger">Loại hình Công việc</b></lable>
+            <select name="WorkType" class="form-control col-md-4">
+                @if (Model.ProjectId == null)
+                {
+                    if (Model.WorkType != null)
+                    {
+                        <option value="@Model.WorkType">@WorkType.FirstOrDefault(s => s.ID == Model.WorkType).WorkName</option>
+                        <option value="@Model.WorkType">---------</option>
+                        foreach (var item in WorkType.Where(s => s.WorkGroup != 2).OrderBy(p => p.WorkGroup))
+                        {
+                            <option value="@item.ID">[Nhóm @item.WorkGroup] - @item.WorkName</option>
+                        }
+                    }
+                }
+                else
+                {
+                    if (Model.WorkType != null)
+                    {
+                        <option value="@Model.WorkType">@WorkType.FirstOrDefault(s => s.ID == Model.WorkType).WorkName</option>
+                        <option value="@Model.WorkType">---------</option>
+                        foreach (var item in WorkType.Where(s => s.WorkGroup == 2).OrderBy(p => p.WorkGroup))
+                        {
+                            <option value="@item.ID">[Nhóm @item.WorkGroup] - @item.WorkName</option>
+                        }
+                    }
+                }
+
             </select>
             @Html.ValidationMessageFor(model => model.WorkType, "", new { @class = "text-danger" })
         </div>
-    </div>
-    <div class="form-group row">
-        <label class="control-label col-md-2">Thời gian</label>
-        <div class="col-md-6 control-group">
-            <div class="form-group row">
-                <lable class="control-label col-md-2 text-left">Số giờ làm</lable>
-                <input type="number" class="form-control col-md-2" name="Hour" placeholder="" required="" value="@Model.Hour" />
+
+        <div class="form-group row">
+            <label class="control-label col-md-2">Thời gian</label>
+            <div class="col-md-6 control-group">
+                <div class="form-group row">
+                    <lable class="control-label col-md-2 text-left">Số giờ làm</lable>
+                    <input type="number" class="form-control col-md-2" name="Hour" placeholder="" required="" value="@Model.Hour" />
+                </div>
+                <div class="form-group row">
+                    <lable class="control-label col-md-2 text-left">Tăng ca (nếu có)</lable>
+                    <input type="number" class="form-control col-md-2" name="OT" placeholder="" required="" value="@Model.OT" />
+                </div>
+
             </div>
-            <div class="form-group row">
-                <lable class="control-label col-md-2 text-left">Tăng ca (nếu có)</lable>
-                <input type="number" class="form-control col-md-2" name="OT" placeholder="" required="" value="@Model.OT" />
+        </div>
+
+        <div class="form-group row">
+            @Html.LabelFor(model => model.Description, "Chú thích công việc", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="form-group col-md-4">
+                <textarea class="form-control col-md-12" rows="3" name="Description" placeholder="Ghi ngắn gọn nội dung công việc" required>@Model.Description</textarea>
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
             </div>
+        </div>
 
+        <div class="form-group row">
+            <div class="col-md-offset-2 col-md-2">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+            <div class="text-danger">@ViewBag.WorkAlert</div>
         </div>
     </div>
-
-    <div class="form-group row">
-        @Html.LabelFor(model => model.Description, "Chú thích công việc", htmlAttributes: new { @class = "control-label col-md-2" })
-        <div class="form-group col-md-4">
-            <textarea class="form-control col-md-12" rows="3" name="Description" placeholder="Ghi ngắn gọn nội dung công việc" required>@Model.Description</textarea>
-            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
-        </div>
-    </div>
-
-    <div class="form-group row">
-        <div class="col-md-offset-2 col-md-2">
-            <input type="submit" value="Save" class="btn btn-primary" />
-        </div>
-        <div class="text-danger">@ViewBag.WorkAlert</div>
-    </div>
-</div>
 }
 

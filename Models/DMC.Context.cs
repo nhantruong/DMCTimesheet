@@ -44,5 +44,7 @@ namespace DMCTimesheet.Models
         public virtual DbSet<C16_Status> C16_Status { get; set; }
         public virtual DbSet<C17_Position> C17_Position { get; set; }
         public virtual DbSet<C18_Descipline> C18_Descipline { get; set; }
+        public virtual DbSet<C19_Workgroup> C19_Workgroup { get; set; }
+        public virtual DbSet<C20_Stage> C20_Stage { get; set; }
     }
 }

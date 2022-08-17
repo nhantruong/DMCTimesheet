@@ -8,6 +8,7 @@
     List<DMCTimesheet.Models.C16_Status> status = ViewBag.Status as List<DMCTimesheet.Models.C16_Status>;
     List<DMCTimesheet.Models.C11_Location> locations = ViewBag.Location as List<DMCTimesheet.Models.C11_Location>;
     List<DMCTimesheet.Models.C10_Owner> owners = ViewBag.Owner as List<DMCTimesheet.Models.C10_Owner>;
+    List<DMCTimesheet.Models.C20_Stage> stage = ViewBag.Stage as List<DMCTimesheet.Models.C20_Stage>;
 
 }
 
@@ -66,7 +67,7 @@
                 }
                 <option value=""></option>
                 @*<option value="">-Chưa chọn-</option>*@
-                @foreach (var item in projectType.OrderBy(s=>s.TypeName))
+                @foreach (var item in projectType.OrderBy(s => s.TypeName))
                 {
                     <option value=@item.TypeId>@item.TypeName</option>
                 }
@@ -74,11 +75,11 @@
         </div>
         @* StatusID *@
         <div class="form-group row  text-left">
-            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tình trạng</lable>
-            <select name="ProjectStatusId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                @if (Model.ProjectStatusId != null)
+            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Giai đoạn</lable>
+            <select name="ProjectStage" class="form-control col-md-7 col-sm-9 col-xs-9">
+                @if (Model.ProjectStage != null)
                 {
-                    <option value=@Model.ProjectStatusId>@status.FirstOrDefault(s => s.Id == Model.ProjectStatusId).StatusName</option>
+                    <option value=@Model.ProjectStage>@stage.FirstOrDefault(s => s.Id == Model.ProjectStage).StageName</option>
                 }
                 <option value=""></option>
                 @*<option value="">-Chưa chọn-</option>*@
@@ -117,6 +118,23 @@
                 @foreach (var item in owners)
                 {
                     <option value=@item.OnwerId>@item.ShortName</option>
+                }
+            </select>
+        </div>
+
+        @* StatusID *@
+        <div class="form-group row  text-left">
+            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tình trạng dự án</lable>
+            <select name="ProjectStatusId" class="form-control col-md-7 col-sm-9 col-xs-9">
+                @if (Model.ProjectStatusId != null)
+                {
+                    <option value=@Model.ProjectStatusId>@status.FirstOrDefault(s => s.Id == Model.ProjectStatusId).StatusName</option>
+                }
+                <option value=""></option>
+                @*<option value="">-Chưa chọn-</option>*@
+                @foreach (var item in status)
+                {
+                    <option value=@item.Id>@item.StatusName</option>
                 }
             </select>
         </div>

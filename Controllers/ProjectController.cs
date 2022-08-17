@@ -24,6 +24,7 @@ namespace DMCTimesheet.Controllers
             ViewBag.Status = db.C16_Status.ToList();
             ViewBag.Location = db.C11_Location.ToList();
             ViewBag.Owner = db.C10_Owner.ToList();
+            ViewBag.Stage = db.C20_Stage.ToList();
 
             return View(db.C01_Projects.ToList());
         }
@@ -43,7 +44,7 @@ namespace DMCTimesheet.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateNewProject(string MaDuAn, string ProjectName, string ProjectOtherName, DateTime StartDate, int Year, int? ProjectTypeId, int? ProjectStatusId, int? LocationId, int? OwnerId)
+        public ActionResult CreateNewProject(string MaDuAn, string ProjectName, string ProjectOtherName, DateTime StartDate, int Year, int? ProjectTypeId, int? ProjectStatusId, int? LocationId, int? OwnerId, int? ProjectStage)
         {
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");            
             C01_Projects _Projects = new C01_Projects()
@@ -56,7 +57,8 @@ namespace DMCTimesheet.Controllers
                 LocationId = LocationId,
                 OwnerId = OwnerId,
                 ProjectStatusId = ProjectStatusId,
-                MaDuAn = MaDuAn
+                MaDuAn = MaDuAn,
+                ProjectStage = ProjectStage
 
             };
             try
@@ -76,6 +78,7 @@ namespace DMCTimesheet.Controllers
                 ViewBag.Status = db.C16_Status.ToList();
                 ViewBag.Location = db.C11_Location.ToList();
                 ViewBag.Owner = db.C10_Owner.ToList();
+                ViewBag.Stage = db.C20_Stage.ToList();
 
                 return View("Index", db.C01_Projects.ToList());
             }
@@ -142,6 +145,7 @@ namespace DMCTimesheet.Controllers
                     ViewBag.Projects = db.C01_Projects.ToList();
                     ViewBag.SubCons = db.C12_SubContractor.ToList();
                     ViewBag.AssignProject = db.C09_ProjectSubCon.ToList();
+                    ViewBag.Stage = db.C20_Stage.ToList();
                     ViewBag.Error = $"Đã có điều phối NTP cho dự án này";
                     return View("AssignDesigner", db.C09_ProjectSubCon.ToList());
                 }
@@ -173,6 +177,7 @@ namespace DMCTimesheet.Controllers
                 ViewBag.Status = db.C16_Status.ToList();
                 ViewBag.Location = db.C11_Location.ToList();
                 ViewBag.Owner = db.C10_Owner.ToList();
+                ViewBag.Stage = db.C20_Stage.ToList();
 
                 return View(Enity);
             }
@@ -199,7 +204,7 @@ namespace DMCTimesheet.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int ProjectID,string MaDuAn, string ProjectName, string ProjectOtherName, DateTime StartDate, int Year,
-            int? ProjectTypeId, int? ProjectStatusId, int? LocationId, int? OwnerId)
+            int? ProjectTypeId, int? ProjectStatusId, int? LocationId, int? OwnerId, int? ProjectStage)
         {
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");            
             try
@@ -218,6 +223,8 @@ namespace DMCTimesheet.Controllers
                 enity.ProjectStatusId = ProjectStatusId;
                 enity.LocationId = LocationId;
                 enity.OwnerId = OwnerId;
+                enity.MaDuAn = MaDuAn;
+                enity.ProjectStage = ProjectStage;
                 if (ModelState.IsValid)
                 {
                     db.Entry(enity).State = System.Data.Entity.EntityState.Modified;
@@ -248,7 +255,7 @@ namespace DMCTimesheet.Controllers
             ViewBag.Projects = db.C01_Projects.ToList();
             ViewBag.SubCons = db.C12_SubContractor.ToList();
             ViewBag.AssignProject = db.C09_ProjectSubCon.ToList();
-
+            ViewBag.Stage = db.C20_Stage.ToList();
             return View(enity);
         }
 
@@ -304,6 +311,7 @@ namespace DMCTimesheet.Controllers
             ViewBag.Status = db.C16_Status.ToList();
             ViewBag.Location = db.C11_Location.ToList();
             ViewBag.Owner = db.C10_Owner.ToList();
+            ViewBag.Stage = db.C20_Stage.ToList();
 
             return View(Enity);
         }
@@ -335,6 +343,7 @@ namespace DMCTimesheet.Controllers
                 Session["Error"] =  $"Dự án còn dữ liệu liên quan (Timesheet, Điều phối nhân sự) cần xóa trước khi xóa dự án.";
                 ViewBag.SaveContent = $"{ex.Message}";
                 ViewBag.Bool = true;
+                ViewBag.Stage = db.C20_Stage.ToList();
                 return View("DeleteProject");
             }
         }
@@ -350,7 +359,7 @@ namespace DMCTimesheet.Controllers
             ViewBag.Projects = db.C01_Projects.ToList();
             ViewBag.SubCons = db.C12_SubContractor.ToList();
             ViewBag.AssignProject = db.C09_ProjectSubCon.ToList();
-
+            ViewBag.Stage = db.C20_Stage.ToList();
             return View(enity);
         }
 
@@ -377,6 +386,7 @@ namespace DMCTimesheet.Controllers
                 ViewBag.Projects = db.C01_Projects.ToList();
                 ViewBag.SubCons = db.C12_SubContractor.ToList();
                 ViewBag.AssignProject = db.C09_ProjectSubCon.ToList();
+                ViewBag.Stage = db.C20_Stage.ToList();
                 //Session["Error"] =  $"Dự án còn dữ liệu liên quan cần xóa trước khi xóa dự án.";
 
 

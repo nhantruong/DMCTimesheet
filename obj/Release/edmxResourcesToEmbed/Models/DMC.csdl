@@ -17,6 +17,7 @@
     <NavigationProperty Name="C03_ProjectMembers" Relationship="Self.FK_03_ProjectMembers_01_Projects" FromRole="C01_Projects" ToRole="C03_ProjectMembers" />
     <NavigationProperty Name="C08_Timesheet" Relationship="Self.FK_08_Timesheet_01_Projects" FromRole="C01_Projects" ToRole="C08_Timesheet" />
     <NavigationProperty Name="C09_ProjectSubCon" Relationship="Self.FK_09_ProjectSubCon_01_Projects" FromRole="C01_Projects" ToRole="C09_ProjectSubCon" />
+    <Property Name="ProjectStage" Type="Int32" />
   </EntityType>
   <EntityType Name="C02_Members">
     <Key>
@@ -93,8 +94,9 @@
     </Key>
     <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="WorkName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-    <Property Name="WorkGroup" Type="Int32" />
+    <Property Name="WorkGroup" Type="Int32" Nullable="false" />
     <NavigationProperty Name="C08_Timesheet" Relationship="Self.FK_08_Timesheet_07_WorkType" FromRole="C07_WorkType" ToRole="C08_Timesheet" />
+    <NavigationProperty Name="C19_Workgroup" Relationship="DMCtimesheet.Models.FK_07_WorkType_19_Workgroup" FromRole="C07_WorkType" ToRole="C19_Workgroup" />
   </EntityType>
   <EntityType Name="C08_Timesheet">
     <Key>
@@ -428,5 +430,38 @@
       <End Role="C14_Services" EntitySet="C14_Services" />
       <End Role="C15_SubConServices" EntitySet="C15_SubConServices" />
     </AssociationSet>
+    <EntitySet Name="C19_Workgroup" EntityType="DMCtimesheet.Models.C19_Workgroup" />
+    <AssociationSet Name="FK_07_WorkType_19_Workgroup" Association="DMCtimesheet.Models.FK_07_WorkType_19_Workgroup">
+      <End Role="C19_Workgroup" EntitySet="C19_Workgroup" />
+      <End Role="C07_WorkType" EntitySet="C07_WorkType" />
+    </AssociationSet>
+    <EntitySet Name="C20_Stage" EntityType="DMCtimesheet.Models.C20_Stage" />
   </EntityContainer>
+  <EntityType Name="C19_Workgroup">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="GroupName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="C07_WorkType" Relationship="DMCtimesheet.Models.FK_07_WorkType_19_Workgroup" FromRole="C19_Workgroup" ToRole="C07_WorkType" />
+  </EntityType>
+  <Association Name="FK_07_WorkType_19_Workgroup">
+    <End Type="DMCtimesheet.Models.C19_Workgroup" Role="C19_Workgroup" Multiplicity="1" />
+    <End Type="DMCtimesheet.Models.C07_WorkType" Role="C07_WorkType" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="C19_Workgroup">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="C07_WorkType">
+        <PropertyRef Name="WorkGroup" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="C20_Stage">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="StageName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+  </EntityType>
 </Schema>

@@ -7,8 +7,11 @@
 
     List<DMCTimesheet.Models.C13_ProjectType> projectType = ViewBag.ProjectType as List<DMCTimesheet.Models.C13_ProjectType>;
     List<DMCTimesheet.Models.C16_Status> status = ViewBag.Status as List<DMCTimesheet.Models.C16_Status>;
+    List<DMCTimesheet.Models.C20_Stage> stage = ViewBag.Stage as List<DMCTimesheet.Models.C20_Stage>;
+
     List<DMCTimesheet.Models.C11_Location> locations = ViewBag.Location as List<DMCTimesheet.Models.C11_Location>;
     List<DMCTimesheet.Models.C10_Owner> owners = ViewBag.Owner as List<DMCTimesheet.Models.C10_Owner>;
+
 }
 
 <script src="~/Scripts/bootstrap-table-multiple-sort.min.js"></script>
@@ -112,12 +115,113 @@
 
 <div class="clearfix"></div>
 <div class="col-md-12">
-    <div class="col-md-10"><h3 class="text-primary">DANH SÁCH DỰ ÁN </h3></div>
+    <div class="col-md-10"><h3 class="text-primary">DANH SÁCH DỰ ÁN ĐANG TIẾN HÀNH</h3></div>
     <div class="col-md-2">
         <button type="button" class="btn btn-success btn-small text-right" data-toggle="modal" data-target="#newProject"><i class="fa fa-plus-circle"></i> Thêm dự án</button>
     </div>
 </div>
-<div class="table-responsive scrollbar">
+<div>
+    <table class="table table-hover table-condensed table-striped ">
+        <thead class="table-dark">
+            <tr>
+                <td class="col-sm-1 text-center">Năm</td>
+                <td class="col-md-1">Mã dự án</td>
+                <td class="col-md-2">Tên rút gọn</td>
+
+                <td class="col-md-1">Chủ đầu tư</td>
+                <td class="col-md-1">Loại hình</td>
+                <td class="col-md-1">Giai đoạn</td>
+                <td class="col-md-1">Ngày bắt đầu</td>
+
+                <td class="col-md-2">Tên dự án theo Hợp đồng</td>
+                <td class="col-md-1">Địa điểm</td>
+                <td class="col-md-1">Xóa dự án</td>
+            </tr>
+        </thead>
+    </table>
+</div>
+<div class="table-responsive" style="height: 600px">
+    <table class="table table-hover table-condensed table-striped ">
+        <caption>Số lượng dự án đang tiến hành: <b class="text-danger">@myProject.Where(s => s.ProjectStage != 5).Count()</b></caption>
+        <tbody>
+            @if (myProject == null || myProject.Count() == 0)
+            {
+                <tr class="row">
+                    <td>Chưa có dự án được tạo</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var item in myProject.Where(s => s.ProjectStage != 5).OrderByDescending(m => m.Year).OrderByDescending(p => p.StartDate))
+                {
+                    <tr class="row text-dark">
+                        <td class="col-sm-1 text-center">@item.Year</td>
+                        <td class="col-md-1"><b>@item.MaDuAn</b></td>
+                        <td class="col-md-2">
+                            <div class="inline">
+                                <b>@Html.ActionLink(item.ProjectOtherName, "Edit", "Project", new { id = item.ProjectID }, new { @class = "text-primary" })</b>
+                                @if (item.ProjectStatusId == 3)
+                                {
+                                    <span class="badge badge-success">@status.FirstOrDefault(s => s.Id == item.ProjectStatusId).StatusName</span>
+                                }
+                                else if (item.ProjectStatusId == 4)
+                                {
+                                    <span class="badge badge-warning">@status.FirstOrDefault(s => s.Id == item.ProjectStatusId).StatusName</span>
+                                }
+                                else
+                                {
+                                    <span class="badge  badge-danger">@status.FirstOrDefault(s => s.Id == item.ProjectStatusId).StatusName</span>
+                                }
+                            </div>
+
+                        </td>
+
+                        <td class="col-md-1">
+                            @if (item.OwnerId != null)
+                            {
+                                <b>@owners.FirstOrDefault(s => s.OnwerId == item.OwnerId).ShortName</b>
+                            }
+                        </td>
+                        <td class="col-md-1">
+                            @if (item.ProjectTypeId != null)
+                            {
+                                @projectType.FirstOrDefault(s => s.TypeId == item.ProjectTypeId).TypeName
+                            }
+
+                        </td>
+
+                        <td class="col-md-1">
+                            @if (item.ProjectStage != null)
+                            {
+                                @stage.FirstOrDefault(s => s.Id == item.ProjectStage).StageName
+                            }
+
+                        </td>
+                        <td class="col-md-1">@DateTime.Parse(item.StartDate.ToString()).ToShortDateString()</td>
+                        <td class="col-md-2"><b>@Html.ActionLink(item.ProjectName, "Edit", "Project", new { id = item.ProjectID }, new { @class = "text-primary" })</b></td>
+                        <td class="col-md-1">
+                            @if (item.LocationId != null)
+                            {
+                                @locations.FirstOrDefault(s => s.LocationId == item.LocationId).LocationName
+                            }
+
+                        </td>
+                        <td class="col-md-1">@Html.ActionLink(" ", "DeleteProject", "Project", new { Id = item.ProjectID }, new { @class = "fa fa-remove btn" })</td>
+                    </tr>
+                }
+            }
+
+        </tbody>
+    </table>
+</div>
+
+<br />
+<div class="clearfix"></div>
+@* DỰ ÁN HOÀN TẤT *@
+<div class="col-md-12">
+    <div class="col-md-10"><h3 class="text-success">DANH SÁCH DỰ ÁN HOÀN TẤT</h3></div>
+</div>
+<div>
     <table class="table table-hover table-condensed table-striped ">
         <thead class="table-dark">
             <tr>
@@ -135,16 +239,21 @@
                 <td class="col-md-1">Xóa dự án</td>
             </tr>
         </thead>
+    </table>
+</div>
+<div class="table-responsive" style="height:400px">
+    <table class="table table-hover table-condensed table-striped ">
+        <caption>Số lượng dự án đang tiến hành:<b class="text-danger">@myProject.Where(s => s.ProjectStage == 5).Count()</b></caption>
         <tbody>
-            @if (myProject == null || myProject.Count() == 0)
+            @if (myProject == null || myProject.Where(s => s.ProjectStage == 5).Count() == 0)
             {
                 <tr class="row">
-                    <td>Chưa có dự án được tạo</td>
+                    <td>Chưa có dự án Hoàn thành</td>
                 </tr>
             }
             else
             {
-                foreach (var item in myProject.OrderByDescending(s => s.ProjectOtherName))
+                foreach (var item in myProject.Where(s => s.ProjectStage == 5).OrderByDescending(s => s.ProjectOtherName).OrderByDescending(s => s.StartDate))
                 {
                     <tr class="row text-dark">
                         <td class="col-sm-1 text-center">@item.Year</td>
@@ -166,9 +275,9 @@
                         </td>
 
                         <td class="col-md-1">
-                            @if (item.ProjectStatusId != null)
+                            @if (item.ProjectStage != null)
                             {
-                                @status.FirstOrDefault(s => s.Id == item.ProjectStatusId).StatusName
+                                @stage.FirstOrDefault(s => s.Id == item.ProjectStage).StageName
                             }
 
                         </td>

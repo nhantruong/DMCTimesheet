@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="DMCtimesheet.Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="DMCtimesheet.Models.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="01_Projects">
           <Key>
             <PropertyRef Name="ProjectID" />
@@ -19,6 +19,7 @@
           <Property Name="ProjectStatusId" Type="int" />
           <Property Name="LocationId" Type="int" />
           <Property Name="OwnerId" Type="int" />
+          <Property Name="ProjectStage" Type="int" />
         </EntityType>
         <EntityType Name="02_Members">
           <Key>
@@ -85,7 +86,7 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="WorkName" Type="nvarchar" MaxLength="200" />
-          <Property Name="WorkGroup" Type="int" />
+          <Property Name="WorkGroup" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="08_Timesheet">
           <Key>
@@ -198,6 +199,20 @@
           <Property Name="DesciplineName" Type="nvarchar" MaxLength="50" />
           <Property Name="Active" Type="bit" />
         </EntityType>
+        <EntityType Name="19_Workgroup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GroupName" Type="nvarchar" MaxLength="150" />
+        </EntityType>
+        <EntityType Name="20_Stage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="StageName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
         <Association Name="FK_03_ProjectMembers_01_Projects">
           <End Role="01_Projects" Type="Self.01_Projects" Multiplicity="0..1" />
           <End Role="03_ProjectMembers" Type="Self.03_ProjectMembers" Multiplicity="*" />
@@ -243,6 +258,18 @@
             </Principal>
             <Dependent Role="06_UserPermisRelationship">
               <PropertyRef Name="idPer" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_07_WorkType_19_Workgroup">
+          <End Role="19_Workgroup" Type="Self.19_Workgroup" Multiplicity="1" />
+          <End Role="07_WorkType" Type="Self.07_WorkType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="19_Workgroup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="07_WorkType">
+              <PropertyRef Name="WorkGroup" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -361,6 +388,8 @@
           <EntitySet Name="16_Status" EntityType="Self.16_Status" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="17_Position" EntityType="Self.17_Position" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="18_Descipline" EntityType="Self.18_Descipline" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="19_Workgroup" EntityType="Self.19_Workgroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="20_Stage" EntityType="Self.20_Stage" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_03_ProjectMembers_01_Projects" Association="Self.FK_03_ProjectMembers_01_Projects">
             <End Role="01_Projects" EntitySet="01_Projects" />
             <End Role="03_ProjectMembers" EntitySet="03_ProjectMembers" />
@@ -376,6 +405,10 @@
           <AssociationSet Name="FK_06_UserPermisRelationship_04_Permission" Association="Self.FK_06_UserPermisRelationship_04_Permission">
             <End Role="04_Permission" EntitySet="04_Permission" />
             <End Role="06_UserPermisRelationship" EntitySet="06_UserPermisRelationship" />
+          </AssociationSet>
+          <AssociationSet Name="FK_07_WorkType_19_Workgroup" Association="Self.FK_07_WorkType_19_Workgroup">
+            <End Role="19_Workgroup" EntitySet="19_Workgroup" />
+            <End Role="07_WorkType" EntitySet="07_WorkType" />
           </AssociationSet>
           <AssociationSet Name="FK_08_Timesheet_01_Projects" Association="Self.FK_08_Timesheet_01_Projects">
             <End Role="01_Projects" EntitySet="01_Projects" />
@@ -410,8 +443,7 @@
             <End Role="03_ProjectMembers" EntitySet="03_ProjectMembers" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DMCtimesheet.Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -432,6 +464,7 @@
           <NavigationProperty Name="C03_ProjectMembers" Relationship="Self.FK_03_ProjectMembers_01_Projects" FromRole="C01_Projects" ToRole="C03_ProjectMembers" />
           <NavigationProperty Name="C08_Timesheet" Relationship="Self.FK_08_Timesheet_01_Projects" FromRole="C01_Projects" ToRole="C08_Timesheet" />
           <NavigationProperty Name="C09_ProjectSubCon" Relationship="Self.FK_09_ProjectSubCon_01_Projects" FromRole="C01_Projects" ToRole="C09_ProjectSubCon" />
+          <Property Name="ProjectStage" Type="Int32" />
         </EntityType>
         <EntityType Name="C02_Members">
           <Key>
@@ -508,8 +541,9 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="WorkName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="WorkGroup" Type="Int32" />
+          <Property Name="WorkGroup" Type="Int32" Nullable="false" />
           <NavigationProperty Name="C08_Timesheet" Relationship="Self.FK_08_Timesheet_07_WorkType" FromRole="C07_WorkType" ToRole="C08_Timesheet" />
+          <NavigationProperty Name="C19_Workgroup" Relationship="DMCtimesheet.Models.FK_07_WorkType_19_Workgroup" FromRole="C07_WorkType" ToRole="C19_Workgroup" />
         </EntityType>
         <EntityType Name="C08_Timesheet">
           <Key>
@@ -843,7 +877,40 @@
             <End Role="C14_Services" EntitySet="C14_Services" />
             <End Role="C15_SubConServices" EntitySet="C15_SubConServices" />
           </AssociationSet>
+          <EntitySet Name="C19_Workgroup" EntityType="DMCtimesheet.Models.C19_Workgroup" />
+          <AssociationSet Name="FK_07_WorkType_19_Workgroup" Association="DMCtimesheet.Models.FK_07_WorkType_19_Workgroup">
+            <End Role="C19_Workgroup" EntitySet="C19_Workgroup" />
+            <End Role="C07_WorkType" EntitySet="C07_WorkType" />
+          </AssociationSet>
+          <EntitySet Name="C20_Stage" EntityType="DMCtimesheet.Models.C20_Stage" />
         </EntityContainer>
+        <EntityType Name="C19_Workgroup">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GroupName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="C07_WorkType" Relationship="DMCtimesheet.Models.FK_07_WorkType_19_Workgroup" FromRole="C19_Workgroup" ToRole="C07_WorkType" />
+        </EntityType>
+        <Association Name="FK_07_WorkType_19_Workgroup">
+          <End Type="DMCtimesheet.Models.C19_Workgroup" Role="C19_Workgroup" Multiplicity="1" />
+          <End Type="DMCtimesheet.Models.C07_WorkType" Role="C07_WorkType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C19_Workgroup">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="C07_WorkType">
+              <PropertyRef Name="WorkGroup" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="C20_Stage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StageName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -853,6 +920,7 @@
           <EntitySetMapping Name="C01_Projects">
             <EntityTypeMapping TypeName="DMCtimesheet.Models.C01_Projects">
               <MappingFragment StoreEntitySet="01_Projects">
+                <ScalarProperty Name="ProjectStage" ColumnName="ProjectStage" />
                 <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
                 <ScalarProperty Name="MaDuAn" ColumnName="MaDuAn" />
                 <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
@@ -1058,6 +1126,22 @@
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="DesciplineName" ColumnName="DesciplineName" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C19_Workgroup">
+            <EntityTypeMapping TypeName="DMCtimesheet.Models.C19_Workgroup">
+              <MappingFragment StoreEntitySet="19_Workgroup">
+                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C20_Stage">
+            <EntityTypeMapping TypeName="DMCtimesheet.Models.C20_Stage">
+              <MappingFragment StoreEntitySet="20_Stage">
+                <ScalarProperty Name="StageName" ColumnName="StageName" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

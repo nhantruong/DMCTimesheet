@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="a5027d77e3224242844f4999d09a1b1c" Name="Diagram1" ZoomLevel="71">
+      <Diagram DiagramId="a5027d77e3224242844f4999d09a1b1c" Name="Diagram1" ZoomLevel="139">
         <EntityTypeShape EntityType="DMCtimesheet.Models.C01_Projects" Width="1.5" PointX="5.125" PointY="4.375" IsExpanded="true" />
         <EntityTypeShape EntityType="DMCtimesheet.Models.C02_Members" Width="1.5" PointX="9.125" PointY="1.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DMCtimesheet.Models.C03_ProjectMembers" Width="1.5" PointX="7.125" PointY="1.75" IsExpanded="true" />
@@ -14,7 +14,7 @@
         <EntityTypeShape EntityType="DMCtimesheet.Models.C07_WorkType" Width="1.5" PointX="9.125" PointY="6.25" IsExpanded="true" />
         <EntityTypeShape EntityType="DMCtimesheet.Models.C08_Timesheet" Width="1.5" PointX="7.125" PointY="5.25" IsExpanded="true" />
         <EntityTypeShape EntityType="DMCtimesheet.Models.C09_ProjectSubCon" Width="1.5" PointX="3" PointY="3" IsExpanded="true" />
-        <EntityTypeShape EntityType="DMCtimesheet.Models.C10_Owner" Width="1.5" PointX="14.375" PointY="3.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DMCtimesheet.Models.C10_Owner" Width="1.5" PointX="13.125" PointY="3.5" IsExpanded="true" />
         <EntityTypeShape EntityType="DMCtimesheet.Models.C11_Location" Width="1.5" PointX="16.125" PointY="0.5" IsExpanded="true" />
         <EntityTypeShape EntityType="DMCtimesheet.Models.C12_SubContractor" Width="1.5" PointX="5.125" PointY="0.5" IsExpanded="true" />
         <EntityTypeShape EntityType="DMCtimesheet.Models.C13_ProjectType" Width="1.5" PointX="16.125" PointY="2" IsExpanded="true" />
@@ -35,6 +35,9 @@
         <AssociationConnector Association="DMCtimesheet.Models.FK_09_ProjectSubCon_12_SubContractor" ManuallyRouted="false" />
         <AssociationConnector Association="DMCtimesheet.Models.FK_15_SubConServices_12_SubContractor" ManuallyRouted="false" />
         <AssociationConnector Association="DMCtimesheet.Models.FK_15_SubConServices_14_Services" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DMCtimesheet.Models.C19_Workgroup" Width="1.5" PointX="11.125" PointY="6.25" />
+        <AssociationConnector Association="DMCtimesheet.Models.FK_07_WorkType_19_Workgroup" />
+        <EntityTypeShape EntityType="DMCtimesheet.Models.C20_Stage" Width="1.5" PointX="0.75" PointY="7.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -27,13 +27,15 @@
             ProjectNeedAssign = Projects.Where(p => p.ProjectID != item.ProjectID).Distinct().ToList();
         }
         //Lấy dự án của từng người
-        foreach (var mem in Members)
+        foreach (var mem in Members.Where(s => s.SystemMember == false))
         {
             KeyValuePair<int, List<int?>> keyValuePair = new KeyValuePair<int, List<int?>>(mem.UserID, Model.Where(s => s.ChuTriChinh == mem.UserID
             || s.ChuTriKienTruc == mem.UserID
             || s.ChuTriKetCau == mem.UserID
             || s.ChuTriMEP == mem.UserID
+            || s.Admin == mem.UserID
             || s.LegalManager == mem.UserID).Select(p => p.ProjectID).ToList());
+
             ProjectOfMember.Add(keyValuePair);
         }
 
@@ -182,18 +184,16 @@
 <div class="col-md-12">
     <div class="col-md-9">
         <h3 class="text-left">DANH SÁCH THÀNH VIÊN THEO DỰ ÁN</h3>
-
     </div>
     <div class="col-md-3 text-right">
         <button type="button" class="btn btn-warning btn-small text-right" data-toggle="modal" data-target="#newAssignMember"><i class="fa fa-plus"></i> Thêm điều phối Thành viên cho dự án mới</button>
-
     </div>
 </div>
 <div class="clearfix"></div>
-<div class="table-responsive scrollbar">
-    <table class="table table-hover table-bordered table-striped">
-        <caption>Số lượng dự án <b class="text-danger">@Model.Count()</b></caption>
-        <thead class="text-white" style="background-color:#000000">
+
+<div>
+    <table class="table">
+        <thead class="table-dark">
             <tr class="row text-center">
                 <td class="col-md-1"><b>Ngày lập</b></td>
                 <td class="col-md-2"><b>Dự án</b></td>
@@ -207,6 +207,11 @@
                 <td class="col-md-1"><b>Xóa</b></td>
             </tr>
         </thead>
+    </table>
+</div>
+<div class="table-responsive scrollbar">
+    <table class="table table-hover table-bordered table-striped">
+        <caption>Số lượng dự án <b class="text-danger">@Model.Count()</b></caption>        
         <tbody>
             @if (Model == null || Model.Count() == 0)
             {
@@ -381,7 +386,7 @@
                             datasets: [{
                                 label: '',
                                 data: data,
-                                backgroundColor: 'rgba(255, 128, 64, 1)',
+                                backgroundColor: 'rgba(255, 255, 64, 0.3)',
                                 borderColor:'rgba(255, 128, 128, 1)',
                                 borderWidth: 1
                             }]
@@ -391,7 +396,7 @@
                yAxes: [{
                    ticks: {
                        beginAtZero: true
-                       //lables: lablesVlue type: 'category',
+                       /*lables: lablesVlue, type: 'category',*/
                    }
                }]
            },
@@ -404,7 +409,7 @@
                    var ctx = this.chart.ctx;
                    ctx.font = Chart.helpers.fontString(Chart.defaults.global.defaultFontSize, 'normal', Chart.defaults.global.defaultFontFamily);
                    ctx.fillStyle = this.chart.config.options.defaultFontColor;
-                   ctx.textAlign = 'middle';
+                   ctx.textAlign = 'top';
                    ctx.textBaseline = 'top';
                    this.data.datasets.forEach(function (dataset) {
                        for (var i = 0; i < dataset.data.length; i++) {

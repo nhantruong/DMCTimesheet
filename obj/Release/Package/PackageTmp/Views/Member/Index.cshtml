@@ -7,6 +7,8 @@
     List<DMCTimesheet.Models.C07_WorkType> WorkType = ViewBag.WorkType as List<DMCTimesheet.Models.C07_WorkType>;
     List<DMCTimesheet.Models.C13_ProjectType> projectType = ViewBag.ProjectType as List<DMCTimesheet.Models.C13_ProjectType>;
     List<DMCTimesheet.Models.C16_Status> status = ViewBag.Status as List<DMCTimesheet.Models.C16_Status>;
+    List<DMCTimesheet.Models.C20_Stage> stage = ViewBag.Stage as List<DMCTimesheet.Models.C20_Stage>;
+
     List<DMCTimesheet.Models.C11_Location> locations = ViewBag.Location as List<DMCTimesheet.Models.C11_Location>;
     List<DMCTimesheet.Models.C10_Owner> owners = ViewBag.Owner as List<DMCTimesheet.Models.C10_Owner>;
 
@@ -98,19 +100,13 @@
 
 <div class="clearfix btn-sm"></div>
 <div class="col-md-12">
-    <div class="col-md-9">
-        <h3>DANH SÁCH NHÂN SỰ</h3>
-
-    </div>
+    <div class="col-md-9"><h3 class="text-primary">DANH SÁCH NHÂN SỰ</h3></div>
     <div class="col-md-3 text-right">
         <button type="button" class="btn btn-info btn-small text-right" data-toggle="modal" data-target="#newMember"><i class="fa fa-plug"></i>  Thêm thành viên</button>
-
     </div>
 </div>
-
 <div class="table-responsive">
     <table class="table table-bordered table-striped table-hover">
-        <caption>Số lượng thành viên đang làm việc: <b class="text-danger">@Model.Count(s => s.Deactived == false && s.SystemMember == false)</b></caption>
         <thead class="table-dark">
             <tr>
                 <td class="col-sm-1">STT</td>
@@ -123,6 +119,11 @@
                 <td class="col-md-1">On/Offline</td>
             </tr>
         </thead>
+    </table>
+</div>
+<div class="table-responsive" style="height:600px">
+    <table class="table table-bordered table-striped table-hover">
+        <caption>Số lượng thành viên đang làm việc: <b class="text-danger">@Model.Count(s => s.Deactived == false && s.SystemMember == false)</b></caption>
         <tbody>
             @if (Model == null || Model.Count() == 0)
             {
@@ -153,13 +154,10 @@
         </tbody>
     </table>
 </div>
-
 <hr />
 <div class="clearfix"></div>
-
-<div class="table-responsive">
+<div>
     <table class="table table-bordered table-striped">
-        <caption>Số lượng thành viên chuyển công tác: <b class="text-danger">@Model.Count(s => s.Deactived == true && s.SystemMember == false)</b></caption>
         <thead class="table-dark">
             <tr>
                 <td class="col-md-1">STT</td>
@@ -172,11 +170,20 @@
                 <td class="col-md-1">#</td>
             </tr>
         </thead>
+    </table>
+</div>
+@{
+    List<DMCTimesheet.Models.C02_Members> offines = Model.Where(s => s.Deactived == true && s.SystemMember == false).ToList();
+}
+<div class="table-responsive" style="height:400px">
+    <table class="table table-bordered table-striped">
+        <caption>Số lượng thành viên chuyển công tác: <b class="text-danger">@offines.Count()</b></caption>
         <tbody>
-            @if (Model == null || Model.Count() == 0)
+
+            @if (offines == null || offines.Count() == 0)
             {
                 <tr class="row">
-                    <td>Chưa có nhân sự</td>
+                    <td>Chưa có nhân sự Offline</td>
                 </tr>
             }
             else
