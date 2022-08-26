@@ -1,13 +1,15 @@
-﻿<!DOCTYPE html>
-<html>
-<head>
-    <meta name="viewport" content="width=device-width" />
-    <title>Error</title>
-</head>
-<body>
-    <hgroup>
-        <h1>Error.</h1>
-        <h2>@ViewBag.Error</h2>
-    </hgroup>
-</body>
-</html>
+﻿<hgroup>
+    <h1>Đã có lỗi xảy ra trong quá trình khởi tạo trang</h1>
+    
+</hgroup>
+
+@model System.Web.Mvc.HandleErrorInfo
+
+@{
+    ViewBag.Title = "Error";
+}
+
+<h2>
+    Sorry, an error occurred while processing your request.
+</h2>
+<h2>@ViewBag.Error - ActionName: @Model.ActionName.ToUpper()</h2>

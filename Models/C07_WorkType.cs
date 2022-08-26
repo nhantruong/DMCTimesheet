@@ -22,10 +22,10 @@ namespace DMCTimesheet.Models
     
         public int ID { get; set; }
         public string WorkName { get; set; }
-        public int WorkGroup { get; set; }
+        public int GroupId { get; set; }
     
+        public virtual C19_Workgroup C19_Workgroup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<C08_Timesheet> C08_Timesheet { get; set; }
-        public virtual C19_Workgroup C19_Workgroup { get; set; }
     }
 }

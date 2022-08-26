@@ -81,7 +81,7 @@
     </Key>
     <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="WorkName" Type="nvarchar" MaxLength="200" />
-    <Property Name="WorkGroup" Type="int" Nullable="false" />
+    <Property Name="GroupId" Type="int" Nullable="false" />
   </EntityType>
   <EntityType Name="08_Timesheet">
     <Key>
@@ -95,6 +95,7 @@
     <Property Name="Hour" Type="float" />
     <Property Name="OT" Type="float" />
     <Property Name="Description" Type="nvarchar(max)" />
+    <Property Name="isConfirm" Type="bit" />
   </EntityType>
   <EntityType Name="09_ProjectSubCon">
     <Key>
@@ -177,6 +178,7 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="StatusName" Type="nvarchar" MaxLength="50" />
+    <Property Name="ColorCode" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="17_Position">
     <Key>
@@ -196,9 +198,10 @@
   </EntityType>
   <EntityType Name="19_Workgroup">
     <Key>
-      <PropertyRef Name="Id" />
+      <PropertyRef Name="GroupId" />
     </Key>
-    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="GroupId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MaNhom" Type="int" />
     <Property Name="GroupName" Type="nvarchar" MaxLength="150" />
   </EntityType>
   <EntityType Name="20_Stage">
@@ -207,6 +210,17 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="StageName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="99_ActivityLog">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DatetimeCreate" Type="datetime" />
+    <Property Name="MemberId" Type="int" />
+    <Property Name="Scope" Type="nvarchar" MaxLength="50" />
+    <Property Name="Details" Type="nvarchar" MaxLength="250" />
+    <Property Name="GroupId" Type="int" />
   </EntityType>
   <Association Name="FK_03_ProjectMembers_01_Projects">
     <End Role="01_Projects" Type="Self.01_Projects" Multiplicity="0..1" />
@@ -261,10 +275,10 @@
     <End Role="07_WorkType" Type="Self.07_WorkType" Multiplicity="*" />
     <ReferentialConstraint>
       <Principal Role="19_Workgroup">
-        <PropertyRef Name="Id" />
+        <PropertyRef Name="GroupId" />
       </Principal>
       <Dependent Role="07_WorkType">
-        <PropertyRef Name="WorkGroup" />
+        <PropertyRef Name="GroupId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -385,6 +399,7 @@
     <EntitySet Name="18_Descipline" EntityType="Self.18_Descipline" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="19_Workgroup" EntityType="Self.19_Workgroup" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="20_Stage" EntityType="Self.20_Stage" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="99_ActivityLog" EntityType="Self.99_ActivityLog" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_03_ProjectMembers_01_Projects" Association="Self.FK_03_ProjectMembers_01_Projects">
       <End Role="01_Projects" EntitySet="01_Projects" />
       <End Role="03_ProjectMembers" EntitySet="03_ProjectMembers" />

@@ -18,9 +18,8 @@ namespace DMCTimesheet.Controllers
         #region General
         public ActionResult ProjectTimesheet()
         {
-
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
-            C02_Members logUser = Session["UserLogin"] as C02_Members;
+            //C02_Members logUser = Session["UserLogin"] as C02_Members;
             ViewBag.Projects = db.C01_Projects.ToList();
             ViewBag.Members = db.C02_Members.ToList();
             ViewBag.WorkType = db.C07_WorkType.ToList();
@@ -29,6 +28,145 @@ namespace DMCTimesheet.Controllers
 
             return View(ProjectTimesheet);
         }
+
+        public ActionResult TimesheetManage()
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            C02_Members logUser = Session["UserLogin"] as C02_Members;
+
+            ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
+            ViewBag.Projects = db.C01_Projects.ToList();
+            ViewBag.WorkType = db.C07_WorkType.ToList();
+            ViewBag.Workgroup = db.C19_Workgroup.ToList();
+
+            ViewBag.ProjectMember = db.C03_ProjectMembers.Where(
+              s => s.ChuTriKienTruc == logUser.UserID
+                || s.ChuTriChinh == logUser.UserID
+                || s.ChuTriKetCau == logUser.UserID
+                || s.ChuTriMEP == logUser.UserID
+                || s.LegalManager == logUser.UserID
+                || s.Admin == logUser.UserID
+                ).ToList();
+
+            List<string[]> group = new List<string[]>();    //Nhóm công việc theo workgroup
+            List<string[]> listIdCV = new List<string[]>(); //List ID công việc để lọc
+            foreach (var item in db.C07_WorkType.ToList())
+            {
+                string[] itm = new string[2];
+                itm[0] = item.GroupId.ToString();
+                itm[1] = item.WorkName;
+                group.Add(itm);
+
+                string[] idw = new string[2];
+                idw[0] = item.ID.ToString();
+                idw[1] = item.WorkName;
+                listIdCV.Add(idw);
+            }
+            ViewBag.group = group;
+            ViewBag.listIdCV = listIdCV;
+
+
+            List<C08_Timesheet> mytimesheet = db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).ToList();
+
+            //Công việc trong ngày
+            List<DMCTimesheet.Models.C08_Timesheet> _ViecTrongNgay = new List<DMCTimesheet.Models.C08_Timesheet>();
+            foreach (var item in mytimesheet)
+            {
+                //int value = DateTime.Compare(DateTime.Parse(item.RecordDate.ToString()), DateTime.Today);
+                if (DateTime.Today == DateTime.Parse(item.RecordDate.ToString()))
+                {
+                    _ViecTrongNgay.Add(item);
+                }
+            }
+            //Công việc trong tuần
+            List<DMCTimesheet.Models.C08_Timesheet> _ViecTrongTuan = new List<DMCTimesheet.Models.C08_Timesheet>();
+                        
+            DateTime startDate = MakeDate(7, false);
+
+            foreach (var item in mytimesheet)
+            {
+                int value = DateTime.Compare(DateTime.Parse(item.RecordDate.ToString()), startDate);
+                if (value <= 7)
+                {
+                    _ViecTrongTuan.Add(item);
+                }
+            }
+            ViewBag.ViecTrongNgay = _ViecTrongNgay;
+            ViewBag.ViecTrongTuan = _ViecTrongTuan;
+
+            return View(mytimesheet);
+        }
+
+        public void GetData()
+        {
+            C02_Members logUser = Session["UserLogin"] as C02_Members;
+            List<string[]> group = new List<string[]>();    //Nhóm công việc theo workgroup
+            List<string[]> listIdCV = new List<string[]>(); //List ID công việc để lọc
+            foreach (var item in db.C07_WorkType.ToList())
+            {
+                string[] itm = new string[2];
+                itm[0] = item.GroupId.ToString();
+                itm[1] = item.WorkName;
+                group.Add(itm);
+
+                string[] idw = new string[2];
+                idw[0] = item.ID.ToString();
+                idw[1] = item.WorkName;
+                listIdCV.Add(idw);
+            }
+            ViewBag.group = group;
+            ViewBag.listIdCV = listIdCV;
+
+
+            List<C08_Timesheet> mytimesheet = db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).ToList();
+
+            //Công việc trong ngày
+            List<DMCTimesheet.Models.C08_Timesheet> _ViecTrongNgay = new List<DMCTimesheet.Models.C08_Timesheet>();
+            foreach (var item in mytimesheet)
+            {
+                //int value = DateTime.Compare(DateTime.Parse(item.RecordDate.ToString()), DateTime.Today);
+                if (DateTime.Today == DateTime.Parse(item.RecordDate.ToString()))
+                {
+                    _ViecTrongNgay.Add(item);
+                }
+            }
+            //Công việc trong tuần
+            List<DMCTimesheet.Models.C08_Timesheet> _ViecTrongTuan = new List<DMCTimesheet.Models.C08_Timesheet>();
+
+            DateTime startDate = MakeDate(7, false);
+
+            foreach (var item in mytimesheet)
+            {
+                int value = DateTime.Compare(DateTime.Parse(item.RecordDate.ToString()), startDate);
+                if (value <= 7)
+                {
+                    _ViecTrongTuan.Add(item);
+                }
+            }
+            ViewBag.ViecTrongNgay = _ViecTrongNgay;
+            ViewBag.ViecTrongTuan = _ViecTrongTuan;
+
+        }
+
+        public DateTime MakeDate(int duration, bool TinhToi)
+        {           
+            int month = DateTime.Today.Month;
+            int year = DateTime.Today.Year;
+            int day = DateTime.Today.Day;
+            
+            int returnDate;
+
+            if (TinhToi)
+            {
+                returnDate = day + duration;
+            }
+            else
+            {
+                returnDate = Math.Abs(day - duration);
+            }
+            return new DateTime(year, month, returnDate);
+        }
+
 
 
         public ActionResult MemberTimesheet()
@@ -50,7 +188,51 @@ namespace DMCTimesheet.Controllers
                 || s.Admin == logUser.UserID
                 ).ToList();
 
+            List<string[]> group = new List<string[]>();    //Nhóm công việc theo workgroup
+            List<string[]> listIdCV = new List<string[]>(); //List ID công việc để lọc
+            foreach (var item in db.C07_WorkType.ToList())
+            {
+                string[] itm = new string[2];
+                itm[0] = item.GroupId.ToString();
+                itm[1] = item.WorkName;
+                group.Add(itm);
+
+                string[] idw = new string[2];
+                idw[0] = item.ID.ToString();
+                idw[1] = item.WorkName;
+                listIdCV.Add(idw);
+            }
+            ViewBag.group = group;
+            ViewBag.listIdCV = listIdCV;
+
+
             List<C08_Timesheet> mytimesheet = db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).ToList();
+
+            //Công việc trong ngày
+            List<DMCTimesheet.Models.C08_Timesheet> _ViecTrongNgay = new List<DMCTimesheet.Models.C08_Timesheet>();
+            foreach (var item in mytimesheet)
+            {
+                //int value = DateTime.Compare(DateTime.Parse(item.RecordDate.ToString()), DateTime.Today);
+                if (DateTime.Today == DateTime.Parse(item.RecordDate.ToString()))
+                {
+                    _ViecTrongNgay.Add(item);
+                }
+            }
+            //Công việc trong tuần
+            List<DMCTimesheet.Models.C08_Timesheet> _ViecTrongTuan = new List<DMCTimesheet.Models.C08_Timesheet>();
+            DateTime startDate = DateTime.Parse(((DateTime.Today.Day - 7).ToString() + "-" + DateTime.Today.Month.ToString() + "-" + DateTime.Today.Year.ToString()));
+
+            foreach (var item in mytimesheet)
+            {
+                int value = DateTime.Compare(DateTime.Parse(item.RecordDate.ToString()), startDate);
+                if (value <= 7)
+                {
+                    _ViecTrongTuan.Add(item);
+                }
+            }
+            ViewBag.ViecTrongNgay = _ViecTrongNgay;
+            ViewBag.ViecTrongTuan = _ViecTrongTuan;
+
             return View(mytimesheet);
         }
 
@@ -75,8 +257,58 @@ namespace DMCTimesheet.Controllers
                 || s.Admin == logUser.UserID
                 ).ToList();
 
+                #region GetData
+
+                List<string[]> group = new List<string[]>();    //Nhóm công việc theo workgroup
+                List<string[]> listIdCV = new List<string[]>(); //List ID công việc để lọc
+                foreach (var item in db.C07_WorkType.ToList())
+                {
+                    string[] itm = new string[2];
+                    itm[0] = item.GroupId.ToString();
+                    itm[1] = item.WorkName;
+                    group.Add(itm);
+
+                    string[] idw = new string[2];
+                    idw[0] = item.ID.ToString();
+                    idw[1] = item.WorkName;
+                    listIdCV.Add(idw);
+                }
+                ViewBag.group = group;
+                ViewBag.listIdCV = listIdCV;
+
+
+                List<C08_Timesheet> mytimesheet = db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).ToList();
+
+                //Công việc trong ngày
+                List<DMCTimesheet.Models.C08_Timesheet> _ViecTrongNgay = new List<DMCTimesheet.Models.C08_Timesheet>();
+                foreach (var item in mytimesheet)
+                {
+                    //int value = DateTime.Compare(DateTime.Parse(item.RecordDate.ToString()), DateTime.Today);
+                    if (DateTime.Today == DateTime.Parse(item.RecordDate.ToString()))
+                    {
+                        _ViecTrongNgay.Add(item);
+                    }
+                }
+                //Công việc trong tuần
+                List<DMCTimesheet.Models.C08_Timesheet> _ViecTrongTuan = new List<DMCTimesheet.Models.C08_Timesheet>();
+
+                DateTime startDate = MakeDate(7, false);
+
+                foreach (var item in mytimesheet)
+                {
+                    int value = DateTime.Compare(DateTime.Parse(item.RecordDate.ToString()), startDate);
+                    if (value <= 7)
+                    {
+                        _ViecTrongTuan.Add(item);
+                    }
+                }
+                ViewBag.ViecTrongNgay = _ViecTrongNgay;
+                ViewBag.ViecTrongTuan = _ViecTrongTuan;
+
+                #endregion
+
                 ViewBag.WorkAlert = "Bạn cần có dự án khi chọn Nhóm hoạt động này";
-                return View("MemberTimesheet", db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).ToList());
+                return View("TimesheetManage", db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).ToList());
             }
             try
             {
@@ -97,9 +329,61 @@ namespace DMCTimesheet.Controllers
                     || s.LegalManager == logUser.UserID
                     || s.Admin == logUser.UserID
                     ).ToList();
+                    #region GetData
+
+                    List<string[]> group = new List<string[]>();    //Nhóm công việc theo workgroup
+                    List<string[]> listIdCV = new List<string[]>(); //List ID công việc để lọc
+                    foreach (var item in db.C07_WorkType.ToList())
+                    {
+                        string[] itm = new string[2];
+                        itm[0] = item.GroupId.ToString();
+                        itm[1] = item.WorkName;
+                        group.Add(itm);
+
+                        string[] idw = new string[2];
+                        idw[0] = item.ID.ToString();
+                        idw[1] = item.WorkName;
+                        listIdCV.Add(idw);
+                    }
+                    ViewBag.group = group;
+                    ViewBag.listIdCV = listIdCV;
+
+
+                    List<C08_Timesheet> mytimesheet = db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).ToList();
+
+                    //Công việc trong ngày
+                    List<DMCTimesheet.Models.C08_Timesheet> _ViecTrongNgay = new List<DMCTimesheet.Models.C08_Timesheet>();
+                    foreach (var item in mytimesheet)
+                    {
+                        //int value = DateTime.Compare(DateTime.Parse(item.RecordDate.ToString()), DateTime.Today);
+                        if (DateTime.Today == DateTime.Parse(item.RecordDate.ToString()))
+                        {
+                            _ViecTrongNgay.Add(item);
+                        }
+                    }
+                    //Công việc trong tuần
+                    List<DMCTimesheet.Models.C08_Timesheet> _ViecTrongTuan = new List<DMCTimesheet.Models.C08_Timesheet>();
+                    DateTime startDate = MakeDate(7, false);
+
+                    foreach (var item in mytimesheet)
+                    {
+                        int value = DateTime.Compare(DateTime.Parse(item.RecordDate.ToString()), startDate);
+                        if (value <= 7)
+                        {
+                            _ViecTrongTuan.Add(item);
+                        }
+                    }
+                    ViewBag.ViecTrongNgay = _ViecTrongNgay;
+                    ViewBag.ViecTrongTuan = _ViecTrongTuan;
+
+                    #endregion
 
                     ViewBag.WorkAlert = "Số giờ làm việc trong ngày đã nhiều hơn 8h, cần chọn qua ô tăng ca";
-                    return View("MemberTimesheet", db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).ToList());
+
+
+
+
+                    return View("TimesheetManage", db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).ToList());
                 }
                 else
                 {
@@ -127,7 +411,7 @@ namespace DMCTimesheet.Controllers
                 }
                 //Session["OverHourError"] = "Lưu thành công";
                 ViewBag.WorkAlert = "Lưu thành công";
-                return RedirectToAction("MemberTimesheet");
+                return RedirectToAction("TimesheetManage");
             }
             catch (Exception ex)
             {
@@ -143,9 +427,57 @@ namespace DMCTimesheet.Controllers
                 || s.LegalManager == logUser.UserID
                 || s.Admin == logUser.UserID
                 ).ToList();
+                #region GetData
 
+                List<string[]> group = new List<string[]>();    //Nhóm công việc theo workgroup
+                List<string[]> listIdCV = new List<string[]>(); //List ID công việc để lọc
+                foreach (var item in db.C07_WorkType.ToList())
+                {
+                    string[] itm = new string[2];
+                    itm[0] = item.GroupId.ToString();
+                    itm[1] = item.WorkName;
+                    group.Add(itm);
+
+                    string[] idw = new string[2];
+                    idw[0] = item.ID.ToString();
+                    idw[1] = item.WorkName;
+                    listIdCV.Add(idw);
+                }
+                ViewBag.group = group;
+                ViewBag.listIdCV = listIdCV;
+
+
+                List<C08_Timesheet> mytimesheet = db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).ToList();
+
+                //Công việc trong ngày
+                List<DMCTimesheet.Models.C08_Timesheet> _ViecTrongNgay = new List<DMCTimesheet.Models.C08_Timesheet>();
+
+                foreach (var item in mytimesheet)
+                {
+                    //int value = DateTime.Compare(DateTime.Parse(item.RecordDate.ToString()), DateTime.Today);
+                    if (DateTime.Today == DateTime.Parse(item.RecordDate.ToString()))
+                    {
+                        _ViecTrongNgay.Add(item);
+                    }
+                }
+                //Công việc trong tuần
+                List<DMCTimesheet.Models.C08_Timesheet> _ViecTrongTuan = new List<DMCTimesheet.Models.C08_Timesheet>();
+                DateTime startDate = MakeDate(7, false);
+
+                foreach (var item in mytimesheet)
+                {
+                    int value = DateTime.Compare(DateTime.Parse(item.RecordDate.ToString()), startDate);
+                    if (value <= 7)
+                    {
+                        _ViecTrongTuan.Add(item);
+                    }
+                }
+                ViewBag.ViecTrongNgay = _ViecTrongNgay;
+                ViewBag.ViecTrongTuan = _ViecTrongTuan;
+
+                #endregion
                 ViewBag.WorkAlert = "Lưu công việc thất bại do lỗi " + ex.Message;
-                return View("MemberTimesheet", db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).ToList());
+                return View("TimesheetManage", db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).ToList());
             }
 
         }
@@ -216,7 +548,7 @@ namespace DMCTimesheet.Controllers
                     db.SaveChanges();
                 }
                 // return RedirectToAction("UserPage", "Home");
-                return RedirectToAction("MemberTimesheet");
+                return RedirectToAction("TimesheetManage");
             }
             catch (Exception ex)
             {
@@ -264,7 +596,7 @@ namespace DMCTimesheet.Controllers
                     db.C08_Timesheet.Remove(c15_TimeSheet);
                     db.SaveChanges();
                 }
-                return RedirectToAction("MemberTimesheet");
+                return RedirectToAction("TimesheetManage");
             }
             catch (Exception ex)
             {
@@ -301,7 +633,7 @@ namespace DMCTimesheet.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateWorktype(string WorkName, int WorkGroup)
+        public ActionResult CreateWorktype(string WorkName, int GroupId)
         {
             try
             {
@@ -311,7 +643,7 @@ namespace DMCTimesheet.Controllers
                     C07_WorkType item = new C07_WorkType
                     {
                         WorkName = WorkName,
-                        WorkGroup = WorkGroup
+                        GroupId = GroupId
                     };
                     db.C07_WorkType.Add(item);
                     db.SaveChanges();
@@ -341,7 +673,7 @@ namespace DMCTimesheet.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditWorktype(int Id, string WorkName, int? WorkGroup)
+        public ActionResult EditWorktype(int Id, string WorkName, int GroupId)
         {
             try
             {
@@ -355,7 +687,7 @@ namespace DMCTimesheet.Controllers
                         return View();
                     }
                     item.WorkName = WorkName;
-                    item.WorkGroup = WorkGroup ?? 1;
+                    item.GroupId = GroupId;
                     db.Entry(item).State = EntityState.Modified;
                     db.SaveChanges();
                 }

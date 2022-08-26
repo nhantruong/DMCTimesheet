@@ -1,0 +1,35 @@
+﻿@model DMCTimesheet.Models.C19_Workgroup
+@{
+    ViewBag.Title = "WorkGroup delete Page";
+}
+<h3>Xóa Workgroup - <b class="text-primary">@Model.MaNhom - @Model.GroupName</b></h3>
+<div class="modal-body">
+    @using (Html.BeginForm("DeleteWorkGroupConfirmed", "Setting", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <form>
+            <div class="form-group row text-left">
+                <lable hidden class="control-label col-md-3 col-sm-3 col-xs-3">Id</lable>
+                <input type="number" class="form-control col-md-7 col-sm-9 col-xs-9" hidden readonly name="GroupId" value="@Model.GroupId" />
+            </div>
+            <div class="form-group row text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Mã nhóm</lable>
+                <input type="number" disabled class="form-control col-md-7 col-sm-9 col-xs-9" name="MaNhom" placeholder="" required="" value="@Model.MaNhom" />
+            </div>
+            <div class="form-group row text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên Nhóm</lable>
+                <input type="text" disabled class="form-control col-md-7 col-sm-9 col-xs-9" name="GroupName" placeholder="" required="" value="@Model.GroupName" />
+            </div>
+            <div class="form-group text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
+                <input type="submit" value="Xóa nhóm" class="btn btn-danger col-md-1" />
+            </div>
+        </form>
+    }
+</div>
+<div class="modal-footer">
+    <div>
+        <p class="text-danger">@ViewBag.Error</p>
+    </div>
+    <div class="clearfix"></div>
+</div>

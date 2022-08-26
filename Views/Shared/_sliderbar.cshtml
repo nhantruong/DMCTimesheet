@@ -99,7 +99,8 @@
             <li>
                 <a><i class="fa fa-table"></i> CÔNG VIỆC <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
-                    <li>@Html.ActionLink("Timesheet hàng ngày", "MemberTimesheet", "Timesheet")</li>
+                    @*<li>@Html.ActionLink("Timesheet hàng ngày", "MemberTimesheet", "Timesheet")</li>*@
+                    <li>@Html.ActionLink("Timesheet hàng ngày", "TimesheetManage", "Timesheet")</li>
                     <li>@Html.ActionLink("Thống kê theo dự án", "ProjectTimesheet", "Timesheet")</li>
                 </ul>
 
@@ -110,14 +111,19 @@
                 <li>
                     <a><i class="fa fa-gear"></i> CÀI ĐẶT <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                        <li>@Html.ActionLink("Loại công việc", "Worktype", "Setting")</li>
+                        <li>@Html.ActionLink("Công việc và Nhóm công việc", "Worktype", "Setting")</li>
                         <li>@Html.ActionLink("Chủ đầu tư", "Ownerlist", "Setting")</li>
-                        @*<li>@Html.ActionLink("Thầu phụ thiết kế", "Designer", "Project")</li>
-                            <li>@Html.ActionLink("Điều chỉnh dịch vụ NTP", "AssignServices", "Project")</li>
-                            <li>@Html.ActionLink("Dịch vụ", "Services", "Project")</li>
-                            <li>@Html.ActionLink("Tình trạng", "Status", "Project")</li>
-                            <li>@Html.ActionLink("Loại hình dự án", "ProjectType", "Project")</li>
-                            <li>@Html.ActionLink("Địa điểm", "Locations", "Project")</li>*@
+                        <li>@Html.ActionLink("Thầu phụ thiết kế", "SubContractors", "Setting")</li>
+
+                        <li>@Html.ActionLink("Tình trạng Dự án", "StatusList", "Setting")</li>
+                        <li>@Html.ActionLink("Chức danh", "PositionList", "Setting")</li>
+
+                        <li>@Html.ActionLink("Loại hình dự án", "ProjectType", "Setting")</li>
+                        <li>@Html.ActionLink("Địa điểm", "Locations", "Setting")</li>
+
+
+                        @*<li>@Html.ActionLink("Điều chỉnh dịch vụ NTP", "AssignServices", "Setting")</li>
+        <li>@Html.ActionLink("Dịch vụ", "Services", "Setting")</li>*@
 
                     </ul>
                     <a class="text-info"></a>

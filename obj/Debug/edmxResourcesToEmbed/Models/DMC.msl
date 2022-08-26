@@ -82,18 +82,10 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="C07_WorkType">
-      <EntityTypeMapping TypeName="DMCtimesheet.Models.C07_WorkType">
-        <MappingFragment StoreEntitySet="07_WorkType">
-          <ScalarProperty Name="ID" ColumnName="ID" />
-          <ScalarProperty Name="WorkName" ColumnName="WorkName" />
-          <ScalarProperty Name="WorkGroup" ColumnName="WorkGroup" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="C08_Timesheet">
       <EntityTypeMapping TypeName="DMCtimesheet.Models.C08_Timesheet">
         <MappingFragment StoreEntitySet="08_Timesheet">
+          <ScalarProperty Name="isConfirm" ColumnName="isConfirm" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
           <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -190,6 +182,7 @@
     <EntitySetMapping Name="C16_Status">
       <EntityTypeMapping TypeName="DMCtimesheet.Models.C16_Status">
         <MappingFragment StoreEntitySet="16_Status">
+          <ScalarProperty Name="ColorCode" ColumnName="ColorCode" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="StatusName" ColumnName="StatusName" />
         </MappingFragment>
@@ -213,19 +206,41 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="C19_Workgroup">
-      <EntityTypeMapping TypeName="DMCtimesheet.Models.C19_Workgroup">
-        <MappingFragment StoreEntitySet="19_Workgroup">
-          <ScalarProperty Name="GroupName" ColumnName="GroupName" />
-          <ScalarProperty Name="Id" ColumnName="Id" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="C20_Stage">
       <EntityTypeMapping TypeName="DMCtimesheet.Models.C20_Stage">
         <MappingFragment StoreEntitySet="20_Stage">
           <ScalarProperty Name="StageName" ColumnName="StageName" />
           <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="C99_ActivityLog">
+      <EntityTypeMapping TypeName="DMCtimesheet.Models.C99_ActivityLog">
+        <MappingFragment StoreEntitySet="99_ActivityLog">
+          <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+          <ScalarProperty Name="Details" ColumnName="Details" />
+          <ScalarProperty Name="Scope" ColumnName="Scope" />
+          <ScalarProperty Name="MemberId" ColumnName="MemberId" />
+          <ScalarProperty Name="DatetimeCreate" ColumnName="DatetimeCreate" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="C07_WorkType">
+      <EntityTypeMapping TypeName="DMCtimesheet.Models.C07_WorkType">
+        <MappingFragment StoreEntitySet="07_WorkType">
+          <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+          <ScalarProperty Name="WorkName" ColumnName="WorkName" />
+          <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="C19_Workgroup">
+      <EntityTypeMapping TypeName="DMCtimesheet.Models.C19_Workgroup">
+        <MappingFragment StoreEntitySet="19_Workgroup">
+          <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+          <ScalarProperty Name="MaNhom" ColumnName="MaNhom" />
+          <ScalarProperty Name="GroupId" ColumnName="GroupId" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -158,19 +158,26 @@
                         <td class="col-sm-1 text-center">@item.Year</td>
                         <td class="col-md-1"><b>@item.MaDuAn</b></td>
                         <td class="col-md-2">
+
                             <div class="inline">
                                 <b>@Html.ActionLink(item.ProjectOtherName, "Edit", "Project", new { id = item.ProjectID }, new { @class = "text-primary" })</b>
-                                @if (item.ProjectStatusId == 3)
+                                @if (item.ProjectStatusId != null)
                                 {
-                                    <span class="badge badge-success">@status.FirstOrDefault(s => s.Id == item.ProjectStatusId).StatusName</span>
-                                }
-                                else if (item.ProjectStatusId == 4)
-                                {
-                                    <span class="badge badge-warning">@status.FirstOrDefault(s => s.Id == item.ProjectStatusId).StatusName</span>
-                                }
-                                else
-                                {
-                                    <span class="badge  badge-danger">@status.FirstOrDefault(s => s.Id == item.ProjectStatusId).StatusName</span>
+                                    string color = status.FirstOrDefault(s => s.Id == item.ProjectStatusId).ColorCode;
+                                    <span class="@color">@status.FirstOrDefault(s => s.Id == item.ProjectStatusId).StatusName</span>
+                                    @*if (item.ProjectStatusId == 3)
+                                    {
+                                        string color = status.FirstOrDefault(s => s.Id == item.ProjectStatusId).ColorCode;
+                                        <span class="@color">@status.FirstOrDefault(s => s.Id == item.ProjectStatusId).StatusName</span>
+                                    }
+                                    else if (item.ProjectStatusId == 4)
+                                    {
+                                        <span class="badge badge-warning">@status.FirstOrDefault(s => s.Id == item.ProjectStatusId).StatusName</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge badge-danger">@status.FirstOrDefault(s => s.Id == item.ProjectStatusId).StatusName</span>
+                                    }*@
                                 }
                             </div>
 

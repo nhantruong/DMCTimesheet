@@ -86,7 +86,7 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="WorkName" Type="nvarchar" MaxLength="200" />
-          <Property Name="WorkGroup" Type="int" Nullable="false" />
+          <Property Name="GroupId" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="08_Timesheet">
           <Key>
@@ -100,6 +100,7 @@
           <Property Name="Hour" Type="float" />
           <Property Name="OT" Type="float" />
           <Property Name="Description" Type="nvarchar(max)" />
+          <Property Name="isConfirm" Type="bit" />
         </EntityType>
         <EntityType Name="09_ProjectSubCon">
           <Key>
@@ -182,6 +183,7 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="StatusName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ColorCode" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="17_Position">
           <Key>
@@ -201,9 +203,10 @@
         </EntityType>
         <EntityType Name="19_Workgroup">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="GroupId" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GroupId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MaNhom" Type="int" />
           <Property Name="GroupName" Type="nvarchar" MaxLength="150" />
         </EntityType>
         <EntityType Name="20_Stage">
@@ -212,6 +215,17 @@
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="StageName" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="99_ActivityLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DatetimeCreate" Type="datetime" />
+          <Property Name="MemberId" Type="int" />
+          <Property Name="Scope" Type="nvarchar" MaxLength="50" />
+          <Property Name="Details" Type="nvarchar" MaxLength="250" />
+          <Property Name="GroupId" Type="int" />
         </EntityType>
         <Association Name="FK_03_ProjectMembers_01_Projects">
           <End Role="01_Projects" Type="Self.01_Projects" Multiplicity="0..1" />
@@ -266,10 +280,10 @@
           <End Role="07_WorkType" Type="Self.07_WorkType" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="19_Workgroup">
-              <PropertyRef Name="Id" />
+              <PropertyRef Name="GroupId" />
             </Principal>
             <Dependent Role="07_WorkType">
-              <PropertyRef Name="WorkGroup" />
+              <PropertyRef Name="GroupId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -390,6 +404,7 @@
           <EntitySet Name="18_Descipline" EntityType="Self.18_Descipline" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="19_Workgroup" EntityType="Self.19_Workgroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="20_Stage" EntityType="Self.20_Stage" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="99_ActivityLog" EntityType="Self.99_ActivityLog" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_03_ProjectMembers_01_Projects" Association="Self.FK_03_ProjectMembers_01_Projects">
             <End Role="01_Projects" EntitySet="01_Projects" />
             <End Role="03_ProjectMembers" EntitySet="03_ProjectMembers" />
@@ -535,16 +550,6 @@
           <NavigationProperty Name="C02_Members" Relationship="Self.FK_06_UserPermisRelationship_02_Members" FromRole="C06_UserPermisRelationship" ToRole="C02_Members" />
           <NavigationProperty Name="C04_Permission" Relationship="Self.FK_06_UserPermisRelationship_04_Permission" FromRole="C06_UserPermisRelationship" ToRole="C04_Permission" />
         </EntityType>
-        <EntityType Name="C07_WorkType">
-          <Key>
-            <PropertyRef Name="ID" />
-          </Key>
-          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="WorkName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
-          <Property Name="WorkGroup" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="C08_Timesheet" Relationship="Self.FK_08_Timesheet_07_WorkType" FromRole="C07_WorkType" ToRole="C08_Timesheet" />
-          <NavigationProperty Name="C19_Workgroup" Relationship="DMCtimesheet.Models.FK_07_WorkType_19_Workgroup" FromRole="C07_WorkType" ToRole="C19_Workgroup" />
-        </EntityType>
         <EntityType Name="C08_Timesheet">
           <Key>
             <PropertyRef Name="Id" />
@@ -559,7 +564,8 @@
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="C01_Projects" Relationship="Self.FK_08_Timesheet_01_Projects" FromRole="C08_Timesheet" ToRole="C01_Projects" />
           <NavigationProperty Name="C02_Members" Relationship="Self.FK_08_Timesheet_02_Members" FromRole="C08_Timesheet" ToRole="C02_Members" />
-          <NavigationProperty Name="C07_WorkType" Relationship="Self.FK_08_Timesheet_07_WorkType" FromRole="C08_Timesheet" ToRole="C07_WorkType" />
+          <Property Name="isConfirm" Type="Boolean" />
+          <NavigationProperty Name="C07_WorkType" Relationship="DMCtimesheet.Models.FK_08_Timesheet_07_WorkType" FromRole="C08_Timesheet" ToRole="C07_WorkType" />
         </EntityType>
         <EntityType Name="C09_ProjectSubCon">
           <Key>
@@ -649,6 +655,7 @@
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="StatusName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ColorCode" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="C17_Position">
           <Key>
@@ -762,18 +769,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_08_Timesheet_07_WorkType">
-          <End Role="C07_WorkType" Type="Self.C07_WorkType" Multiplicity="0..1" />
-          <End Role="C08_Timesheet" Type="Self.C08_Timesheet" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="C07_WorkType">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="C08_Timesheet">
-              <PropertyRef Name="WorkType" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_09_ProjectSubCon_12_SubContractor">
           <End Role="C12_SubContractor" Type="Self.C12_SubContractor" Multiplicity="0..1" />
           <End Role="C09_ProjectSubCon" Type="Self.C09_ProjectSubCon" Multiplicity="*" />
@@ -817,7 +812,6 @@
           <EntitySet Name="C04_Permission" EntityType="Self.C04_Permission" />
           <EntitySet Name="C05_PermissionDetail" EntityType="Self.C05_PermissionDetail" />
           <EntitySet Name="C06_UserPermisRelationship" EntityType="Self.C06_UserPermisRelationship" />
-          <EntitySet Name="C07_WorkType" EntityType="Self.C07_WorkType" />
           <EntitySet Name="C08_Timesheet" EntityType="Self.C08_Timesheet" />
           <EntitySet Name="C09_ProjectSubCon" EntityType="Self.C09_ProjectSubCon" />
           <EntitySet Name="C10_Owner" EntityType="Self.C10_Owner" />
@@ -861,10 +855,6 @@
             <End Role="C04_Permission" EntitySet="C04_Permission" />
             <End Role="C06_UserPermisRelationship" EntitySet="C06_UserPermisRelationship" />
           </AssociationSet>
-          <AssociationSet Name="FK_08_Timesheet_07_WorkType" Association="Self.FK_08_Timesheet_07_WorkType">
-            <End Role="C07_WorkType" EntitySet="C07_WorkType" />
-            <End Role="C08_Timesheet" EntitySet="C08_Timesheet" />
-          </AssociationSet>
           <AssociationSet Name="FK_09_ProjectSubCon_12_SubContractor" Association="Self.FK_09_ProjectSubCon_12_SubContractor">
             <End Role="C12_SubContractor" EntitySet="C12_SubContractor" />
             <End Role="C09_ProjectSubCon" EntitySet="C09_ProjectSubCon" />
@@ -877,18 +867,53 @@
             <End Role="C14_Services" EntitySet="C14_Services" />
             <End Role="C15_SubConServices" EntitySet="C15_SubConServices" />
           </AssociationSet>
+          <EntitySet Name="C20_Stage" EntityType="DMCtimesheet.Models.C20_Stage" />
+          <EntitySet Name="C99_ActivityLog" EntityType="DMCtimesheet.Models.C99_ActivityLog" />
+          <EntitySet Name="C07_WorkType" EntityType="DMCtimesheet.Models.C07_WorkType" />
           <EntitySet Name="C19_Workgroup" EntityType="DMCtimesheet.Models.C19_Workgroup" />
           <AssociationSet Name="FK_07_WorkType_19_Workgroup" Association="DMCtimesheet.Models.FK_07_WorkType_19_Workgroup">
             <End Role="C19_Workgroup" EntitySet="C19_Workgroup" />
             <End Role="C07_WorkType" EntitySet="C07_WorkType" />
           </AssociationSet>
-          <EntitySet Name="C20_Stage" EntityType="DMCtimesheet.Models.C20_Stage" />
+          <AssociationSet Name="FK_08_Timesheet_07_WorkType" Association="DMCtimesheet.Models.FK_08_Timesheet_07_WorkType">
+            <End Role="C07_WorkType" EntitySet="C07_WorkType" />
+            <End Role="C08_Timesheet" EntitySet="C08_Timesheet" />
+          </AssociationSet>
         </EntityContainer>
-        <EntityType Name="C19_Workgroup">
+        <EntityType Name="C20_Stage">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="StageName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="C99_ActivityLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DatetimeCreate" Type="DateTime" Precision="3" />
+          <Property Name="MemberId" Type="Int32" />
+          <Property Name="Scope" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Details" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="GroupId" Type="Int32" />
+        </EntityType>
+        <EntityType Name="C07_WorkType">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="WorkName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="GroupId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="C19_Workgroup" Relationship="DMCtimesheet.Models.FK_07_WorkType_19_Workgroup" FromRole="C07_WorkType" ToRole="C19_Workgroup" />
+          <NavigationProperty Name="C08_Timesheet" Relationship="DMCtimesheet.Models.FK_08_Timesheet_07_WorkType" FromRole="C07_WorkType" ToRole="C08_Timesheet" />
+        </EntityType>
+        <EntityType Name="C19_Workgroup">
+          <Key>
+            <PropertyRef Name="GroupId" />
+          </Key>
+          <Property Name="GroupId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MaNhom" Type="Int32" />
           <Property Name="GroupName" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="C07_WorkType" Relationship="DMCtimesheet.Models.FK_07_WorkType_19_Workgroup" FromRole="C19_Workgroup" ToRole="C07_WorkType" />
         </EntityType>
@@ -897,20 +922,25 @@
           <End Type="DMCtimesheet.Models.C07_WorkType" Role="C07_WorkType" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="C19_Workgroup">
-              <PropertyRef Name="Id" />
+              <PropertyRef Name="GroupId" />
             </Principal>
             <Dependent Role="C07_WorkType">
-              <PropertyRef Name="WorkGroup" />
+              <PropertyRef Name="GroupId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityType Name="C20_Stage">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="StageName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-        </EntityType>
+        <Association Name="FK_08_Timesheet_07_WorkType">
+          <End Type="DMCtimesheet.Models.C07_WorkType" Role="C07_WorkType" Multiplicity="0..1" />
+          <End Type="DMCtimesheet.Models.C08_Timesheet" Role="C08_Timesheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C07_WorkType">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="C08_Timesheet">
+              <PropertyRef Name="WorkType" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -998,18 +1028,10 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="C07_WorkType">
-            <EntityTypeMapping TypeName="DMCtimesheet.Models.C07_WorkType">
-              <MappingFragment StoreEntitySet="07_WorkType">
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="WorkName" ColumnName="WorkName" />
-                <ScalarProperty Name="WorkGroup" ColumnName="WorkGroup" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="C08_Timesheet">
             <EntityTypeMapping TypeName="DMCtimesheet.Models.C08_Timesheet">
               <MappingFragment StoreEntitySet="08_Timesheet">
+                <ScalarProperty Name="isConfirm" ColumnName="isConfirm" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="RecordDate" ColumnName="RecordDate" />
                 <ScalarProperty Name="MemberID" ColumnName="MemberID" />
@@ -1106,6 +1128,7 @@
           <EntitySetMapping Name="C16_Status">
             <EntityTypeMapping TypeName="DMCtimesheet.Models.C16_Status">
               <MappingFragment StoreEntitySet="16_Status">
+                <ScalarProperty Name="ColorCode" ColumnName="ColorCode" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="StatusName" ColumnName="StatusName" />
               </MappingFragment>
@@ -1129,19 +1152,41 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="C19_Workgroup">
-            <EntityTypeMapping TypeName="DMCtimesheet.Models.C19_Workgroup">
-              <MappingFragment StoreEntitySet="19_Workgroup">
-                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="C20_Stage">
             <EntityTypeMapping TypeName="DMCtimesheet.Models.C20_Stage">
               <MappingFragment StoreEntitySet="20_Stage">
                 <ScalarProperty Name="StageName" ColumnName="StageName" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C99_ActivityLog">
+            <EntityTypeMapping TypeName="DMCtimesheet.Models.C99_ActivityLog">
+              <MappingFragment StoreEntitySet="99_ActivityLog">
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+                <ScalarProperty Name="Details" ColumnName="Details" />
+                <ScalarProperty Name="Scope" ColumnName="Scope" />
+                <ScalarProperty Name="MemberId" ColumnName="MemberId" />
+                <ScalarProperty Name="DatetimeCreate" ColumnName="DatetimeCreate" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C07_WorkType">
+            <EntityTypeMapping TypeName="DMCtimesheet.Models.C07_WorkType">
+              <MappingFragment StoreEntitySet="07_WorkType">
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+                <ScalarProperty Name="WorkName" ColumnName="WorkName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C19_Workgroup">
+            <EntityTypeMapping TypeName="DMCtimesheet.Models.C19_Workgroup">
+              <MappingFragment StoreEntitySet="19_Workgroup">
+                <ScalarProperty Name="GroupName" ColumnName="GroupName" />
+                <ScalarProperty Name="MaNhom" ColumnName="MaNhom" />
+                <ScalarProperty Name="GroupId" ColumnName="GroupId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

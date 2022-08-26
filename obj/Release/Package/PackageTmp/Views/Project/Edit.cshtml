@@ -83,9 +83,9 @@
                 }
                 <option value=""></option>
                 @*<option value="">-Chưa chọn-</option>*@
-                @foreach (var item in status)
+                @foreach (var item in stage)
                 {
-                    <option value=@item.Id>@item.StatusName</option>
+                    <option value=@item.Id>@item.StageName</option>
                 }
             </select>
         </div>
@@ -129,9 +129,7 @@
                 @if (Model.ProjectStatusId != null)
                 {
                     <option value=@Model.ProjectStatusId>@status.FirstOrDefault(s => s.Id == Model.ProjectStatusId).StatusName</option>
-                }
-                <option value=""></option>
-                @*<option value="">-Chưa chọn-</option>*@
+                }              
                 @foreach (var item in status)
                 {
                     <option value=@item.Id>@item.StatusName</option>

@@ -7,11 +7,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="icon" href="~/UserStyles/images/favicon.ico" type="image/ico" />
 
-    <title>@ViewBag.Title - Coteccons BIM Apps</title>
+    <title>@ViewBag.Title - Coteccons DMC Apps</title>
     @Styles.Render("~/Content/css")
     @Styles.Render("~/Content")
     @Scripts.Render("~/bundles/modernizr")
     <!-- Bootstrap -->
+    <link href="~/Content/cscpda-scrollbar.css" rel="stylesheet" />
     @*<link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">*@
 
     @*Font Awesome*@
@@ -31,7 +32,7 @@
     <link href="~/UserStyles/jqvmap/dist/jqvmap.min.css" rel="stylesheet" />
     @*bootstrap-daterangepicker*@
     <link href="~/UserStyles/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
-    
+
     <!-- Bootstrap Colorpicker -->
     <link href="~/UserStyles/mjolnic-bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css" rel="stylesheet">
     <link href="~/UserStyles/cropper/dist/cropper.min.css" rel="stylesheet">
@@ -96,8 +97,12 @@
                             @*<h2 class="text-warning">@Html.ActionLink(loginUser.Sortname, "Details", "Member", new { id = loginUser.BIMstaffID }, new { @class = "text-center text-warning" })</h2>*@
                         </div>
                     </div>
+
+
                     <hr />
                     <div class="clearfix"></div>
+
+
                     @* sidebar menu -->*@
                     @Html.Partial("_Sliderbar")
                     @*< /sidebar menu glyphicon glyphicon-off -->*@
@@ -170,7 +175,7 @@
     <script src="~/UserStyles/bootstrap-daterangepicker/daterangepicker.js"></script>
     <!-- ECharts -->
     <script src="~/UserStyles/echarts/dist/echarts.min.js"></script>
-    
+
     <!-- Bootstrap Colorpicker -->
     <script src="~/UserStyles/mjolnic-bootstrap-colorpicker/dist/js/bootstrap-colorpicker.min.js"></script>
 

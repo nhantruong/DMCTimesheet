@@ -1,0 +1,184 @@
+﻿@model DMCTimesheet.Models.C12_SubContractor
+@{
+    ViewBag.Title = "Edit Design Constractor Page";
+    string updateInfo = ViewBag.SaveContent;
+    List<DMCTimesheet.Models.C11_Location> Locations = ViewBag.Location as List<DMCTimesheet.Models.C11_Location>;
+
+    string arc = Model.ARC != null ? "checked" : "";
+    string str = Model.STR != null ? "checked" : "";
+    string mep = Model.MEP != null ? "checked" : "";
+    string interior = Model.Interior != null ? "checked" : "";
+    string infra = Model.Infrastructure != null ? "checked" : "";
+    string dtm = Model.DTM != null ? "checked" : "";
+    string render = Model.Render != null ? "checked" : "";
+    string land = Model.Landscape != null ? "checked" : "";
+
+}
+
+<div class="modal-body">
+    @using (Html.BeginForm("EditNTP", "Setting", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <form>
+            @* WorkType *@
+            <div class="form-group row text-left text-dark">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên đầy đủ của NTP</lable>
+                <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9 text-primary" name="ContractorName" placeholder="Tên theo Hợp đồng" required="" value="@Model.ContractorName" />
+            </div>
+            <div class="form-group row text-left text-dark">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên rút gọn</lable>
+                <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9 text-primary" name="ShortName" placeholder="Tên rút gọn" value="@Model.ShortName" />
+            </div>
+
+            <div class="form-group row text-left text-dark">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Vị trí</lable>
+                <select name="ContractorLocation" class="form-control col-md-7 col-sm-9 col-xs-9">
+                    @if (Model.ContractorLocation != null)
+                    {
+                        <option value="@Model.ContractorLocation"></option>
+                    }
+                    else
+                    {
+                        <option value=""></option>
+                    }
+                    @foreach (var item in Locations)
+                    {
+                        <option value=@item.LocationId>@item.LocationName</option>
+                    }
+                </select>
+            </div>
+
+            <br />
+            <div class="clearfix"></div>
+
+            <div class="form-group row text-left text-dark">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Dịch vụ thiết kế cung cấp</lable>
+            </div>
+            <div class="col-md-12 form-group inline text-primary">
+                <div class="col-md-3">
+                    <div class="form-check">
+                        @if (Model.ARC != null)
+                        {
+                            <input type="checkbox" class="form-check-input" name="ARC" value="true" checked>
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="form-check-input" name="ARC" value="true">
+                        }
+                        <label class="form-check-label" for="ARC">Architecture</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-check">
+                        @if (Model.STR != null)
+                        {
+                            <input type="checkbox" class="form-check-input" name="STR" value="true" checked>
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="form-check-input" name="STR" value="true">
+                        }
+
+                        <label class="form-check-label" for="STR">Structure</label>
+
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-check">
+                        @if (Model.MEP != null)
+                        {
+                            <input type="checkbox" class="form-check-input" name="MEP" value="true" checked>
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="form-check-input" name="MEP" value="true">
+                        }
+
+                        <label class="form-check-label" for="MEP">MEP</label>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-check">
+                        @if (Model.Interior != null)
+                        {
+                            <input type="checkbox" class="form-check-input" name="Interior" value="true" checked>
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="form-check-input" name="Interior" value="true">
+                        }
+                        <label class="form-check-label" for="Interior">Interior</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="clearfix"></div>
+
+            <div class="col-md-12 form-group inline text-primary">
+                <div class="col-md-3">
+                    <div class="form-check">
+                        @if (Model.Infrastructure != null)
+                        {
+                            <input type="checkbox" class="form-check-input" name="Infrastructure" value="true" checked>
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="form-check-input" name="Infrastructure" value="true">
+                        }
+
+                        <label class="form-check-label" for="Infrastructure">Infrastructure</label>
+
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-check">
+                        @if (Model.DTM != null)
+                        {
+                            <input type="checkbox" class="form-check-input" name="DTM" value="true" checked>
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="form-check-input" name="DTM" value="true">
+                        }
+                        <label class="form-check-label" for="DTM">DTM</label>
+
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-check">
+                        @if (Model.Render != null)
+                        {
+                            <input type="checkbox" class="form-check-input" name="Render" value="true" checked>
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="form-check-input" name="Render" value="true">
+                        }
+                        <label class="form-check-label" for="Render">Render</label>
+
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-check">
+                        @if (Model.Landscape != null)
+                        {
+                            <input type="checkbox" class="form-check-input" name="Landscape" value="true" checked>
+                        }
+                        else
+                        {
+                            <input type="checkbox" class="form-check-input" name="Landscape" value="true">
+                        }
+                        <label class="form-check-label" for="Landscape">Landscape</label>
+                    </div>
+                </div>
+            </div>
+
+            <br />
+            <div class="clearfix"></div>
+            <div class="form-group text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
+                <input type="submit" value="Cập nhật thông tin" class="btn btn-success col-md-7" />
+            </div>
+        </form>
+    }
+</div>

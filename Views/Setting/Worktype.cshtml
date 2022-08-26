@@ -3,14 +3,17 @@
     ViewBag.Title = "WorkType Page";
     //Layout = "~/Views/Shared/_AdminLayout.cshtml";
     string updateInfo = ViewBag.SaveContent;
-    List<DMCTimesheet.Models.C07_WorkType> Worklist = ViewBag.Worklist as List<DMCTimesheet.Models.C07_WorkType>;
+    List<DMCTimesheet.Models.C19_Workgroup> WorkGroup = ViewBag.WorkGroup as List<DMCTimesheet.Models.C19_Workgroup>;
+    int stt = 1;
 }
-<h3>DANH MỤC CÔNG VIỆC</h3>
-@* Modal create new *@
+<h3 class="text-primary">DANH MỤC QUẢN LÝ CÔNG VIỆC VÀ NHÓM CÔNG VIỆC DÙNG TRONG TIMESHEET</h3>
+<hr />
 <div>
-    <button type="button" class="btn btn-info btn-small text-right" data-toggle="modal" data-target="#form">Thêm mới</button>
+    <p class="text-danger">@ViewBag.SaveContent</p>
 </div>
-@* Form nhập liệu *@
+
+<hr />
+@* Form nhập Công việc mới *@
 <div id="form" class="modal fade" role="dialog">
     <div class="modal-dialog modal-m">
         <div class="modal-content">
@@ -25,24 +28,28 @@
                     <form>
                         @* WorkType *@
                         <div class="form-group row text-left">
-                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên</lable>
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên công việc</lable>
                             <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" name="WorkName" placeholder="" required="" value="" />
                         </div>
                         <div class="form-group row text-left">
                             <lable class="control-label col-md-3 col-sm-3 col-xs-3">Nhóm</lable>
-                            <input type="number" class="form-control col-md-7 col-sm-9 col-xs-9" name="WorkGroup" value="1" />
+                            @*<input type="number" class="form-control col-md-7 col-sm-9 col-xs-9" name="WorkGroup" />*@
+                            <select name="GroupId" class="form-control col-md-7 col-sm-9 col-xs-9">
+                                @foreach (var item in WorkGroup.OrderByDescending(s => s.MaNhom))
+                                {
+                                    <option value="@item.GroupId">[Nhóm @item.MaNhom] - @item.GroupName</option>
+                                }
+                            </select>
                         </div>
                         <div class="form-group text-left">
                             <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
-                            <input type="submit" value="Save" class="btn btn-success col-md-7" />
+                            <input type="submit" value="Tạo công việc" class="btn btn-success col-md-7" />
                         </div>
                     </form>
                 }
             </div>
             <div class="modal-footer">
-                <div>
-                    <p class="text-danger">@ViewBag.SaveContent</p>
-                </div>
+
                 <div class="clearfix"></div>
             </div>
         </div>
@@ -52,83 +59,180 @@
 
 
 
-@* Worktype table *@
-<table class="table table-condensed table-hover tab-pane">
-    <thead class="bg-dark text-white">
-        <tr>
-            <th>Mã công việc</th>
-            <th>Tên công việc</th>
-            <th>Nhóm công việc</th>
-            <th>#</th>
-        </tr>
-    </thead>
 
-    @if (Worklist.Count() != 0)
-    {
-        foreach (var item in Worklist)
-        {
-            <tr class="table tab-content">
-                <td>@item.ID</td>
-                <td><b>@Html.ActionLink(item.WorkName.ToString(), "EditWorktype", "Setting", new { id = item.ID }, new { @class = "text-primary" })</b></td>
-            <td>@item.WorkGroup.ToString()</td>
-            <td class="row">               
-                <div>
-                    @Html.ActionLink(" ", "DeleteWorktype", "Setting", new { id = item.ID }, new { @class = "btn fa fa-remove" })
-                </div>
-            </td>
-        </tr>
-    }
-}
-else
-{
-    <tr>
-        <td>Chưa có danh mục công việc được tạo</td>
-    </tr>
-}
-</table>
+<div class="col-md-12">
+    @* ---------------------------------DANH MỤC NHÓM CONG VIỆC------------------*@
+    <div class="col-md-5">
+        <div class="inline">
+            <div class="col-md-8">
+                <h5 class="text-primary">Danh mục các nhóm công việc [<b class="text-danger">@WorkGroup.Count()</b> nhóm]</h5>
+            </div>
+            <div class="col-md-2">
+                <button type="button" style="margin-top:4px" class="btn btn-danger btn-small" data-toggle="modal" data-target="#modalGroup"><i class="fa fa-plus-circle"></i> Thêm Nhóm Công việc</button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-condensed table-hover tab-pane">
+                <thead class="bg-dark text-white">
+                    <tr>
+                        <th>Mã nhóm</th>
+                        <th>Tên Nhóm</th>
+                        <th>#</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-condensed table-hover table-striped">
+                <tbody>
+                    @if (WorkGroup.Count() != 0)
+                    {
+                        foreach (var item in WorkGroup)
+                        {
+                            <tr class="table tab-content">
+                                <td><b class="text-danger text-center">@item.MaNhom</b></td>
+                                <td><b>@Html.ActionLink(item.GroupName.ToString(), "EditWorkGroup", "Setting", new { id = item.GroupId }, new { @class = "text-primary" })</b></td>
+                                <td class="row">
+                                    <div>
+                                        @Html.ActionLink(" ", "DeleteWorkGroup", "Setting", new { id = item.GroupId }, new { @class = "btn fa fa-remove" })
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>Chưa có nhóm công việc được tạo</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @* ---------------------------------DANH MỤC CONG VIỆC------------------*@
+    <div class="col-md-7">
+        @* Modal create new *@
+        <div class="inline">
+            <div class="col-md-8">
+                <h5 class="text-primary">Danh mục các công việc trong timesheet [<b class="text-danger">@Model.Count()</b> đầu việc]</h5>
+            </div>
+            <div class="col-md-2">
+                <button type="button" style="margin-top:4px" class="btn btn-info btn-small" data-toggle="modal" data-target="#form"><i class="fa fa-plus-circle"></i> Thêm Công việc</button>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-condensed table-hover tab-pane">
+                <thead class="bg-dark text-white">
+                    <tr>
+                        <th>STT</th>
+                        <th>Tên công việc</th>
+                        <th>Nhóm công việc</th>
+                        <th>#</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-condensed table-hover table-striped">
+                <tbody>
+                    @if (Model.Count() != 0)
+                    {
+                        foreach (var item in Model.OrderByDescending(s => s.GroupId))
+                        {
+                            <tr class="table tab-content">
+                                <td class="text-center">@stt</td>
+                                <td><b>@Html.ActionLink(item.WorkName.ToString(), "EditWorktype", "Setting", new { id = item.ID }, new { @class = "text-primary" })</b></td>
+                                <td>Nhóm <b class="text-primary">@WorkGroup.FirstOrDefault(s => s.GroupId == item.GroupId).MaNhom</b> - @WorkGroup.FirstOrDefault(s => s.GroupId == item.GroupId).GroupName  </td>
+                                <td class="row">
+                                    <div>
+                                        @Html.ActionLink(" ", "DeleteWorktype", "Setting", new { id = item.ID }, new { @class = "btn fa fa-remove" })
+                                    </div>
+                                </td>
+                            </tr>
+                            stt++;
+                        }
+                        @*foreach (var item in Model.GroupBy(s => s.GroupId))
+                        {
+                            <tr class="row">
+                                <td class="text-danger col-md-12">Nhóm <b class="text-primary">@WorkGroup.FirstOrDefault(s => s.GroupId == item.Key).MaNhom</b> - @WorkGroup.FirstOrDefault(s => s.GroupId == item.Key).GroupName</td>
+                            </tr>
+                            foreach (var itm in item.ToList())
+                            {
+                                <tr class="table tab-content">
+                                    <td class="text-center">@stt</td>
+                                    <td><b>@Html.ActionLink(itm.WorkName.ToString(), "EditWorktype", "Setting", new { id = itm.ID }, new { @class = "text-primary" })</b></td>
+                                    <td>Nhóm <b class="text-primary">@WorkGroup.FirstOrDefault(s => s.GroupId == itm.GroupId).MaNhom</b> - @WorkGroup.FirstOrDefault(s => s.GroupId == itm.GroupId).GroupName  </td>
+                                    <td class="row">
+                                        <div>
+                                            @Html.ActionLink(" ", "DeleteWorktype", "Setting", new { id = itm.ID }, new { @class = "btn fa fa-remove" })
+                                        </div>
+                                    </td>
+                                </tr>
+                                stt++;
+                            }
 
-@* Modal sửa data *@
-<div id="AddUpdateModel" class="modal fade" role="dialog">
+                        }*@
+                    }
+                    else
+                    {
+                        <tr>
+                            <td>Chưa có danh mục công việc được tạo</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+</div>
+
+
+@* Form nhập liệu *@
+<div id="modalGroup" class="modal fade" role="dialog">
     <div class="modal-dialog modal-m">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 class="modal-title">Chỉnh sửa loại hình công việc</h3>
+                <h3 class="modal-title text-danger">Thêm nhóm công việc</h3>
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
             <div class="modal-body">
-                @using (Html.BeginForm("EditWorktype", "Setting", FormMethod.Post))
+                @using (Html.BeginForm("CreateWorkGroup", "Setting", FormMethod.Post))
                 {
+                    int hint = WorkGroup.Select(s => s.MaNhom).Distinct().Count();
+                    int nextgroup = hint + 1;
                     @Html.AntiForgeryToken()
                     <form>
                         @* WorkType *@
                         <div class="form-group row text-left">
-                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">ID</lable>
-                            <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" id="txtId" enable="false" required="" value="" />
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Mã quản lý nhóm</lable>
+                            <input type="number" class="form-control col-md-7 col-sm-9 col-xs-9" name="MaNhom"
+                                   data-toggle="tooltip" data-placement="left" id="cmbworktype" title="Số nhóm (hiện tại đang có @hint nhóm)"
+                                   placeholder="tạm đặt " required="" value="@nextgroup" />
                         </div>
+
                         <div class="form-group row text-left">
-                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên</lable>
-                            <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" id="txtWorkName" placeholder="" required="" value="" />
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên Nhóm</lable>
+                            <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" name="GroupName" placeholder="" required="" value="" />
                         </div>
-                        <div class="form-group row text-left">
-                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Nhóm</lable>
-                            <input type="number" class="form-control col-md-7 col-sm-9 col-xs-9" id="txtWorkGroup" value="1" />
-                        </div>
+
                         <div class="form-group text-left">
-                            <input type="submit" value="Update" id="btnUpdate" class="btn btn-warning col-md-7" />
-                            <input type="submit" value="Delete" id="btnDelete" class="btn btn-danger col-md-7" />
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
+                            <input type="submit" value="Tạo nhóm mới" class="btn btn-danger col-md-7" />
                         </div>
                     </form>
                 }
             </div>
             <div class="modal-footer">
-                <div>
-                    <p class="text-danger">@ViewBag.SaveContent</p>
-                </div>
+
                 <div class="clearfix"></div>
             </div>
         </div>
     </div>
 </div>
+@* End Form nhập liệu *@
 
 
 <script type="text/javascript">

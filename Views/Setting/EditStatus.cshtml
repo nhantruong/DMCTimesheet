@@ -1,0 +1,63 @@
+﻿@model DMCTimesheet.Models.C16_Status
+@{
+    ViewBag.Title = "Edit Project status Page";
+}
+
+<h3>@ViewBag.Title</h3>
+<div class="modal-body">
+    @using (Html.BeginForm("EditStatus", "Setting", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <form>
+            @* WorkType *@
+
+            <div class="form-group row text-left text-dark">
+                <lable hidden class="control-label col-md-3 col-sm-3 col-xs-3">Id</lable>
+                <input hidden type="text" class="form-control col-md-7 col-sm-9 col-xs-9" name="Id" placeholder="Tên" required="" value="@Model.Id" />
+            </div>
+
+            <div class="form-group row text-left text-dark">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên Tình trạng dự án</lable>
+                <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" name="StatusName" placeholder="Tên" required="" value="@Model.StatusName" />
+                <span class="@Model.ColorCode">@Model.StatusName</span>
+            </div>
+
+            <div class="form-group row text-left text-dark inline">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thay đổi Màu sắc</lable>
+                <select name="ColorCode" class="form-control col-md-7 col-sm-9 col-xs-9" id="colorCodeSelected" onclick="OnchangeColor()">
+                    <option id="@Model.ColorCode" value="@Model.ColorCode"></option>
+
+                    <option id="badge badge-primary" value="badge badge-primary" class="p-3 mb-2 bg-primary text-white">blue</option>
+                    <option id="badge badge-secondary" value="badge badge-secondary" class="p-3 mb-2 bg-secondary text-white">gray</option>
+                    <option id="badge badge-success" value="badge badge-success" class="p-3 mb-2 bg-success text-white">green</option>
+                    <option id="badge badge-danger" value="badge badge-danger" class="p-3 mb-2 bg-danger text-white">red</option>
+                    <option id="badge badge-warning" value="badge badge-warning" class="p-3 mb-2 bg-warning text-dark">orgrance</option>
+                    <option id="badge badge-info" value="badge badge-info" class="p-3 mb-2 bg-info text-white">cyan</option>
+                    <option id="badge badge-light" value="badge badge-light" class="p-3 mb-2 bg-light text-dark">white</option>
+                    <option id="badge badge-dark" value="badge badge-dark" class="p-3 mb-2 bg-dark text-white">black</option>
+                </select>
+                <span id="review" class=""></span>
+            </div>
+
+            <br />
+            <div class="clearfix"></div>
+            <div class="form-group text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
+                <input type="submit" value="Cập nhật thông tin" class="btn btn-success col-md-7" />
+            </div>
+        </form>
+    }
+</div>
+<hr />
+<h6 class="text-danger">@ViewBag.Error</h6>
+
+<script>
+    function OnchangeColor() {
+        var opt = document.getElementById("colorCodeSelected").value;
+        //alert(opt);
+        document.getElementById("review").setAttribute('class', opt);
+        document.getElementById("review").innerText = 'Review Selected color';
+
+    }
+
+</script>

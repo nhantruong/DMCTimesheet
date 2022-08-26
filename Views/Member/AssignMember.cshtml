@@ -70,13 +70,13 @@
                     @Html.AntiForgeryToken()
                     <form>
                         <div class="form-group row">
-                            <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Ngày</lable>
-                            <input type="date" class="form-control col-md-7 col-sm-9 col-xs-9" name="Ngay" placeholder="" required="" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                            <lable class="control-label col-sm-3 col-sm-3 col-xs-3 text-left">Ngày</lable>
+                            <input type="date" class="form-control col-sm-7 col-sm-9 col-xs-9" name="Ngay" placeholder="" required="" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
                         </div>
                         @* ProjectTypeID *@
                         <div class="form-group row  text-left">
-                            <lable class="control-label col-md-3 col-sm-3 col-xs-3"><b class="text-danger">Tên dự án</b></lable>
-                            <select required name="ProjectID" class="form-control col-md-7 col-sm-9 col-xs-9">
+                            <lable class="control-label col-sm-3 col-sm-3 col-xs-3"><b class="text-danger">Tên dự án</b></lable>
+                            <select required name="ProjectID" class="form-control col-sm-7 col-sm-9 col-xs-9">
                                 <option value=""></option>
                                 @foreach (var item in Projects.OrderBy(s => s.ProjectOtherName))
                                 {
@@ -86,8 +86,8 @@
                         </div>
                         @* ARC ID *@
                         <div class="form-group row  text-left">
-                            <lable class="control-label col-md-3 col-sm-3 col-xs-3"><b>Chủ trì Dự án</b></lable>
-                            <select name="ChuTriChinh" class="form-control col-md-7 col-sm-9 col-xs-9">
+                            <lable class="control-label col-sm-3 col-sm-3 col-xs-3"><b>Chủ trì Dự án</b></lable>
+                            <select name="ChuTriChinh" class="form-control col-sm-7 col-sm-9 col-xs-9">
                                 <option value=""></option>
                                 @foreach (var item in Members.Where(s => s.SystemMember == false).OrderBy(s => s.UserName))
                                 {
@@ -97,8 +97,8 @@
                         </div>
                         @* interior ID *@
                         <div class="form-group row  text-left">
-                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chủ trì bộ môn <b class="text-primary">Kiến trúc</b></lable>
-                            <select name="ChuTriKienTruc" class="form-control col-md-7 col-sm-9 col-xs-9">
+                            <lable class="control-label col-sm-3 col-sm-3 col-xs-3">Chủ trì bộ môn <b class="text-primary">Kiến trúc</b></lable>
+                            <select name="ChuTriKienTruc" class="form-control col-sm-7 col-sm-9 col-xs-9">
                                 <option value=""></option>
                                 @foreach (var item in Members.Where(s => s.Descipline == 1 && s.SystemMember == false).OrderBy(s => s.UserName))
                                 {
@@ -108,8 +108,8 @@
                         </div>
                         @* Structure ID *@
                         <div class="form-group row  text-left">
-                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chủ trì bộ môn <b class="text-primary">Kết cấu</b></lable>
-                            <select name="ChuTriKetCau" class="form-control col-md-7 col-sm-9 col-xs-9">
+                            <lable class="control-label col-sm-3 col-sm-3 col-xs-3">Chủ trì bộ môn <b class="text-primary">Kết cấu</b></lable>
+                            <select name="ChuTriKetCau" class="form-control col-sm-7 col-sm-9 col-xs-9">
                                 <option value=""></option>
                                 @foreach (var item in Members.Where(s => s.Descipline == 2 && s.SystemMember == false).OrderBy(s => s.UserName))
                                 {
@@ -120,8 +120,8 @@
 
                         @* MEP ID *@
                         <div class="form-group row  text-left">
-                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chủ trì bộ môn <b class="text-primary">Cơ điện - MEPF</b></lable>
-                            <select name="ChuTriMEP" class="form-control col-md-7 col-sm-9 col-xs-9">
+                            <lable class="control-label col-sm-3 col-sm-3 col-xs-3">Chủ trì bộ môn <b class="text-primary">Cơ điện - MEPF</b></lable>
+                            <select name="ChuTriMEP" class="form-control col-sm-7 col-sm-9 col-xs-9">
                                 <option value=""></option>
                                 @foreach (var item in Members.Where(s => s.Descipline == 3 && s.SystemMember == false).OrderBy(s => s.UserName))
                                 {
@@ -131,8 +131,8 @@
                         </div>
                         @* Legal ID *@
                         <div class="form-group row  text-left">
-                            <lable class="control-label col-md-3 col-sm-3 col-xs-3"><b class="text-primary">Pháp lý</b></lable>
-                            <select name="LegalManager" class="form-control col-md-7 col-sm-9 col-xs-9">
+                            <lable class="control-label col-sm-3 col-sm-3 col-xs-3"><b class="text-primary">Pháp lý</b></lable>
+                            <select name="LegalManager" class="form-control col-sm-7 col-sm-9 col-xs-9">
                                 <option value=""></option>
                                 @foreach (var item in Members.Where(s => s.SystemMember == false).OrderBy(s => s.UserName))
                                 {
@@ -141,8 +141,8 @@
                             </select>
                         </div>
                         <div class="form-group row  text-left">
-                            <lable class="control-label col-md-3 col-sm-3 col-xs-3"><b class="text-primary">Admin</b></lable>
-                            <select name="Admin" class="form-control col-md-7 col-sm-9 col-xs-9">
+                            <lable class="control-label col-sm-3 col-sm-3 col-xs-3"><b class="text-primary">Admin</b></lable>
+                            <select name="Admin" class="form-control col-sm-7 col-sm-9 col-xs-9">
                                 <option value=""></option>
                                 @foreach (var item in Members.Where(s => s.SystemMember == false).OrderBy(s => s.UserName))
                                 {
@@ -152,8 +152,8 @@
                         </div>
                         @* BIM ID *@
                         <div class="form-group row  text-left">
-                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Quản lý <b class="text-primary">BIM</b></lable>
-                            <select name="BIMManager" class="form-control col-md-7 col-sm-9 col-xs-9">
+                            <lable class="control-label col-sm-3 col-sm-3 col-xs-3">Quản lý <b class="text-primary">BIM</b></lable>
+                            <select name="BIMManager" class="form-control col-sm-7 col-sm-9 col-xs-9">
                                 <option value=""></option>
                                 @foreach (var item in BIMer.Where(s => s.UserType == "User").OrderBy(s => s.SoftName))
                                 {
@@ -165,8 +165,8 @@
                         <div class="clearfix"></div>
 
                         <div class="form-group text-left">
-                            <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
-                            <input type="submit" value="Save" class="btn btn-success col-md-7" />
+                            <lable class="control-label col-sm-3 col-sm-3 col-xs-3 text-left"></lable>
+                            <input type="submit" value="Save" class="btn btn-success col-sm-7" />
                         </div>
                     </form>
                 }
@@ -181,11 +181,11 @@
 
 
 <div class="clearfix"></div>
-<div class="col-md-12">
-    <div class="col-md-9">
+<div class="col-sm-12">
+    <div class="col-sm-9">
         <h3 class="text-left">DANH SÁCH THÀNH VIÊN THEO DỰ ÁN</h3>
     </div>
-    <div class="col-md-3 text-right">
+    <div class="col-sm-3 text-right">
         <button type="button" class="btn btn-warning btn-small text-right" data-toggle="modal" data-target="#newAssignMember"><i class="fa fa-plus"></i> Thêm điều phối Thành viên cho dự án mới</button>
     </div>
 </div>
@@ -195,16 +195,16 @@
     <table class="table">
         <thead class="table-dark">
             <tr class="row text-center">
-                <td class="col-md-1"><b>Ngày lập</b></td>
-                <td class="col-md-2"><b>Dự án</b></td>
-                <td class="col-md-1"><b>Chủ trì dự án</b></td>
-                <td class="col-md-1"><b>Chủ trì Kiến trúc</b></td>
-                <td class="col-md-1"><b>Chủ trì Kết cấu</b></td>
-                <td class="col-md-1"><b>Chủ trì MEP</b></td>
-                <td class="col-md-1"><b>Pháp lý</b></td>
-                <td class="col-md-1"><b>Admin</b></td>
-                <td class="col-md-1"><b>Quản lý BIM</b></td>
-                <td class="col-md-1"><b>Xóa</b></td>
+                <td class="col-sm-1"><b>Ngày lập</b></td>
+                <td class="col-sm-2"><b>Dự án</b></td>
+                <td class="col-sm-1"><b>Chủ trì dự án</b></td>
+                <td class="col-sm-1"><b>Chủ trì Kiến trúc</b></td>
+                <td class="col-sm-1"><b>Chủ trì Kết cấu</b></td>
+                <td class="col-sm-1"><b>Chủ trì MEP</b></td>
+                <td class="col-sm-1"><b>Pháp lý</b></td>
+                <td class="col-sm-1"><b>Admin</b></td>
+                <td class="col-sm-1"><b>Quản lý BIM</b></td>
+                <td class="col-sm-1"><b>Xóa</b></td>
             </tr>
         </thead>
     </table>
@@ -225,54 +225,54 @@
                 {
                     string name = @Projects.FirstOrDefault(s => s.ProjectID == item.ProjectID).MaDuAn + "-" + @Projects.FirstOrDefault(s => s.ProjectID == item.ProjectID).ProjectOtherName;
 
-                    <tr class="row text-dark table-bordered text-center">
-                        <td class="col-md-1">@DateTime.Parse(item.Ngay.ToString()).ToShortDateString()</td>
-                        <td class="col-md-2 text-left"><b>@Html.ActionLink(name, "EditAssign", "Member", new { Id = item.ID }, new { @class = "text-primary" })</b></td>
-                        <td class="col-md-1">
+                    <tr class="row text-dark text-center">
+                        <td class="col-sm-1">@DateTime.Parse(item.Ngay.ToString()).ToShortDateString()</td>
+                        <td class="col-sm-2 text-left"><b>@Html.ActionLink(name, "EditAssign", "Member", new { Id = item.ID }, new { @class = "text-primary" })</b></td>
+                        <td class="col-sm-1">
                             @if (item.ChuTriChinh != null)
                             {
                                 <b class="text-danger">@Members.FirstOrDefault(s => s.UserID == item.ChuTriChinh).FullName</b>
                             }
                         </td>
-                        <td class="col-md-1">
+                        <td class="col-sm-1">
                             @if (item.ChuTriKienTruc != null)
                             {
                                 @Members.FirstOrDefault(s => s.UserID == item.ChuTriKienTruc).FullName
                             }
                         </td>
-                        <td class="col-md-1">
+                        <td class="col-sm-1">
                             @if (item.ChuTriKetCau != null)
                             {
                                 @Members.FirstOrDefault(s => s.UserID == item.ChuTriKetCau).FullName
                             }
                         </td>
-                        <td class="col-md-1">
+                        <td class="col-sm-1">
                             @if (item.ChuTriMEP != null)
                             {
                                 @Members.FirstOrDefault(s => s.UserID == item.ChuTriMEP).FullName
                             }
                         </td>
-                        <td class="col-md-1">
+                        <td class="col-sm-1">
                             @if (item.LegalManager != null)
                             {
                                 @Members.FirstOrDefault(s => s.UserID == item.LegalManager).FullName
                             }
 
                         </td>
-                        <td class="col-md-1">
+                        <td class="col-sm-1">
                             @if (item.Admin != null)
                             {
                                 @Members.FirstOrDefault(s => s.UserID == item.Admin).FullName
                             }
 
                         </td>
-                        <td class="col-md-1">
+                        <td class="col-sm-1">
                             @if (item.BIMManager != null)
                             {
                                 @BIMer.FirstOrDefault(s => s.ID == item.BIMManager).SoftName
                             }
                         </td>
-                        <td class="col-md-1">@Html.ActionLink(" ", "DeleteAssigned", "Member", new { ID = item.ID }, new { @class = "btn fa fa-remove" })</td>
+                        <td class="col-sm-1">@Html.ActionLink(" ", "DeleteAssigned", "Member", new { ID = item.ID }, new { @class = "btn fa fa-remove" })</td>
                     </tr>
                 }
             }
@@ -287,15 +287,15 @@
 <h3 class="text-center text-primary">CÔNG VIỆC ĐƯỢC GIAO</h3>
 <div>
     @* Bản thống kê *@
-    <div class="col-md-6">
+    <div class="col-sm-6">
         <h5 class="text-center">Bảng thống kê số lượng dự án theo thành viên</h5>
         <div class="table-responsive-sm scrollbar">
             <table class="table table-bordered table-condensed table-striped">
                 <thead class="text-center">
                     <tr class="text-white" style="background-color:#808080">
-                        <td class="col-md-3">Tên thành viên</td>
-                        <td class="col-md-2">SL dự án</td>
-                        <td class="col-md-7">Tên dự án</td>
+                        <td class="col-sm-3">Tên thành viên</td>
+                        <td class="col-sm-2">SL dự án</td>
+                        <td class="col-sm-7">Tên dự án</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -321,7 +321,7 @@
                                     UserImg = imgPath + @Members.FirstOrDefault(s => s.UserID == item.Key).Image;
                                 }
                                 <tr class="text-dark text-center row">
-                                    <td class="col-md-3 text-center">
+                                    <td class="col-sm-3 text-center">
                                         <p>
 
                                             <img src="@UserImg" class="img-circle" alt="Alternate Text" style="height:50px; width:50px" />
@@ -331,12 +331,12 @@
                                         </p>
 
                                     </td>
-                                    <td class="col-md-2">@item.Value.Count()</td>
-                                    <td class="col-md-7">
+                                    <td class="col-sm-2">@item.Value.Count()</td>
+                                    <td class="col-sm-7">
                                         <ol class="col">
                                             @foreach (var itm in item.Value.ToList())
                                             {
-                                                <li class="col-md-6 text-left"><b>@Projects.FirstOrDefault(s => s.ProjectID == itm).ProjectOtherName</b></li>
+                                                <li class="col-sm-6 text-left"><b>@Projects.FirstOrDefault(s => s.ProjectID == itm).ProjectOtherName</b></li>
 
                                             }
                                         </ol>
@@ -354,7 +354,7 @@
 
 
     @* Biểu đồ dự án theo nhân sự *@
-    <div class="col-md-6">
+    <div class="col-sm-6">
         <h5 class="text-center">Biểu đồ số lượng dự án theo thành viên</h5>
         <div>
             <canvas id="ProjectOfMemberSummary"></canvas>

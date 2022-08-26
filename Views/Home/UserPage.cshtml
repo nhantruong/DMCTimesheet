@@ -15,11 +15,12 @@
     string Vaitro = "";
 
 }
+<link href="~/Content/cscpda-scrollbar.css" rel="stylesheet" />
+
 <div class="clearfix"></div>
-<h2 class="text-primary">Danh mục dự án đang tham gia</h2>
-<div class="form-group-lg">
-    <table class="table table-bordered table-condensed">
-        <caption class="text-primary">Số lượng dự án được giao <b class="text-danger">@SLDA</b></caption>
+<h2 class="text-primary">Danh mục dự án đang tham gia @SLDA</h2>
+<div class="table-responsive">
+    <table class="table table-borderless table-condensed">
         <thead class="table-dark">
             <tr class="row-fluid">
                 <td class="col-md-1">Mã dự án</td>
@@ -29,26 +30,45 @@
                 <td class="col-md-2">Ngày bắt đầu</td>
             </tr>
         </thead>
+    </table>
+</div>
+<div class="form-group-lg">
+    <table class="table table-bordered table-condensed table-striped scrollbar">
+        @*<caption class="text-primary">Số lượng dự án được giao <b class="text-danger"></b></caption>*@
         <tbody class="text-dark">
             @if (myProject.Count() > 0)
             {
                 foreach (DMCTimesheet.Models.C01_Projects item in myProject)
                 {
                     <tr>
-                        <td class="col-md-2">@item.ProjectID</td>
-                        <td class="col-md-2"><b class="text-danger">@item.ProjectOtherName</b></td>
-                        <td class="col-md-2">@item.ProjectOtherName</td>
-                        @*<td class="col-md-2">@Vaitro</td>*@
-                        <td class="col-md-2">@item.StartDate</td>
-                    </tr>
-                }
-            }
-            else
-            {
-                <tr>
-                    <td class="row">Bạn chưa có dự án</td>
-                </tr>
-            }
+                        <td class="col-md-2">
+                            @if (item.ProjectID != null)
+                            {
+                                <b class="text-primary">@item.ProjectID</b>
+                            }
+                        </td>
+
+                        <td class="col-md-2">
+                            <b class="text-danger">
+                                @if (item.ProjectOtherName != null)
+                                {<b>@item.ProjectOtherName</b>}
+                        </b>
+                    </td>
+                    <td class="col-md-2">
+                        @if (item.ProjectOtherName != null)
+                        {<a>@item.ProjectOtherName</a>}
+                </td>
+                @*<td class="col-md-2">@Vaitro</td>*@
+                <td class="col-md-2">@item.StartDate</td>
+            </tr>
+        }
+    }
+    else
+    {
+        <tr>
+            <td class="row">Bạn chưa có dự án</td>
+        </tr>
+    }
         </tbody>
     </table>
 
@@ -61,12 +81,12 @@
     <h2 class="text-danger col-md-3">Danh sách công việc đã triển khai</h2>
     @* Modal create new *@
     <div class="col-md-offset-2">
-        <button type="button" class="btn btn-info btn-small text-right8" data-toggle="modal" data-target="#newTimesheet"> <i class="fa fa-plus-circle"></i> Add</button>
-
+        @*<button type="button" class="btn btn-info btn-small text-right8" data-toggle="modal" data-target="#newTimesheet"> <i class="fa fa-plus-circle"></i> Add</button>*@
+        <b class="btn btn-success text-white"> @Html.ActionLink(" Thêm công tác ", "MemberTimesheet", "Timesheet", null, new { @class = "fa fa-plus-circle" })</b>
     </div>
 </div>
-<div class="form-group-lg">
-    <table class="table table-bordered">
+<div class="table-responsive">
+    <table class="table table-borderless ">
         <thead class="table-dark text-white">
             <tr class="row-fluid">
                 <td class="col-md-1">Ngày</td>
@@ -78,6 +98,10 @@
                 <td class="col-md-1">#</td>
             </tr>
         </thead>
+    </table>
+</div>
+<div class="form-group-lg scrollbar">
+    <table class="table table-bordered table-striped">
         <tbody class="text-dark">
             @if (myWorks.Count() == 0 || SLDA == 0)
             {
@@ -91,7 +115,12 @@
                 {
                     <tr>
                         <td class="col-md-1">@DateTime.Parse(item.RecordDate.ToString()).ToShortDateString()</td>
-                        <td class="col-md-2">@item.ProjectId - @AllProject.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName</td>
+                        <td class="col-md-2">
+                            @if (item.ProjectId != null)
+                            {
+                                <b>@item.ProjectId-@AllProject.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName</b>
+                            }
+                        </td>
                         <td class="col-md-2">@Worktype.FirstOrDefault(s => s.ID == item.WorkType).WorkName</td>
                         <td class="col-md-1">@item.Hour</td>
                         <td class="col-md-1">@item.OT</td>

@@ -1,7 +1,7 @@
 ﻿@model DMCTimesheet.Models.C07_WorkType
 @{
-    ViewBag.Title = "Cập nhật Worktype";
-    //Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewBag.Title = "Delete Worktype";
+    List<DMCTimesheet.Models.C19_Workgroup> WorkGroup = ViewBag.WorkGroup as List<DMCTimesheet.Models.C19_Workgroup>;
 }
 
 <h3>@ViewBag.Title</h3>
@@ -16,30 +16,27 @@
     {
         @Html.AntiForgeryToken()
         <form>
-            @* WorkType *@
-            @Html.HiddenFor(model => model.ID)
-
-            <div class="form-group row">
-                @Html.LabelFor(model => model.WorkName, "Tên", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.WorkName, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.WorkName, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group row">
-                @Html.LabelFor(model => model.WorkGroup, "Nhóm", htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.WorkGroup, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.WorkGroup, "", new { @class = "text-danger" })
-                </div>
+            <div class="form-group row text-left">
+                <lable hidden class="control-label col-md-3 col-sm-3 col-xs-3">Id Công việc</lable>
+                <input hidden type="number" class="form-control col-md-7 col-sm-9 col-xs-9" name="ID" placeholder="" required="" value="@Model.ID" />
             </div>
 
-            <div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Delete" class="btn btn-danger" />
-                </div>
+            <div class="form-group row text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên công việc</lable>
+                <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9 text-danger" readonly name="WorkName" placeholder="" required="" value="@Model.WorkName" />
             </div>
+            <div class="form-group row text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Nhóm</lable>
+                @*<input type="number" class="form-control col-md-7 col-sm-9 col-xs-9" name="WorkGroup" />*@
+                <select disabled name="GroupId" class="form-control col-md-7 col-sm-9 col-xs-9">
+                    <option value="@Model.GroupId">[Nhóm @WorkGroup.FirstOrDefault(s => s.GroupId == Model.GroupId).MaNhom] - @WorkGroup.FirstOrDefault(s => s.GroupId == Model.GroupId).GroupName</option>
 
+                </select>
+            </div>
+            <div class="form-group text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
+                <input type="submit" value=" Xóa công việc" class="btn btn-danger col-md-2" />
+            </div>
         </form>
     }
 </div>
@@ -49,3 +46,5 @@
     </div>
     <div class="clearfix"></div>
 </div>
+<hr />
+<h6 class="text-danger">@ViewBag.Error</h6>

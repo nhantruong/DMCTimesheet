@@ -1,17 +1,30 @@
 ﻿@model IEnumerable<DMCTimesheet.Models.C10_Owner>
 @{
-    ViewBag.Title = "WorkType Page";
+    ViewBag.Title = "Owner Manage Page";
     //Layout = "~/Views/Shared/_AdminLayout.cshtml";
     string updateInfo = ViewBag.SaveContent;
     List<DMCTimesheet.Models.C11_Location> Locations = ViewBag.Location as List<DMCTimesheet.Models.C11_Location>;
 }
 <link href="~/Content/cscpda-scrollbar.css" rel="stylesheet" />
 
-<h3>DANH MỤC CHỦ ĐẦU TƯ</h3>
-@* Modal create new *@
-<div>
-    <button type="button" class="btn btn-info btn-small text-right" data-toggle="modal" data-target="#form">Thêm mới CDT</button>
+<div class="row">
+    <div class="col-md-10">
+        <h3>
+            DANH SÁCH CHỦ ĐẦU TƯ - <b>
+                @if (Model == null)
+                {
+                    <b class="text-primary">0</b>}
+                else
+                {<b class="text-danger">@Model.Count()</b>}
+            </b>
+        </h3>
+    </div>
+
+    <div class="col-md-2">
+        <button type="button" class="btn btn-danger btn-small text-right" data-toggle="modal" data-target="#form">Thêm mới CDT</button>
+    </div>
 </div>
+
 <h3 class="text-danger">@ViewBag.Error</h3>
 
 @* Form nhập liệu *@
@@ -48,7 +61,7 @@
                         <div class="form-group row  text-left">
                             <lable class="control-label col-md-3 col-sm-3 col-xs-3">Vị trí</lable>
                             <select name="OnwerLocation" class="form-control col-md-7 col-sm-9 col-xs-9">
-                                <option value="1">--Chọn địa điểm--</option>
+                                <option value=""></option>
                                 @foreach (var item in Locations)
                                 {
                                     <option value=@item.LocationId>@item.LocationName</option>
@@ -93,21 +106,9 @@
         </tr>
     </table>
 </div>
-<div class="table-responsive scrollbar-custom">
+<div class="table-responsive" style="height:900px">
     <div class="col-md-12">        
-        <table class="table table-striped table-bordered">
-            <!--<thead class="text-white" style="background-color:#000000">
-                <tr class="row text-center navbar-fixed-top">
-                    <td class="col-md-2">Tên đầy đủ theo HĐ</td>
-                    <td class="col-md-2">Tên rút gọn</td>
-                    <td class="col-md-1">Người đại diện</td>
-                    <td class="col-md-2">Email Người đại diện</td>
-                    <td class="col-md-1">Vị trí</td>
-                    <td class="col-md-3">Mô tả</td>-->
-                    @*<td class="col-md-1">Actived</td>*@
-                    <!--<td class="col-md-1">#</td>
-                </tr>
-            </thead>-->
+        <table class="table table-striped table-bordered">            
             <tbody class="">
                 @if (Model == null || Model.Count() == 0)
                 {
@@ -127,7 +128,7 @@
                             <td class="col-md-1">
                                 @if (item.OnwerLocation == null)
                                 {
-                                    <a>@Locations.FirstOrDefault(s => s.LocationId == 1).LocationName</a>
+                                    <a>-</a>
                                 }
                                 else
                                 {

@@ -22,6 +22,7 @@ namespace DMCTimesheet.Models
         public Nullable<double> Hour { get; set; }
         public Nullable<double> OT { get; set; }
         public string Description { get; set; }
+        public Nullable<bool> isConfirm { get; set; }
     
         public virtual C01_Projects C01_Projects { get; set; }
         public virtual C02_Members C02_Members { get; set; }

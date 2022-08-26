@@ -1,0 +1,358 @@
+﻿@model IEnumerable<DMCTimesheet.Models.C08_Timesheet>
+@{
+    DMCTimesheet.Models.C06_UserPermisRelationship Userpermiss = Session["UserPermission"] as DMCTimesheet.Models.C06_UserPermisRelationship;
+
+    DMCTimesheet.Models.C02_Members loginUser = Session["UserLogin"] as DMCTimesheet.Models.C02_Members;
+    int stt = 0;
+    List<DMCTimesheet.Models.C02_Members> Members = ViewBag.Members as List<DMCTimesheet.Models.C02_Members>;
+    List<DMCTimesheet.Models.C01_Projects> Projects = ViewBag.Projects as List<DMCTimesheet.Models.C01_Projects>;
+    List<DMCTimesheet.Models.C07_WorkType> WorkTypes = ViewBag.WorkType as List<DMCTimesheet.Models.C07_WorkType>;
+    List<DMCTimesheet.Models.C03_ProjectMembers> MyProjects = ViewBag.ProjectMember as List<DMCTimesheet.Models.C03_ProjectMembers>;
+    List<DMCTimesheet.Models.C19_Workgroup> WorkGroup = ViewBag.Workgroup as List<DMCTimesheet.Models.C19_Workgroup>;
+
+    //group data
+    List<string[]> group = ViewBag.group as List<string[]>;    //Nhóm công việc theo workgroup
+    List<string[]> listIdCV = ViewBag.listIdCV as List<string[]>; //List ID công việc để lọc
+                                                                  //Công việc trong ngày
+    List<DMCTimesheet.Models.C08_Timesheet> _ViecTrongNgay = ViewBag.ViecTrongNgay as List<DMCTimesheet.Models.C08_Timesheet>;
+    //Công việc trong tuần
+    List<DMCTimesheet.Models.C08_Timesheet> _ViecTrongTuan = ViewBag.ViecTrongTuan as List<DMCTimesheet.Models.C08_Timesheet>;
+
+}
+
+@* --------------------------------------------------------VIỆC TRONG NGÀY--------------------------------------------------- *@
+@* Danh sách Timesheet đã làm *@
+@*<h3 class="text-danger">@ViewBag.WorkAlert</h3>*@
+<div class="row" style="height:600px">
+    <div class="col-md-12">
+        @* Form tạo timesheet *@
+        <div class="col-md-5">
+            <div class="x_panel">
+                <div class="x_title">
+                    <h2 class="text-warning"><b class="text-success">Add Dailywork</b></h2>
+                </div>
+                <div class="x_content">
+                    @* Form nhập liệu *@
+                    <div>
+                        @using (Html.BeginForm("CreateTimesheet", "Timesheet", FormMethod.Post))
+                        {
+                            @Html.AntiForgeryToken()
+                            <form class="text-dark">
+                                @*<h2 class="text-left text-danger">Add daily work</h2>
+                                <div class="clearfix"></div>*@
+                                @* memberID *@
+                                <div class="form-group row">
+                                    <lable hidden class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Tên thành viên</lable>
+                                    <input hidden type="text" class="form-control col-md-7 col-sm-9 col-xs-9" readonly name="MemberName" placeholder="" required="" value="@loginUser.FullName" />
+                                </div>
+
+                                @* Date *@
+                                <div class="form-group row">
+                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Ngày ghi</lable>
+                                    <input type="date" class="form-control col-md-7 col-sm-9 col-xs-9" name="RecordDate" placeholder="" required="" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                                </div>
+
+                                @* WorkGroup *@
+                                <div class="form-group row  text-left">
+                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-primary">Nhóm hoạt động</lable>
+                                    <select name="NhomHoatDong" required data-toggle="tooltip" data-placement="left" id="workgroup" onclick="onchangeworkgroup()" title="Chọn nhóm hoạt động" class="form-control col-md-7 col-sm-9 col-xs-9 text-primary">
+                                        <option value="2">--Chọn nhóm hoạt động--</option>
+                                        @if (WorkGroup != null || WorkGroup.Count() > 0)
+                                        {
+                                            <option value="2">@WorkGroup.FirstOrDefault(s => s.Id == 2).GroupName</option>
+                                            foreach (var item in WorkGroup.Where(s => s.Id != 2))
+                                            {
+                                                <option id="@item.Id" value="@item.Id">@item.GroupName</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+
+
+                                @* ProjectID *@
+                                <div class="form-group row  text-left">
+                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3">Dự án được phân công</lable>
+                                    <select name="ProjectId" data-toggle="tooltip" disabled id="seletorProjectId" data-placement="left" title="Dự án được phân công sẽ xuất hiện ở đây, vui lòng liên hệ Admin nếu chưa có dự án" class="form-control col-md-7 col-sm-9 col-xs-9">
+                                        @if (MyProjects.Count() > 0)
+                                        {
+                                            foreach (var item in MyProjects.OrderBy(s => s.Ngay))
+                                            {
+                                                <option value=@item.ProjectID>@Projects.FirstOrDefault(s => s.ProjectID == item.ProjectID).ProjectOtherName</option>
+                                            }
+                                        }
+                                    </select>
+                                </div>
+
+                                @* LỖI *@
+                                <div class="form-group row">
+                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
+                                    <h6 class="col-md-7 col-sm-9 col-xs-9 text-danger" id="Error">@ViewBag.WorkAlert</h6>
+                                </div>
+
+
+                                @* WorkType *@
+                                <div class="form-group row  text-left">
+                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chọn Công việc</lable>
+                                    <select required name="WorkID" disabled data-toggle="tooltip" data-placement="left" id="cmbworktype" title="Chọn loại hình công việc của bạn" class="form-control col-md-7 col-sm-9 col-xs-9">
+                                        @*@foreach (var item in WorkTypes.OrderBy(s => s.WorkGroup))
+                                        {
+                                            <option value=@item.ID>[@item.WorkGroup] - @item.WorkName</option>
+                                        }*@
+                                    </select>
+                                </div>
+
+
+                                @* Hour *@
+                                <div class="form-group row text-left">
+                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thời gian</lable>
+                                    <div class="col-md-7 col-sm-9 col-xs-9">
+                                        <div class="col-md-6 text-success inline">
+                                            <lable class="control-label col-md-5 text-left">Giờ</lable>
+                                            <input type="number" class="form-control col-md-6" name="Hour" required value="4" />
+                                        </div>
+                                        <div class="col-md-6 inline">
+                                            <lable class="control-label col-md-6 text-left">Tăng ca</lable>
+                                            <input type="number" class="form-control col-md-6" name="OvertimeHour" value="0" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                @* Description *@
+                                <div class="form-group row">
+                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Ghi chú chi tiết</lable>
+                                    <textarea class="form-control col-md-7 col-sm-9 col-xs-9 " rows="3" name="Description" placeholder="Nhập ngắn gọn nội dung công việc" required></textarea>
+                                </div>
+                                <div class="form-group text-left">
+                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
+                                    <input type="submit" value="Save" class="btn btn-success col-md-7" />
+                                </div>
+                            </form>
+
+                            <div class="clearfix"></div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        @* --------------------------------------------------------BẢNG THỐNG KÊ VIỆC TRONG NGÀY--------------------------------------------------- *@
+        <div class="col-md-7">
+            <div class="row">
+                <div class="x_panel">
+                    <div class="x_title">
+                        <h2 class="text-primary">
+                            <b class="text-success">Công việc trong ngày</b>
+                            @if (_ViecTrongNgay != null || _ViecTrongNgay.Count() > 0)
+                            {
+                                <a>
+                                    Hour: <b class="text-danger">@_ViecTrongNgay.Select(p => p.Hour).Sum()</b>
+                                    - OT: <b class="text-danger">@_ViecTrongNgay.Select(p => p.OT).Sum() </b>
+                                </a>
+                            }
+                            else
+                            {
+                                <b>0</b>
+                            }
+                        </h2>
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="x_content">
+                        <div class="x_content table-responsive">
+                            <div id="ajax-loader"></div>
+                            <div>
+                                <table class="table table-hover table-borderless">
+                                    <thead class="bg-dark text-center text-white">
+                                        <tr class="row">
+                                            <th class="col-1">No</th>
+                                            <th class="col-1">Record date</th>
+                                            <th class="col-2">Project</th>
+                                            <th class="col-2">Workdone</th>
+                                            <th class="col-1">Hours</th>
+                                            <th class="col-1">Overtime</th>
+                                            <th class="col-3">Description</th>
+                                            <th class="col-1">#</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                            <div class="table-responsive-md scrollbar">
+                                <table class="table table-hover table-bordered table-striped">
+                                    <tbody id="seachResult" class="text-dark">
+                                        @if (_ViecTrongNgay != null)
+                                        {
+                                            foreach (var item in _ViecTrongNgay.OrderByDescending(s => s.RecordDate))
+                                            {
+                                                stt++;
+                                                <tr class="row">
+                                                    <td class="col-1 text-center">@stt</td>
+                                                    <td class="col-1">@DateTime.Parse(item.RecordDate.ToString()).ToShortDateString()</td>
+                                                    <td class="col-2">
+                                                        @if (item.ProjectId != null)
+                                                        {
+                                                            <b class="text-primary">@Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName</b>
+                                                        }
+                                                        else
+                                                        {
+                                                            <b class="text-primary">Công việc chung</b>
+                                                        }
+                                                    </td>
+                                                    <td class="col-2">@WorkTypes.FirstOrDefault(s => s.ID == item.WorkType).WorkName</td>
+                                                    <td class="col-1">@item.Hour</td>
+                                                    <td class="col-1">@item.OT</td>
+                                                    <td class="col-3">@item.Description</td>
+                                                    <td class="col-1">
+                                                        @Html.ActionLink(" ", "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "fa fa-edit" })
+                                                        @Html.ActionLink(" ", "Delete", "Timesheet", new { id = item.Id }, new { @class = " fa fa-remove btn" })
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <tr>
+                                                <td class="row text-danger">Tuần này chưa có công việc nào được ghi nhận</td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @*<h6>Tổng số giờ trong trong ngày <b class="text-danger">@Model.Where(s => s.RecordDate == DateTime.Today).Select(p => p.Hour).Sum()</b></h6>*@
+
+        </div>
+    </div>
+</div>
+
+@* --------------------------------------------------------VIỆC TRONG TUẦN--------------------------------------------------- *@
+<div class="clearfix"></div>
+<div class="col-md-12">
+    <div class="row">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2 class="text-warning"><b class="text-success">DANH SÁCH CÔNG VIỆC TRONG TUẦN</b></h2>
+                @*<ul class="nav navbar-right panel_toolbox">
+                        <li>
+                            <a class="collapse-link"><i class="fa fa-chevron-up text-primary"></i></a>
+                        </li>
+                    </ul>*@
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <div class="x_content table-responsive">
+                    <div id="ajax-loader"></div>
+                    <div>
+                        <table class="table table-hover table-borderless table-striped">
+                            <thead class="bg-dark text-center text-white">
+                                <tr class="row">
+                                    <th class="col-md-1">No</th>
+                                    <th class="col-md-1">Record date</th>
+                                    <th class="col-md-2">Project</th>
+                                    <th class="col-md-2">Workdone</th>
+                                    <th class="col-md-1">Hours</th>
+                                    <th class="col-md-1">Overtime</th>
+                                    <th class="col-md-3">Description</th>
+                                    <th class="col-md-1">#</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                    <div class="table-responsive scrollbar" style="height:300px">
+                        <table class="table table-hover table-bordered table-striped " style="height:400px">
+                            <tbody id="seachResult" class="text-dark">
+                                @if (Model != null)
+                                {
+                                    int st = 1;
+                                    foreach (var item in Model.OrderByDescending(s => s.RecordDate))
+                                    {
+
+                                        <tr class="row">
+                                            <td class="col-md-1 text-center">@st</td>
+                                            <td class="col-md-1">@DateTime.Parse(item.RecordDate.ToString()).ToShortDateString()</td>
+                                            <td class="col-md-2">
+                                                @if (item.ProjectId != null)
+                                                {
+                                                    <b class="text-primary">@Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName</b>
+                                                }
+                                                else
+                                                {
+                                                    <b class="text-primary">Công việc chung</b>
+                                                }
+                                            </td>
+                                            <td class="col-md-2">@WorkTypes.FirstOrDefault(s => s.ID == item.WorkType).WorkName</td>
+                                            <td class="col-md-1">@item.Hour</td>
+                                            <td class="col-md-1">@item.OT</td>
+                                            <td class="col-md-3">@item.Description</td>
+                                            <td class="col-md-1">
+                                                @Html.ActionLink(" ", "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "fa fa-edit" })
+                                                @Html.ActionLink(" ", "Delete", "Timesheet", new { id = item.Id }, new { @class = " fa fa-remove btn" })
+                                            </td>
+                                        </tr>
+                                        st++;
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td class="row text-danger">Hôm nay chưa có công việc nào được ghi nhận</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <script>
+    function onchangeworkgroup() {
+        var opt = document.getElementById("workgroup").value;
+        var dbNhomCV = @Html.Raw(Json.Encode(group));
+        var dbCongviec = @Html.Raw(Json.Encode(listIdCV));
+
+        document.getElementById("Error").value = '';
+        //alert("NHÓM CV: "+dbNhomCV);
+        //alert("DANH SACH CONG VIEC: "+dbCongviec);
+
+        //const cmbWorkType = document.getElementById("cmbworktype");//Loại công việc hàng ngày
+        if (opt == "2") {
+            document.getElementById("seletorProjectId").disabled = false;
+            document.getElementById("cmbworktype").disabled = false;
+        }
+        else {
+            document.getElementById("seletorProjectId").disabled = true;
+            document.getElementById("cmbworktype").disabled = false;
+            document.getElementById("seletorProjectId").text = "";
+
+        }
+        addOptByworkGroup(dbNhomCV, dbCongviec, opt);
+
+    }
+
+    //Hàm thay đổi nội dung của select Công việc
+    function addOptByworkGroup(dbNhomCV, dbCongviec, Opt) {
+        document.getElementById("cmbworktype").value = '';
+        const groupOption = Array.from(dbNhomCV).filter(a => a[0] == Opt);
+        document.getElementById("cmbworktype").innerHTML = createOpt(dbCongviec, groupOption);
+    }
+    //Hàm tạo thẻ Option trong select
+    function createOpt(dbCongviec, group2option) {
+        var text = "";
+        for (var i = 0; i < group2option.length; i++) {
+            for (var j = 0; j < dbCongviec.length; j++) {
+                if (dbCongviec[j][1] == group2option[i][1]) {
+                    text += '<option value=' + dbCongviec[j][0] + '>' + dbCongviec[j][1] + '</option>';
+                }
+            }
+        }
+        return text;
+    }
+    </script>
+</div>

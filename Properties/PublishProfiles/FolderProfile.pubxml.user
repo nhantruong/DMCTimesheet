@@ -4,8 +4,8 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 -->
 <Project>
   <PropertyGroup>
-    <_PublishTargetUrl>C:\Users\truon\OneDrive\MyApp\DMCTimesheet\Publish\ver1.3</_PublishTargetUrl>
-    <History>True|2022-08-11T09:26:10.3937430Z;True|2022-08-11T08:49:03.3468756+07:00;True|2022-08-11T08:21:12.7539599+07:00;True|2022-08-10T19:48:23.7808778+07:00;True|2022-08-10T19:22:10.1896120+07:00;</History>
+    <_PublishTargetUrl>C:\Users\truon\OneDrive\MyApp\DMCTimesheet\Publish\ver1.6</_PublishTargetUrl>
+    <History>True|2022-08-24T10:57:03.7328267Z;True|2022-08-23T14:17:50.8545344+07:00;True|2022-08-23T13:26:14.4985749+07:00;True|2022-08-11T16:26:10.3937430+07:00;True|2022-08-11T08:49:03.3468756+07:00;True|2022-08-11T08:21:12.7539599+07:00;True|2022-08-10T19:48:23.7808778+07:00;True|2022-08-10T19:22:10.1896120+07:00;</History>
   </PropertyGroup>
   <ItemGroup>
     <File Include="Assets/Chi tiết dự án DRAGON BAY VIEW %281646%29 - Coteccons Group.htm">
@@ -294,13 +294,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>09/10/2013 16:29:20</publishTime>
     </File>
     <File Include="bin/DMCTimesheet.dll">
-      <publishTime>08/17/2022 17:58:12</publishTime>
+      <publishTime>08/26/2022 13:09:25</publishTime>
     </File>
     <File Include="bin/DMCTimesheet.pdb">
-      <publishTime>08/17/2022 17:58:12</publishTime>
+      <publishTime>08/26/2022 13:09:25</publishTime>
     </File>
     <File Include="bin/DMCTimesheet.XmlSerializers.dll">
-      <publishTime>08/17/2022 17:58:18</publishTime>
+      <publishTime>08/26/2022 13:09:31</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>04/17/2020 03:38:42</publishTime>
@@ -537,7 +537,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/11/2022 15:47:46</publishTime>
     </File>
     <File Include="Content/Site.css">
-      <publishTime>06/24/2022 13:13:17</publishTime>
+      <publishTime>08/23/2022 17:38:37</publishTime>
     </File>
     <File Include="favicon.ico">
       <publishTime>06/24/2022 13:13:17</publishTime>
@@ -546,7 +546,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>06/24/2022 13:13:17</publishTime>
     </File>
     <File Include="Models/DMC.edmx.diagram">
-      <publishTime>08/17/2022 16:50:52</publishTime>
+      <publishTime>08/26/2022 08:10:00</publishTime>
     </File>
     <File Include="Scripts/bootstrap-table-multiple-sort.min.js">
       <publishTime>08/08/2022 13:07:16</publishTime>
@@ -3288,7 +3288,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/19/2020 10:49:54</publishTime>
     </File>
     <File Include="UserStyles/cropper/src/js/bind.js">
-      <publishTime>08/19/2020 10:49:54</publishTime>
+      <publishTime>08/23/2022 14:15:02</publishTime>
     </File>
     <File Include="UserStyles/cropper/src/js/build.js">
       <publishTime>08/19/2020 10:49:54</publishTime>
@@ -6381,7 +6381,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/19/2020 10:50:07</publishTime>
     </File>
     <File Include="UserStyles/echarts/src/chart/map/backwardCompat.js">
-      <publishTime>08/19/2020 10:50:07</publishTime>
+      <publishTime>08/23/2022 14:15:02</publishTime>
     </File>
     <File Include="UserStyles/echarts/src/chart/map/mapDataStatistic.js">
       <publishTime>08/19/2020 10:50:07</publishTime>
@@ -7068,7 +7068,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/19/2020 10:50:10</publishTime>
     </File>
     <File Include="UserStyles/echarts/test/axes.html">
-      <publishTime>08/19/2020 10:50:10</publishTime>
+      <publishTime>08/23/2022 14:13:01</publishTime>
     </File>
     <File Include="UserStyles/echarts/test/axis.html">
       <publishTime>08/19/2020 10:50:10</publishTime>
@@ -10707,13 +10707,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/20/2022 15:10:19</publishTime>
     </File>
     <File Include="Views/Home/UserPage.cshtml">
-      <publishTime>08/10/2022 17:21:26</publishTime>
+      <publishTime>08/18/2022 16:03:17</publishTime>
     </File>
     <File Include="Views/Home/WebAdminPage.cshtml">
       <publishTime>08/12/2022 15:47:46</publishTime>
     </File>
     <File Include="Views/Member/AssignMember.cshtml">
-      <publishTime>08/17/2022 15:31:08</publishTime>
+      <publishTime>08/17/2022 18:20:54</publishTime>
     </File>
     <File Include="Views/Member/DeleteAssigned.cshtml">
       <publishTime>08/12/2022 17:38:59</publishTime>
@@ -10746,49 +10746,103 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/12/2022 15:06:25</publishTime>
     </File>
     <File Include="Views/Project/Edit.cshtml">
-      <publishTime>08/17/2022 17:54:49</publishTime>
+      <publishTime>08/17/2022 18:11:51</publishTime>
     </File>
     <File Include="Views/Project/EditAssign.cshtml">
       <publishTime>08/12/2022 16:22:05</publishTime>
     </File>
     <File Include="Views/Project/Index.cshtml">
-      <publishTime>08/17/2022 17:37:41</publishTime>
+      <publishTime>08/24/2022 16:32:03</publishTime>
+    </File>
+    <File Include="Views/Setting/DeleteLocation.cshtml">
+      <publishTime>08/26/2022 12:49:15</publishTime>
+    </File>
+    <File Include="Views/Setting/DeleteNTP.cshtml">
+      <publishTime>08/26/2022 11:40:19</publishTime>
     </File>
     <File Include="Views/Setting/DeleteOwner.cshtml">
-      <publishTime>08/11/2022 15:42:07</publishTime>
+      <publishTime>08/25/2022 09:12:16</publishTime>
+    </File>
+    <File Include="Views/Setting/DeletePosition.cshtml">
+      <publishTime>08/26/2022 10:48:19</publishTime>
+    </File>
+    <File Include="Views/Setting/DeleteProjectType.cshtml">
+      <publishTime>08/26/2022 11:40:04</publishTime>
+    </File>
+    <File Include="Views/Setting/DeleteStatus.cshtml">
+      <publishTime>08/26/2022 11:39:56</publishTime>
+    </File>
+    <File Include="Views/Setting/DeleteWorkGroup.cshtml">
+      <publishTime>08/25/2022 16:27:26</publishTime>
     </File>
     <File Include="Views/Setting/DeleteWorktype.cshtml">
-      <publishTime>08/11/2022 09:28:09</publishTime>
+      <publishTime>08/26/2022 11:39:22</publishTime>
+    </File>
+    <File Include="Views/Setting/EditLocation.cshtml">
+      <publishTime>08/26/2022 11:41:20</publishTime>
+    </File>
+    <File Include="Views/Setting/EditNTP.cshtml">
+      <publishTime>08/24/2022 16:46:12</publishTime>
     </File>
     <File Include="Views/Setting/EditOwner.cshtml">
-      <publishTime>08/11/2022 15:49:58</publishTime>
+      <publishTime>08/25/2022 08:58:52</publishTime>
+    </File>
+    <File Include="Views/Setting/EditPosition.cshtml">
+      <publishTime>08/26/2022 10:51:03</publishTime>
+    </File>
+    <File Include="Views/Setting/EditProjectType.cshtml">
+      <publishTime>08/26/2022 11:39:07</publishTime>
+    </File>
+    <File Include="Views/Setting/EditStatus.cshtml">
+      <publishTime>08/26/2022 09:43:12</publishTime>
+    </File>
+    <File Include="Views/Setting/EditWorkGroup.cshtml">
+      <publishTime>08/25/2022 16:07:16</publishTime>
     </File>
     <File Include="Views/Setting/EditWorktype.cshtml">
-      <publishTime>08/11/2022 09:28:18</publishTime>
+      <publishTime>08/26/2022 08:58:26</publishTime>
+    </File>
+    <File Include="Views/Setting/Locations.cshtml">
+      <publishTime>08/26/2022 13:04:16</publishTime>
     </File>
     <File Include="Views/Setting/Ownerlist.cshtml">
-      <publishTime>08/11/2022 15:48:07</publishTime>
+      <publishTime>08/25/2022 09:16:58</publishTime>
+    </File>
+    <File Include="Views/Setting/PositionList.cshtml">
+      <publishTime>08/26/2022 09:33:25</publishTime>
+    </File>
+    <File Include="Views/Setting/ProjectType.cshtml">
+      <publishTime>08/26/2022 11:34:49</publishTime>
+    </File>
+    <File Include="Views/Setting/StatusList.cshtml">
+      <publishTime>08/24/2022 16:53:54</publishTime>
+    </File>
+    <File Include="Views/Setting/SubContractor.cshtml">
+      <publishTime>08/24/2022 14:33:42</publishTime>
+    </File>
+    <File Include="Views/Setting/SubContractors.cshtml">
+      <publishTime>08/25/2022 09:17:58</publishTime>
     </File>
     <File Include="Views/Setting/Worktype.cshtml">
-      <publishTime>08/11/2022 09:37:46</publishTime>
+      <publishTime>08/26/2022 08:52:13</publishTime>
     </File>
     <File Include="Views/Shared/Error.cshtml">
-      <publishTime>07/29/2022 15:26:44</publishTime>
+      <publishTime>08/23/2022 18:29:29</publishTime>
     </File>
     <File Include="Views/Shared/_AdminLayout.cshtml">
-      <publishTime>08/04/2022 08:25:40</publishTime>
+      <publishTime>08/23/2022 18:16:27</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
       <publishTime>06/28/2022 19:05:14</publishTime>
     </File>
     <File Include="Views/Shared/_sliderbar.cshtml">
-      <publishTime>08/13/2022 13:03:04</publishTime>
+      <publishTime>08/26/2022 11:28:20</publishTime>
     </File>
     <File Include="Views/Shared/_TopNav.cshtml">
-      <publishTime>08/04/2022 07:58:14</publishTime>
+      <publishTime>08/18/2022 15:09:49</publishTime>
     </File>
     <File Include="Views/Shared/_UserLayout.cshtml">
-      <publishTime>08/04/2022 07:55:41</publishTime>
+      <publishTime>08/23/2022 14:43:53</publishTime>
     </File>
     <File Include="Views/Shared/_UserLeftSliderBar.cshtml">
       <publishTime>07/27/2022 15:19:28</publishTime>
@@ -10800,7 +10854,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/04/2022 08:12:23</publishTime>
     </File>
     <File Include="Views/Timesheet/Delete.cshtml">
-      <publishTime>08/08/2022 13:51:42</publishTime>
+      <publishTime>08/24/2022 08:39:18</publishTime>
     </File>
     <File Include="Views/Timesheet/DeleteWorktype.cshtml">
       <publishTime>08/08/2022 13:51:42</publishTime>
@@ -10809,10 +10863,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/08/2022 13:51:42</publishTime>
     </File>
     <File Include="Views/Timesheet/MemberTimesheet.cshtml">
-      <publishTime>08/17/2022 15:40:27</publishTime>
+      <publishTime>08/23/2022 14:57:57</publishTime>
     </File>
     <File Include="Views/Timesheet/ProjectTimesheet.cshtml">
       <publishTime>08/17/2022 15:56:38</publishTime>
+    </File>
+    <File Include="Views/Timesheet/TimesheetManage.cshtml">
+      <publishTime>08/25/2022 14:37:53</publishTime>
     </File>
     <File Include="Views/Timesheet/UserEdit.cshtml">
       <publishTime>08/17/2022 15:55:24</publishTime>
@@ -10836,7 +10893,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/03/2022 08:16:02</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>08/12/2022 17:46:10</publishTime>
+      <publishTime>08/23/2022 18:30:06</publishTime>
     </File>
   </ItemGroup>
 </Project>

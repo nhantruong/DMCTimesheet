@@ -1,20 +1,19 @@
-﻿using System;
+﻿using DMCTimesheet.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
-using DMCTimesheet.Models;
-using System.Security.Cryptography;
 
 namespace DMCTimesheet.Controllers
 {
     public class HomeController : Controller
     {
         private readonly dmcDbcontext db = new dmcDbcontext();
-        string conn = "server = 103.27.60.66; user id=dmcAdmin;password=DmcNewVision@2022#; persistsecurityinfo = True; database =cbimtech_dmc";
+        readonly string conn = "server = 103.27.60.66; user id=dmcAdmin;password=DmcNewVision@2022#; persistsecurityinfo = True; database =cbimtech_dmc";
 
 
         public ActionResult Index()
@@ -22,7 +21,6 @@ namespace DMCTimesheet.Controllers
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
             C02_Members logUser = Session["UserLogin"] as C02_Members;
             C06_UserPermisRelationship userper = db.C06_UserPermisRelationship.FirstOrDefault(s => s.idUser == logUser.UserID);
-
             switch (userper.idPer)
             {
                 case 1: //WebAdmin
@@ -52,7 +50,7 @@ namespace DMCTimesheet.Controllers
                 default: return RedirectToAction("UserPage");
 
             }
-            return RedirectToAction("Login");
+            //return RedirectToAction("Login");
         }
         #region Login
 
@@ -361,10 +359,10 @@ namespace DMCTimesheet.Controllers
                         return View("Login");
                     }
                     List<int?> projectsAssigned = db.C03_ProjectMembers.Where(
-                        s => s.ChuTriKienTruc == logUser.UserID 
-                        || s.ChuTriChinh == logUser.UserID 
-                        || s.ChuTriKetCau == logUser.UserID 
-                        || s.ChuTriMEP == logUser.UserID 
+                        s => s.ChuTriKienTruc == logUser.UserID
+                        || s.ChuTriChinh == logUser.UserID
+                        || s.ChuTriKetCau == logUser.UserID
+                        || s.ChuTriMEP == logUser.UserID
                         || s.LegalManager == logUser.UserID
                         || s.Admin == logUser.UserID
                         ).Select(p => p.ProjectID).ToList();

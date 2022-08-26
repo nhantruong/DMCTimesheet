@@ -32,7 +32,6 @@ namespace DMCTimesheet.Models
         public virtual DbSet<C04_Permission> C04_Permission { get; set; }
         public virtual DbSet<C05_PermissionDetail> C05_PermissionDetail { get; set; }
         public virtual DbSet<C06_UserPermisRelationship> C06_UserPermisRelationship { get; set; }
-        public virtual DbSet<C07_WorkType> C07_WorkType { get; set; }
         public virtual DbSet<C08_Timesheet> C08_Timesheet { get; set; }
         public virtual DbSet<C09_ProjectSubCon> C09_ProjectSubCon { get; set; }
         public virtual DbSet<C10_Owner> C10_Owner { get; set; }
@@ -44,7 +43,9 @@ namespace DMCTimesheet.Models
         public virtual DbSet<C16_Status> C16_Status { get; set; }
         public virtual DbSet<C17_Position> C17_Position { get; set; }
         public virtual DbSet<C18_Descipline> C18_Descipline { get; set; }
-        public virtual DbSet<C19_Workgroup> C19_Workgroup { get; set; }
         public virtual DbSet<C20_Stage> C20_Stage { get; set; }
+        public virtual DbSet<C99_ActivityLog> C99_ActivityLog { get; set; }
+        public virtual DbSet<C07_WorkType> C07_WorkType { get; set; }
+        public virtual DbSet<C19_Workgroup> C19_Workgroup { get; set; }
     }
 }
