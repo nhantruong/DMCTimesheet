@@ -312,6 +312,7 @@
     <Content Include="Assets\Photos\MemberImage\CTC-9-004591-HOHOAIAN.jpg" />
     <Content Include="Assets\Photos\MemberImage\CTC-9-004960-LEVANTRI.png" />
     <Content Include="Assets\Photos\MemberImage\CTC-9_000329_NGUYENKHUUTRONGLUAT.jpg" />
+    <Content Include="Assets\Photos\MemberImage\NguyenThanhTam.jpg" />
     <Content Include="Assets\Photos\MemberImage\no-image.jpg" />
     <Content Include="Assets\Photos\MemberImage\TrongLuat.jpg" />
     <Content Include="Assets\Photos\ProjectImage\0000.jpg" />
@@ -3301,6 +3302,18 @@
     <Content Include="Views\Setting\Locations.cshtml" />
     <Content Include="Views\Setting\EditLocation.cshtml" />
     <Content Include="Views\Setting\DeleteLocation.cshtml" />
+    <Content Include="Views\Setting\ProjectStates.cshtml" />
+    <Content Include="Views\Setting\EditStage.cshtml" />
+    <Content Include="Views\Setting\DeleteStage.cshtml" />
+    <Content Include="Views\Setting\Desciplines.cshtml" />
+    <Content Include="Views\Setting\EditDescipline.cshtml" />
+    <Content Include="Views\Setting\DeleteDescipline.cshtml" />
+    <Content Include="Views\Setting\Services.cshtml" />
+    <Content Include="Views\Setting\EditService.cshtml" />
+    <Content Include="Views\Setting\DeleteService.cshtml" />
+    <Content Include="Views\Setting\DeleteCompanyService.cshtml" />
+    <Content Include="Views\Setting\EditCompanyService.cshtml" />
+    <Content Include="Views\Setting\CreateNewCompanyService.cshtml" />
     <None Include="Web References\com.cbimtech.MemberServices\MemberService.disco" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

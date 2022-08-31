@@ -462,7 +462,36 @@ namespace DMCTimesheet.Controllers
 
         }
 
+        [HttpPost,ActionName("EditPermit")]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditPermit(int? id_user_perm,string idUser,int? idPer,int? actived)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            int UserId = db.C02_Members.FirstOrDefault(s => s.FullName == idUser).UserID;
+            if (UserId <=0) return RedirectToAction("EditPermission");
+            C06_UserPermisRelationship enity = db.C06_UserPermisRelationship.FirstOrDefault(s => s.id_user_perm == id_user_perm);
+            bool _actived = actived != 0;
+            if (enity == null) return RedirectToAction("EditPermission");
+            try
+            {
+                enity.idPer = idPer;
+                enity.actived = _actived;
 
+                db.Entry(enity).State = System.Data.Entity.EntityState.Modified;
+                db.SaveChangesAsync();
+                return RedirectToAction("EditPermission");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Có lỗi trong quá trình cập nhật dự liệu do {ex.InnerException.Message}";
+                List<C06_UserPermisRelationship> userPermiss = db.C06_UserPermisRelationship.ToList();
+                ViewBag.Members = db.C02_Members.ToList();
+                ViewBag.Permissions = db.C04_Permission.ToList();
+                return View("EditPermission", userPermiss);
+            }
+
+           
+        }
 
         #endregion
 

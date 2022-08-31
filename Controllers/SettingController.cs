@@ -161,37 +161,6 @@ namespace DMCTimesheet.Controllers
 
         }
 
-        public JsonResult GetWorktypebyID(int WorktypeId)
-        {
-            try
-            {
-                var worktype = db.C07_WorkType.Where(a => a.ID == WorktypeId).FirstOrDefault();
-                return Json(worktype, JsonRequestBehavior.AllowGet);
-            }
-            catch (Exception)
-            {
-                return Json(null, JsonRequestBehavior.AllowGet);
-            }
-        }
-
-        public JsonResult UpdateWorktype(C07_WorkType workType)
-        {
-
-            string status = "success";
-            try
-            {
-                db.Entry(workType).State = EntityState.Modified;
-                db.SaveChanges();
-
-            }
-            catch (Exception ex)
-            {
-                status = ex.Message;
-
-            }
-            return Json(workType, JsonRequestBehavior.AllowGet);
-        }
-
         #endregion
 
         #region 1A-WORKGROUP - Nhóm công việc
@@ -967,17 +936,440 @@ namespace DMCTimesheet.Controllers
         }
         #endregion
 
-        #region 8-Dịch vụ NTP
+        #region 8-Giai đoạn dự án - Project State
+        public ActionResult ProjectStates()
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            return View(db.C20_Stage.ToList());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateNewStage(string StageName)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            try
+            {
+                C20_Stage location = db.C20_Stage.FirstOrDefault(s => s.StageName.Contains(StageName.Trim()) || s.StageName == StageName.Trim());
+                if (location != null)
+                {
+                    ViewBag.Error = $"Đã có tên Giai đoạn này";
+                    return View("Locations", db.C20_Stage.ToList());
+                }
+                else
+                {
+                    C20_Stage newEnity = new C20_Stage() { StageName = StageName };
+                    db.C20_Stage.Add(newEnity);
+                    db.SaveChanges();
+                    return RedirectToAction("ProjectStates");
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Có lỗi xãy ra do {ex.InnerException.Message}";
+                return View("ProjectStates", db.C20_Stage.ToList());
+            }
+
+        }
+
+        public ActionResult EditStage(int? Id)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Id == null) return RedirectToAction("ProjectStates");
+            C20_Stage enity = db.C20_Stage.FirstOrDefault(s => s.Id == Id);
+            if (enity == null) return RedirectToAction("ProjectStates");
+            return View(enity);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditStage(int? Id, string StageName)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Id == null) return RedirectToAction("ProjectStates");
+            C20_Stage enity = db.C20_Stage.FirstOrDefault(s => s.Id == Id);
+            if (enity == null) return RedirectToAction("ProjectStates");
+            try
+            {
+                enity.StageName = StageName;
+
+                db.Entry(enity).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("ProjectStates");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Có lỗi xãy ra do {ex.InnerException.Message}";
+                return View();
+            }
+        }
+
+        public ActionResult DeleteStage(int? Id)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Id == null) return RedirectToAction("ProjectStates");
+            C20_Stage enity = db.C20_Stage.FirstOrDefault(s => s.Id == Id);
+            if (enity == null) return RedirectToAction("ProjectStates");
+            return View(enity);
+        }
+
+        [HttpPost, ActionName("DeleteStageConfirmed")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteStageConfirmed(int? Id)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Id == null) return RedirectToAction("ProjectStates");
+            C20_Stage enity = db.C20_Stage.FirstOrDefault(s => s.Id == Id);
+            if (enity == null) return RedirectToAction("ProjectStates");
+            try
+            {
+                db.Entry(enity).State = EntityState.Deleted;
+                db.SaveChanges();
+                return RedirectToAction("ProjectStates");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Có lỗi xãy ra do {ex.InnerException.Message}";
+                return View("ProjectStates");
+            }
+        }
+        #endregion
+
+        #region 9-Chuyên môn - descipline
+        public ActionResult Desciplines()
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            return View(db.C18_Descipline.ToList());
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateNewDesciplines(string DesciplineName, int? Active)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            try
+            {
+                C18_Descipline descipline = db.C18_Descipline.FirstOrDefault(s => s.DesciplineName.Contains(DesciplineName.Trim()) || s.DesciplineName == DesciplineName.Trim());
+                if (descipline != null)
+                {
+                    ViewBag.Error = $"Đã có tên địa phương này";
+                    return View("Desciplines", db.C18_Descipline.ToList());
+                }
+                else
+                {
+                    bool _active = Active != 0;
+                    C18_Descipline newEnity = new C18_Descipline() { DesciplineName = DesciplineName, Active = _active };
+                    db.C18_Descipline.Add(newEnity);
+                    db.SaveChanges();
+                    return RedirectToAction("Desciplines");
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Có lỗi xãy ra do {ex.InnerException.Message}";
+                return View("Desciplines", db.C18_Descipline.ToList());
+            }
+
+        }
+
+        public ActionResult EditDescipline(int? Id)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Id == null) return RedirectToAction("Desciplines");
+            C18_Descipline enity = db.C18_Descipline.FirstOrDefault(s => s.Id == Id);
+            if (enity == null) return RedirectToAction("Desciplines");
+            return View(enity);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditDescipline(int? Id, string DesciplineName, int? Active)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Id == null) return RedirectToAction("Desciplines");
+            C18_Descipline enity = db.C18_Descipline.FirstOrDefault(s => s.Id == Id);
+            if (enity == null) return RedirectToAction("Desciplines");
+            try
+            {
+                enity.DesciplineName = DesciplineName;
+                enity.Active = Active!=0;
+
+                db.Entry(enity).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Desciplines");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Có lỗi xãy ra do {ex.InnerException.Message}";
+                return View();
+            }
+        }
+
+        public ActionResult DeleteDescipline(int? Id)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Id == null) return RedirectToAction("Desciplines");
+            C18_Descipline enity = db.C18_Descipline.FirstOrDefault(s => s.Id == Id);
+            if (enity == null) return RedirectToAction("Desciplines");
+            return View(enity);
+        }
+
+        [HttpPost, ActionName("DeleteDesciplineConfirmed")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteDesciplineConfirmed(int? Id)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Id == null) return RedirectToAction("Desciplines");
+            C18_Descipline enity = db.C18_Descipline.FirstOrDefault(s => s.Id == Id);
+            if (enity == null) return RedirectToAction("Desciplines");
+            try
+            {
+                db.Entry(enity).State = EntityState.Deleted;
+                db.SaveChanges();
+                return RedirectToAction("Desciplines");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Có lỗi xãy ra do {ex.InnerException.Message}";
+                return View("Desciplines");
+            }
+        }
 
         #endregion
 
-        #region 9-Dịch vụ
+        #region 10-Dịch vụ
+        public ActionResult Services()
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            ViewBag.CompanyService = db.C15_SubConServices.ToList();
+            ViewBag.CompanyName = db.C12_SubContractor.ToList();
+           // ViewBag.Service = db.C14_Services.ToList();
+            return View(db.C14_Services.ToList());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateNewService(string ServiceName)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            try
+            {
+                C14_Services location = db.C14_Services.FirstOrDefault(s => s.ServiceName.Contains(ServiceName.Trim()) || s.ServiceName == ServiceName.Trim());
+                if (location != null)
+                {
+                    ViewBag.Error = $"Đã có tên Dịch vụ này";
+                    ViewBag.CompanyService = db.C15_SubConServices.ToList();
+                    ViewBag.CompanyName = db.C12_SubContractor.ToList();
+                   // ViewBag.Service = db.C14_Services.ToList();
+                    return View("Locations", db.C14_Services.ToList());
+                }
+                else
+                {
+                    C14_Services newEnity = new C14_Services() { ServiceName = ServiceName };
+                    db.C14_Services.Add(newEnity);
+                    db.SaveChanges();
+                    return RedirectToAction("Services");
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Có lỗi xãy ra do {ex.InnerException.Message}";
+                ViewBag.CompanyService = db.C15_SubConServices.ToList();
+                ViewBag.CompanyName = db.C12_SubContractor.ToList();
+             //  ViewBag.Service = db.C14_Services.ToList();
+                return View("Services", db.C20_Stage.ToList());
+            }
+
+        }
+
+        public ActionResult EditService(int? Id)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Id == null) return RedirectToAction("Services");
+            C14_Services enity = db.C14_Services.FirstOrDefault(s => s.ServiceId == Id);
+            if (enity == null) return RedirectToAction("Services");
+            return View(enity);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditService(int? ServiceId, string ServiceName)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (ServiceId == null) return RedirectToAction("Services");
+            C14_Services enity = db.C14_Services.FirstOrDefault(s => s.ServiceId == ServiceId);
+            if (enity == null) return RedirectToAction("Services");
+            try
+            {
+                enity.ServiceName = ServiceName;
+
+                db.Entry(enity).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Services");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Có lỗi xãy ra do {ex.InnerException.Message}";
+                ViewBag.CompanyService = db.C15_SubConServices.ToList();
+                ViewBag.CompanyName = db.C12_SubContractor.ToList();
+               // ViewBag.Service = db.C14_Services.ToList();
+                return View();
+            }
+        }
+
+        public ActionResult DeleteService(int? Id)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Id == null) return RedirectToAction("Services");
+            C14_Services enity = db.C14_Services.FirstOrDefault(s => s.ServiceId == Id);
+            if (enity == null) return RedirectToAction("Services");
+            return View(enity);
+        }
+
+        [HttpPost, ActionName("DeleteServiceConfirmed")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteServiceConfirmed(int? ServiceId)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (ServiceId == null) return RedirectToAction("Services");
+            C14_Services enity = db.C14_Services.FirstOrDefault(s => s.ServiceId == ServiceId);
+            if (enity == null) return RedirectToAction("Services");
+            try
+            {
+                db.Entry(enity).State = EntityState.Deleted;
+                db.SaveChanges();
+                return RedirectToAction("Services");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Có lỗi xãy ra do {ex.InnerException.Message}";
+                ViewBag.CompanyService = db.C15_SubConServices.ToList();
+                ViewBag.CompanyName = db.C12_SubContractor.ToList();
+             
+                return View("Services");
+            }
+        }
+
 
         #endregion
 
+        #region 12-Company services
+
+        public ActionResult CreateNewCompanyService()
+        {
+            ViewBag.CompanyName = db.C12_SubContractor.ToList();
+            ViewBag.Service = db.C14_Services.ToList();
+
+            return View();
+        }
+
+        [HttpPost, ActionName("CreateNewCompanyService")]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateNewCompanyService(int? ServiceId, int? SubconId, DateTime Date)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            C15_SubConServices newEnity = new C15_SubConServices() { SubConId = SubconId, ServiceId = ServiceId, Date = Date };
+            try
+            {
+                db.Entry(newEnity).State = EntityState.Added;
+                db.SaveChanges();
+                return RedirectToAction("Services");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Có lỗi xãy ra do {ex.InnerException.Message}";
+                ViewBag.CompanyService = db.C15_SubConServices.ToList();
+                ViewBag.CompanyName = db.C12_SubContractor.ToList();
+                return View("Services");
+            }
+
+        }
+
+        public ActionResult EditCompanyService(int? Id)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Id == null) return RedirectToAction("Services");
+            ViewBag.CompanyName = db.C12_SubContractor.ToList();
+            ViewBag.Service = db.C14_Services.ToList();
+            C15_SubConServices enity = db.C15_SubConServices.FirstOrDefault(s => s.Id == Id);
+            //Tìm danh sách các service của cty này
+            List<C15_SubConServices> item = db.C15_SubConServices.Where(s => s.SubConId == enity.SubConId).ToList();
+
+            return View(item);
+        }
 
 
 
+        [HttpPost, ActionName("EditCompanyService")]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditCompanyService(int? Id, int? ServiceId, DateTime Date)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Id == null) return RedirectToAction("Services");
+            C15_SubConServices enity = db.C15_SubConServices.FirstOrDefault(s => s.Id == Id);
+            if (enity == null) return RedirectToAction("Services");
+            //C12_SubContractor companyId = db.C12_SubContractor.FirstOrDefault(s => s.ShortName == SubConId_Name);
+
+            try
+            {
+                enity.ServiceId = ServiceId;
+                enity.Date = Date;
+                db.Entry(enity).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Services");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Có lỗi xãy ra do {ex.InnerException.Message}";
+                ViewBag.CompanyService = db.C15_SubConServices.ToList();
+                ViewBag.CompanyName = db.C12_SubContractor.ToList();
+
+                return View("Services");
+            }
+
+        }
+
+
+        public ActionResult DeleteCompanyService(int? Id)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Id == null) return RedirectToAction("Services");
+            C15_SubConServices enity = db.C15_SubConServices.FirstOrDefault(s => s.Id == Id);
+            if (enity == null) return RedirectToAction("Services");
+
+            ViewBag.CompanyName = db.C12_SubContractor.ToList();
+            ViewBag.Service = db.C14_Services.ToList();
+
+            return View(enity);
+        }
+
+        [HttpPost, ActionName("DeleteCompanyServiceConfirm")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteCompanyServiceConfirm(int? Id)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Id == null) return RedirectToAction("Services");
+            C15_SubConServices enity = db.C15_SubConServices.FirstOrDefault(s => s.Id == Id);
+            if (enity == null) return RedirectToAction("Services");
+            try
+            {
+
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            ViewBag.CompanyName = db.C12_SubContractor.ToList();
+            ViewBag.Service = db.C14_Services.ToList();
+
+            return View(enity);
+        }
+
+
+
+        #endregion
 
     }
 }

@@ -79,7 +79,7 @@
                         {
                             case 3:// System Administrator
                                 {
-                                    <li>@Html.ActionLink("Cấp quyền", "SetPermission", "Member", null, new { @class = "text-info" })</li>
+                                    @*<li>@Html.ActionLink("Cấp quyền", "SetPermission", "Member", null, new { @class = "text-info" })</li>*@
                                     <li>@Html.ActionLink("Cập nhật quyền", "EditPermission", "Member", null, new { @class = "text-info" })</li>
                                     break;
                                 }
@@ -121,9 +121,11 @@
                         <li>@Html.ActionLink("Loại hình dự án", "ProjectType", "Setting")</li>
                         <li>@Html.ActionLink("Địa điểm", "Locations", "Setting")</li>
 
+                        <li>@Html.ActionLink("Giai đoạn dự án", "ProjectStates", "Setting")</li>
 
-                        @*<li>@Html.ActionLink("Điều chỉnh dịch vụ NTP", "AssignServices", "Setting")</li>
-        <li>@Html.ActionLink("Dịch vụ", "Services", "Setting")</li>*@
+                        <li>@Html.ActionLink("Chuyên môn", "Desciplines", "Setting")</li>
+                       @* <li>@Html.ActionLink("Dịch vụ", "Services", "Setting")</li>*@
+
 
                     </ul>
                     <a class="text-info"></a>
