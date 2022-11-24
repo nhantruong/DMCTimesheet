@@ -98,7 +98,7 @@ namespace DMCTimesheet.Controllers
             try
             {
                 C02_Members enity = db.C02_Members.FirstOrDefault(s => s.UserID == UserID);
-                
+
                 if (ModelState.IsValid)
                 {
                     db.Entry(enity).State = System.Data.Entity.EntityState.Deleted;
@@ -215,25 +215,35 @@ namespace DMCTimesheet.Controllers
         public ActionResult AssignMember()
         {
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
-            ViewBag.Projects = db.C01_Projects.ToList();
-            ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
+
             List<MemberOutput> BIMer = new List<MemberOutput>();
-
-            using (MemberService memberService = new MemberService())
+            try
             {
-                BIMer.AddRange(memberService.DanhSachMember().ToList());
+                using (MemberService memberService = new MemberService())
+                {
+                    BIMer.AddRange(memberService.DanhSachMember().ToList());
+                }
+                ViewBag.BIMer = BIMer;
+                ViewBag.Projects = db.C01_Projects.ToList();
+                ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
+                return View(db.C03_ProjectMembers.ToList());
             }
-            ViewBag.BIMer = BIMer;           
+            catch (Exception)
+            {
+                ViewBag.Projects = db.C01_Projects.ToList();
+                ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
+                ViewBag.Error = "Lỗi kết nối đến server ban BIM";
+                return View(db.C03_ProjectMembers.ToList());
+            }
 
-            return View(db.C03_ProjectMembers.ToList());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult NewAssignMember(int? ProjectID, int? ChuTriChinh, int? ChuTriKienTruc, int? ChuTriKetCau, int? ChuTriMEP, DateTime Ngay,
-            int? BIMManager, int? LegalManager, int? Admin)
+            int? BIMManager, int? LegalManager, int? Admin, int? ChuTriKienTruc2, int? ChuTriKetCau2, int? ChuTriMEP2, int? LegalManager2)
         {
-            if (Session["UserLogin"] == null || ProjectID == null) return RedirectToAction("Login", "Home");            
+            if (Session["UserLogin"] == null || ProjectID == null) return RedirectToAction("Login", "Home");
             try
             {
                 C03_ProjectMembers current = db.C03_ProjectMembers.FirstOrDefault(s => s.ProjectID == ProjectID);
@@ -248,6 +258,10 @@ namespace DMCTimesheet.Controllers
                         ChuTriMEP = ChuTriMEP,
                         BIMManager = BIMManager,
                         LegalManager = LegalManager,
+                        ChuTriKienTruc2 = ChuTriKienTruc2,
+                        ChuTriKetCau2 = ChuTriKetCau2,
+                        ChuTriMEP2 = ChuTriMEP2,
+                        LegalManager2 = LegalManager2,
                         Ngay = Ngay,
                         Admin = Admin
                     };
@@ -310,7 +324,7 @@ namespace DMCTimesheet.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EditAssignMember(int? ID, int? ProjectID, int? ChuTriChinh, int? ChuTriKienTruc, int? ChuTriKetCau, int? ChuTriMEP, DateTime Ngay,
-            int? BIMManager, int? LegalManager, int? Admin)
+            int? BIMManager, int? LegalManager, int? Admin, int? ChuTriKienTruc2, int? ChuTriKetCau2, int? ChuTriMEP2, int? LegalManager2)
         {
             if (Session["UserLogin"] == null || ID == null || ProjectID == null) return RedirectToAction("Login", "Home");
             if (ID < 0) return RedirectToAction("AssignMember");
@@ -327,9 +341,15 @@ namespace DMCTimesheet.Controllers
                 enity.ChuTriKienTruc = ChuTriKienTruc;
                 enity.ChuTriKetCau = ChuTriKetCau;
                 enity.ChuTriMEP = ChuTriMEP;
+                enity.LegalManager = LegalManager;
+
+                enity.ChuTriKienTruc2 = ChuTriKienTruc2;
+                enity.ChuTriKetCau2 = ChuTriKetCau2;
+                enity.ChuTriMEP2 = ChuTriMEP2;
+                enity.LegalManager2 = LegalManager2;
+
                 enity.BIMManager = BIMManager;
                 enity.Ngay = Ngay;
-                enity.LegalManager = LegalManager;
                 enity.Admin = Admin;
 
                 if (ModelState.IsValid)
@@ -353,7 +373,7 @@ namespace DMCTimesheet.Controllers
 
         }
 
-        
+
         public ActionResult DeleteAssigned(int? ID)
         {
             if (Session["UserLogin"] == null || ID == null) return RedirectToAction("Login", "Home");
@@ -377,7 +397,7 @@ namespace DMCTimesheet.Controllers
             return View(enity);
         }
 
-        [HttpPost,ActionName("DeleteAssignConfirmed")]
+        [HttpPost, ActionName("DeleteAssignConfirmed")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteAssignConfirmed(int? ID)
         {
@@ -462,13 +482,13 @@ namespace DMCTimesheet.Controllers
 
         }
 
-        [HttpPost,ActionName("EditPermit")]
+        [HttpPost, ActionName("EditPermit")]
         [ValidateAntiForgeryToken]
-        public ActionResult EditPermit(int? id_user_perm,string idUser,int? idPer,int? actived)
+        public ActionResult EditPermit(int? id_user_perm, string idUser, int? idPer, int? actived)
         {
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
             int UserId = db.C02_Members.FirstOrDefault(s => s.FullName == idUser).UserID;
-            if (UserId <=0) return RedirectToAction("EditPermission");
+            if (UserId <= 0) return RedirectToAction("EditPermission");
             C06_UserPermisRelationship enity = db.C06_UserPermisRelationship.FirstOrDefault(s => s.id_user_perm == id_user_perm);
             bool _actived = actived != 0;
             if (enity == null) return RedirectToAction("EditPermission");
@@ -490,7 +510,7 @@ namespace DMCTimesheet.Controllers
                 return View("EditPermission", userPermiss);
             }
 
-           
+
         }
 
         #endregion

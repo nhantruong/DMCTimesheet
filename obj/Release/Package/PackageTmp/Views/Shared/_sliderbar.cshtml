@@ -111,22 +111,28 @@
                 <li>
                     <a><i class="fa fa-gear"></i> CÀI ĐẶT <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
+                        <shadow class="text-warning" style="margin-left:20px">Timesheet và Nhân sự</shadow>
                         <li>@Html.ActionLink("Công việc và Nhóm công việc", "Worktype", "Setting")</li>
-                        <li>@Html.ActionLink("Chủ đầu tư", "Ownerlist", "Setting")</li>
-                        <li>@Html.ActionLink("Thầu phụ thiết kế", "SubContractors", "Setting")</li>
-
-                        <li>@Html.ActionLink("Tình trạng Dự án", "StatusList", "Setting")</li>
+                        <li>@Html.ActionLink("Chuyên môn", "Desciplines", "Setting")</li>
                         <li>@Html.ActionLink("Chức danh", "PositionList", "Setting")</li>
+                        <li>@Html.ActionLink("PowerBI_report", "PowerBIEmbedString", "Setting")</li>
 
+                        <shadow class="text-warning" style="margin-left:20px">Chủ thể</shadow>
+                        <li>@Html.ActionLink("Chủ đầu tư", "Ownerlist", "Setting")</li>
+                        <li>@Html.ActionLink("NTP thiết kế", "SubContractors", "Setting")</li>
+
+                        <shadow class="text-warning" style="margin-left:20px">Dự án</shadow>
+                        <li>@Html.ActionLink("Tình trạng Dự án", "StatusList", "Setting")</li>
                         <li>@Html.ActionLink("Loại hình dự án", "ProjectType", "Setting")</li>
-                        <li>@Html.ActionLink("Địa điểm", "Locations", "Setting")</li>
-
                         <li>@Html.ActionLink("Giai đoạn dự án", "ProjectStates", "Setting")</li>
 
-                        <li>@Html.ActionLink("Chuyên môn", "Desciplines", "Setting")</li>
-                       @* <li>@Html.ActionLink("Dịch vụ", "Services", "Setting")</li>*@
-
-
+                        <shadow class="text-warning" style="margin-left:20px">Khác</shadow>
+                        <li>@Html.ActionLink("Địa điểm", "Locations", "Setting")</li>
+                        <li>@Html.ActionLink("Dịch vụ của NTP", "Services", "Setting")</li>
+                    </ul>
+                    <ul class="nav child_menu">
+                    </ul>
+                    <ul class="nav child_menu">
                     </ul>
                     <a class="text-info"></a>
                 </li>

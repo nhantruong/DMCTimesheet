@@ -7,7 +7,12 @@
 
     List<DMCTimesheet.Models.C02_Members> _Members = ViewBag.Members as List<DMCTimesheet.Models.C02_Members>;
     List<DMCTimesheet.Models.C02_Members> Members = _Members.OrderBy(s => s.FullName).ToList();
-    List<DMCTimesheet.com.cbimtech.MemberServices.MemberOutput> BIMer = ViewBag.BIMer as List<DMCTimesheet.com.cbimtech.MemberServices.MemberOutput>;
+    List<DMCTimesheet.com.cbimtech.MemberServices.MemberOutput> BIMer = new List<DMCTimesheet.com.cbimtech.MemberServices.MemberOutput>();
+    if (ViewBag.BIMer != null)
+    {
+        BIMer = ViewBag.BIMer as List<DMCTimesheet.com.cbimtech.MemberServices.MemberOutput>;
+    }
+
     string Error = Session["MemberAssignError"] as string ?? "";
     List<KeyValuePair<int, List<int?>>> ProjectOfMember = new List<KeyValuePair<int, List<int?>>>();
     List<string> ChartLabels = new List<string>();
@@ -31,10 +36,14 @@
         {
             KeyValuePair<int, List<int?>> keyValuePair = new KeyValuePair<int, List<int?>>(mem.UserID, Model.Where(s => s.ChuTriChinh == mem.UserID
             || s.ChuTriKienTruc == mem.UserID
+            || s.ChuTriKienTruc2 == mem.UserID
             || s.ChuTriKetCau == mem.UserID
+            || s.ChuTriKetCau2 == mem.UserID
             || s.ChuTriMEP == mem.UserID
+            || s.ChuTriMEP2 == mem.UserID
             || s.Admin == mem.UserID
-            || s.LegalManager == mem.UserID).Select(p => p.ProjectID).ToList());
+            || s.LegalManager == mem.UserID
+            || s.LegalManager2 == mem.UserID).Select(p => p.ProjectID).ToList());
 
             ProjectOfMember.Add(keyValuePair);
         }
@@ -95,10 +104,21 @@
                                 }
                             </select>
                         </div>
-                        @* interior ID *@
+                        @* Kiến trúc *@
                         <div class="form-group row  text-left">
                             <lable class="control-label col-sm-3 col-sm-3 col-xs-3">Chủ trì bộ môn <b class="text-primary">Kiến trúc</b></lable>
                             <select name="ChuTriKienTruc" class="form-control col-sm-7 col-sm-9 col-xs-9">
+                                <option value=""></option>
+                                @foreach (var item in Members.Where(s => s.Descipline == 1 && s.SystemMember == false).OrderBy(s => s.UserName))
+                                {
+                                    <option value=@item.UserID>@item.FullName</option>
+                                }
+                            </select>
+                        </div>
+                        @* Kiến trúc 2*@
+                        <div class="form-group row  text-left">
+                            <lable class="control-label col-sm-3 col-sm-3 col-xs-3">Hỗ trợ bộ môn <b class="text-primary">Kiến trúc</b></lable>
+                            <select name="ChuTriKienTruc2" class="form-control col-sm-7 col-sm-9 col-xs-9">
                                 <option value=""></option>
                                 @foreach (var item in Members.Where(s => s.Descipline == 1 && s.SystemMember == false).OrderBy(s => s.UserName))
                                 {
@@ -117,11 +137,33 @@
                                 }
                             </select>
                         </div>
+                        @* Structure 2 *@
+                        <div class="form-group row  text-left">
+                            <lable class="control-label col-sm-3 col-sm-3 col-xs-3">Hỗ trợ bộ môn <b class="text-primary">Kết cấu</b></lable>
+                            <select name="ChuTriKetCau2" class="form-control col-sm-7 col-sm-9 col-xs-9">
+                                <option value=""></option>
+                                @foreach (var item in Members.Where(s => s.Descipline == 2 && s.SystemMember == false).OrderBy(s => s.UserName))
+                                {
+                                    <option value=@item.UserID>@item.FullName</option>
+                                }
+                            </select>
+                        </div>
 
                         @* MEP ID *@
                         <div class="form-group row  text-left">
-                            <lable class="control-label col-sm-3 col-sm-3 col-xs-3">Chủ trì bộ môn <b class="text-primary">Cơ điện - MEPF</b></lable>
+                            <lable class="control-label col-sm-3 col-sm-3 col-xs-3">Hỗ trợ bộ môn <b class="text-primary">Cơ điện - MEPF</b></lable>
                             <select name="ChuTriMEP" class="form-control col-sm-7 col-sm-9 col-xs-9">
+                                <option value=""></option>
+                                @foreach (var item in Members.Where(s => s.Descipline == 3 && s.SystemMember == false).OrderBy(s => s.UserName))
+                                {
+                                    <option value=@item.UserID>@item.FullName</option>
+                                }
+                            </select>
+                        </div>
+                        @* MEP 2 *@
+                        <div class="form-group row  text-left">
+                            <lable class="control-label col-sm-3 col-sm-3 col-xs-3">Hỗ trợ bộ môn <b class="text-primary">Cơ điện - MEPF</b></lable>
+                            <select name="ChuTriMEP2" class="form-control col-sm-7 col-sm-9 col-xs-9">
                                 <option value=""></option>
                                 @foreach (var item in Members.Where(s => s.Descipline == 3 && s.SystemMember == false).OrderBy(s => s.UserName))
                                 {
@@ -133,6 +175,17 @@
                         <div class="form-group row  text-left">
                             <lable class="control-label col-sm-3 col-sm-3 col-xs-3"><b class="text-primary">Pháp lý</b></lable>
                             <select name="LegalManager" class="form-control col-sm-7 col-sm-9 col-xs-9">
+                                <option value=""></option>
+                                @foreach (var item in Members.Where(s => s.SystemMember == false).OrderBy(s => s.UserName))
+                                {
+                                    <option value=@item.UserID>@item.FullName</option>
+                                }
+                            </select>
+                        </div>
+                        @* Legal 2 *@
+                        <div class="form-group row  text-left">
+                            <lable class="control-label col-sm-3 col-sm-3 col-xs-3"><b class="text-primary">Hỗ trợ Pháp lý</b></lable>
+                            <select name="LegalManager2" class="form-control col-sm-7 col-sm-9 col-xs-9">
                                 <option value=""></option>
                                 @foreach (var item in Members.Where(s => s.SystemMember == false).OrderBy(s => s.UserName))
                                 {
@@ -155,9 +208,16 @@
                             <lable class="control-label col-sm-3 col-sm-3 col-xs-3">Quản lý <b class="text-primary">BIM</b></lable>
                             <select name="BIMManager" class="form-control col-sm-7 col-sm-9 col-xs-9">
                                 <option value=""></option>
-                                @foreach (var item in BIMer.Where(s => s.UserType == "User").OrderBy(s => s.SoftName))
+                                @if (BIMer.Count() > 0)
                                 {
-                                    <option value=@item.ID>@item.SoftName</option>
+                                    foreach (var item in BIMer.Where(s => s.UserType == "User").OrderBy(s => s.SoftName))
+                                    {
+                                        <option value=@item.ID>@item.SoftName</option>
+                                    }
+                                }
+                                else
+                                {
+                                    <option value="">Kết nối data BIM lỗi</option>
                                 }
                             </select>
                         </div>
@@ -195,23 +255,23 @@
     <table class="table">
         <thead class="table-dark">
             <tr class="row text-center">
-                <td class="col-sm-1"><b>Ngày lập</b></td>
-                <td class="col-sm-2"><b>Dự án</b></td>
-                <td class="col-sm-1"><b>Chủ trì dự án</b></td>
-                <td class="col-sm-1"><b>Chủ trì Kiến trúc</b></td>
-                <td class="col-sm-1"><b>Chủ trì Kết cấu</b></td>
-                <td class="col-sm-1"><b>Chủ trì MEP</b></td>
-                <td class="col-sm-1"><b>Pháp lý</b></td>
-                <td class="col-sm-1"><b>Admin</b></td>
-                <td class="col-sm-1"><b>Quản lý BIM</b></td>
-                <td class="col-sm-1"><b>Xóa</b></td>
+                <td class="col-1"><b>Ngày lập</b></td>
+                <td class="col-2"><b>Dự án</b></td>
+                <td class="col-1"><b>Chủ trì dự án</b></td>
+                <td class="col-1"><b>Bộ môn Kiến trúc</b></td>
+                <td class="col-1"><b>Bộ môn Kết cấu</b></td>
+                <td class="col-1"><b>Bộ môn MEP</b></td>
+                <td class="col-1"><b>Pháp lý</b></td>
+                <td class="col-1"><b>Admin</b></td>
+                <td class="col-1"><b>Quản lý BIM</b></td>
+                <td class="col-1"><b>Xóa</b></td>
             </tr>
         </thead>
     </table>
 </div>
 <div class="table-responsive scrollbar">
     <table class="table table-hover table-bordered table-striped">
-        <caption>Số lượng dự án <b class="text-danger">@Model.Count()</b></caption>        
+        <caption>Số lượng dự án <b class="text-danger">@Model.Count()</b></caption>
         <tbody>
             @if (Model == null || Model.Count() == 0)
             {
@@ -226,53 +286,79 @@
                     string name = @Projects.FirstOrDefault(s => s.ProjectID == item.ProjectID).MaDuAn + "-" + @Projects.FirstOrDefault(s => s.ProjectID == item.ProjectID).ProjectOtherName;
 
                     <tr class="row text-dark text-center">
-                        <td class="col-sm-1">@DateTime.Parse(item.Ngay.ToString()).ToShortDateString()</td>
-                        <td class="col-sm-2 text-left"><b>@Html.ActionLink(name, "EditAssign", "Member", new { Id = item.ID }, new { @class = "text-primary" })</b></td>
-                        <td class="col-sm-1">
+                        <td class="col-1">@DateTime.Parse(item.Ngay.ToString()).ToShortDateString()</td>
+                        <td class="col-2 text-left"><b>@Html.ActionLink(name, "EditAssign", "Member", new { Id = item.ID }, new { @class = "text-primary" })</b></td>
+                        <td class="col-1">
                             @if (item.ChuTriChinh != null)
                             {
                                 <b class="text-danger">@Members.FirstOrDefault(s => s.UserID == item.ChuTriChinh).FullName</b>
                             }
                         </td>
-                        <td class="col-sm-1">
+                        <td class="col-1 text-left text-justify">
+
                             @if (item.ChuTriKienTruc != null)
                             {
-                                @Members.FirstOrDefault(s => s.UserID == item.ChuTriKienTruc).FullName
+                                <a>Chủ trì: </a><p><b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriKienTruc).FullName </b></p>}
+                            @if (item.ChuTriKienTruc2 != null)
+                            {
+                                <a>Hỗ trợ: </a><p><b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriKienTruc2).FullName</b></p>
                             }
+
                         </td>
-                        <td class="col-sm-1">
+                        <td class="col-1 text-sm-left">
                             @if (item.ChuTriKetCau != null)
                             {
-                                @Members.FirstOrDefault(s => s.UserID == item.ChuTriKetCau).FullName
-                            }
-                        </td>
-                        <td class="col-sm-1">
-                            @if (item.ChuTriMEP != null)
+                                <a>Chủ trì: </a><p><b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriKetCau).FullName</b></p>
+                        }
+                            @if (item.ChuTriKetCau2 != null)
                             {
-                                @Members.FirstOrDefault(s => s.UserID == item.ChuTriMEP).FullName
-                            }
-                        </td>
-                        <td class="col-sm-1">
-                            @if (item.LegalManager != null)
-                            {
-                                @Members.FirstOrDefault(s => s.UserID == item.LegalManager).FullName
-                            }
+                                <a>Hỗ trợ: </a><p><b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriKetCau2).FullName</b></p>
+                        }
 
                         </td>
-                        <td class="col-sm-1">
+                        <td class="col-1 text-sm-left">
+                           
+                                @if (item.ChuTriMEP != null)
+                                {
+                                    <a>Chủ trì: </a><p><b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriMEP).FullName</b></p>
+                                }
+                                @if (item.ChuTriMEP2 != null)
+                                {
+                                    <a>Hỗ trợ: </a><p><b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriMEP2).FullName</b></p>
+                                }
+                           
+
+                        </td>
+                        <td class="col-1 text-sm-left">
+                           
+                                @if (item.LegalManager != null)
+                                {
+                                    <a>Chủ trì: </a><p><b class=""> @Members.FirstOrDefault(s => s.UserID == item.LegalManager).FullName</b></p>
+                                }
+                                @if (item.LegalManager2 != null)
+                                {
+                                    <a>Hỗ trợ: </a><p><b class="">@Members.FirstOrDefault(s => s.UserID == item.LegalManager2).FullName</b></p>
+                                }
+                           
+                        </td>
+                        <td class="col-1 text-sm-left">
                             @if (item.Admin != null)
                             {
-                                @Members.FirstOrDefault(s => s.UserID == item.Admin).FullName
+                                <b>@Members.FirstOrDefault(s => s.UserID == item.Admin).FullName</b>
                             }
 
                         </td>
-                        <td class="col-sm-1">
+                        <td class="col-1 text-sm-left">
                             @if (item.BIMManager != null)
                             {
-                                @BIMer.FirstOrDefault(s => s.ID == item.BIMManager).SoftName
+                                if (BIMer.Count() > 0)
+                                {
+                                   <b> @BIMer.FirstOrDefault(s => s.ID == item.BIMManager).SoftName</b>
+                                }
+
                             }
                         </td>
-                        <td class="col-sm-1">@Html.ActionLink(" ", "DeleteAssigned", "Member", new { ID = item.ID }, new { @class = "btn fa fa-remove" })</td>
+                        <td class="col-1">@Html.ActionLink(" ", "DeleteAssigned", "Member", new { ID = item.ID }, new { @class = "btn fa fa-remove" })</td>
                     </tr>
                 }
             }
@@ -323,7 +409,6 @@
                                 <tr class="text-dark text-center row">
                                     <td class="col-sm-3 text-center">
                                         <p>
-
                                             <img src="@UserImg" class="img-circle" alt="Alternate Text" style="height:50px; width:50px" />
                                         </p>
                                         <p>
@@ -422,3 +507,12 @@
        }
                     });
 </script>
+
+<style>
+    .oneline {
+        /*width: 400px;*/
+        overflow: auto;
+        white-space: nowrap;
+        /*text-overflow:clip;*/
+    }
+</style>

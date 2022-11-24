@@ -100,6 +100,17 @@
                                 }
                             </select>
                         </div>
+                        @* StageID *@
+                        <div class="form-group row  text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Giai Đoạn</lable>
+                            <select name="ProjectStage" class="form-control col-md-7 col-sm-9 col-xs-9">
+                                <option value=""></option>
+                                @foreach (var item in stage.OrderBy(s => s.StageName))
+                                {
+                                    <option value=@item.Id>@item.StageName</option>
+                                }
+                            </select>
+                        </div>
 
                         <div class="form-group text-left">
                             <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
@@ -115,7 +126,7 @@
 
 <div class="clearfix"></div>
 <div class="col-md-12">
-    <div class="col-md-10"><h3 class="text-primary">DANH SÁCH DỰ ÁN ĐANG TIẾN HÀNH</h3></div>
+    <div class="col-md-10"><h3 class="text-primary">DANH SÁCH DỰ ÁN ĐANG TIẾN HÀNH <span class="text-danger">@myProject.Where(s => s.ProjectStage != 5).Count()</span></h3></div>
     <div class="col-md-2">
         <button type="button" class="btn btn-success btn-small text-right" data-toggle="modal" data-target="#newProject"><i class="fa fa-plus-circle"></i> Thêm dự án</button>
     </div>
@@ -152,7 +163,7 @@
             }
             else
             {
-                foreach (var item in myProject.Where(s => s.ProjectStage != 5).OrderByDescending(m => m.Year).OrderByDescending(p => p.StartDate))
+                foreach (var item in myProject.Where(s => s.ProjectStage != 5).OrderByDescending(m => m.MaDuAn).ThenBy(p => p.ProjectOtherName))
                 {
                     <tr class="row text-dark">
                         <td class="col-sm-1 text-center">@item.Year</td>
@@ -165,28 +176,24 @@
                                 {
                                     string color = status.FirstOrDefault(s => s.Id == item.ProjectStatusId).ColorCode;
                                     <span class="@color">@status.FirstOrDefault(s => s.Id == item.ProjectStatusId).StatusName</span>
-                                    @*if (item.ProjectStatusId == 3)
-                                    {
-                                        string color = status.FirstOrDefault(s => s.Id == item.ProjectStatusId).ColorCode;
-                                        <span class="@color">@status.FirstOrDefault(s => s.Id == item.ProjectStatusId).StatusName</span>
-                                    }
-                                    else if (item.ProjectStatusId == 4)
-                                    {
-                                        <span class="badge badge-warning">@status.FirstOrDefault(s => s.Id == item.ProjectStatusId).StatusName</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge badge-danger">@status.FirstOrDefault(s => s.Id == item.ProjectStatusId).StatusName</span>
-                                    }*@
                                 }
                             </div>
 
                         </td>
 
                         <td class="col-md-1">
-                            @if (item.OwnerId != null)
+                            @{
+                                DMCTimesheet.Models.C10_Owner cdt = new DMCTimesheet.Models.C10_Owner();
+                                cdt = owners.FirstOrDefault(s => s.OnwerId == item.OwnerId);
+                                string OwnerName = "Chưa cập nhật";
+                                if (cdt != null)
+                                {
+                                    OwnerName = cdt.ShortName;
+                                }
+                            }
+                            @if (item.OwnerId != null && cdt != null)
                             {
-                                <b>@owners.FirstOrDefault(s => s.OnwerId == item.OwnerId).ShortName</b>
+                                <b>@OwnerName</b>
                             }
                         </td>
                         <td class="col-md-1">
@@ -226,7 +233,7 @@
 <div class="clearfix"></div>
 @* DỰ ÁN HOÀN TẤT *@
 <div class="col-md-12">
-    <div class="col-md-10"><h3 class="text-success">DANH SÁCH DỰ ÁN HOÀN TẤT</h3></div>
+    <div class="col-md-10"><h3 class="text-success">DANH SÁCH DỰ ÁN HOÀN TẤT <span class="text-danger">@myProject.Where(s => s.ProjectStage == 5).Count()</span></h3></div>
 </div>
 <div>
     <table class="table table-hover table-condensed table-striped ">

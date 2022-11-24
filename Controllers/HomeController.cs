@@ -1,12 +1,14 @@
 ﻿using DMCTimesheet.Models;
 using System;
 using System.Collections.Generic;
+using System.EnterpriseServices;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
 using System.Web.Security;
+//using DMCTimesheet.Models;
 
 namespace DMCTimesheet.Controllers
 {
@@ -259,6 +261,14 @@ namespace DMCTimesheet.Controllers
                         ViewBag.LoginNote = "User không tồn tại, vui lòng liên hệ admin";
                         return View("Login");
                     }
+                    ViewBag.AssignMemProjects = db.C03_ProjectMembers.ToList();
+                    ViewBag.Projects = db.C01_Projects.ToList();
+                    ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
+
+
+
+
+
                     return View();
                 }
                 catch (Exception ex)
@@ -329,6 +339,143 @@ namespace DMCTimesheet.Controllers
                         ViewBag.LoginNote = "User không tồn tại, vui lòng liên hệ admin";
                         return View("Login");
                     }
+                    //Nhân sự
+                    //ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).GetEnumerator();
+                    IEnumerable<C02_Members> member =  GetDMCdata.GetDMCMembers();;/* = new IEnumerable<C02_Members>(); List<C02_Members>();*/
+                   
+                    ViewBag.Members = member;
+
+
+
+                   //ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
+                    //Dự án
+                    ViewBag.Projects = GetDMCdata.GetDMCProjects();
+                    
+                    //ViewBag.Projects = db.C01_Projects.ToList();
+                    #region Char 1 - Loại hình dự án - 
+                    //Loại hình dự án
+                    ViewBag.ProjectType = db.C13_ProjectType.ToList();
+
+                    List<string> ProjectTypeName = new List<string>();
+                    List<double> ProjectTypeCountTS = new List<double>();
+                    var CountPTts = db.C01_Projects.GroupBy(s => s.ProjectTypeId);
+                    foreach (var item in CountPTts)
+                    {
+                        if (item.Key != null)
+                        {
+                            ProjectTypeName.Add(db.C13_ProjectType.FirstOrDefault(s => s.TypeId == item.Key).TypeName);
+                            ProjectTypeCountTS.Add(item.Count());
+                        }
+                        else
+                        {
+                            ProjectTypeName.Add("N/A");
+                            ProjectTypeCountTS.Add(item.Count());
+                        }
+
+                    }
+                    ViewBag.ProjectTypeName = ProjectTypeName;
+                    ViewBag.ProjectTypeCountTS = ProjectTypeCountTS;
+                    #endregion
+
+                    #region Chart 2 Đếm dự án theo Giai đoạn
+                    //Giai đoạn dự án
+                    ViewBag.Stage = db.C20_Stage.ToList();
+
+                    List<string> ProjectStageName = new List<string>();
+                    List<double> ProjectStageCount = new List<double>();
+                    var CountPjStage = db.C01_Projects.GroupBy(s => s.ProjectStage);
+                    foreach (var item in CountPjStage)
+                    {
+                        if (item.Key != null)
+                        {
+                            ProjectStageName.Add(db.C20_Stage.FirstOrDefault(s => s.Id == item.Key).StageName);
+                            ProjectStageCount.Add(item.Count());
+                        }
+                        else
+                        {
+                            ProjectStageName.Add("N/A");
+                            ProjectStageCount.Add(item.Count());
+                        }
+
+                    }
+                    ViewBag.ProjectStageName = ProjectStageName;
+                    ViewBag.ProjectStageCount = ProjectStageCount;
+
+                    #endregion
+
+                    #region Chart 3 - Đếm dự án theo Tình trạng
+                    //Tình trạng dự án
+                    ViewBag.Status = db.C16_Status.ToList();
+
+                    List<string> ProjectStatusName = new List<string>();
+                    List<double> ProjectStatusCount = new List<double>();
+                    var CountPjStatus = db.C01_Projects.GroupBy(s => s.ProjectStatusId);
+                    foreach (var item in CountPjStatus)
+                    {
+                        if (item.Key != null)
+                        {
+                            ProjectStatusName.Add(db.C16_Status.FirstOrDefault(s => s.Id == item.Key).StatusName);
+                            ProjectStatusCount.Add(item.Count());
+                        }
+                        else
+                        {
+                            ProjectStatusName.Add("N/A");
+                            ProjectStatusCount.Add(item.Count());
+                        }
+
+                    }
+                    ViewBag.ProjectStatusName = ProjectStatusName;
+                    ViewBag.ProjectStatusCount = ProjectStatusCount;
+
+                    #endregion
+
+                    #region Chart 4 - Timesheet
+                    ViewBag.Timesheet = db.C08_Timesheet.ToList();
+
+                    #endregion
+
+                    #region Chart 5 - Timesheet theo nhóm công việc
+                    //Nhóm công việc
+                    ViewBag.WorkGroup = db.C19_Workgroup.ToList();
+                    ViewBag.WorkType = db.C07_WorkType.ToList();
+
+                    List<string> workgroupName = new List<string>();
+                    List<double> workgroupCountTS = new List<double>();
+                    var countTS = db.C19_Workgroup.Include("C07_WorkType").Include("C08_Timesheet").GroupBy(s => s.GroupName).ToList();
+                    List<KeyValuePair<string, double>> returnTSbyGroup = new List<KeyValuePair<string, double>>();
+                    foreach (var item in countTS)
+                    {
+                        double? hot = 0;
+                        foreach (var itm in item.ToList())
+                        {
+                            var ts = itm.C07_WorkType.Select(s => s.C08_Timesheet).ToList();
+                            if (ts.Count > 0)
+                            {
+                                foreach (var it in ts)
+                                {
+                                    hot += it.AsEnumerable().Sum(s => s.Hour);
+                                    hot += it.AsEnumerable().Sum(s => s.OT) * 1.5;
+                                }
+                            }
+                            workgroupName.Add(item.Key);
+                            workgroupCountTS.Add(double.Parse(hot.ToString()));
+                        }
+                        KeyValuePair<string, double> valuePair = new KeyValuePair<string, double>(item.Key, double.Parse(hot.ToString()));
+                        returnTSbyGroup.Add(valuePair);
+
+                    }
+                    ViewBag.WorkGroupName = workgroupName;
+                    ViewBag.WorkGroupCountTS = workgroupCountTS;
+                    #endregion
+
+                    #region Chart 6 & Table 1 - Thống kê dự án theo nhân sự - 
+                    //Điều phối nhân sự trong dự án
+                    ViewBag.AssignMemProjects = db.C03_ProjectMembers.ToList();
+                    #endregion
+
+
+
+
                     return View();
                 }
                 catch (Exception ex)

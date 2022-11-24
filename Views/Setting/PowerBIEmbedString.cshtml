@@ -1,0 +1,100 @@
+﻿@model IEnumerable<DMCTimesheet.Models.C98_EmbedString>
+@{
+
+}
+
+<div>
+    <p class="text-danger">@ViewBag.Error</p>
+</div>
+@* Form nhập liệu *@
+<div id="newEmbedstring" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-m">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Thêm phiên bản báo cáo mới</h3>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("CreateNewEmbebString", "Setting", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <form>
+                        <div class="form-group row text-left">
+                            <lable hidden class="control-label col-md-3 col-sm-3 col-xs-3">Mã</lable>
+                            <input hidden type="number" class="form-control col-md-7 col-sm-9 col-xs-9" name="ID" placeholder="" value="" />
+                        </div>
+                        <div class="form-group row text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Ngày tạo</lable>
+                            <input type="date" class="text-dark form-control col-md-7 col-sm-9 col-xs-9" name="NgayLap" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                        </div>
+
+                        <div class="form-group row">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left">EmbedString</lable>
+                            <textarea id="descriptionNote" class="form-control col-md-7 col-sm-9 col-xs-9 " rows="3" name="EmbedString" placeholder="https://app.powerbi.com/view?..." required></textarea>
+                        </div>
+
+                        <div class="form-group row text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Version</lable>
+                            <input type="number" class="form-control col-md-7 col-sm-9 col-xs-9" name="Version" placeholder="" required="" value="" />
+                        </div>
+
+                        <div class="form-group text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
+                            <input type="submit" value="Save" class="btn btn-success col-md-7" />
+                        </div>
+                    </form>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@* End Form nhập liệu *@
+<div class="row">
+    <div class="col-md-10"><h3 class="text-primary">Danh sách Embebcode PowerBI <span class="text-danger">@Model.Count()</span></h3></div>
+    <div class="col-md-2">
+        <button type="button" class="btn btn-success btn-small text-right" data-toggle="modal" data-target="#newEmbedstring"><i class="fa fa-plus-circle"></i> Thêm phiên bản</button>
+    </div>
+</div>
+<div class="row">
+    <table class="table table-bordered table-dark">
+        <thead>
+            <tr class="row">
+                <td class="col-md-1">ID</td>
+                <td class="col-md-1">Version</td>
+                <td class="col-md-2">Ngày tạo</td>
+                <td class="col-md-7">EmbedString</td>
+                <td class="col-md-1">#</td>
+            </tr>
+        </thead>
+    </table>
+</div>
+<div>
+    <table class="table table-borderless table-responsive tab-content table-condensed">
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr class="row col-md-12">
+                    @using (Html.BeginForm("UpdateEmbebString", "Setting", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <td class="col-md-1">
+                            <input type="number" class="form-control" name="ID" placeholder="" value="@item.ID" />
+                        </td>
+                        <td class="col-md-1">
+                            <input type="number" class="form-control" name="Version" placeholder="" value="@item.Version" />
+                        </td>
+                        <td class="col-md-2">
+                            <input type="date" class="form-control" name="NgayLap" value="@DateTime.Parse(item.NgayLap.ToString()).ToString("yyyy-MM-dd")" />
+                        </td>
+                        <td class="col-md-7">
+                            <textarea id="descriptionNote" class="form-control col-md-12" name="EmbedString">@item.EmbedString</textarea>
+                        </td>
+                        <td class="col-md-1">
+                            <input type="submit" value="Cập nhật" class="btn btn-warning" />
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -47,6 +47,10 @@
     <Property Name="BIMManager" Type="int" />
     <Property Name="LegalManager" Type="int" />
     <Property Name="Admin" Type="int" />
+    <Property Name="ChuTriKienTruc2" Type="int" />
+    <Property Name="ChuTriKetCau2" Type="int" />
+    <Property Name="ChuTriMEP2" Type="int" />
+    <Property Name="LegalManager2" Type="int" />
   </EntityType>
   <EntityType Name="04_Permission">
     <Key>
@@ -104,12 +108,8 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="Date" Type="date" />
     <Property Name="ProjectId" Type="int" />
-    <Property Name="ArcId" Type="int" />
-    <Property Name="InteriorId" Type="int" />
-    <Property Name="StructureId" Type="int" />
-    <Property Name="MEPid" Type="int" />
-    <Property Name="LandscapeId" Type="int" />
-    <Property Name="LegalId" Type="int" />
+    <Property Name="ServicesAssign" Type="int" />
+    <Property Name="SubConId" Type="int" />
   </EntityType>
   <EntityType Name="10_Owner">
     <Key>
@@ -139,14 +139,7 @@
     <Property Name="ContractorName" Type="nvarchar" MaxLength="250" />
     <Property Name="ShortName" Type="nvarchar" MaxLength="50" />
     <Property Name="ContractorLocation" Type="int" />
-    <Property Name="ARC" Type="bit" />
-    <Property Name="STR" Type="bit" />
-    <Property Name="MEP" Type="bit" />
-    <Property Name="Interior" Type="bit" />
-    <Property Name="Infrastructure" Type="bit" />
-    <Property Name="DTM" Type="bit" />
-    <Property Name="Render" Type="bit" />
-    <Property Name="Landscape" Type="bit" />
+    <Property Name="MaQuanLy" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="13_ProjectType">
     <Key>
@@ -162,6 +155,7 @@
     </Key>
     <Property Name="ServiceId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ServiceName" Type="nvarchar" MaxLength="50" />
+    <Property Name="ServiceGroupId" Type="int" />
   </EntityType>
   <EntityType Name="15_SubConServices">
     <Key>
@@ -187,6 +181,7 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="PositionName" Type="nvarchar" MaxLength="50" />
     <Property Name="Active" Type="bit" />
+    <Property Name="isLeader" Type="bit" />
   </EntityType>
   <EntityType Name="18_Descipline">
     <Key>
@@ -210,6 +205,32 @@
     </Key>
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="StageName" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="21_DetailAction">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="WorktypeId" Type="int" />
+    <Property Name="DetailAction" Type="nvarchar" MaxLength="250" />
+    <Property Name="Note" Type="nvarchar" MaxLength="50" />
+  </EntityType>
+  <EntityType Name="22_ServiceGroup">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="GroupNumber" Type="int" />
+    <Property Name="ServiceGroupName" Type="nvarchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="98_EmbedString">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NgayLap" Type="date" />
+    <Property Name="EmbedString" Type="nvarchar(max)" />
+    <Property Name="Version" Type="float" />
   </EntityType>
   <EntityType Name="99_ActivityLog">
     <Key>
@@ -338,7 +359,21 @@
         <PropertyRef Name="SubConId" />
       </Principal>
       <Dependent Role="09_ProjectSubCon">
-        <PropertyRef Name="ArcId" />
+        <PropertyRef Name="SubConId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_14_Services_22_ServiceGroup">
+    <End Role="22_ServiceGroup" Type="Self.22_ServiceGroup" Multiplicity="0..1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="14_Services" Type="Self.14_Services" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="22_ServiceGroup">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="14_Services">
+        <PropertyRef Name="ServiceGroupId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -363,6 +398,18 @@
       </Principal>
       <Dependent Role="15_SubConServices">
         <PropertyRef Name="ServiceId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_21_DetailAction_07_WorkType">
+    <End Role="07_WorkType" Type="Self.07_WorkType" Multiplicity="0..1" />
+    <End Role="21_DetailAction" Type="Self.21_DetailAction" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="07_WorkType">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="21_DetailAction">
+        <PropertyRef Name="WorktypeId" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -399,6 +446,9 @@
     <EntitySet Name="18_Descipline" EntityType="Self.18_Descipline" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="19_Workgroup" EntityType="Self.19_Workgroup" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="20_Stage" EntityType="Self.20_Stage" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="21_DetailAction" EntityType="Self.21_DetailAction" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="22_ServiceGroup" EntityType="Self.22_ServiceGroup" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="98_EmbedString" EntityType="Self.98_EmbedString" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="99_ActivityLog" EntityType="Self.99_ActivityLog" Schema="dbo" store:Type="Tables" />
     <AssociationSet Name="FK_03_ProjectMembers_01_Projects" Association="Self.FK_03_ProjectMembers_01_Projects">
       <End Role="01_Projects" EntitySet="01_Projects" />
@@ -440,6 +490,10 @@
       <End Role="12_SubContractor" EntitySet="12_SubContractor" />
       <End Role="09_ProjectSubCon" EntitySet="09_ProjectSubCon" />
     </AssociationSet>
+    <AssociationSet Name="FK_14_Services_22_ServiceGroup" Association="Self.FK_14_Services_22_ServiceGroup">
+      <End Role="22_ServiceGroup" EntitySet="22_ServiceGroup" />
+      <End Role="14_Services" EntitySet="14_Services" />
+    </AssociationSet>
     <AssociationSet Name="FK_15_SubConServices_12_SubContractor" Association="Self.FK_15_SubConServices_12_SubContractor">
       <End Role="12_SubContractor" EntitySet="12_SubContractor" />
       <End Role="15_SubConServices" EntitySet="15_SubConServices" />
@@ -447,6 +501,10 @@
     <AssociationSet Name="FK_15_SubConServices_14_Services" Association="Self.FK_15_SubConServices_14_Services">
       <End Role="14_Services" EntitySet="14_Services" />
       <End Role="15_SubConServices" EntitySet="15_SubConServices" />
+    </AssociationSet>
+    <AssociationSet Name="FK_21_DetailAction_07_WorkType" Association="Self.FK_21_DetailAction_07_WorkType">
+      <End Role="07_WorkType" EntitySet="07_WorkType" />
+      <End Role="21_DetailAction" EntitySet="21_DetailAction" />
     </AssociationSet>
     <AssociationSet Name="FK_3_ChonNhansu_02_Members_Main" Association="Self.FK_3_ChonNhansu_02_Members_Main">
       <End Role="02_Members" EntitySet="02_Members" />

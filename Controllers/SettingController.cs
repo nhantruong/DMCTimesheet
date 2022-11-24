@@ -4,6 +4,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Services.Description;
 using DMCTimesheet.Models;
 
 namespace DMCTimesheet.Controllers
@@ -22,6 +23,7 @@ namespace DMCTimesheet.Controllers
             //db.Database.Connection.ConnectionString = conn;
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
             ViewBag.WorkGroup = db.C19_Workgroup.ToList();
+            ViewBag.Details = db.C21_DetailAction.ToList();
             return View(db.C07_WorkType.ToList());
         }
 
@@ -43,6 +45,7 @@ namespace DMCTimesheet.Controllers
                 {
                     ViewBag.SaveContent = $"Phải có tên nhóm hoặc tên nhóm đã có trong database";
                     ViewBag.WorkGroup = db.C19_Workgroup.ToList();
+                    ViewBag.Details = db.C21_DetailAction.ToList();
                     return View("WorkType", db.C07_WorkType.ToList());
                 }
                 if (ModelState.IsValid)
@@ -62,6 +65,7 @@ namespace DMCTimesheet.Controllers
             {
                 ViewBag.SaveContent = $"Có lỗi trong quá trình lưu data trên server do {ex.InnerException.Message}";
                 ViewBag.WorkGroup = db.C19_Workgroup.ToList();
+                ViewBag.Details = db.C21_DetailAction.ToList();
                 return View("Worktype", db.C07_WorkType.ToList());
             }
         }
@@ -76,9 +80,11 @@ namespace DMCTimesheet.Controllers
             {
                 ViewBag.SaveContent = "Không tìm thấy Worktype này";
                 ViewBag.WorkGroup = db.C19_Workgroup.ToList();
+                ViewBag.Details = db.C21_DetailAction.ToList();
                 return View(db.C07_WorkType.ToList());
             }
             ViewBag.WorkGroup = db.C19_Workgroup.ToList();
+            ViewBag.Details = db.C21_DetailAction.ToList();
             return View(enity);
         }
 
@@ -96,6 +102,7 @@ namespace DMCTimesheet.Controllers
                     {
                         ViewBag.SaveContent = "Không tìm thấy Worktype này";
                         ViewBag.WorkGroup = db.C19_Workgroup.ToList();
+                        ViewBag.Details = db.C21_DetailAction.ToList();
                         return View(db.C07_WorkType.ToList());
                     }
                     item.WorkName = WorkName;
@@ -109,6 +116,7 @@ namespace DMCTimesheet.Controllers
             {
                 ViewBag.SaveContent = $"Có lỗi trong quá trình Cập nhật do {ex.Message}";
                 ViewBag.WorkGroup = db.C19_Workgroup.ToList();
+                ViewBag.Details = db.C21_DetailAction.ToList();
                 return View(db.C07_WorkType.ToList());
             }
         }
@@ -127,9 +135,11 @@ namespace DMCTimesheet.Controllers
             {
                 ViewBag.SaveContent = "Không tìm thấy Worktype này";
                 ViewBag.WorkGroup = db.C19_Workgroup.ToList();
+                ViewBag.Details = db.C21_DetailAction.ToList();
                 return View(db.C07_WorkType.ToList());
             }
             ViewBag.WorkGroup = db.C19_Workgroup.ToList();
+            ViewBag.Details = db.C21_DetailAction.ToList();
             return View(enity);
         }
 
@@ -145,6 +155,7 @@ namespace DMCTimesheet.Controllers
                 {
                     ViewBag.SaveContent = "Không tìm thấy Worktype này";
                     ViewBag.WorkGroup = db.C19_Workgroup.ToList();
+                    ViewBag.Details = db.C21_DetailAction.ToList();
                     return View(db.C07_WorkType.ToList());
                 }
                 db.C07_WorkType.Remove(enity);
@@ -156,6 +167,7 @@ namespace DMCTimesheet.Controllers
             {
                 ViewBag.SaveContent = $"Xóa lỗi do {ex.Message}";
                 ViewBag.WorkGroup = db.C19_Workgroup.ToList();
+                ViewBag.Details = db.C21_DetailAction.ToList();
                 return View(db.C07_WorkType.ToList());
             }
 
@@ -175,6 +187,7 @@ namespace DMCTimesheet.Controllers
             {
                 ViewBag.SaveContent = $"Không bỏ trống tên nhóm hoặc Tên nhóm đã có trong database";
                 ViewBag.WorkGroup = db.C19_Workgroup.ToList();
+                ViewBag.Details = db.C21_DetailAction.ToList();
                 return View(db.C07_WorkType.ToList());
             }
             try
@@ -183,12 +196,14 @@ namespace DMCTimesheet.Controllers
                 db.C19_Workgroup.Add(newEnity);
                 db.SaveChanges();
                 ViewBag.WorkGroup = db.C19_Workgroup.ToList();
+                ViewBag.Details = db.C21_DetailAction.ToList();
                 return RedirectToAction("Worktype");
             }
             catch (Exception ex)
             {
                 ViewBag.SaveContent = $"Tạo mới bị lỗi do {ex.Message}";
                 ViewBag.WorkGroup = db.C19_Workgroup.ToList();
+                ViewBag.Details = db.C21_DetailAction.ToList();
                 return View(db.C07_WorkType.ToList());
             }
         }
@@ -224,6 +239,7 @@ namespace DMCTimesheet.Controllers
             {
                 ViewBag.SaveContent = $"Cập nhật bị lỗi do {ex.Message}";
                 ViewBag.WorkGroup = db.C19_Workgroup.ToList();
+                ViewBag.Details = db.C21_DetailAction.ToList();
                 return View(db.C07_WorkType.ToList());
             }
 
@@ -249,6 +265,7 @@ namespace DMCTimesheet.Controllers
             {
                 ViewBag.SaveContent = "Không tìm thấy WorkGroup này";
                 ViewBag.WorkGroup = db.C19_Workgroup.ToList();
+                ViewBag.Details = db.C21_DetailAction.ToList();
                 return View("Worktype", db.C07_WorkType.ToList());
             }
             C19_Workgroup enity = db.C19_Workgroup.FirstOrDefault(s => s.GroupId == GroupId);
@@ -264,8 +281,98 @@ namespace DMCTimesheet.Controllers
             {
                 ViewBag.SaveContent = $"Xóa bị lỗi do {ex.Message}";
                 ViewBag.WorkGroup = db.C19_Workgroup.ToList();
+                ViewBag.Details = db.C21_DetailAction.ToList();
                 return View(db.C07_WorkType.ToList());
             }
+        }
+
+
+
+        #endregion
+
+        #region 1B-WORK DETAILS - Công việc Chi tiết
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditWorkDetail(int? Id, string DetailAction)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Id == null || string.IsNullOrEmpty(DetailAction)) return RedirectToAction("WorkType");
+            C21_DetailAction enity = db.C21_DetailAction.FirstOrDefault(s => s.Id == Id);
+            if (enity == null) return RedirectToAction("Worktype");
+            try
+            {
+                enity.DetailAction = DetailAction;
+                db.Entry(enity).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Worktype");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.SaveContent = $"Cập nhật bị lỗi do {ex.Message}";
+                ViewBag.WorkGroup = db.C19_Workgroup.ToList();
+                ViewBag.Details = db.C21_DetailAction.ToList();
+                return View(db.C07_WorkType.ToList());
+            }
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateWorkDetail(int? WorktypeId, string DetailAction)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (WorktypeId == null || string.IsNullOrEmpty(DetailAction)) return RedirectToAction("WorkType");
+            C21_DetailAction ExistingName = db.C21_DetailAction.FirstOrDefault(s => s.DetailAction.Contains(DetailAction));
+
+            if (string.IsNullOrEmpty(DetailAction) || ExistingName != null)
+            {
+                ViewBag.SaveContent = $"Không bỏ trống tên Công việc chi tiết hoặc Công việc này đã có trong database";
+                ViewBag.WorkGroup = db.C19_Workgroup.ToList();
+                ViewBag.Details = db.C21_DetailAction.ToList();
+                return View("Worktype", db.C07_WorkType.ToList());
+            }
+            try
+            {
+                C21_DetailAction newEnity = new C21_DetailAction() { WorktypeId = WorktypeId, DetailAction = DetailAction };
+                db.C21_DetailAction.Add(newEnity);
+                db.SaveChanges();
+                ViewBag.WorkGroup = db.C19_Workgroup.ToList();
+                ViewBag.Details = db.C21_DetailAction.ToList();
+                return RedirectToAction("Worktype");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.SaveContent = $"Tạo mới bị lỗi do {ex.Message}";
+                ViewBag.WorkGroup = db.C19_Workgroup.ToList();
+                ViewBag.Details = db.C21_DetailAction.ToList();
+                return View("Worktype", db.C07_WorkType.ToList());
+            }
+        }
+
+        public ActionResult DeleteWorkDetail(int? Id)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Id == null) return RedirectToAction("WorkType");
+            C21_DetailAction enity = db.C21_DetailAction.FirstOrDefault(s => s.Id == Id);
+            if (enity == null) return RedirectToAction("Worktype");
+            ViewBag.WorkGroup = db.C19_Workgroup.ToList();
+            ViewBag.Worktype = db.C07_WorkType.ToList();
+
+            return View(enity);
+        }
+
+        [HttpPost, ActionName("DeleteWorkDetailConfirmed")]
+        [ValidateAntiForgeryToken]
+        public ActionResult DeleteWorkDetailConfirmed(int? Id)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Id == null) return RedirectToAction("WorkType");
+            C21_DetailAction enity = db.C21_DetailAction.FirstOrDefault(s => s.Id == Id);
+            if (enity == null) return RedirectToAction("Worktype");
+            db.C21_DetailAction.Remove(enity);
+            db.SaveChanges();
+            return RedirectToAction("Worktype");
         }
 
 
@@ -422,7 +529,7 @@ namespace DMCTimesheet.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult CreateNewSubContractor(string ContractorName, string ShortName, int? ContractorLocation,
-            bool? ARC, bool? STR, bool? MEP, bool? Interior, bool? Infrastructure, bool? DTM, bool? Render, bool? Landscape)
+           string MaQuanLy)
         {
             try
             {
@@ -432,14 +539,7 @@ namespace DMCTimesheet.Controllers
                     ContractorName = ContractorName,
                     ShortName = ShortName,
                     ContractorLocation = ContractorLocation,
-                    ARC = ARC,
-                    STR = STR,
-                    MEP = MEP,
-                    Interior = Interior,
-                    Infrastructure = Infrastructure,
-                    Render = Render,
-                    Landscape = Landscape,
-                    DTM = DTM
+                    MaQuanLy = MaQuanLy
                 };
                 db.C12_SubContractor.Add(newEnity);
                 ViewBag.SaveContent = "Lưu thành công";
@@ -463,13 +563,28 @@ namespace DMCTimesheet.Controllers
             C12_SubContractor enity = db.C12_SubContractor.FirstOrDefault(s => s.SubConId == Id);
             if (enity == null) return RedirectToAction("SubContractors");
             ViewBag.Location = db.C11_Location.ToList();
+            ViewBag.NTPService = db.C15_SubConServices.Where(s => s.SubConId == Id).ToList();
+            ViewBag.Services = db.C14_Services.ToList();
+            ViewBag.ServiceGroup = db.C22_ServiceGroup.ToList();
             return View(enity);
+        }
+        public ActionResult EditNTP2(int? Id)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Id == null) return RedirectToAction("SubContractors");
+            C12_SubContractor enity = db.C12_SubContractor.FirstOrDefault(s => s.SubConId == Id);
+            if (enity == null) return RedirectToAction("SubContractors");
+            ViewBag.Location = db.C11_Location.ToList();
+            ViewBag.NTPService = db.C15_SubConServices.Where(s => s.SubConId == Id).ToList();
+            ViewBag.Services = db.C14_Services.ToList();
+            ViewBag.ServiceGroup = db.C22_ServiceGroup.ToList();
+            return View("EditNTP", enity);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EditNTP(int? Id, string ContractorName, string ShortName, int? ContractorLocation,
-            bool? ARC, bool? STR, bool? MEP, bool? Interior, bool? Infrastructure, bool? DTM, bool? Render, bool? Landscape)
+            string MaQuanLy)
         {
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
             if (Id == null) return RedirectToAction("SubContractors");
@@ -480,20 +595,18 @@ namespace DMCTimesheet.Controllers
                 enity.ContractorName = ContractorName;
                 enity.ShortName = ShortName;
                 enity.ContractorLocation = ContractorLocation;
-                enity.ARC = ARC;
-                enity.STR = STR;
-                enity.MEP = MEP;
-                enity.Interior = Interior;
-                enity.Infrastructure = Infrastructure;
-                enity.DTM = DTM;
-                enity.Render = Render;
-                enity.Landscape = Landscape;
+                enity.MaQuanLy = MaQuanLy;
 
                 db.Entry(enity).State = EntityState.Modified;
                 db.SaveChanges();
 
                 ViewBag.Location = db.C11_Location.ToList();
-                return View("SubContractors", db.C12_SubContractor.ToList());
+                ViewBag.NTPService = db.C15_SubConServices.Where(s => s.SubConId == Id).ToList();
+                ViewBag.Services = db.C14_Services.ToList();
+                ViewBag.ServiceGroup = db.C22_ServiceGroup.ToList();
+                C12_SubContractor enity2 = db.C12_SubContractor.FirstOrDefault(s => s.SubConId == Id);
+
+                return RedirectToAction("EditNTP", enity2);
             }
             catch (Exception ex)
             {
@@ -527,6 +640,8 @@ namespace DMCTimesheet.Controllers
             {
                 db.Entry(enity).State = EntityState.Deleted;
                 db.SaveChanges();
+                C12_SubContractor enity2 = db.C12_SubContractor.FirstOrDefault(s => s.SubConId == SubConId);
+                //return RedirectToAction("EditNTP",enity2);
                 return RedirectToAction("SubContractors");
             }
             catch (Exception ex)
@@ -653,15 +768,17 @@ namespace DMCTimesheet.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateNewPosition(string PositionName, int? Active)
+        public ActionResult CreateNewPosition(string PositionName, int? Active, int? isLeader)
         {
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
             if (string.IsNullOrEmpty(PositionName)) return RedirectToAction("PositionList");
             try
             {
                 bool active = false;
+                bool leader = false;
                 if (Active == null || Active == 0) active = false; else active = true;
-                C17_Position newEnity = new C17_Position() { PositionName = PositionName, Active = active };
+                if (isLeader == null || isLeader == 0) leader = false; else leader = true;
+                C17_Position newEnity = new C17_Position() { PositionName = PositionName, Active = active, isLeader = leader };
                 db.C17_Position.Add(newEnity);
                 db.SaveChanges();
                 return RedirectToAction("PositionList");
@@ -684,7 +801,7 @@ namespace DMCTimesheet.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditPosition(int? Id, string PositionName, int? Active)
+        public ActionResult EditPosition(int? Id, string PositionName, int? Active, int? isLeader)
         {
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
             if (Id == null) return RedirectToAction("PositionList");
@@ -695,6 +812,7 @@ namespace DMCTimesheet.Controllers
             {
                 enity.PositionName = PositionName;
                 enity.Active = Active != 0;
+                enity.isLeader = isLeader != 0;
                 db.Entry(enity).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("PositionList");
@@ -855,7 +973,7 @@ namespace DMCTimesheet.Controllers
                 if (location != null)
                 {
                     ViewBag.Error = $"Đã có tên địa phương này";
-                    return View("Locations", db.C11_Location.ToList()) ;
+                    return View("Locations", db.C11_Location.ToList());
                 }
                 else
                 {
@@ -1093,7 +1211,7 @@ namespace DMCTimesheet.Controllers
             try
             {
                 enity.DesciplineName = DesciplineName;
-                enity.Active = Active!=0;
+                enity.Active = Active != 0;
 
                 db.Entry(enity).State = EntityState.Modified;
                 db.SaveChanges();
@@ -1144,29 +1262,30 @@ namespace DMCTimesheet.Controllers
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
             ViewBag.CompanyService = db.C15_SubConServices.ToList();
             ViewBag.CompanyName = db.C12_SubContractor.ToList();
-           // ViewBag.Service = db.C14_Services.ToList();
+            ViewBag.ServiceGroups = db.C22_ServiceGroup.ToList();
+            // ViewBag.Service = db.C14_Services.ToList();
             return View(db.C14_Services.ToList());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateNewService(string ServiceName)
+        public ActionResult CreateNewService(string ServiceName, int? ServiceGroupId)
         {
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
             try
             {
-                C14_Services location = db.C14_Services.FirstOrDefault(s => s.ServiceName.Contains(ServiceName.Trim()) || s.ServiceName == ServiceName.Trim());
-                if (location != null)
+                C14_Services service = db.C14_Services.FirstOrDefault(s => s.ServiceName.Contains(ServiceName.Trim()) || s.ServiceName == ServiceName.Trim());
+                if (service != null)
                 {
                     ViewBag.Error = $"Đã có tên Dịch vụ này";
                     ViewBag.CompanyService = db.C15_SubConServices.ToList();
                     ViewBag.CompanyName = db.C12_SubContractor.ToList();
-                   // ViewBag.Service = db.C14_Services.ToList();
-                    return View("Locations", db.C14_Services.ToList());
+                    // ViewBag.Service = db.C14_Services.ToList();
+                    return View("Services", db.C14_Services.ToList());
                 }
                 else
                 {
-                    C14_Services newEnity = new C14_Services() { ServiceName = ServiceName };
+                    C14_Services newEnity = new C14_Services() { ServiceName = ServiceName, ServiceGroupId = ServiceGroupId };
                     db.C14_Services.Add(newEnity);
                     db.SaveChanges();
                     return RedirectToAction("Services");
@@ -1177,8 +1296,8 @@ namespace DMCTimesheet.Controllers
                 ViewBag.Error = $"Có lỗi xãy ra do {ex.InnerException.Message}";
                 ViewBag.CompanyService = db.C15_SubConServices.ToList();
                 ViewBag.CompanyName = db.C12_SubContractor.ToList();
-             //  ViewBag.Service = db.C14_Services.ToList();
-                return View("Services", db.C20_Stage.ToList());
+                //  ViewBag.Service = db.C14_Services.ToList();
+                return View("Services", db.C14_Services.ToList());
             }
 
         }
@@ -1188,13 +1307,14 @@ namespace DMCTimesheet.Controllers
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
             if (Id == null) return RedirectToAction("Services");
             C14_Services enity = db.C14_Services.FirstOrDefault(s => s.ServiceId == Id);
+            ViewBag.ServiceGroups = db.C22_ServiceGroup.ToList();
             if (enity == null) return RedirectToAction("Services");
             return View(enity);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditService(int? ServiceId, string ServiceName)
+        public ActionResult EditService(int? ServiceId, string ServiceName, int? ServiceGroupId)
         {
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
             if (ServiceId == null) return RedirectToAction("Services");
@@ -1203,6 +1323,7 @@ namespace DMCTimesheet.Controllers
             try
             {
                 enity.ServiceName = ServiceName;
+                enity.ServiceGroupId = ServiceGroupId;
 
                 db.Entry(enity).State = EntityState.Modified;
                 db.SaveChanges();
@@ -1213,7 +1334,8 @@ namespace DMCTimesheet.Controllers
                 ViewBag.Error = $"Có lỗi xãy ra do {ex.InnerException.Message}";
                 ViewBag.CompanyService = db.C15_SubConServices.ToList();
                 ViewBag.CompanyName = db.C12_SubContractor.ToList();
-               // ViewBag.Service = db.C14_Services.ToList();
+                ViewBag.ServiceGroups = db.C22_ServiceGroup.ToList();
+                // ViewBag.Service = db.C14_Services.ToList();
                 return View();
             }
         }
@@ -1224,6 +1346,7 @@ namespace DMCTimesheet.Controllers
             if (Id == null) return RedirectToAction("Services");
             C14_Services enity = db.C14_Services.FirstOrDefault(s => s.ServiceId == Id);
             if (enity == null) return RedirectToAction("Services");
+            ViewBag.ServiceGroups = db.C22_ServiceGroup.ToList();
             return View(enity);
         }
 
@@ -1246,7 +1369,7 @@ namespace DMCTimesheet.Controllers
                 ViewBag.Error = $"Có lỗi xãy ra do {ex.InnerException.Message}";
                 ViewBag.CompanyService = db.C15_SubConServices.ToList();
                 ViewBag.CompanyName = db.C12_SubContractor.ToList();
-             
+                ViewBag.ServiceGroups = db.C22_ServiceGroup.ToList();
                 return View("Services");
             }
         }
@@ -1254,15 +1377,77 @@ namespace DMCTimesheet.Controllers
 
         #endregion
 
+        #region PowerBIEmbedString
+        public ActionResult PowerBIEmbedString()
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            return View(db.C98_EmbedString.ToList());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateNewEmbebString(DateTime NgayLap, string EmbedString, double Version)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            try
+            {
+                C98_EmbedString newEnity = new C98_EmbedString() { NgayLap = NgayLap, EmbedString = EmbedString, Version = Version };
+                db.C98_EmbedString.Add(newEnity);
+                db.SaveChanges();
+                return RedirectToAction("PowerBIEmbedString");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Có lỗi xãy ra do {ex.Message}";
+                return RedirectToAction("PowerBIEmbedString");
+            }
+
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UpdateEmbebString(int ID, DateTime NgayLap, string EmbedString, double Version)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            C98_EmbedString enity = db.C98_EmbedString.FirstOrDefault(s => s.ID == ID);
+            if (enity != null)
+            {
+                try
+                {
+                    enity.NgayLap = NgayLap;
+                    enity.EmbedString = EmbedString;
+                    enity.Version = Version;
+                    db.Entry(enity).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("PowerBIEmbedString");
+                }
+                catch (Exception ex)
+                {
+                    ViewBag.Error = $"Có lỗi xãy ra do {ex.Message}";
+                    return RedirectToAction("PowerBIEmbedString");
+                }
+            }
+            else
+            {
+                ViewBag.Error = $"Không tìm thấy Nội dung này";
+                return RedirectToAction("PowerBIEmbedString");
+            }
+        }
+
+        #endregion
+
         #region 12-Company services
 
-        public ActionResult CreateNewCompanyService()
-        {
-            ViewBag.CompanyName = db.C12_SubContractor.ToList();
-            ViewBag.Service = db.C14_Services.ToList();
+        //public ActionResult CreateNewCompanyService()
+        //{
+        //    ViewBag.CompanyName = db.C12_SubContractor.ToList();
+        //    ViewBag.Service = db.C14_Services.ToList();
+        //    ViewBag.ServiceGroup = db.C22_ServiceGroup.ToList();
+        //    ViewBag.Location = db.C11_Location.ToList();
 
-            return View();
-        }
+        //    return View();
+        //}
 
         [HttpPost, ActionName("CreateNewCompanyService")]
         [ValidateAntiForgeryToken]
@@ -1274,7 +1459,16 @@ namespace DMCTimesheet.Controllers
             {
                 db.Entry(newEnity).State = EntityState.Added;
                 db.SaveChanges();
-                return RedirectToAction("Services");
+
+                ViewBag.Location = db.C11_Location.ToList();
+                ViewBag.NTPService = db.C15_SubConServices.Where(s => s.SubConId == ServiceId).ToList();
+                ViewBag.Services = db.C14_Services.ToList();
+                ViewBag.ServiceGroup = db.C22_ServiceGroup.ToList();
+                C12_SubContractor enity = db.C12_SubContractor.FirstOrDefault(s => s.SubConId == SubconId);
+                return Redirect($"EditNTP/{enity.SubConId}");
+                //return RedirectToAction("EditNTP");
+                //return View("EditNTP",enity);
+                //return RedirectToAction("Services");
             }
             catch (Exception ex)
             {
@@ -1293,6 +1487,7 @@ namespace DMCTimesheet.Controllers
             ViewBag.CompanyName = db.C12_SubContractor.ToList();
             ViewBag.Service = db.C14_Services.ToList();
             C15_SubConServices enity = db.C15_SubConServices.FirstOrDefault(s => s.Id == Id);
+            ViewBag.SubConId = Id;
             //Tìm danh sách các service của cty này
             List<C15_SubConServices> item = db.C15_SubConServices.Where(s => s.SubConId == enity.SubConId).ToList();
 
@@ -1306,9 +1501,11 @@ namespace DMCTimesheet.Controllers
         public ActionResult EditCompanyService(int? Id, int? ServiceId, DateTime Date)
         {
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
-            if (Id == null) return RedirectToAction("Services");
+            if (Id == null) return RedirectToAction("SubContractors");
             C15_SubConServices enity = db.C15_SubConServices.FirstOrDefault(s => s.Id == Id);
-            if (enity == null) return RedirectToAction("Services");
+            //if (enity == null) return View();
+            if (enity == null) return RedirectToAction("SubContractors");
+            int subconId = int.Parse(enity.SubConId.ToString());
             //C12_SubContractor companyId = db.C12_SubContractor.FirstOrDefault(s => s.ShortName == SubConId_Name);
 
             try
@@ -1317,7 +1514,15 @@ namespace DMCTimesheet.Controllers
                 enity.Date = Date;
                 db.Entry(enity).State = EntityState.Modified;
                 db.SaveChanges();
-                return RedirectToAction("Services");
+
+                ViewBag.Location = db.C11_Location.ToList();
+                ViewBag.NTPService = db.C15_SubConServices.Where(s => s.SubConId == ServiceId).ToList();
+                ViewBag.Services = db.C14_Services.ToList();
+                ViewBag.ServiceGroup = db.C22_ServiceGroup.ToList();
+                C12_SubContractor _enity = db.C12_SubContractor.FirstOrDefault(s => s.SubConId == subconId);
+                return RedirectToAction("EditNTP", _enity);
+                //return Redirect($"EditNTP/{_enity.SubConId}");
+                //return RedirectToAction("Services");
             }
             catch (Exception ex)
             {
@@ -1339,7 +1544,7 @@ namespace DMCTimesheet.Controllers
             if (enity == null) return RedirectToAction("Services");
 
             ViewBag.CompanyName = db.C12_SubContractor.ToList();
-            ViewBag.Service = db.C14_Services.ToList();
+            ViewBag.Services = db.C14_Services.ToList();
 
             return View(enity);
         }
@@ -1351,20 +1556,35 @@ namespace DMCTimesheet.Controllers
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
             if (Id == null) return RedirectToAction("Services");
             C15_SubConServices enity = db.C15_SubConServices.FirstOrDefault(s => s.Id == Id);
+            int subconId = int.Parse(enity.SubConId.ToString());
             if (enity == null) return RedirectToAction("Services");
             try
             {
+                db.C15_SubConServices.Remove(enity);
+                db.SaveChanges();
+                ViewBag.Location = db.C11_Location.ToList();
+                ViewBag.NTPService = db.C15_SubConServices.Where(s => s.SubConId == Id).ToList();
+                ViewBag.Services = db.C14_Services.ToList();
+                ViewBag.ServiceGroup = db.C22_ServiceGroup.ToList();
+                C12_SubContractor _enity = db.C12_SubContractor.FirstOrDefault(s => s.SubConId == subconId);
+                string returnValue = $"EditNTP/{subconId}";
+                return Redirect(returnValue);
+                // return RedirectToAction("EditNTP");
+                //return RedirectToRoute("EditNTP", _enity);
+                //return RedirectToAction("EditNTP", "Setting", _enity);
+                //return RedirectToAction("SubContractors");
 
             }
             catch (Exception ex)
             {
+                ViewBag.Error = $"Có lỗi do {ex.Message}";
+                return View();
 
-                throw;
             }
-            ViewBag.CompanyName = db.C12_SubContractor.ToList();
-            ViewBag.Service = db.C14_Services.ToList();
+            //ViewBag.CompanyName = db.C12_SubContractor.ToList();
+            //ViewBag.Service = db.C14_Services.ToList();
 
-            return View(enity);
+            //return View(enity);
         }
 
 

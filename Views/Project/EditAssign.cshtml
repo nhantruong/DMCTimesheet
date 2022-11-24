@@ -7,6 +7,11 @@
     List<DMCTimesheet.Models.C12_SubContractor> SubCons = ViewBag.SubCons as List<DMCTimesheet.Models.C12_SubContractor>;
     List<DMCTimesheet.Models.C09_ProjectSubCon> AssignProject = ViewBag.AssignProject as List<DMCTimesheet.Models.C09_ProjectSubCon>;
 
+
+    List<DMCTimesheet.Models.C14_Services> Services = ViewBag.Services as List<DMCTimesheet.Models.C14_Services>;
+    List<DMCTimesheet.Models.C15_SubConServices> ContractorServices = ViewBag.ContractorServices as List<DMCTimesheet.Models.C15_SubConServices>;
+
+
 }
 <div class="nav navbar-fixed-top row">
     @Html.ActionLink(" Home", "Index", "Project", null, new { @class = "fa fa-home btn btn-round btn-dark" })
@@ -34,113 +39,44 @@
             @* ProjectTypeID *@
             <div class="form-group row  text-left">
                 <lable hidden class="control-label col-md-3 col-sm-3 col-xs-3 text-danger">Tên dự án</lable>
-                <input type="number" name="ProjectID" hidden value="@Model.ProjectId" />               
+                <input type="number" name="ProjectID" hidden value="@Model.ProjectId" />
             </div>
-            @* ARC ID *@
+
+            @* Chọn dịch vụ *@
             <div class="form-group row  text-left">
-                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thiết kế Kiến trúc</lable>
-                <select name="ArcId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                    @if (Model.ArcId != null)
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Dịch vụ sử dụng</lable>
+                <select name="ServicesAssign" class="form-control col-md-7 col-sm-9 col-xs-9">
+                    @if (Model.ServicesAssign != null)
                     {
-                        <option value=@Model.ArcId>@SubCons.FirstOrDefault(s => s.SubConId == Model.ArcId).ShortName</option>
+                        <option value="@Model.ServicesAssign">@Services.FirstOrDefault(s => s.ServiceId == Model.ServicesAssign).ServiceName</option>
                     }
-                    <option value=""></option>
-                    @foreach (var item in SubCons.Where(s => s.SubConId != 160).OrderBy(s => s.ContractorName))
+                    @if (Services != null)
                     {
-                        <option value=@item.SubConId>@item.ShortName</option>
-                    }
-                </select>
-            </div>
-            @* interior ID *@
-            <div class="form-group row  text-left">
-                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thiết kế Nội thất</lable>
-                <select name="InteriorId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                    @if (Model.InteriorId != null)
-                    {
-                        <option value=@Model.InteriorId>@SubCons.FirstOrDefault(s => s.SubConId == Model.InteriorId).ShortName</option>
-                    }
-                    <option value=""></option>
-                    @foreach (var item in SubCons.OrderBy(s => s.ContractorName))
-                    {
-                        <option value=@item.SubConId>@item.ShortName</option>
+                        foreach (var item in Services)
+                        {
+                            <option value="@item.ServiceId">@item.ServiceName</option>
+                        }
                     }
 
                 </select>
             </div>
-            @* Structure ID *@
+            @* Chọn NTP phù hợp với dịch vụ *@
             <div class="form-group row  text-left">
-                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thiết kế Kết cấu</lable>
-                <select name="StructureId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                    @if (Model.StructureId != null)
-                    {
-                        <option value=@Model.StructureId>@SubCons.FirstOrDefault(s => s.SubConId == Model.StructureId).ShortName</option>
-                    }
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chọn NTP cung cấp</lable>
+                <select name="SubConId" class="form-control col-md-7 col-sm-9 col-xs-9">
+                    <option value="@Model.SubConId">@SubCons.FirstOrDefault(s => s.SubConId == Model.SubConId).ShortName</option>
                     <option value=""></option>
-                    @foreach (var item in SubCons.OrderBy(s => s.ContractorName))
+                    @foreach (var pro in SubCons.OrderBy(s=>s.ShortName))
                     {
-                        <option value=@item.SubConId>@item.ShortName</option>
+                        <option value="@pro.SubConId">@pro.ShortName</option>
                     }
-
-
                 </select>
             </div>
 
-            @* MEP ID *@
-            <div class="form-group row  text-left">
-                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thiết kế Cơ điện - MEPF</lable>
-                <select name="MEPid" class="form-control col-md-7 col-sm-9 col-xs-9">
-                    @if (Model.MEPid != null)
-                    {
-                        <option value=@Model.MEPid>@SubCons.FirstOrDefault(s => s.SubConId == Model.MEPid).ShortName</option>
-                    }
-                    <option value=""></option>
-                    @foreach (var item in SubCons.OrderBy(s => s.ContractorName))
-                    {
-                        <option value=@item.SubConId>@item.ShortName</option>
-                    }
-
-
-                </select>
-            </div>
-
-            @* Landscape ID *@
-            <div class="form-group row  text-left">
-                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thiết kế Cảnh quan</lable>
-                <select name="LandscapeId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                    @if (Model.LandscapeId != null)
-                    {
-                        <option value=@Model.LandscapeId>@SubCons.FirstOrDefault(s => s.SubConId == Model.LandscapeId).ShortName</option>
-                    }
-                    <option value=""></option>
-                    @foreach (var item in SubCons.OrderBy(s => s.ContractorName))
-                    {
-                        <option value=@item.SubConId>@item.ShortName</option>
-                    }
-
-
-                </select>
-            </div>
-            @* Legal ID *@
-            <div class="form-group row  text-left">
-                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Pháp lý</lable>
-                <select name="LegalId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                    @if (Model.LegalId != null)
-                    {
-                        <option value=@Model.LegalId>@SubCons.FirstOrDefault(s => s.SubConId == Model.LegalId).ShortName</option>
-                    }
-                    <option value=""></option>
-                    @foreach (var item in SubCons.OrderBy(s => s.ContractorName))
-                    {
-                        <option value=@item.SubConId>@item.ShortName</option>
-                    }
-
-
-                </select>
-            </div>
 
             <div class="form-group text-left">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
-                <input type="submit" value="Save" class="btn btn-success col-md-7" />
+                <input type="submit" value="Save" class="btn btn-success col-md-2" />
             </div>
             <div>
                 <p class="text-danger">@ViewBag.Error</p>

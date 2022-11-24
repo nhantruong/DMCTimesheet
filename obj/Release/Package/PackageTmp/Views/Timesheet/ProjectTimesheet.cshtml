@@ -7,11 +7,22 @@
     List<DMCTimesheet.Models.C02_Members> Members = ViewBag.Members as List<DMCTimesheet.Models.C02_Members>;
     List<DMCTimesheet.Models.C07_WorkType> WorkType = ViewBag.WorkType as List<DMCTimesheet.Models.C07_WorkType>;
     List<DMCTimesheet.Models.C19_Workgroup> WorkGroup = ViewBag.Workgroup as List<DMCTimesheet.Models.C19_Workgroup>;
+    //string BI_embed = "https://app.powerbi.com/view?r=eyJrIjoiMWFhYTViM2ItYjYxNi00ZGI5LTk1MjQtNGUzZTc0NjdkZGIxIiwidCI6ImFmYzIxMzc5LTEwMGItNDYzZC04MzI1LWNkMTY4NmFlOTRjYSIsImMiOjEwfQ%3D%3D";
+    DMCTimesheet.Models.C98_EmbedString BI_embed = ViewBag.Embedstring as DMCTimesheet.Models.C98_EmbedString;
 
     int stt = 1;
 }
 
 <h3>@ViewBag.Title</h3>
+<div>
+    <h4>BI Report</h4>
+    <div>
+        <div class="embed-responsive embed-responsive-16by9">
+            @*<iframe title="DMCreport - Page 1" width="1024" height="1060" src="https://app.powerbi.com/view?r=eyJrIjoiMWFhYTViM2ItYjYxNi00ZGI5LTk1MjQtNGUzZTc0NjdkZGIxIiwidCI6ImFmYzIxMzc5LTEwMGItNDYzZC04MzI1LWNkMTY4NmFlOTRjYSIsImMiOjEwfQ%3D%3D" frameborder="0" allowFullScreen="true"></iframe>*@
+            <iframe title="DMCreport - Page 1" width="1024" height="1060" src=@BI_embed.EmbedString frameborder="0" allowFullScreen="true"></iframe>
+        </div>
+    </div>
+</div>
 
 <div>
     <h4>DANH MỤC TIMESHEET THEO DỰ ÁN</h4>
@@ -42,18 +53,20 @@
                 }
                 else
                 {
-                    foreach (var item in Model)
+                    foreach (var item in Model.OrderByDescending(s=>s.RecordDate))
                     {
                         <tr class="row">
                             <td class="col-md-1 text-center text-dark">@stt</td>
                             <td class="col-md-1">
                                 @if (item.ProjectId != null)
                                 {
-                                    <b class="text-primary">@Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName</b>
+                                    @*<b class="text-primary">@Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName</b>*@
+                                <b>@Html.ActionLink(Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName, "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "text-primary" })</b>
                                 }
                                 else
                                 {
-                                    <b class="text-danger">Công việc chung</b>
+                                    @*<b class="text-danger">Công việc chung</b>*@
+                            <b>@Html.ActionLink("Công việc chung", "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "text-primary" })</b>
                                 }
                             </td>
                             <td class="col-md-1 text-center text-dark">

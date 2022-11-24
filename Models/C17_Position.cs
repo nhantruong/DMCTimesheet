@@ -17,5 +17,6 @@ namespace DMCTimesheet.Models
         public int Id { get; set; }
         public string PositionName { get; set; }
         public Nullable<bool> Active { get; set; }
+        public Nullable<bool> isLeader { get; set; }
     }
 }

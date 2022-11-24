@@ -10,6 +10,9 @@
     Error = Session["Error"] as string;
     bool isError = false;
     isError = ViewBag.Bool == null ? false : true;
+
+    List<DMCTimesheet.Models.C14_Services> Services = ViewBag.Services as List<DMCTimesheet.Models.C14_Services>;
+    List<DMCTimesheet.Models.C15_SubConServices> ContractorServices = ViewBag.ContractorServices as List<DMCTimesheet.Models.C15_SubConServices>;
 }
 
 <div class="nav navbar-fixed-top row">
@@ -18,116 +21,55 @@
 <br>
 <div class="clearfix"></div>
 
-@*@if (!isError)
-    {*@@* Form nhập liệu *@
-    <div>
-        @using (Html.BeginForm("DeleteAssignConfirmed", "Project", FormMethod.Post))
-        {
-            @Html.AntiForgeryToken()
-            <form>
-                @* ID *@
-                <div class="form-group row">
-                    <lable hidden class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Id</lable>
-                    <input type="number" class="form-control col-md-7 col-sm-9 col-xs-9" name="Id" placeholder="" hidden readonly value="@Model.Id" />
-                </div>
+<div>
+    @using (Html.BeginForm("DeleteAssignConfirmed", "Project", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+    <form action="/" method="post">
+        @* ID *@
+        <div class="form-group row">
+            <lable hidden class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Id</lable>
+            <input type="number" class="form-control col-md-7 col-sm-9 col-xs-9" name="Id" placeholder="" hidden readonly value="@Model.Id" />
+        </div>
 
-                <div class="form-group row">
-                    <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Ngày</lable>
-                    <input type="date" class="form-control col-md-7 col-sm-9 col-xs-9" name="Date" placeholder="" required="" value="@DateTime.Parse(Model.Date.ToString()).ToString("yyyy-MM-dd")" />
-                </div>
-                @* ProjectTypeID *@
-                <div class="form-group row  text-left">
-                    <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên dự án</lable>
-                    <select name="ProjectID" class="form-control col-md-7 col-sm-9 col-xs-9">
-                        <option value=@Model.ProjectId>@Project.FirstOrDefault(s => s.ProjectID == Model.ProjectId).ProjectName</option>
-                    </select>
-                </div>
-                @* ARC ID *@
-                <div class="form-group row  text-left">
-                    <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thiết kế Kiến trúc</lable>
-                    <select name="ArcId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                        @if (Model.ArcId != null)
-                        {
-                            <option value=@Model.ArcId>@SubCons.FirstOrDefault(s => s.SubConId == Model.ArcId).ShortName</option>
-                        }
-                    </select>
-                </div>
-                @* interior ID *@
-                <div class="form-group row  text-left">
-                    <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thiết kế Nội thất</lable>
-                    <select name="InteriorId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                        @if (Model.InteriorId != null)
-                        {
-                            <option value=@Model.InteriorId>@SubCons.FirstOrDefault(s => s.SubConId == Model.InteriorId).ShortName</option>
-                        }
-                    </select>
-                </div>
-                @* Structure ID *@
-                <div class="form-group row  text-left">
-                    <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thiết kế Kết cấu</lable>
-                    <select name="StructureId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                        @if (Model.StructureId != null)
-                        {
-                            <option value=@Model.StructureId>@SubCons.FirstOrDefault(s => s.SubConId == Model.StructureId).ShortName</option>
-                        }
+        <div class="form-group row">
+            <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Ngày</lable>
+            <input type="date" class="form-control col-md-7 col-sm-9 col-xs-9" name="Date" readonly placeholder="" required="" value="@DateTime.Parse(Model.Date.ToString()).ToString("yyyy-MM-dd")" />
+        </div>
+        @* ProjectTypeID *@
+        <div class="form-group row  text-left">
+            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên dự án</lable>
+            <select name="ProjectID" class="form-control col-md-7 col-sm-9 col-xs-9">
+                <option value=@Model.ProjectId>@Project.FirstOrDefault(s => s.ProjectID == Model.ProjectId).ProjectName</option>
+            </select>
+        </div>
+        <div class="form-group row">
+            <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left">NTP cung cấp dịch vụ</lable>
+            <input readonly type="text" class="form-control col-md-7 col-sm-9 col-xs-9 text-danger" name="SubConId" placeholder="" required="" value="@SubCons.FirstOrDefault(s=>s.SubConId ==  Model.SubConId).ShortName" />
+        </div>
 
-                    </select>
-                </div>
+        <div class="form-group row">
+            <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Tên dịch vụ</lable>
+            <input readonly type="text" class="form-control col-md-7 col-sm-9 col-xs-9" name="ServicesAssign" placeholder="" required="" value="@Services.FirstOrDefault(s=>s.ServiceId == Model.ServicesAssign).ServiceName" />
+        </div>
 
-                @* MEP ID *@
-                <div class="form-group row  text-left">
-                    <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thiết kế Cơ điện - MEPF</lable>
-                    <select name="MEPid" class="form-control col-md-7 col-sm-9 col-xs-9">
-                        @if (Model.MEPid != null)
-                        {
-                            <option value=@Model.MEPid>@SubCons.FirstOrDefault(s => s.SubConId == Model.MEPid).ShortName</option>
-                        }
+        <div class="form-group text-left">
+            <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
+            <input type="submit" value="Delete" class="btn btn-danger col-md-2" />
+        </div>
 
-                    </select>
-                </div>
+        <div class="clearfix"></div>
 
-                @* Landscape ID *@
-                <div class="form-group row  text-left">
-                    <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thiết kế Cảnh quan</lable>
-                    <select name="LandscapeId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                        @if (Model.LandscapeId != null)
-                        {
-                            <option value=@Model.LandscapeId>@SubCons.FirstOrDefault(s => s.SubConId == Model.LandscapeId).ShortName</option>
 
-                        }
-                    </select>
-                </div>
-                @* Legal ID *@
-                <div class="form-group row  text-left">
-                    <lable class="control-label col-md-3 col-sm-3 col-xs-3">Pháp lý</lable>
-                    <select name="LegalId" class="form-control col-md-7 col-sm-9 col-xs-9">
-                        @if (Model.LegalId != null)
-                        {
-                            <option value=@Model.LegalId>@SubCons.FirstOrDefault(s => s.SubConId == Model.LegalId).ShortName</option>
+    </form>
 
-                        }
-                    </select>
-                </div>
+    }
+</div>
 
-                <div class="form-group text-left">
-                    <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
-                    <input type="submit" value="Delete" class="btn btn-danger col-md-2" />
-                </div>
+@*<h5 class="text-primary">@Error</h5>*@
+<h5 class="text-primary">@ViewBag.SaveContent</h5>
 
-                <div class="clearfix"></div>
-
-            </form>
-        }
-    </div>
-
-    @* End Form nhập liệu *@
-    //}
-    //else
-    //{
-    @*<h5 class="text-primary">@Error</h5>*@
-    <h5 class="text-primary">@ViewBag.SaveContent</h5>
-    @*}*@
-    <div>
-        <p class="text-danger">@ViewBag.SaveContent</p>
-    </div>
+<div>
+    <p class="text-danger">@ViewBag.SaveContent</p>
+</div>
 

@@ -18,6 +18,7 @@ namespace DMCTimesheet.Models
         public C07_WorkType()
         {
             this.C08_Timesheet = new HashSet<C08_Timesheet>();
+            this.C21_DetailAction = new HashSet<C21_DetailAction>();
         }
     
         public int ID { get; set; }
@@ -27,5 +28,7 @@ namespace DMCTimesheet.Models
         public virtual C19_Workgroup C19_Workgroup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<C08_Timesheet> C08_Timesheet { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<C21_DetailAction> C21_DetailAction { get; set; }
     }
 }

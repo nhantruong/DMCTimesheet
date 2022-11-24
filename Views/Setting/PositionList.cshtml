@@ -42,6 +42,14 @@
                             <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên Chức danh</lable>
                             <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" name="PositionName" placeholder="Tên chức danh" required="" value="" />
                         </div>
+                        <div class="form-group row text-center text-dark">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">isLeader?</lable>
+                            <select name="isLeader" class="form-control col-md-7 col-sm-9 col-xs-9">
+                                <option value="0"></option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
                         <div class="form-group row text-left text-dark">
                             <lable class="control-label col-md-3 col-sm-3 col-xs-3">Kích hoạt</lable>
                             <select name="Active" class="form-control col-md-7 col-sm-9 col-xs-9">
@@ -80,6 +88,7 @@
         <tr class="text-white" style="background-color:#000000">
             <td class="col-sm-1">STT</td>
             <td class="col-sm-2">Tên Chức danh</td>
+            <td class="col-sm-1">isLeader</td>
             <td class="col-sm-1">Tình trạng kích hoạt</td>
             <td class="col-sm-1">#</td>
         </tr>
@@ -103,7 +112,22 @@
                         <td class="col-sm-2">
                             @if (item.PositionName != null)
                             {
-                                <b class="text-danger">@item.PositionName</b>
+                                @*<b class="text-danger">@item.PositionName</b>*@
+                                <b> @Html.ActionLink(item.PositionName, "EditPosition", "Setting", new { Id = item.Id }, new { @class = "text-danger" })</b>
+                            }
+                        </td>
+                        <td class="col-sm-1">
+                            @if (item.isLeader != null)
+                            {
+                                if (item.isLeader == true)
+                                {
+                                    <b class="text-primary">Yes</b>
+                                }
+                                else
+                                {
+                                    <b class="text-primary">No</b>
+                                }
+
                             }
                         </td>
                         <td class="col-sm-1">

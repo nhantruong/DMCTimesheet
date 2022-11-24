@@ -46,9 +46,9 @@ namespace DMCTimesheet.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult CreateNewProject(string MaDuAn, string ProjectName, string ProjectOtherName, DateTime StartDate, int Year, int? ProjectTypeId, int? ProjectStatusId, int? LocationId, int? OwnerId, int? ProjectStage)
         {
-            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");            
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
             C01_Projects _Projects = new C01_Projects()
-            {                
+            {
                 ProjectName = ProjectName,
                 ProjectOtherName = ProjectOtherName,
                 StartDate = StartDate,
@@ -97,6 +97,9 @@ namespace DMCTimesheet.Controllers
             ViewBag.SubCons = db.C12_SubContractor.ToList();
             ViewBag.AssignProject = db.C09_ProjectSubCon.ToList();
 
+            ViewBag.Services = db.C14_Services.ToList();
+            ViewBag.ContractorServices = db.C15_SubConServices.ToList();
+
             return View(db.C09_ProjectSubCon.ToList());
         }
 
@@ -114,41 +117,41 @@ namespace DMCTimesheet.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AssignDesigner(DateTime Date, int ProjectId, int? ArcId, int? InteriorId, int? StructureId, int? MEPid, int? LandscapeId, int? LegalId)
+        public ActionResult AssignDesigner(DateTime Date, int ProjectId, int? SubConId, int? ServicesAssign)
         {
-            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");            
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
             try
             {
-                C09_ProjectSubCon current = db.C09_ProjectSubCon.FirstOrDefault(s => s.ProjectId == ProjectId);
-                if (current == null)
+                //C09_ProjectSubCon current = db.C09_ProjectSubCon.FirstOrDefault(s => s.ProjectId == ProjectId);
+                //if (current == null)
+                //{
+                C09_ProjectSubCon assignProject = new C09_ProjectSubCon
                 {
-                    C09_ProjectSubCon assignProject = new C09_ProjectSubCon
-                    {
-                        Date = Date,
-                        ProjectId = ProjectId,
-                        ArcId = ArcId,
-                        StructureId = StructureId,
-                        InteriorId = InteriorId,
-                        MEPid = MEPid,
-                        LandscapeId = LandscapeId,
-                        LegalId = LegalId
-                    };
-                    if (ModelState.IsValid)
-                    {
-                        db.C09_ProjectSubCon.Add(assignProject);
-                        db.SaveChanges();
-                    }
-                }
-                else
+                    Date = Date,
+                    ProjectId = ProjectId,
+                    SubConId = SubConId,
+                    ServicesAssign = ServicesAssign
+                };
+                if (ModelState.IsValid)
                 {
-                    //Session["ProjectAssignError"] = $"Đã có điều phối NTP cho dự án này";
-                    ViewBag.Projects = db.C01_Projects.ToList();
-                    ViewBag.SubCons = db.C12_SubContractor.ToList();
-                    ViewBag.AssignProject = db.C09_ProjectSubCon.ToList();
-                    ViewBag.Stage = db.C20_Stage.ToList();
-                    ViewBag.Error = $"Đã có điều phối NTP cho dự án này";
-                    return View("AssignDesigner", db.C09_ProjectSubCon.ToList());
+                    db.C09_ProjectSubCon.Add(assignProject);
+                    db.SaveChanges();
                 }
+                //}
+                //else
+                //{
+                //    //Session["ProjectAssignError"] = $"Đã có điều phối NTP cho dự án này";
+                //    ViewBag.Projects = db.C01_Projects.ToList();
+                //    ViewBag.SubCons = db.C12_SubContractor.ToList();
+                //    ViewBag.AssignProject = db.C09_ProjectSubCon.ToList();
+                //    ViewBag.Stage = db.C20_Stage.ToList();
+                //    ViewBag.Error = $"Đã có điều phối NTP cho dự án này";
+
+                //    ViewBag.Services = db.C14_Services.ToList();
+                //    ViewBag.ContractorServices = db.C15_SubConServices.ToList();
+
+                //    return View("AssignDesigner", db.C09_ProjectSubCon.ToList());
+                //}
                 return RedirectToAction("AssignDesigner");
             }
             catch (Exception ex)
@@ -178,7 +181,8 @@ namespace DMCTimesheet.Controllers
                 ViewBag.Location = db.C11_Location.ToList();
                 ViewBag.Owner = db.C10_Owner.ToList();
                 ViewBag.Stage = db.C20_Stage.ToList();
-
+                ViewBag.Services = db.C14_Services.ToList();
+                ViewBag.ContractorServices = db.C15_SubConServices.ToList();
                 return View(Enity);
             }
             catch (Exception ex)
@@ -203,10 +207,10 @@ namespace DMCTimesheet.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int ProjectID,string MaDuAn, string ProjectName, string ProjectOtherName, DateTime StartDate, int Year,
+        public ActionResult Edit(int ProjectID, string MaDuAn, string ProjectName, string ProjectOtherName, DateTime StartDate, int Year,
             int? ProjectTypeId, int? ProjectStatusId, int? LocationId, int? OwnerId, int? ProjectStage)
         {
-            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");            
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
             try
             {
                 C01_Projects enity = db.C01_Projects.First(s => s.ProjectID == ProjectID);
@@ -256,27 +260,25 @@ namespace DMCTimesheet.Controllers
             ViewBag.SubCons = db.C12_SubContractor.ToList();
             ViewBag.AssignProject = db.C09_ProjectSubCon.ToList();
             ViewBag.Stage = db.C20_Stage.ToList();
+            ViewBag.Services = db.C14_Services.ToList();
+            ViewBag.ContractorServices = db.C15_SubConServices.ToList();
             return View(enity);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult EditAssign(int? Id, DateTime Date, int? ProjectId, int? ArcId, int? InteriorId, int? StructureId, int? MEPid, int? LandscapeId, int? LegalId)
+        public ActionResult EditAssign(int? Id, DateTime Date, int? ProjectId, int? SubConId, int? ServicesAssign)
         {
             if (Session["UserLogin"] == null || Id == null) return RedirectToAction("Login", "Home");
             if (ProjectId == null) return RedirectToAction("EditAssign");
-            
+
             C09_ProjectSubCon enity = db.C09_ProjectSubCon.FirstOrDefault(s => s.Id == Id);
             if (enity == null) return RedirectToAction("AssignDesigner");
 
             enity.Date = Date;
             enity.ProjectId = ProjectId;
-            enity.InteriorId = InteriorId;
-            enity.StructureId = StructureId;
-            enity.MEPid = MEPid;
-            enity.LandscapeId = LandscapeId;
-            enity.LegalId = LegalId;
-            enity.ArcId = ArcId;
+            enity.SubConId = SubConId;
+            enity.ServicesAssign = ServicesAssign;
             try
             {
                 if (ModelState.IsValid)
@@ -318,16 +320,16 @@ namespace DMCTimesheet.Controllers
 
 
         [HttpPost, ActionName("DeleteConfirmed")]
-       // [ValidateAntiForgeryToken]
+        // [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int? ProjectID)
-        {   
-            if (Session["UserLogin"] == null || ProjectID == null) return RedirectToAction("Login", "Home");            
+        {
+            if (Session["UserLogin"] == null || ProjectID == null) return RedirectToAction("Login", "Home");
             try
             {
                 C01_Projects Enity = db.C01_Projects.FirstOrDefault(s => s.ProjectID == ProjectID);
                 if (Enity == null) return RedirectToAction("DeleteProject");
                 //Thông tin chung
-                if(ModelState.IsValid)
+                if (ModelState.IsValid)
                 {
                     db.C01_Projects.Remove(Enity);
                     db.SaveChanges();
@@ -340,15 +342,19 @@ namespace DMCTimesheet.Controllers
                 ViewBag.Status = db.C16_Status.ToList();
                 ViewBag.Location = db.C11_Location.ToList();
                 ViewBag.Owner = db.C10_Owner.ToList();
-                Session["Error"] =  $"Dự án còn dữ liệu liên quan (Timesheet, Điều phối nhân sự) cần xóa trước khi xóa dự án.";
+                Session["Error"] = $"Dự án còn dữ liệu liên quan (Timesheet, Điều phối nhân sự) cần xóa trước khi xóa dự án.";
                 ViewBag.SaveContent = $"{ex.Message}";
                 ViewBag.Bool = true;
                 ViewBag.Stage = db.C20_Stage.ToList();
+
+                ViewBag.Services = db.C14_Services.ToList();
+                ViewBag.ContractorServices = db.C15_SubConServices.ToList();
+
                 return View("DeleteProject");
             }
         }
 
-        
+
         [HttpGet]
         public ActionResult DeleteAssign(int Id)
         {
@@ -360,15 +366,17 @@ namespace DMCTimesheet.Controllers
             ViewBag.SubCons = db.C12_SubContractor.ToList();
             ViewBag.AssignProject = db.C09_ProjectSubCon.ToList();
             ViewBag.Stage = db.C20_Stage.ToList();
+            ViewBag.Services = db.C14_Services.ToList();
+            ViewBag.ContractorServices = db.C15_SubConServices.ToList();
             return View(enity);
         }
 
 
         [HttpPost, ActionName("DeleteAssignConfirmed")]
-       // [ValidateAntiForgeryToken]
+        // [ValidateAntiForgeryToken]
         public ActionResult DeleteAssignConfirmed(int Id)
-        {   
-            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");            
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
             try
             {
                 C09_ProjectSubCon enity = db.C09_ProjectSubCon.FirstOrDefault(s => s.Id == Id);
@@ -387,6 +395,8 @@ namespace DMCTimesheet.Controllers
                 ViewBag.SubCons = db.C12_SubContractor.ToList();
                 ViewBag.AssignProject = db.C09_ProjectSubCon.ToList();
                 ViewBag.Stage = db.C20_Stage.ToList();
+                ViewBag.Services = db.C14_Services.ToList();
+                ViewBag.ContractorServices = db.C15_SubConServices.ToList();
                 //Session["Error"] =  $"Dự án còn dữ liệu liên quan cần xóa trước khi xóa dự án.";
 
 

@@ -28,11 +28,11 @@
             @* ProjectTypeID *@
             <div class="form-group row  text-left">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3"><b class="text-danger">Tên dự án</b></lable>
-                <select name="ProjectID"  class="form-control col-md-7 col-sm-9 col-xs-9">
-                    <option value=@Model.ProjectID>@Projects.FirstOrDefault(s => s.ProjectID == Model.ProjectID).ProjectOtherName</option>                    
+                <select name="ProjectID" class="form-control col-md-7 col-sm-9 col-xs-9">
+                    <option value=@Model.ProjectID>@Projects.FirstOrDefault(s => s.ProjectID == Model.ProjectID).ProjectOtherName</option>
                 </select>
             </div>
-            @* ARC ID *@
+            @* Chu tri ID *@
             <div class="form-group row  text-left">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3"><b>Chủ trì Dự án</b></lable>
                 <select name="ChuTriChinh" class="form-control col-md-7 col-sm-9 col-xs-9">
@@ -42,7 +42,7 @@
                     }
                 </select>
             </div>
-            @* interior ID *@
+            @* ARC ID *@
             <div class="form-group row  text-left">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chủ trì bộ môn <b class="text-primary">Kiến trúc</b></lable>
                 <select name="ChuTriKienTruc" class="form-control col-md-7 col-sm-9 col-xs-9">
@@ -53,6 +53,18 @@
                     }
                 </select>
             </div>
+            @* ARC 2 *@
+            <div class="form-group row  text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chủ trì 2 bộ môn <b class="text-primary">Kiến trúc</b></lable>
+                <select name="ChuTriKienTruc2" class="form-control col-md-7 col-sm-9 col-xs-9">
+                    @if (Model.ChuTriKienTruc2 != null)
+                    {
+                        <option value="@Model.ChuTriKienTruc2">@Members.FirstOrDefault(s => s.UserID == Model.ChuTriKienTruc2).FullName</option>
+
+                    }
+                </select>
+            </div>
+
             @* Structure ID *@
             <div class="form-group row  text-left">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chủ trì bộ môn <b class="text-primary">Kết cấu</b></lable>
@@ -60,6 +72,17 @@
                     @if (Model.ChuTriKetCau != null)
                     {
                         <option value="@Model.ChuTriKetCau">@Members.FirstOrDefault(s => s.UserID == Model.ChuTriKetCau).FullName</option>
+
+                    }
+                </select>
+            </div>
+            @* Structure 2 *@
+            <div class="form-group row  text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chủ trì 2 bộ môn <b class="text-primary">Kết cấu</b></lable>
+                <select name="ChuTriKetCau2" class="form-control col-md-7 col-sm-9 col-xs-9">
+                    @if (Model.ChuTriKetCau2 != null)
+                    {
+                        <option value="@Model.ChuTriKetCau2">@Members.FirstOrDefault(s => s.UserID == Model.ChuTriKetCau2).FullName</option>
 
                     }
                 </select>
@@ -72,6 +95,18 @@
                     @if (Model.ChuTriMEP != null)
                     {
                         <option value="@Model.ChuTriMEP">@Members.FirstOrDefault(s => s.UserID == Model.ChuTriMEP).FullName</option>
+
+                    }
+                </select>
+            </div>
+
+            @* MEP 2 *@
+            <div class="form-group row  text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chủ trì 2 bộ môn <b class="text-primary">Cơ điện - MEPF</b></lable>
+                <select name="ChuTriMEP2" class="form-control col-md-7 col-sm-9 col-xs-9">
+                    @if (Model.ChuTriMEP2 != null)
+                    {
+                        <option value="@Model.ChuTriMEP2">@Members.FirstOrDefault(s => s.UserID == Model.ChuTriMEP2).FullName</option>
 
                     }
                 </select>
@@ -98,8 +133,19 @@
 
                     }
                 </select>
-            </div> 
-            @* Legal ID *@
+            </div>
+            @* Legal 2 *@
+            <div class="form-group row  text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3"><b class="text-primary">Hỗ trợ Pháp lý</b></lable>
+                <select name="LegalManager2" class="form-control col-md-7 col-sm-9 col-xs-9">
+                    @if (Model.LegalManager2 != null)
+                    {
+                        <option value="@Model.LegalManager2">@Members.FirstOrDefault(s => s.UserID == Model.LegalManager2).FullName</option>
+
+                    }
+                </select>
+            </div>
+            @* Admin ID *@
             <div class="form-group row  text-left">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3"><b class="text-primary">Admin</b></lable>
                 <select name="LegalManager" class="form-control col-md-7 col-sm-9 col-xs-9">

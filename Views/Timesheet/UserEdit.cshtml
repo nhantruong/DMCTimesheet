@@ -4,7 +4,7 @@
     //Layout = "~/Views/Shared/_UserLayout.cshtml";
     List<DMCTimesheet.Models.C01_Projects> Projects = ViewBag.Projects as List<DMCTimesheet.Models.C01_Projects>;
     List<DMCTimesheet.Models.C07_WorkType> WorkType = ViewBag.WorkType as List<DMCTimesheet.Models.C07_WorkType>;
-
+    DMCTimesheet.Models.C02_Members loginUser = Session["UserLogin"] as DMCTimesheet.Models.C02_Members;
 }
 
 <h2>@ViewBag.Title</h2>
@@ -60,9 +60,9 @@
                     {
                         <option value="@Model.WorkType">@WorkType.FirstOrDefault(s => s.ID == Model.WorkType).WorkName</option>
                         <option value="@Model.WorkType">---------</option>
-                        foreach (var item in WorkType.Where(s => s.WorkGroup != 2).OrderBy(p => p.WorkGroup))
+                        foreach (var item in WorkType.Where(s => s.GroupId != 2).OrderBy(p => p.GroupId))
                         {
-                            <option value="@item.ID">[Nhóm @item.WorkGroup] - @item.WorkName</option>
+                            <option value="@item.ID">[Nhóm @item.GroupId] - @item.WorkName</option>
                         }
                     }
                 }
@@ -72,9 +72,9 @@
                     {
                         <option value="@Model.WorkType">@WorkType.FirstOrDefault(s => s.ID == Model.WorkType).WorkName</option>
                         <option value="@Model.WorkType">---------</option>
-                        foreach (var item in WorkType.Where(s => s.WorkGroup == 2).OrderBy(p => p.WorkGroup))
+                        foreach (var item in WorkType.Where(s => s.GroupId == 2).OrderBy(p => p.GroupId))
                         {
-                            <option value="@item.ID">[Nhóm @item.WorkGroup] - @item.WorkName</option>
+                            <option value="@item.ID">[Nhóm @item.GroupId] - @item.WorkName</option>
                         }
                     }
                 }
@@ -107,9 +107,13 @@
         </div>
 
         <div class="form-group row">
-            <div class="col-md-offset-2 col-md-2">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
+            @if (Model.MemberID == loginUser.UserID)
+            {
+                <div class="col-md-offset-2 col-md-2">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            }
+
             <div class="text-danger">@ViewBag.WorkAlert</div>
         </div>
     </div>

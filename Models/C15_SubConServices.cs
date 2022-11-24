@@ -19,7 +19,7 @@ namespace DMCTimesheet.Models
         public Nullable<int> ServiceId { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
     
-        public virtual C12_SubContractor C12_SubContractor { get; set; }
         public virtual C14_Services C14_Services { get; set; }
+        public virtual C12_SubContractor C12_SubContractor { get; set; }
     }
 }

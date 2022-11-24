@@ -24,6 +24,10 @@ namespace DMCTimesheet.Models
         public Nullable<int> BIMManager { get; set; }
         public Nullable<int> LegalManager { get; set; }
         public Nullable<int> Admin { get; set; }
+        public Nullable<int> ChuTriKienTruc2 { get; set; }
+        public Nullable<int> ChuTriKetCau2 { get; set; }
+        public Nullable<int> ChuTriMEP2 { get; set; }
+        public Nullable<int> LegalManager2 { get; set; }
     
         public virtual C01_Projects C01_Projects { get; set; }
         public virtual C02_Members C02_Members { get; set; }

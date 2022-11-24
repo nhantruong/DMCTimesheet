@@ -100,7 +100,8 @@
                         <td class="col-sm-2">
                             @if (item.TypeName != null)
                             {
-                                <b class="text-danger">@item.TypeName</b>
+                                <b> @Html.ActionLink(item.TypeName, "EditProjectType", "Setting", new { Id = item.TypeId }, new { @class = "text-danger" })</b>
+                                @*<b class="text-danger">@item.TypeName</b>*@
                             }
                         </td>
                         <td class="col-sm-2">

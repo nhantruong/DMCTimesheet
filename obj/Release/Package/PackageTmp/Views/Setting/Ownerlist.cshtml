@@ -4,6 +4,7 @@
     //Layout = "~/Views/Shared/_AdminLayout.cshtml";
     string updateInfo = ViewBag.SaveContent;
     List<DMCTimesheet.Models.C11_Location> Locations = ViewBag.Location as List<DMCTimesheet.Models.C11_Location>;
+    int stt = 1;
 }
 <link href="~/Content/cscpda-scrollbar.css" rel="stylesheet" />
 
@@ -95,20 +96,21 @@
 <div class="table-responsive col-md-12">
     <table class="table table-borderless">
         <tr class="text-white" style="background-color:#000000">
+            <td class="col-md-1" style="width:60px">STT</td>
             <td class="col-md-2">Tên đầy đủ theo HĐ</td>
             <td class="col-md-2">Tên rút gọn</td>
             <td class="col-md-1">Người đại diện</td>
             <td class="col-md-2">Email Người đại diện</td>
             <td class="col-md-1">Vị trí</td>
-            <td class="col-md-3">Mô tả</td>
+            <td class="col-md-2">Mô tả</td>
             @*<td class="col-md-1">Actived</td>*@
             <td class="col-md-1">#</td>
         </tr>
     </table>
 </div>
 <div class="table-responsive" style="height:900px">
-    <div class="col-md-12">        
-        <table class="table table-striped table-bordered">            
+    <div class="col-md-12">
+        <table class="table table-striped table-bordered">
             <tbody class="">
                 @if (Model == null || Model.Count() == 0)
                 {
@@ -118,11 +120,16 @@
                 }
                 else
                 {
-                    foreach (var item in Model.Where(s=>s.OnwerId != 1).OrderBy(s=>s.ShortName))
+                    foreach (var item in Model.Where(s => s.OnwerId != 1).OrderBy(s => s.ShortName))
                     {
                         <tr class="row">
-                            <td class="col-md-2"><b class="text-primary">@item.OwnerName</b></td>
-                            <td class="col-md-2"><b class="text-danger">@item.ShortName</b></td>
+                            <td style="width:60px">@stt</td>
+                            <td class="col-md-2"><b class="text-primary"> @Html.ActionLink(item.OwnerName, "EditOwner", "Setting", new { Id = item.OnwerId }, new { @class = "text-primary" })</b></td>
+                            <td class="col-md-2">
+                                <b>
+                                    @Html.ActionLink(item.ShortName, "EditOwner", "Setting", new { Id = item.OnwerId }, new { @class = "text-danger" })
+                                </b>
+                            </td>
                             <td class="col-md-1">@item.KeyPerson</td>
                             <td class="col-md-2">@item.Email</td>
                             <td class="col-md-1">
@@ -135,25 +142,26 @@
                                     <a>@Locations.FirstOrDefault(s => s.LocationId == item.OnwerLocation).LocationName</a>
                                 }
                             </td>
-                            <td class="col-md-3">@item.OnwerDescription</td>
+                            <td class="col-md-2">@item.OnwerDescription</td>
                             @*<td class="col-md-1">
-                                <select disabled name="Actived" class="form-control col-md-7 col-sm-9 col-xs-9">
-                                    @if (item.Active == true)
-                                    {
-                                        <option value="1">Đang làm việc</option>
-                                    }
-                                    else
-                                    {
-                                        <option value="0">Không còn làm việc </option>
-                                    }
+                                    <select disabled name="Actived" class="form-control col-md-7 col-sm-9 col-xs-9">
+                                        @if (item.Active == true)
+                                        {
+                                            <option value="1">Đang làm việc</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="0">Không còn làm việc </option>
+                                        }
 
-                                </select>
-                            </td>*@
-                            <td class="col-md-1">                                
+                                    </select>
+                                </td>*@
+                            <td class="col-md-1">
                                 @Html.ActionLink(" ", "EditOwner", "Setting", new { Id = item.OnwerId }, new { @class = "fa fa-edit" })
                                 @Html.ActionLink(" ", "DeleteOwner", "Setting", new { Id = item.OnwerId }, new { @class = "fa fa-remove btn" })
                             </td>
                         </tr>
+                        stt++;
                     }
                 }
             </tbody>

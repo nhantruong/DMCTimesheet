@@ -240,6 +240,15 @@
     <Compile Include="Models\C20_Stage.cs">
       <DependentUpon>DMC.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\C21_DetailAction.cs">
+      <DependentUpon>DMC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C22_ServiceGroup.cs">
+      <DependentUpon>DMC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C98_EmbedString.cs">
+      <DependentUpon>DMC.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\C99_ActivityLog.cs">
       <DependentUpon>DMC.tt</DependentUpon>
     </Compile>
@@ -258,6 +267,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DMC.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\GetDMCdata.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -881,6 +891,7 @@
     <Content Include="UserStyles\build\js\custom.js" />
     <Content Include="UserStyles\build\js\custom.min.js" />
     <Content Include="UserStyles\Chart.js\.gitignore" />
+    <Content Include="UserStyles\Chart.js\chart.js" />
     <Content Include="UserStyles\Chart.js\dist\Chart.bundle.js" />
     <Content Include="UserStyles\Chart.js\dist\Chart.bundle.min.js" />
     <Content Include="UserStyles\Chart.js\dist\Chart.js" />
@@ -3314,6 +3325,8 @@
     <Content Include="Views\Setting\DeleteCompanyService.cshtml" />
     <Content Include="Views\Setting\EditCompanyService.cshtml" />
     <Content Include="Views\Setting\CreateNewCompanyService.cshtml" />
+    <Content Include="Views\Setting\DeleteWorkDetail.cshtml" />
+    <Content Include="Views\Setting\PowerBIEmbedString.cshtml" />
     <None Include="Web References\com.cbimtech.MemberServices\MemberService.disco" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

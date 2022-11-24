@@ -17,26 +17,19 @@ namespace DMCTimesheet.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public C12_SubContractor()
         {
-            this.C09_ProjectSubCon = new HashSet<C09_ProjectSubCon>();
             this.C15_SubConServices = new HashSet<C15_SubConServices>();
+            this.C09_ProjectSubCon = new HashSet<C09_ProjectSubCon>();
         }
     
         public int SubConId { get; set; }
         public string ContractorName { get; set; }
         public string ShortName { get; set; }
         public Nullable<int> ContractorLocation { get; set; }
-        public Nullable<bool> ARC { get; set; }
-        public Nullable<bool> STR { get; set; }
-        public Nullable<bool> MEP { get; set; }
-        public Nullable<bool> Interior { get; set; }
-        public Nullable<bool> Infrastructure { get; set; }
-        public Nullable<bool> DTM { get; set; }
-        public Nullable<bool> Render { get; set; }
-        public Nullable<bool> Landscape { get; set; }
+        public string MaQuanLy { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<C09_ProjectSubCon> C09_ProjectSubCon { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<C15_SubConServices> C15_SubConServices { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<C09_ProjectSubCon> C09_ProjectSubCon { get; set; }
     }
 }

@@ -3,15 +3,10 @@
     ViewBag.Title = "Edit Design Constractor Page";
     string updateInfo = ViewBag.SaveContent;
     List<DMCTimesheet.Models.C11_Location> Locations = ViewBag.Location as List<DMCTimesheet.Models.C11_Location>;
+    List<DMCTimesheet.Models.C15_SubConServices> NTPService = ViewBag.NTPService as List<DMCTimesheet.Models.C15_SubConServices>;
+    List<DMCTimesheet.Models.C14_Services> Services = ViewBag.Services as List<DMCTimesheet.Models.C14_Services>;
+    List<DMCTimesheet.Models.C22_ServiceGroup> ServiceGroup = ViewBag.ServiceGroup as List<DMCTimesheet.Models.C22_ServiceGroup>;
 
-    string arc = Model.ARC != null ? "checked" : "";
-    string str = Model.STR != null ? "checked" : "";
-    string mep = Model.MEP != null ? "checked" : "";
-    string interior = Model.Interior != null ? "checked" : "";
-    string infra = Model.Infrastructure != null ? "checked" : "";
-    string dtm = Model.DTM != null ? "checked" : "";
-    string render = Model.Render != null ? "checked" : "";
-    string land = Model.Landscape != null ? "checked" : "";
 
 }
 
@@ -19,8 +14,9 @@
     @using (Html.BeginForm("EditNTP", "Setting", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
-        <form>
-            @* WorkType *@
+        <form action="~/Controllers/Setting/EditNTP/">
+            @* Thông tin chung *@
+            <h5>Thông tin chung Nhà thầu phụ thiết kế</h5>
             <div class="form-group row text-left text-dark">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên đầy đủ của NTP</lable>
                 <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9 text-primary" name="ContractorName" placeholder="Tên theo Hợp đồng" required="" value="@Model.ContractorName" />
@@ -29,13 +25,17 @@
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên rút gọn</lable>
                 <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9 text-primary" name="ShortName" placeholder="Tên rút gọn" value="@Model.ShortName" />
             </div>
+            <div class="form-group row text-left text-dark">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Mã Quản lý</lable>
+                <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9 text-primary" name="MaQuanLy" placeholder="Nhập Mã quản lý" value="@Model.MaQuanLy" />
+            </div>
 
             <div class="form-group row text-left text-dark">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3">Vị trí</lable>
                 <select name="ContractorLocation" class="form-control col-md-7 col-sm-9 col-xs-9">
                     @if (Model.ContractorLocation != null)
                     {
-                        <option value="@Model.ContractorLocation"></option>
+                        <option value="@Model.ContractorLocation">@Locations.FirstOrDefault(s => s.LocationId == Model.ContractorLocation).LocationName</option>
                     }
                     else
                     {
@@ -47,138 +47,124 @@
                     }
                 </select>
             </div>
-
             <br />
             <div class="clearfix"></div>
 
-            <div class="form-group row text-left text-dark">
-                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Dịch vụ thiết kế cung cấp</lable>
-            </div>
-            <div class="col-md-12 form-group inline text-primary">
-                <div class="col-md-3">
-                    <div class="form-check">
-                        @if (Model.ARC != null)
-                        {
-                            <input type="checkbox" class="form-check-input" name="ARC" value="true" checked>
-                        }
-                        else
-                        {
-                            <input type="checkbox" class="form-check-input" name="ARC" value="true">
-                        }
-                        <label class="form-check-label" for="ARC">Architecture</label>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-check">
-                        @if (Model.STR != null)
-                        {
-                            <input type="checkbox" class="form-check-input" name="STR" value="true" checked>
-                        }
-                        else
-                        {
-                            <input type="checkbox" class="form-check-input" name="STR" value="true">
-                        }
-
-                        <label class="form-check-label" for="STR">Structure</label>
-
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-check">
-                        @if (Model.MEP != null)
-                        {
-                            <input type="checkbox" class="form-check-input" name="MEP" value="true" checked>
-                        }
-                        else
-                        {
-                            <input type="checkbox" class="form-check-input" name="MEP" value="true">
-                        }
-
-                        <label class="form-check-label" for="MEP">MEP</label>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-check">
-                        @if (Model.Interior != null)
-                        {
-                            <input type="checkbox" class="form-check-input" name="Interior" value="true" checked>
-                        }
-                        else
-                        {
-                            <input type="checkbox" class="form-check-input" name="Interior" value="true">
-                        }
-                        <label class="form-check-label" for="Interior">Interior</label>
-                    </div>
-                </div>
-            </div>
-
-            <div class="clearfix"></div>
-
-            <div class="col-md-12 form-group inline text-primary">
-                <div class="col-md-3">
-                    <div class="form-check">
-                        @if (Model.Infrastructure != null)
-                        {
-                            <input type="checkbox" class="form-check-input" name="Infrastructure" value="true" checked>
-                        }
-                        else
-                        {
-                            <input type="checkbox" class="form-check-input" name="Infrastructure" value="true">
-                        }
-
-                        <label class="form-check-label" for="Infrastructure">Infrastructure</label>
-
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-check">
-                        @if (Model.DTM != null)
-                        {
-                            <input type="checkbox" class="form-check-input" name="DTM" value="true" checked>
-                        }
-                        else
-                        {
-                            <input type="checkbox" class="form-check-input" name="DTM" value="true">
-                        }
-                        <label class="form-check-label" for="DTM">DTM</label>
-
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-check">
-                        @if (Model.Render != null)
-                        {
-                            <input type="checkbox" class="form-check-input" name="Render" value="true" checked>
-                        }
-                        else
-                        {
-                            <input type="checkbox" class="form-check-input" name="Render" value="true">
-                        }
-                        <label class="form-check-label" for="Render">Render</label>
-
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="form-check">
-                        @if (Model.Landscape != null)
-                        {
-                            <input type="checkbox" class="form-check-input" name="Landscape" value="true" checked>
-                        }
-                        else
-                        {
-                            <input type="checkbox" class="form-check-input" name="Landscape" value="true">
-                        }
-                        <label class="form-check-label" for="Landscape">Landscape</label>
-                    </div>
-                </div>
-            </div>
-
-            <br />
-            <div class="clearfix"></div>
             <div class="form-group text-left">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
-                <input type="submit" value="Cập nhật thông tin" class="btn btn-success col-md-7" />
+                <input type="submit" value="Cập nhật thông tin" class="btn btn-success col-md-2" />
             </div>
         </form>
     }
+    @*Dịch vụ đang cung cấp*@
+    <br />
+    <div class="clearfix"></div>
+    <div class="row inline">
+        <h5 class="col-md-10">Các dịch vụ đang cung cấp</h5>
+        <div class="col-md-2">
+            <button type="button" class="btn btn-primary btn-small text-right" data-toggle="modal" data-target="#dichvuNTP"><i class="fa fa-plus-circle"></i>Thêm dịch vụ NTP</button>
+        </div>
+    </div>
+    <table class="table table-bordered">
+        <tr class="text-white text-center row" style="background-color:#808080">
+            <td class="col-md-2">Nhóm dịch vụ</td>
+            <td class="col-md-2">Ngày tạo</td>
+            <td class="col-md-6">Tên dịch vụ</td>
+            <td class="col-md-2"># </td>
+
+        </tr>
+    </table>
+    <table class="table table-bordered table-striped">
+        @using (Html.BeginForm("EditCompanyService", "Setting", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            foreach (var ser in NTPService)
+            {
+                int id = int.Parse(Services.FirstOrDefault(p => p.ServiceId == ser.ServiceId).ServiceGroupId.ToString());
+                <tr class="row">
+                    <td class="col-md-2"><b>@ServiceGroup.FirstOrDefault(s => s.Id == id).ServiceGroupName</b></td>
+                    <td hidden ><input type="number" class="form-control text-right" name="SubConId" value="@ser.SubConId" /></td>
+                    <td hidden ><input type="number" class="form-control text-right" name="Id" value="@ser.Id" /></td>                    
+                    <td class="col-md-2">
+                        <input type="date" class="form-control" name="Date" value="@ser.Date.Value.ToString("yyyy-MM-dd")" />                    
+                    </td>
+                    <td class="col-md-6">
+                        <select  @*name="ServiceId"*@ class="form-group form-control col-md-12">
+                            @if (ser.ServiceId != null)
+                            {
+                                <option value="@ser.ServiceId">@Services.FirstOrDefault(s => s.ServiceId == ser.ServiceId).ServiceName</option>
+                            }
+                            <option></option>
+                            @foreach (var item in Services)
+                            {
+                                <option value="@item.ServiceId">@item.ServiceName</option>
+                            }
+                        </select>
+
+                    </td>
+                    <td class="col-md-2">
+                        <input type="submit" value="Save" class="btn btn-warning" />
+                        @*<a>@Html.ActionLink("Lưu", "EditCompanyService", "Setting", new { Id = ser.Id }, new { @class = "btn btn-danger" })</a>*@
+                        <a>@Html.ActionLink("Xóa", "DeleteCompanyService", "Setting", new { Id = ser.Id }, new { @class = "btn btn-danger" })</a>
+                    </td>
+                </tr>
+            }
+        }
+
+    </table>
+
 </div>
+
+
+@* Form nhập liệu *@
+<div id="dichvuNTP" class="modal fade" role="dialog">
+    <div class="modal-dialog modal-m">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Dịch vụ NTP</h3>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("CreateNewCompanyService", "Setting", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <form action="~/Controllers/Setting/CreateNewCompanyService/">
+                        <div class="form-group row">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên Công ty</lable>
+                            <select name="SubConId" class="form-control col-md-7">
+                                <option value="@Model.SubConId">@Model.ContractorName</option>
+                            </select>
+                        </div>
+                        <div class="form-group row">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên dịch vụ</lable>
+                            <select name="ServiceId" class="form-control col-md-7">
+                                <option value=""></option>
+                                @foreach (var ser in Services.OrderBy(s => s.ServiceName))
+                                {
+                                    <option value="@ser.ServiceId">@ser.ServiceName</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group row">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Ngày tạo</lable>
+                            <input type="date" class="form-control  col-md-7 col-sm-7 col-xs-7" name="Date" placeholder="" required="" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+
+                        </div>
+                        <br />
+                        <div class="clearfix"></div>
+
+                        <div class="form-group text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
+                            <input type="submit" value="Lưu thông tin" class="btn btn-success col-md-7" />
+                        </div>
+                    </form>
+                }
+            </div>
+            <div class="modal-footer">
+                <div class="clearfix"></div>
+            </div>
+        </div>
+    </div>
+</div>
+@* End Form nhập liệu *@
+

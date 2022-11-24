@@ -17,12 +17,8 @@ namespace DMCTimesheet.Models
         public int Id { get; set; }
         public Nullable<System.DateTime> Date { get; set; }
         public Nullable<int> ProjectId { get; set; }
-        public Nullable<int> ArcId { get; set; }
-        public Nullable<int> InteriorId { get; set; }
-        public Nullable<int> StructureId { get; set; }
-        public Nullable<int> MEPid { get; set; }
-        public Nullable<int> LandscapeId { get; set; }
-        public Nullable<int> LegalId { get; set; }
+        public Nullable<int> ServicesAssign { get; set; }
+        public Nullable<int> SubConId { get; set; }
     
         public virtual C01_Projects C01_Projects { get; set; }
         public virtual C12_SubContractor C12_SubContractor { get; set; }

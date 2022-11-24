@@ -22,7 +22,9 @@ namespace DMCTimesheet.Models
     
         public int ServiceId { get; set; }
         public string ServiceName { get; set; }
+        public Nullable<int> ServiceGroupId { get; set; }
     
+        public virtual C22_ServiceGroup C22_ServiceGroup { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<C15_SubConServices> C15_SubConServices { get; set; }
     }

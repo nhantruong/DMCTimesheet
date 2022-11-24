@@ -3,11 +3,19 @@
     DMCTimesheet.Models.C06_UserPermisRelationship Userpermiss = Session["UserPermission"] as DMCTimesheet.Models.C06_UserPermisRelationship;
 
     DMCTimesheet.Models.C02_Members loginUser = Session["UserLogin"] as DMCTimesheet.Models.C02_Members;
+    bool fullProject = false;
+    if (loginUser.Position == 1 || loginUser.Position == 2 || loginUser.Position == 3)
+    {
+        fullProject = true;
+    }
+    //= loginUser.Position == 1 || loginUser.Position == 2 || loginUser.Position == 3 ? true : false;
     int stt = 0;
     List<DMCTimesheet.Models.C02_Members> Members = ViewBag.Members as List<DMCTimesheet.Models.C02_Members>;
-    List<DMCTimesheet.Models.C01_Projects> Projects = ViewBag.Projects as List<DMCTimesheet.Models.C01_Projects>;
-    List<DMCTimesheet.Models.C07_WorkType> WorkTypes = ViewBag.WorkType as List<DMCTimesheet.Models.C07_WorkType>;
+    List<DMCTimesheet.Models.C01_Projects> _Projects = ViewBag.Projects as List<DMCTimesheet.Models.C01_Projects>;
+    List<DMCTimesheet.Models.C01_Projects> Projects = _Projects.Where(s => s.ProjectStage != 5).ToList();//Lấy dự án chưa hoàn thành
     List<DMCTimesheet.Models.C03_ProjectMembers> MyProjects = ViewBag.ProjectMember as List<DMCTimesheet.Models.C03_ProjectMembers>;
+
+    List<DMCTimesheet.Models.C07_WorkType> WorkTypes = ViewBag.WorkType as List<DMCTimesheet.Models.C07_WorkType>;
     List<DMCTimesheet.Models.C19_Workgroup> WorkGroup = ViewBag.Workgroup as List<DMCTimesheet.Models.C19_Workgroup>;
 
     //group data
@@ -18,11 +26,14 @@
     //Công việc trong tuần
     List<DMCTimesheet.Models.C08_Timesheet> _ViecTrongTuan = ViewBag.ViecTrongTuan as List<DMCTimesheet.Models.C08_Timesheet>;
 
+    //Chi tiết công việc
+    List<DMCTimesheet.Models.C21_DetailAction> DetailAction = ViewBag.DetailAction as List<DMCTimesheet.Models.C21_DetailAction>;
+    List<string[]> actiondetailList = ViewBag.actiondetailList as List<string[]>;
+
 }
 
 @* --------------------------------------------------------VIỆC TRONG NGÀY--------------------------------------------------- *@
 @* Danh sách Timesheet đã làm *@
-@*<h3 class="text-danger">@ViewBag.WorkAlert</h3>*@
 <div class="row" style="height:600px">
     <div class="col-md-12">
         @* Form tạo timesheet *@
@@ -33,7 +44,7 @@
                 </div>
                 <div class="x_content">
                     @* Form nhập liệu *@
-                    <div>
+                    <div class="embed-responsive">
                         @using (Html.BeginForm("CreateTimesheet", "Timesheet", FormMethod.Post))
                         {
                             @Html.AntiForgeryToken()
@@ -73,13 +84,27 @@
                                 <div class="form-group row  text-left">
                                     <lable class="control-label col-md-3 col-sm-3 col-xs-3">Dự án được phân công</lable>
                                     <select name="ProjectId" data-toggle="tooltip" disabled id="seletorProjectId" data-placement="left" title="Dự án được phân công sẽ xuất hiện ở đây, vui lòng liên hệ Admin nếu chưa có dự án" class="form-control col-md-7 col-sm-9 col-xs-9">
-                                        @if (MyProjects.Count() > 0)
+                                        @if (fullProject)
                                         {
-                                            foreach (var item in MyProjects.OrderBy(s => s.Ngay))
+                                            <option value=""></option>
+                                            foreach (var item in Projects.OrderBy(s => s.ProjectName))
                                             {
                                                 <option value=@item.ProjectID>@Projects.FirstOrDefault(s => s.ProjectID == item.ProjectID).ProjectOtherName</option>
                                             }
                                         }
+                                        else
+                                        {
+                                            if (MyProjects.Count() > 0)
+                                            {
+                                                <option value=""></option>
+                                                foreach (var item in MyProjects.OrderBy(s => s.Ngay))
+                                                {
+                                                    <option value=@item.ProjectID>@Projects.FirstOrDefault(s => s.ProjectID == item.ProjectID).ProjectOtherName</option>
+                                                }
+                                            }
+                                        }
+
+
                                     </select>
                                 </div>
 
@@ -93,14 +118,13 @@
                                 @* WorkType *@
                                 <div class="form-group row  text-left">
                                     <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chọn Công việc</lable>
-                                    <select required name="WorkID" disabled data-toggle="tooltip" data-placement="left" id="cmbworktype" title="Chọn loại hình công việc của bạn" class="form-control col-md-7 col-sm-9 col-xs-9">
+                                    <select required name="WorkID" disabled data-toggle="tooltip" data-placement="left" onclick="onchangeworktype()" id="cmbworktype" title="Chọn loại hình công việc của bạn" class="form-control col-md-7 col-sm-9 col-xs-9">
                                         @*@foreach (var item in WorkTypes.OrderBy(s => s.WorkGroup))
                                             {
                                                 <option value=@item.ID>[@item.WorkGroup] - @item.WorkName</option>
                                             }*@
                                     </select>
                                 </div>
-
 
                                 @* Hour *@
                                 <div class="form-group row text-left">
@@ -111,16 +135,27 @@
                                             <input type="number" class="form-control col-md-6" name="Hour" required value="4" />
                                         </div>
                                         <div class="col-md-6 inline">
-                                            <lable class="control-label col-md-6 text-left">Tăng ca</lable>
+                                            <lable class="control-label col-md-6 text-left">OT</lable>
                                             <input type="number" class="form-control col-md-6" name="OvertimeHour" value="0" />
                                         </div>
                                     </div>
                                 </div>
 
                                 @* Description *@
+                                @* Detail action *@
+                                <div class="form-group row  text-left">
+                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thêm chi tiết công việc</lable>
+                                    <select name="detailWork" disabled data-toggle="tooltip" data-placement="left" id="cmbdetailWork" onclick="writetodesc(this.value)" title="Chọn chi tiết công việc cụ thể" class="form-control col-md-7 col-sm-9 col-xs-9">
+                                        <option value=""></option>
+                                        @*@foreach (var item in DetailAction.OrderBy(s => s.WorktypeId))
+                                            {
+                                                <option value=@item.Id>[@item.WorktypeId] - @item.DetailAction</option>
+                                            }*@
+                                    </select>
+                                </div>
                                 <div class="form-group row">
                                     <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Ghi chú chi tiết</lable>
-                                    <textarea class="form-control col-md-7 col-sm-9 col-xs-9 " rows="3" name="Description" placeholder="Nhập ngắn gọn nội dung công việc" required></textarea>
+                                    <textarea id="descriptionNote" class="form-control col-md-7 col-sm-9 col-xs-9 " rows="3" name="Description" placeholder="Nhập ngắn gọn nội dung công việc" required></textarea>
                                 </div>
                                 <div class="form-group text-left">
                                     <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
@@ -189,11 +224,13 @@
                                                     <td class="col-2">
                                                         @if (item.ProjectId != null)
                                                         {
-                                                            <b class="text-primary">@Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName</b>
+                                                            @*<b class="text-primary">@Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName</b>*@
+                                                            @Html.ActionLink(Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName, "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "text-primary" })
                                                         }
                                                         else
                                                         {
-                                                            <b class="text-primary">Công việc chung</b>
+                                                            @*<b class="text-primary">Công việc chung</b>*@
+                                                            @Html.ActionLink("Công việc chung", "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "text-primary" })
                                                         }
                                                     </td>
                                                     <td class="col-2">@WorkTypes.FirstOrDefault(s => s.ID == item.WorkType).WorkName</td>
@@ -275,11 +312,13 @@
                                             <td class="col-md-2">
                                                 @if (item.ProjectId != null)
                                                 {
-                                                    <b class="text-primary">@Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName</b>
+                                                    @Html.ActionLink(Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName, "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "text-primary" })
+                                                    @*<b class="text-primary">@Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName</b>*@
                                                 }
                                                 else
                                                 {
                                                     <b class="text-primary">Công việc chung</b>
+                                                    @Html.ActionLink("Công việc chung", "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "text-primary" })
                                                 }
                                             </td>
                                             <td class="col-md-2">@WorkTypes.FirstOrDefault(s => s.ID == item.WorkType).WorkName</td>
@@ -309,11 +348,12 @@
 
         </div>
     </div>
+</div>
 
-
-    <script>
+<script>
     function onchangeworkgroup() {
         var opt = document.getElementById("workgroup").value;
+        //alert(opt);
         var dbNhomCV = @Html.Raw(Json.Encode(group));
         var dbCongviec = @Html.Raw(Json.Encode(listIdCV));
 
@@ -322,14 +362,16 @@
         //alert("DANH SACH CONG VIEC: "+dbCongviec);
 
         //const cmbWorkType = document.getElementById("cmbworktype");//Loại công việc hàng ngày
-        if (opt == "2") {
+        if (opt == "2" || opt ==1) {
             document.getElementById("seletorProjectId").disabled = false;
             document.getElementById("cmbworktype").disabled = false;
         }
         else {
             document.getElementById("seletorProjectId").disabled = true;
             document.getElementById("cmbworktype").disabled = false;
-            document.getElementById("seletorProjectId").text = "";
+            //document.getElementById("seletorProjectId").value = "";
+            //document.getElementById("seletorProjectId").textContent = "";
+            //document.getElementById("seletorProjectId").text = "";
 
         }
         addOptByworkGroup(dbNhomCV, dbCongviec, opt);
@@ -340,8 +382,10 @@
     function addOptByworkGroup(dbNhomCV, dbCongviec, Opt) {
         document.getElementById("cmbworktype").value = '';
         const groupOption = Array.from(dbNhomCV).filter(a => a[0] == Opt);
+        document.getElementById("cmbdetailWork").disabled = false;
         document.getElementById("cmbworktype").innerHTML = createOpt(dbCongviec, groupOption);
     }
+
     //Hàm tạo thẻ Option trong select
     function createOpt(dbCongviec, group2option) {
         var text = "";
@@ -354,5 +398,33 @@
         }
         return text;
     }
-    </script>
-</div>
+</script>
+
+<script>
+    //Hàm thay đổi chi tiết công việc trong công việc dc chọn
+    function onchangeworktype() {
+        var workid = document.getElementById('cmbworktype').value;
+        var detailWorks = @Html.Raw(Json.Encode(actiondetailList));
+        var choosingWork = Array.from(detailWorks).filter(s => s[0] == workid);
+        //alert(choosingWork);
+        document.getElementById("cmbdetailWork").value = '';
+        document.getElementById("cmbdetailWork").innerHTML = createOpt4(choosingWork);
+
+    }
+
+    //Hàm tạo cmb chi tiết công việc
+    function createOpt4(choosingWork) {
+        var text = "";
+        for (var i = 0; i < choosingWork.length; i++) {
+            text += '<option value=' +"'"+ choosingWork[i][1] +"'"+ '>' + choosingWork[i][1] + '</option>';
+        }
+        return text;
+    }
+</script>
+
+<script>
+    function writetodesc(val) {
+        document.getElementById('descriptionNote').innerText = "";
+        document.getElementById('descriptionNote').textContent = val;
+    }
+</script>

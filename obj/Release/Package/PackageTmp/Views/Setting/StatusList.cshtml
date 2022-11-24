@@ -108,7 +108,8 @@
                         <td class="col-sm-1">
                             @if (item.StatusName != null)
                             {
-                                <b class="text-danger">@item.StatusName</b>
+                                <b>@Html.ActionLink(item.StatusName, "EditStatus", "Setting", new { Id = item.Id }, new { @class = "text-danger" })</b>
+                                @*<b class="text-danger">@item.StatusName</b>*@
                             }
                         </td>
                         <td class="col-sm-1">

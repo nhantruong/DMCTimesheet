@@ -25,7 +25,7 @@ namespace DMCTimesheet.Controllers
             ViewBag.WorkType = db.C07_WorkType.ToList();
             ViewBag.Workgroup = db.C19_Workgroup.ToList();
             List<C08_Timesheet> ProjectTimesheet = db.C08_Timesheet.ToList();
-
+            ViewBag.Embedstring = db.C98_EmbedString.OrderByDescending(s=>s.Version).FirstOrDefault();
             return View(ProjectTimesheet);
         }
 
@@ -42,11 +42,15 @@ namespace DMCTimesheet.Controllers
             ViewBag.ProjectMember = db.C03_ProjectMembers.Where(
               s => s.ChuTriKienTruc == logUser.UserID
                 || s.ChuTriChinh == logUser.UserID
+                || s.ChuTriKienTruc2 == logUser.UserID
                 || s.ChuTriKetCau == logUser.UserID
+                || s.ChuTriKetCau2 == logUser.UserID
                 || s.ChuTriMEP == logUser.UserID
+                || s.ChuTriMEP2 == logUser.UserID
                 || s.LegalManager == logUser.UserID
+                || s.LegalManager2 == logUser.UserID
                 || s.Admin == logUser.UserID
-                ).ToList();
+                ).Distinct().ToList();
 
             List<string[]> group = new List<string[]>();    //Nhóm công việc theo workgroup
             List<string[]> listIdCV = new List<string[]>(); //List ID công việc để lọc
@@ -93,6 +97,22 @@ namespace DMCTimesheet.Controllers
             }
             ViewBag.ViecTrongNgay = _ViecTrongNgay;
             ViewBag.ViecTrongTuan = _ViecTrongTuan;
+           //Detail actions
+            ViewBag.DetailAction = db.C21_DetailAction.ToList();
+           // List<string[]> worktypeId = new List<string[]>();    //Nhóm công việc theo workgroup
+            List<string[]> listdetailaction = new List<string[]>(); //List ID công việc để lọc
+
+            foreach (var item in db.C21_DetailAction.ToList())
+            {
+                string[] itm = new string[2];
+                itm[0] = item.WorktypeId.ToString();
+                itm[1] = item.DetailAction;
+                listdetailaction.Add(itm);
+            }
+            ViewBag.actiondetailList = listdetailaction;
+            
+
+
 
             return View(mytimesheet);
         }
@@ -145,7 +165,7 @@ namespace DMCTimesheet.Controllers
             }
             ViewBag.ViecTrongNgay = _ViecTrongNgay;
             ViewBag.ViecTrongTuan = _ViecTrongTuan;
-
+            ViewBag.DetailAction = db.C21_DetailAction.ToList();
         }
 
         public DateTime MakeDate(int duration, bool TinhToi)
@@ -162,7 +182,8 @@ namespace DMCTimesheet.Controllers
             }
             else
             {
-                returnDate = Math.Abs(day - duration);
+                int a = Math.Abs(day - duration);
+                returnDate = a==0?1:a;
             }
             return new DateTime(year, month, returnDate);
         }
@@ -182,9 +203,13 @@ namespace DMCTimesheet.Controllers
             ViewBag.ProjectMember = db.C03_ProjectMembers.Where(
               s => s.ChuTriKienTruc == logUser.UserID
                 || s.ChuTriChinh == logUser.UserID
+                || s.ChuTriKienTruc2 == logUser.UserID
                 || s.ChuTriKetCau == logUser.UserID
+                || s.ChuTriKetCau2 == logUser.UserID
                 || s.ChuTriMEP == logUser.UserID
+                || s.ChuTriMEP2 == logUser.UserID
                 || s.LegalManager == logUser.UserID
+                || s.LegalManager2 == logUser.UserID
                 || s.Admin == logUser.UserID
                 ).ToList();
 
@@ -232,7 +257,7 @@ namespace DMCTimesheet.Controllers
             }
             ViewBag.ViecTrongNgay = _ViecTrongNgay;
             ViewBag.ViecTrongTuan = _ViecTrongTuan;
-
+            ViewBag.DetailAction = db.C21_DetailAction.ToList();
             return View(mytimesheet);
         }
 
@@ -251,9 +276,13 @@ namespace DMCTimesheet.Controllers
 
                 ViewBag.ProjectMember = db.C03_ProjectMembers.Where(s => s.ChuTriKienTruc == logUser.UserID
                 || s.ChuTriChinh == logUser.UserID
+                || s.ChuTriKienTruc2 == logUser.UserID
                 || s.ChuTriKetCau == logUser.UserID
+                || s.ChuTriKetCau2 == logUser.UserID
                 || s.ChuTriMEP == logUser.UserID
+                || s.ChuTriMEP2 == logUser.UserID
                 || s.LegalManager == logUser.UserID
+                || s.LegalManager2 == logUser.UserID
                 || s.Admin == logUser.UserID
                 ).ToList();
 
@@ -304,7 +333,7 @@ namespace DMCTimesheet.Controllers
                 }
                 ViewBag.ViecTrongNgay = _ViecTrongNgay;
                 ViewBag.ViecTrongTuan = _ViecTrongTuan;
-
+                ViewBag.DetailAction = db.C21_DetailAction.ToList();
                 #endregion
 
                 ViewBag.WorkAlert = "Bạn cần có dự án khi chọn Nhóm hoạt động này";
@@ -324,9 +353,13 @@ namespace DMCTimesheet.Controllers
 
                     ViewBag.ProjectMember = db.C03_ProjectMembers.Where(s => s.ChuTriKienTruc == logUser.UserID
                     || s.ChuTriChinh == logUser.UserID
+                    || s.ChuTriKienTruc2 == logUser.UserID
                     || s.ChuTriKetCau == logUser.UserID
+                    || s.ChuTriKetCau2 == logUser.UserID
                     || s.ChuTriMEP == logUser.UserID
+                    || s.ChuTriMEP2 == logUser.UserID
                     || s.LegalManager == logUser.UserID
+                    || s.LegalManager2 == logUser.UserID
                     || s.Admin == logUser.UserID
                     ).ToList();
                     #region GetData
@@ -375,7 +408,7 @@ namespace DMCTimesheet.Controllers
                     }
                     ViewBag.ViecTrongNgay = _ViecTrongNgay;
                     ViewBag.ViecTrongTuan = _ViecTrongTuan;
-
+                    ViewBag.DetailAction = db.C21_DetailAction.ToList();
                     #endregion
 
                     ViewBag.WorkAlert = "Số giờ làm việc trong ngày đã nhiều hơn 8h, cần chọn qua ô tăng ca";
@@ -422,9 +455,13 @@ namespace DMCTimesheet.Controllers
 
                 ViewBag.ProjectMember = db.C03_ProjectMembers.Where(s => s.ChuTriKienTruc == logUser.UserID
                 || s.ChuTriChinh == logUser.UserID
+                || s.ChuTriKienTruc2 == logUser.UserID
                 || s.ChuTriKetCau == logUser.UserID
+                || s.ChuTriKetCau2 == logUser.UserID
                 || s.ChuTriMEP == logUser.UserID
+                || s.ChuTriMEP2 == logUser.UserID
                 || s.LegalManager == logUser.UserID
+                || s.LegalManager2 == logUser.UserID
                 || s.Admin == logUser.UserID
                 ).ToList();
                 #region GetData
@@ -474,7 +511,7 @@ namespace DMCTimesheet.Controllers
                 }
                 ViewBag.ViecTrongNgay = _ViecTrongNgay;
                 ViewBag.ViecTrongTuan = _ViecTrongTuan;
-
+                ViewBag.DetailAction = db.C21_DetailAction.ToList();
                 #endregion
                 ViewBag.WorkAlert = "Lưu công việc thất bại do lỗi " + ex.Message;
                 return View("TimesheetManage", db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).ToList());
@@ -520,7 +557,7 @@ namespace DMCTimesheet.Controllers
             }
             ViewBag.Projects = db.C01_Projects.ToList();
             ViewBag.WorkType = db.C07_WorkType.ToList();
-
+            ViewBag.DetailAction = db.C21_DetailAction.ToList();
 
             return View(item);
 
@@ -554,7 +591,7 @@ namespace DMCTimesheet.Controllers
             {
                 ViewBag.Projects = db.C01_Projects.ToList();
                 ViewBag.WorkType = db.C07_WorkType.ToList();
-
+                ViewBag.DetailAction = db.C21_DetailAction.ToList();
                 ViewBag.WorkAlert = $"Có lỗi khi cập nhật timesheet số {Id} do {ex.Message}";
                 return View();
             }
@@ -571,7 +608,7 @@ namespace DMCTimesheet.Controllers
 
             ViewBag.Projects = db.C01_Projects.ToList();
             ViewBag.WorkType = db.C07_WorkType.ToList();
-
+            ViewBag.DetailAction = db.C21_DetailAction.ToList();
             return View(Timesheet);
         }
 
@@ -602,7 +639,7 @@ namespace DMCTimesheet.Controllers
             {
                 ViewBag.Projects = db.C01_Projects.ToList();
                 ViewBag.WorkType = db.C07_WorkType.ToList();
-
+                ViewBag.DetailAction = db.C21_DetailAction.ToList();
                 ViewBag.WorkAlert = $"Xóa Thất bại do {ex.Message}";
                 return RedirectToAction("Delete", db.C08_Timesheet.FirstOrDefault(s => s.Id == id));
             }
@@ -622,6 +659,7 @@ namespace DMCTimesheet.Controllers
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
             List<C07_WorkType> worktypeList = db.C07_WorkType.ToList();
             ViewBag.Worklist = worktypeList;
+            ViewBag.DetailAction = db.C21_DetailAction.ToList();
             return View(worktypeList);
         }
 
@@ -668,6 +706,7 @@ namespace DMCTimesheet.Controllers
                 ViewBag.SaveContent = "Không tìm thấy Worktype này";
                 return View();
             }
+            ViewBag.DetailAction = db.C21_DetailAction.ToList();
             return View(enity);
         }
 
@@ -691,6 +730,7 @@ namespace DMCTimesheet.Controllers
                     db.Entry(item).State = EntityState.Modified;
                     db.SaveChanges();
                 }
+                ViewBag.DetailAction = db.C21_DetailAction.ToList();
                 return RedirectToAction("WorkType");
             }
             catch (Exception ex)
@@ -739,6 +779,7 @@ namespace DMCTimesheet.Controllers
             catch (Exception ex)
             {
                 ViewBag.SaveContent = $"Xóa lỗi do {ex.Message}";
+                ViewBag.DetailAction = db.C21_DetailAction.ToList();
                 return View("WorkType");
             }
 
@@ -751,7 +792,7 @@ namespace DMCTimesheet.Controllers
             var userLogin = Session["UserLogin"] as C02_Members;
             ViewBag.Members = db.C02_Members.ToList();
             ViewBag.Projects = db.C01_Projects.ToList();
-
+            ViewBag.DetailAction = db.C21_DetailAction.ToList();
             if (UserSearch == -1) return PartialView("_TimeSheetAjaxSearch", db.C08_Timesheet.Where(s => s.MemberID == userLogin.UserID).OrderByDescending(s => s.RecordDate).ToList());
             List<C08_Timesheet> data = db.C08_Timesheet.Where(s => s.ProjectId == UserSearch).OrderByDescending(s => s.RecordDate).ToList();
             if (data == null) return PartialView("_TimeSheetAjaxSearch", null);
