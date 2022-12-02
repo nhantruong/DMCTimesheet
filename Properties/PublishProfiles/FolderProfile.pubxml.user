@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>C:\Users\truon\OneDrive\MyApp\DMCTimesheet\Publish\ver2.0</_PublishTargetUrl>
-    <History>True|2022-11-24T03:04:35.5945832Z;True|2022-10-04T16:25:21.4827262+07:00;True|2022-10-03T10:58:43.2588054+07:00;True|2022-09-29T12:14:52.1885939+07:00;True|2022-09-28T11:27:34.1331897+07:00;True|2022-09-27T07:34:56.2759365+07:00;True|2022-08-24T17:57:03.7328267+07:00;True|2022-08-23T14:17:50.8545344+07:00;True|2022-08-23T13:26:14.4985749+07:00;True|2022-08-11T16:26:10.3937430+07:00;True|2022-08-11T08:49:03.3468756+07:00;True|2022-08-11T08:21:12.7539599+07:00;True|2022-08-10T19:48:23.7808778+07:00;True|2022-08-10T19:22:10.1896120+07:00;</History>
+    <History>True|2022-12-01T07:42:52.7158729Z;True|2022-11-24T10:04:35.5945832+07:00;True|2022-10-04T16:25:21.4827262+07:00;True|2022-10-03T10:58:43.2588054+07:00;True|2022-09-29T12:14:52.1885939+07:00;True|2022-09-28T11:27:34.1331897+07:00;True|2022-09-27T07:34:56.2759365+07:00;True|2022-08-24T17:57:03.7328267+07:00;True|2022-08-23T14:17:50.8545344+07:00;True|2022-08-23T13:26:14.4985749+07:00;True|2022-08-11T16:26:10.3937430+07:00;True|2022-08-11T08:49:03.3468756+07:00;True|2022-08-11T08:21:12.7539599+07:00;True|2022-08-10T19:48:23.7808778+07:00;True|2022-08-10T19:22:10.1896120+07:00;</History>
     <LastFailureDetails />
   </PropertyGroup>
   <ItemGroup>
@@ -60,8 +60,35 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Assets/Photos/background/background wood.jpg">
       <publishTime>07/20/2022 09:52:50</publishTime>
     </File>
+    <File Include="Assets/Photos/background/background-dep-chu-de-noel_021843848.jpg">
+      <publishTime>12/01/2022 14:00:16</publishTime>
+    </File>
+    <File Include="Assets/Photos/background/background-hop-qua-noel_021843973.jpg">
+      <publishTime>12/01/2022 14:00:21</publishTime>
+    </File>
+    <File Include="Assets/Photos/background/background-noel-dep_021844285.jpg">
+      <publishTime>12/01/2022 14:00:25</publishTime>
+    </File>
+    <File Include="Assets/Photos/background/background-noel-powerpoint_021844489.jpg">
+      <publishTime>12/01/2022 14:00:30</publishTime>
+    </File>
+    <File Include="Assets/Photos/background/background-noel-trang-tri-dep_021844535.jpg">
+      <publishTime>12/01/2022 14:00:34</publishTime>
+    </File>
+    <File Include="Assets/Photos/background/background-noel_021844660.jpg">
+      <publishTime>12/01/2022 14:00:38</publishTime>
+    </File>
+    <File Include="Assets/Photos/background/background-thiep-noel-dep_021844832.jpg">
+      <publishTime>12/01/2022 14:00:49</publishTime>
+    </File>
     <File Include="Assets/Photos/background/green_leafy_wood_background_hd_picture.jpg">
       <publishTime>07/20/2022 09:52:50</publishTime>
+    </File>
+    <File Include="Assets/Photos/background/hinh-nen-background-noel-dep_021845192.jpg">
+      <publishTime>12/01/2022 14:00:53</publishTime>
+    </File>
+    <File Include="Assets/Photos/background/mau-background-noel_021845379.jpg">
+      <publishTime>12/01/2022 14:00:57</publishTime>
     </File>
     <File Include="Assets/Photos/background/no-image-available.jpg">
       <publishTime>07/20/2022 09:52:50</publishTime>
@@ -298,13 +325,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>09/10/2013 16:29:20</publishTime>
     </File>
     <File Include="bin/DMCTimesheet.dll">
-      <publishTime>11/24/2022 10:03:32</publishTime>
+      <publishTime>12/01/2022 14:42:05</publishTime>
     </File>
     <File Include="bin/DMCTimesheet.pdb">
-      <publishTime>11/24/2022 10:03:32</publishTime>
+      <publishTime>12/01/2022 14:42:05</publishTime>
     </File>
     <File Include="bin/DMCTimesheet.XmlSerializers.dll">
-      <publishTime>11/24/2022 10:03:37</publishTime>
+      <publishTime>12/01/2022 14:42:07</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>04/17/2020 03:38:42</publishTime>
@@ -10702,7 +10729,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>07/19/2022 17:06:36</publishTime>
     </File>
     <File Include="Views/Home/Login.cshtml">
-      <publishTime>08/29/2022 16:07:53</publishTime>
+      <publishTime>12/01/2022 14:39:41</publishTime>
     </File>
     <File Include="Views/Home/SysAdminPage.cshtml">
       <publishTime>07/27/2022 12:12:21</publishTime>
@@ -10891,7 +10918,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/18/2022 15:09:49</publishTime>
     </File>
     <File Include="Views/Shared/_UserLayout.cshtml">
-      <publishTime>11/24/2022 09:46:49</publishTime>
+      <publishTime>12/01/2022 14:41:23</publishTime>
     </File>
     <File Include="Views/Shared/_UserLeftSliderBar.cshtml">
       <publishTime>07/27/2022 15:19:28</publishTime>

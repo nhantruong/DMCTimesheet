@@ -15,7 +15,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>@ViewBag.Title - Coteccons BIM Apps</title>
+    <title>@ViewBag.Title - Coteccons BIM-DMC Apps</title>
     @Styles.Render("~/Content/css")
     @Styles.Render("~/Content")
     @Scripts.Render("~/bundles/modernizr")
@@ -45,13 +45,50 @@
     @*Custom Theme Style*@
     <link href="../UserStyles/build/css/custom.min.css" rel="stylesheet">
 
+    @* Background Image style*@
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+        .bg {
+            /* The image used */
+            background-image: url("../Assets/Photos/background/background-noel_021844660.jpg");
+            /* Full height */
+            height: 50%;
+            /* Center and scale the image nicely */
+            position: relative;
+            /*/*opacity: 0.65;*/
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+        .bgimg-1 {
+            background-image: url("../Assets/Photos/background/hinh-nen-background-noel-dep_021845192.jpg");
+            height: 100%;
+        }
+        .bgimg-1, .bgimg-2, .bgimg-3 {
+            position: relative;
+            /*opacity: 0.65;*/
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+        }
+
+        .bgimg-1 {
+            background-image: url("img_parallax.jpg");
+            height: 100%;
+        }
+
+    </style>
 </head>
 
-<body class="login">
-    @*Origin contents ----------------------------------------------*@       
+<body class="login bg" style="offset-distance:300px">
+    @*Origin contents ----------------------------------------------*@    
     <div>
+        @*<img src="~/Assets/Photos/background/background-noel-dep_021844285.jpg" alt="Alternate Text" />*@
         <a class="hiddenanchor" id="signup"></a>
-        <a class="hiddenanchor" id="signin"></a>       
+        <a class="hiddenanchor" id="signin"></a>
         <div class="login_wrapper">
             @using (Html.BeginForm("SubmitLogin", "Home", FormMethod.Post))
             {
@@ -61,15 +98,15 @@
                     </div>
                     <section class="login_content">
                         <form>
-                            <h1>Login</h1>
+                            <h1 class="text-danger">Login</h1>
                             <div class="form-group">
                                 <input type="text" class="form-control" name="Username" placeholder="Username" required="" value=@userName />
                             </div>
                             <div class="form-group">
                                 <input type="password" class="form-control" name="Password" placeholder="Password" required="" />
                             </div>
-                            <div class="form-group text-left">
-                                <button class="btn btn-primary col-md-2" type="submit">Log in</button>
+                            <div class="form-group">
+                                <button class="btn btn-danger col-md-3" type="submit">Log in</button>
                             </div>
                             <div>
                                 <p class="text-danger">@ViewBag.LoginNote</p>
@@ -102,7 +139,7 @@
                     </div>
                     <section class="login_content">
                         <form>
-                            <h1>Lost | Change password</h1>
+                            <h1 class="text-danger">Lost | Change password</h1>
                             <div class="form-group">
                                 <input type="text" class="form-control" name="UserName" placeholder="Username" required="" />
                             </div>
@@ -113,7 +150,7 @@
                                 <input type="password" class="form-control" name="ConfirmPass" placeholder="Confirm new Password" required="" />
                             </div>
                             <div class="form-group">
-                                <button type="submit" class="btn btn-outline-success">Create new password</button>
+                                <button type="submit" class="btn btn-warning">Create new password</button>
                             </div>
                             <div>
                                 <p class="text-danger">@ViewBag.LoginNote</p>
