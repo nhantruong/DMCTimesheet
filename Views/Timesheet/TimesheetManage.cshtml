@@ -30,17 +30,39 @@
     List<DMCTimesheet.Models.C21_DetailAction> DetailAction = ViewBag.DetailAction as List<DMCTimesheet.Models.C21_DetailAction>;
     List<string[]> actiondetailList = ViewBag.actiondetailList as List<string[]>;
 
+    //for chart
+    //List<string> DanhsachNgay = new List<string>();
+    //List<int> SogioTheoNgay = new List<int>();
+    //if (_ViecTrongTuan != null)
+    //{
+    //    foreach (DMCTimesheet.Models.C08_Timesheet itm in _ViecTrongTuan)
+    //    {
+    //        //DanhsachNgay.Add(DateTime.Parse(itm.);
+
+    //        DanhsachNgay.Add(DateTime.Parse(itm.RecordDate.Value.ToString()).ToShortDateString());
+    //        SogioTheoNgay.Add(((int)itm.Hour.Value) + (int)itm.OT.Value);
+    //    }
+    //}
+
+
 }
 
 @* --------------------------------------------------------VIỆC TRONG NGÀY--------------------------------------------------- *@
-@* Danh sách Timesheet đã làm *@
-<div class="row" style="height:600px">
-    <div class="col-md-12">
-        @* Form tạo timesheet *@
-        <div class="col-md-5">
+@*
+
+
+
+
+
+*@
+<div class="row flex">
+    <div class="col-md-6">
+        <div class="col flex-column">
+            @* Form tạo timesheet *@
             <div class="x_panel">
                 <div class="x_title">
-                    <h2 class="text-warning"><b class="text-success">Add Dailywork</b></h2>
+                    <h2 class="text-warning"><b class="">Add Dailywork</b></h2>
+                    <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
                     @* Form nhập liệu *@
@@ -168,15 +190,13 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <br />
-        @* --------------------------------------------------------BẢNG THỐNG KÊ VIỆC TRONG NGÀY--------------------------------------------------- *@
-        <div class="col-md-7">
+            <br />
+            @* --------------------------------------------------------BẢNG THỐNG KÊ VIỆC TRONG NGÀY--------------------------------------------------- *@
             <div class="row">
                 <div class="x_panel">
                     <div class="x_title">
                         <h2 class="text-primary">
-                            <b class="text-success">Công việc trong ngày</b>
+                            <b class="">Công việc trong ngày <i class="text-primary">@DateTime.Today.ToShortDateString(): </i></b>
                             @if (_ViecTrongNgay != null || _ViecTrongNgay.Count() > 0)
                             {
                                 <a>
@@ -210,7 +230,7 @@
                                     </thead>
                                 </table>
                             </div>
-                            <div class="table-responsive-md scrollbar">
+                            <div class="table-responsive-md" style="height:450px">
                                 <table class="table table-hover table-bordered table-striped">
                                     <tbody id="seachResult" class="text-dark">
                                         @if (_ViecTrongNgay != null)
@@ -224,12 +244,10 @@
                                                     <td class="col-2">
                                                         @if (item.ProjectId != null)
                                                         {
-                                                            @*<b class="text-primary">@Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName</b>*@
                                                             @Html.ActionLink(Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName, "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "text-primary" })
                                                         }
                                                         else
-                                                        {
-                                                            @*<b class="text-primary">Công việc chung</b>*@
+                                                        {                                                            
                                                             @Html.ActionLink("Công việc chung", "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "text-primary" })
                                                         }
                                                     </td>
@@ -260,92 +278,104 @@
             </div>
             @*<h6>Tổng số giờ trong trong ngày <b class="text-danger">@Model.Where(s => s.RecordDate == DateTime.Today).Select(p => p.Hour).Sum()</b></h6>*@
 
+
+
         </div>
     </div>
-</div>
 
-@* --------------------------------------------------------VIỆC TRONG TUẦN--------------------------------------------------- *@
-<div class="clearfix"></div>
-<div class="col-md-12">
-    <div class="row">
-        <div class="x_panel">
-            <div class="x_title">
-                <h2 class="text-warning"><b class="text-success">DANH SÁCH CÔNG VIỆC TRONG TUẦN</b></h2>
-                @*<ul class="nav navbar-right panel_toolbox">
-                        <li>
-                            <a class="collapse-link"><i class="fa fa-chevron-up text-primary"></i></a>
-                        </li>
-                    </ul>*@
-                <div class="clearfix"></div>
-            </div>
-            <div class="x_content">
-                <div class="x_content table-responsive">
-                    <div id="ajax-loader"></div>
-                    <div>
-                        <table class="table table-hover table-borderless table-striped">
-                            <thead class="bg-dark text-center text-white">
-                                <tr class="row">
-                                    <th class="col-md-1">No</th>
-                                    <th class="col-md-1">Record date</th>
-                                    <th class="col-md-2">Project</th>
-                                    <th class="col-md-2">Workdone</th>
-                                    <th class="col-md-1">Hours</th>
-                                    <th class="col-md-1">Overtime</th>
-                                    <th class="col-md-3">Description</th>
-                                    <th class="col-md-1">#</th>
-                                </tr>
-                            </thead>
-                        </table>
+    <div class="col-md-6 flex-column">
+        <div class="col">
+            @*<div class="x_panel" style="height:auto">*@
+            @* -----------CHART -------------------------------- *@
+            @*<div class="x_title">
+
+                        <h2 class="text-warning"><b class="text-success">THỐNG KÊ CÔNG VIỆC TRONG TUẦN </b></h2>
+                        <h2 class="text-warning"> - FROM @cal.GetDayOfWeek(DateTime.Today) </h2>
+                        <div class="clearfix"></div>
                     </div>
-                    <div class="table-responsive scrollbar" style="height:300px">
-                        <table class="table table-hover table-bordered table-striped " style="height:400px">
-                            <tbody id="seachResult" class="text-dark">
-                                @if (Model != null)
-                                {
-                                    int st = 1;
-                                    foreach (var item in Model.OrderByDescending(s => s.RecordDate))
-                                    {
-
-                                        <tr class="row">
-                                            <td class="col-md-1 text-center">@st</td>
-                                            <td class="col-md-1">@DateTime.Parse(item.RecordDate.ToString()).ToShortDateString()</td>
-                                            <td class="col-md-2">
-                                                @if (item.ProjectId != null)
-                                                {
-                                                    @Html.ActionLink(Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName, "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "text-primary" })
-                                                    @*<b class="text-primary">@Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName</b>*@
-                                                }
-                                                else
-                                                {
-                                                    <b class="text-primary">Công việc chung</b>
-                                                    @Html.ActionLink("Công việc chung", "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "text-primary" })
-                                                }
-                                            </td>
-                                            <td class="col-md-2">@WorkTypes.FirstOrDefault(s => s.ID == item.WorkType).WorkName</td>
-                                            <td class="col-md-1">@item.Hour</td>
-                                            <td class="col-md-1">@item.OT</td>
-                                            <td class="col-md-3">@item.Description</td>
-                                            <td class="col-md-1">
-                                                @Html.ActionLink(" ", "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "fa fa-edit" })
-                                                @Html.ActionLink(" ", "Delete", "Timesheet", new { id = item.Id }, new { @class = " fa fa-remove btn" })
-                                            </td>
-                                        </tr>
-                                        st++;
-                                    }
-                                }
-                                else
-                                {
-                                    <tr>
-                                        <td class="row text-danger">Hôm nay chưa có công việc nào được ghi nhận</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
+                    <div class="x_content">
+                        <canvas id="weekly_workdone"></canvas>
                     </div>
+                </div>*@
 
+            <div class="x_panel">
+                <div class="x_title">
+                    @{
+                        System.Globalization.CultureInfo cultureInfo = new System.Globalization.CultureInfo("vi-VN");
+                        System.Globalization.Calendar cal = cultureInfo.Calendar;
+                    }
+                    <h2 class="text-warning"><b class="text-success">DANH SÁCH CÔNG VIỆC TRONG TUẦN THỨ <i class="text-primary">@cultureInfo.Calendar.GetWeekOfYear(DateTime.Today, System.Globalization.CalendarWeekRule.FirstDay, DayOfWeek.Monday) - @DateTime.Today.Year </i></b></h2>
+                    <div class="clearfix"></div>
                 </div>
-            </div>
+                @* -----------BẢNG THỐNG KÊ TRONG TUẦN------------------------------------------------ *@
+                <div class="x_content">
+                    <div class="x_content">
+                        <div>
+                            <table class="table table-hover table-borderless table-striped">
+                                <thead class="bg-dark text-center text-white">
+                                    <tr class="row">
+                                        <th class="col-md-1">No</th>
+                                        <th class="col-md-1">Record date</th>
+                                        <th class="col-md-2">Project</th>
+                                        <th class="col-md-2">Workdone</th>
+                                        <th class="col-md-1">Hours</th>
+                                        <th class="col-md-1">Overtime</th>
+                                        <th class="col-md-3">Description</th>
+                                        <th class="col-md-1">#</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="table-responsive" style="height:1000px">
+                            <table class="table table-hover table-bordered table-striped">
+                                <tbody id="seachResult" class="text-dark">
+                                    @if (Model != null)
+                                    {
+                                        int st = 1;
+                                        foreach (var item in Model.OrderByDescending(s => s.RecordDate))
+                                        {
 
+                                            <tr class="row">
+                                                <td class="col-md-1 text-center">@st</td>
+                                                <td class="col-md-1">@DateTime.Parse(item.RecordDate.ToString()).ToShortDateString()</td>
+                                                <td class="col-md-2">
+                                                    @if (item.ProjectId != null)
+                                                    {
+                                                        @Html.ActionLink(Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName, "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "text-primary" })
+                                                        @*<b class="text-primary">@Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName</b>*@
+                                                    }
+                                                    else
+                                                    {
+                                                        <b class="text-primary">Công việc chung</b>
+                                                        @Html.ActionLink("Công việc chung", "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "text-primary" })
+                                                    }
+                                                </td>
+                                                <td class="col-md-2">@WorkTypes.FirstOrDefault(s => s.ID == item.WorkType).WorkName</td>
+                                                <td class="col-md-1">@item.Hour</td>
+                                                <td class="col-md-1">@item.OT</td>
+                                                <td class="col-md-3">@item.Description</td>
+                                                <td class="col-md-1">
+                                                    @Html.ActionLink(" ", "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "fa fa-edit" })
+                                                    @Html.ActionLink(" ", "Delete", "Timesheet", new { id = item.Id }, new { @class = " fa fa-remove btn" })
+                                                </td>
+                                            </tr>
+                                            st++;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td class="row text-danger">Tuần này chưa có công việc nào được ghi nhận</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
         </div>
     </div>
 </div>
@@ -353,15 +383,10 @@
 <script>
     function onchangeworkgroup() {
         var opt = document.getElementById("workgroup").value;
-        //alert(opt);
         var dbNhomCV = @Html.Raw(Json.Encode(group));
         var dbCongviec = @Html.Raw(Json.Encode(listIdCV));
 
         document.getElementById("Error").value = '';
-        //alert("NHÓM CV: "+dbNhomCV);
-        //alert("DANH SACH CONG VIEC: "+dbCongviec);
-
-        //const cmbWorkType = document.getElementById("cmbworktype");//Loại công việc hàng ngày
         if (opt == "2" || opt ==1) {
             document.getElementById("seletorProjectId").disabled = false;
             document.getElementById("cmbworktype").disabled = false;
@@ -369,9 +394,6 @@
         else {
             document.getElementById("seletorProjectId").disabled = true;
             document.getElementById("cmbworktype").disabled = false;
-            //document.getElementById("seletorProjectId").value = "";
-            //document.getElementById("seletorProjectId").textContent = "";
-            //document.getElementById("seletorProjectId").text = "";
 
         }
         addOptByworkGroup(dbNhomCV, dbCongviec, opt);
@@ -428,3 +450,53 @@
         document.getElementById('descriptionNote').textContent = val;
     }
 </script>
+<script src="~/UserStyles/Chart.js/chart.js"></script>
+<link href="~/Content/cscpda-scrollbar.css" rel="stylesheet" />
+<link href="~/Content/scrollbarStyle.css" rel="stylesheet" />
+@* Chart 3 - Donus Project theo Tình trạng *@
+
+@*<script>
+       var ctx = document.getElementById('weekly_workdone').getContext('2d');
+       var _lable = @Html.Raw(Json.Encode(DanhsachNgay));
+       var _data = @Html.Raw(Json.Encode(SogioTheoNgay));
+       var myChart = new Chart(ctx, {
+           type: 'bar',
+            data: {
+               labels:  _lable,
+                datasets: [{
+                    data: _data,
+                    backgroundColor: ['rgba(124,252,0,0.4)', 'rgba(255,165,0,0.5)', 'rgba(255,0,0, 0.7)', 'rgba(54, 255, 235,0.7)', 'rgba(220, 53, 69, 0.8)'],
+                    borderColor:'rgba(54, 162, 235, 1)',
+                    borderWidth: 1,
+                    outerWidth: 0.3
+                }]
+            },
+           options: {
+               responsive: true,//to nhỏ
+               interaction: {
+                   intersect: false,
+               },
+               scales: {
+                   x: {
+                       stacked: true,
+                   },
+                   y: {
+                       stacked: true
+                   }
+               },
+               showToolTips: true,
+               plugins: {
+                   title: {
+                       display: true,
+                       text: 'Danh sách công việc trong tuần'
+                   },
+                   legend: {//ghi chú các thành phần trong biểu đồ
+                       display: false,
+                       position: 'right',
+                       align:'left',
+                       labels: {
+                           color: 'rgb(0, 0, 0)'
+                       }
+                   }
+               }}});
+    </script>*@

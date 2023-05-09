@@ -263,9 +263,10 @@ namespace DMCTimesheet.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateTimesheet(int? ProjectID, string RecordDate, int WorkID, string Hour, string OvertimeHour, string Description, int NhomHoatDong)
+        public ActionResult CreateTimesheet(int? ProjectID, string RecordDate, int? WorkID, string Hour, string OvertimeHour, string Description, int NhomHoatDong)
         {
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+
             C02_Members logUser = Session["UserLogin"] as C02_Members;
             if (NhomHoatDong == 2 && ProjectID == null)
             {
@@ -320,9 +321,7 @@ namespace DMCTimesheet.Controllers
                 }
                 //Công việc trong tuần
                 List<DMCTimesheet.Models.C08_Timesheet> _ViecTrongTuan = new List<DMCTimesheet.Models.C08_Timesheet>();
-
                 DateTime startDate = MakeDate(7, false);
-
                 foreach (var item in mytimesheet)
                 {
                     int value = DateTime.Compare(DateTime.Parse(item.RecordDate.ToString()), startDate);
@@ -430,7 +429,7 @@ namespace DMCTimesheet.Controllers
                         MemberID = logUser.UserID,
                         RecordDate = recordDate,
                         ProjectId = ProjectID,
-                        WorkType = WorkID,
+                        WorkType = WorkID??43,
                         Description = Description,
                         Hour = Hours,
                         OT = _OT

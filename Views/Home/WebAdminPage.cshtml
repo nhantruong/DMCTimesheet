@@ -464,7 +464,7 @@
 <!--Chart 2-->
 @* Chart 2 - Donus Project theo Giai đoạn *@
 <script>
-    var ctx = document.getElementById('project_stage').getContext('2d');
+   var ctx = document.getElementById('project_stage').getContext('2d');
    var lable = @Html.Raw(Json.Encode(ProjectStageName));
    var data = @Html.Raw(Json.Encode(ProjectStageCount));
    var myChart = new Chart(ctx, {

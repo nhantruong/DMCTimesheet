@@ -399,6 +399,7 @@
     <Content Include="Content\Chart.css" />
     <Content Include="Content\Chart.min.css" />
     <Content Include="Content\cscpda-scrollbar.css" />
+    <Content Include="Content\scrollbarStyle.css" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
