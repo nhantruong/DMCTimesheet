@@ -212,7 +212,7 @@
 
                         </td>
                         <td class="col-md-1">@DateTime.Parse(item.StartDate.ToString()).ToShortDateString()</td>
-                        <td class="col-md-2"><b>@Html.ActionLink(item.ProjectName, "Edit", "Project", new { id = item.ProjectID }, new { @class = "text-primary" })</b></td>
+                        <td class="col-md-2"><b>@Html.ActionLink(item.ProjectOtherName, "Edit", "Project", new { id = item.ProjectID }, new { @class = "text-primary" })</b></td>
                         <td class="col-md-1">
                             @if (item.LocationId != null)
                             {

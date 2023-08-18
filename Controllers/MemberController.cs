@@ -225,13 +225,15 @@ namespace DMCTimesheet.Controllers
                 }
                 ViewBag.BIMer = BIMer;
                 ViewBag.Projects = db.C01_Projects.ToList();
-                ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
+                //ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
+                ViewBag.Members = db.C02_Members.ToList();
                 return View(db.C03_ProjectMembers.ToList());
             }
             catch (Exception)
             {
                 ViewBag.Projects = db.C01_Projects.ToList();
-                ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
+                ViewBag.Members = db.C02_Members.ToList();
+                //ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
                 ViewBag.Error = "Lỗi kết nối đến server ban BIM";
                 return View(db.C03_ProjectMembers.ToList());
             }
@@ -309,7 +311,8 @@ namespace DMCTimesheet.Controllers
                 return RedirectToAction("AssignMember");
             }
             ViewBag.Projects = db.C01_Projects.ToList();
-            ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
+            ViewBag.Members = db.C02_Members.ToList();
+            //ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
             List<MemberOutput> BIMer = new List<MemberOutput>();
 
             using (MemberService memberService = new MemberService())
@@ -385,7 +388,8 @@ namespace DMCTimesheet.Controllers
                 return RedirectToAction("AssignMember");
             }
             ViewBag.Projects = db.C01_Projects.ToList();
-            ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
+            ViewBag.Members = db.C02_Members.ToList();
+            //ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
             List<MemberOutput> BIMer = new List<MemberOutput>();
 
             using (MemberService memberService = new MemberService())
@@ -424,7 +428,8 @@ namespace DMCTimesheet.Controllers
                 ViewBag.SaveContent = $"{ex.Message}";
                 ViewBag.Bool = true;
                 ViewBag.Projects = db.C01_Projects.ToList();
-                ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
+                ViewBag.Members = db.C02_Members.ToList();
+                //ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
                 List<MemberOutput> BIMer = new List<MemberOutput>();
 
                 using (MemberService memberService = new MemberService())

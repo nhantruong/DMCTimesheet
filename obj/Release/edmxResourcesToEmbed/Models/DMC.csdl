@@ -5,7 +5,7 @@
       <PropertyRef Name="ProjectID" />
     </Key>
     <Property Name="ProjectID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="MaDuAn" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+    <Property Name="MaDuAn" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
     <Property Name="ProjectName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
     <Property Name="ProjectOtherName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
     <Property Name="StartDate" Type="DateTime" Precision="0" />

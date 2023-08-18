@@ -5,7 +5,7 @@
       <PropertyRef Name="ProjectID" />
     </Key>
     <Property Name="ProjectID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="MaDuAn" Type="nchar" MaxLength="10" />
+    <Property Name="MaDuAn" Type="nchar" MaxLength="50" />
     <Property Name="ProjectName" Type="nvarchar" MaxLength="250" />
     <Property Name="ProjectOtherName" Type="nvarchar" MaxLength="250" />
     <Property Name="StartDate" Type="date" />

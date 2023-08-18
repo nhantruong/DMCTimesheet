@@ -7,6 +7,9 @@
     List<DMCTimesheet.Models.C02_Members> _Members = ViewBag.Members as List<DMCTimesheet.Models.C02_Members>;
     List<DMCTimesheet.Models.C02_Members> Members = _Members.OrderBy(s => s.FullName).ToList();
     List<DMCTimesheet.com.cbimtech.MemberServices.MemberOutput> BIMer = ViewBag.BIMer as List<DMCTimesheet.com.cbimtech.MemberServices.MemberOutput>;
+
+    List<DMCTimesheet.Models.C02_Members> chuyenCongTac = new List<DMCTimesheet.Models.C02_Members>();
+    chuyenCongTac = _Members.Where(s => s.Deactived == true).ToList();
     //string Error = Session["MemberAssignError"] as string ?? "";
 }
 @*<h3><i>@Error</i></h3>*@

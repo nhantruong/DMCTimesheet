@@ -1,7 +1,9 @@
 ﻿using DMCTimesheet.Models;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity.Validation;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -231,14 +233,25 @@ namespace DMCTimesheet.Controllers
                 enity.ProjectStage = ProjectStage;
                 if (ModelState.IsValid)
                 {
+                    
                     db.Entry(enity).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
                 return RedirectToAction("Index");
             }
-            catch (Exception ex)
+            catch (DbEntityValidationException ex)
             {
-                ViewBag.SaveContent = $"Có lỗi trong quá trình Hiển thị thông tin do {ex.Message}";
+                StringBuilder sb = new StringBuilder();
+                foreach (var eve in ex.EntityValidationErrors)
+                {
+                    
+                    sb.Append($"Entity of type \"{eve.Entry.Entity.GetType().Name}\" in state \"{eve.Entry.State}\" has the following validation errors:");                    
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        sb.AppendLine($"- Property: \"{ve.PropertyName}\", Error: \"{ve.ErrorMessage}\"");                       
+                    }
+                }
+                ViewBag.SaveContent = $"Có lỗi trong quá trình Hiển thị thông tin do {sb.ToString()}";
                 return View();
             }
         }

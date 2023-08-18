@@ -162,10 +162,10 @@
             <tr>
                 <td class="col-md-1">STT</td>
                 <td class="col-md-1">UserName</td>
-                <td class="col-md-1">Tên đầy đủ</td>
+                <td class="col-md-2">Tên đầy đủ</td>
                 <td class="col-md-1">Chức vụ</td>
                 <td class="col-md-1">Chuyên môn</td>
-                <td class="col-md-1">Email</td>
+                <td class="col-md-2">Email</td>
                 <td class="col-md-1">Tình trạng</td>
                 <td class="col-md-1">#</td>
             </tr>
@@ -193,10 +193,10 @@
                     <tr>
                         <td class="col-md-1">@stt</td>
                         <td class="col-md-1"><b>@Html.ActionLink(@item.UserName, "Details", "Member", new { Id = item.UserID }, new { @class = "text-primary" }) </b></td>
-                        <td class="col-md-1"><b>@Html.ActionLink(@item.FullName, "Details", "Member", new { Id = item.UserID }, new { @class = "text-primary" }) </b></td>
+                        <td class="col-md-2"><b>@Html.ActionLink(@item.FullName, "Details", "Member", new { Id = item.UserID }, new { @class = "text-primary" }) </b></td>
                         <td class="col-md-1">@Positions.FirstOrDefault(s => s.Id == item.Position).PositionName</td>
                         <td class="col-md-1">@desciplines.FirstOrDefault(s => s.Id == item.Descipline).DesciplineName</td>
-                        <td class="col-md-1">@item.Email</td>
+                        <td class="col-md-2">@item.Email</td>
                         <td class="col-md-1">Offline</td>
                         <td>
                             @Html.ActionLink(" ", "OnOffline", "Member", new { Id = item.UserID }, new { @class = "fa fa-adjust btn" })

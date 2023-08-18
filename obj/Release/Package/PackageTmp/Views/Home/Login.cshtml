@@ -4,6 +4,7 @@
     Layout = null;
     //Layout = "~/Views/Shared/_AdminLayout.cshtml";
     string userName = ViewBag.UserName;
+    string backgroundImage = "../Assets/Photos/background/dmc_login.jpg";
 }
 
 <!DOCTYPE html>
@@ -53,7 +54,8 @@
         }
         .bg {
             /* The image used */
-            background-image: url("../Assets/Photos/background/background-noel_021844660.jpg");
+            /*background-image: url("../Assets/Photos/background/dmc_login.jpg");*/
+            background-image: url("@backgroundImage");
             /* Full height */
             height: 50%;
             /* Center and scale the image nicely */
@@ -64,7 +66,8 @@
             background-size: cover;
         }
         .bgimg-1 {
-            background-image: url("../Assets/Photos/background/hinh-nen-background-noel-dep_021845192.jpg");
+            background-image: url("@backgroundImage");
+            /*background-image: url("../Assets/Photos/background/dmc_login.jpg");*/
             height: 100%;
         }
         .bgimg-1, .bgimg-2, .bgimg-3 {
@@ -83,7 +86,7 @@
     </style>
 </head>
 
-<body class="login bg" style="offset-distance:300px">
+<body class="login bg">
     @*Origin contents ----------------------------------------------*@    
     <div>
         @*<img src="~/Assets/Photos/background/background-noel-dep_021844285.jpg" alt="Alternate Text" />*@

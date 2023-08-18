@@ -59,7 +59,7 @@
 
 }
 <script src="~/UserStyles/Chart.js/dist/Chart.min.js"></script>
-<link href="~/Content/cscpda-scrollbar.css" rel="stylesheet" />
+@*<link href="~/Content/cscpda-scrollbar.css" rel="stylesheet" />*@
 
 @* Modal create new *@
 <div>
@@ -246,7 +246,7 @@
         <h3 class="text-left">DANH SÁCH THÀNH VIÊN THEO DỰ ÁN</h3>
     </div>
     <div class="col-sm-3 text-right">
-        <button type="button" class="btn btn-warning btn-small text-right" data-toggle="modal" data-target="#newAssignMember"><i class="fa fa-plus"></i> Thêm điều phối Thành viên cho dự án mới</button>
+        <button type="button" class="btn btn-primary btn-small text-right" data-toggle="modal" data-target="#newAssignMember"><i class="fa fa-plus"></i> Thêm Thành viên cho dự án mới</button>
     </div>
 </div>
 <div class="clearfix"></div>
@@ -269,7 +269,7 @@
         </thead>
     </table>
 </div>
-<div class="table-responsive scrollbar">
+<div class="table-responsive " style="height:600px">
     <table class="table table-hover table-bordered table-striped">
         <caption>Số lượng dự án <b class="text-danger">@Model.Count()</b></caption>
         <tbody>
@@ -309,37 +309,37 @@
                             @if (item.ChuTriKetCau != null)
                             {
                                 <a>Chủ trì: </a><p><b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriKetCau).FullName</b></p>
-                        }
+                            }
                             @if (item.ChuTriKetCau2 != null)
                             {
                                 <a>Hỗ trợ: </a><p><b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriKetCau2).FullName</b></p>
-                        }
+                            }
 
                         </td>
                         <td class="col-1 text-sm-left">
-                           
-                                @if (item.ChuTriMEP != null)
-                                {
-                                    <a>Chủ trì: </a><p><b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriMEP).FullName</b></p>
-                                }
-                                @if (item.ChuTriMEP2 != null)
-                                {
-                                    <a>Hỗ trợ: </a><p><b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriMEP2).FullName</b></p>
-                                }
-                           
+
+                            @if (item.ChuTriMEP != null)
+                            {
+                                <a>Chủ trì: </a><p><b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriMEP).FullName</b></p>
+                            }
+                            @if (item.ChuTriMEP2 != null)
+                            {
+                                <a>Hỗ trợ: </a><p><b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriMEP2).FullName</b></p>
+                            }
+
 
                         </td>
                         <td class="col-1 text-sm-left">
-                           
-                                @if (item.LegalManager != null)
-                                {
-                                    <a>Chủ trì: </a><p><b class=""> @Members.FirstOrDefault(s => s.UserID == item.LegalManager).FullName</b></p>
-                                }
-                                @if (item.LegalManager2 != null)
-                                {
-                                    <a>Hỗ trợ: </a><p><b class="">@Members.FirstOrDefault(s => s.UserID == item.LegalManager2).FullName</b></p>
-                                }
-                           
+
+                            @if (item.LegalManager != null)
+                            {
+                                <a>Chủ trì: </a><p><b class=""> @Members.FirstOrDefault(s => s.UserID == item.LegalManager).FullName</b></p>
+                            }
+                            @if (item.LegalManager2 != null)
+                            {
+                                <a>Hỗ trợ: </a><p><b class="">@Members.FirstOrDefault(s => s.UserID == item.LegalManager2).FullName</b></p>
+                            }
+
                         </td>
                         <td class="col-1 text-sm-left">
                             @if (item.Admin != null)
@@ -353,7 +353,7 @@
                             {
                                 if (BIMer.Count() > 0)
                                 {
-                                   <b> @BIMer.FirstOrDefault(s => s.ID == item.BIMManager).SoftName</b>
+                                    <b> @BIMer.FirstOrDefault(s => s.ID == item.BIMManager).SoftName</b>
                                 }
 
                             }
@@ -372,19 +372,19 @@
 <div class="clearfix"></div>
 <h3 class="text-center text-primary">CÔNG VIỆC ĐƯỢC GIAO</h3>
 <div>
-    @* Bản thống kê *@
+    @* Bảng thống kê *@
     <div class="col-sm-6">
         <h5 class="text-center">Bảng thống kê số lượng dự án theo thành viên</h5>
-        <div class="table-responsive-sm scrollbar">
+        <table class="table table-bordered table-condensed table-striped">
+            <tr class="text-white" style="background-color:#808080">
+                <td class="col-sm-3">Tên thành viên</td>
+                <td class="col-sm-2">SL dự án</td>
+                <td class="col-sm-7">Tên dự án</td>
+            </tr>
+        </table>
+        <div class="table-responsive" style="height:600px">
             <table class="table table-bordered table-condensed table-striped">
-                <thead class="text-center">
-                    <tr class="text-white" style="background-color:#808080">
-                        <td class="col-sm-3">Tên thành viên</td>
-                        <td class="col-sm-2">SL dự án</td>
-                        <td class="col-sm-7">Tên dự án</td>
-                    </tr>
-                </thead>
-                <tbody>
+                <tbody class="table">
                     @if (Model == null || Model.Count() == 0)
                     {
                         <tr class="row">
@@ -436,7 +436,6 @@
             </table>
         </div>
     </div>
-
 
     @* Biểu đồ dự án theo nhân sự *@
     <div class="col-sm-6">

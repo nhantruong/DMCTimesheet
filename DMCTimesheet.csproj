@@ -302,6 +302,7 @@
     <Content Include="Assets\Photos\background\background-noel-trang-tri-dep_021844535.jpg" />
     <Content Include="Assets\Photos\background\background-noel_021844660.jpg" />
     <Content Include="Assets\Photos\background\background-thiep-noel-dep_021844832.jpg" />
+    <Content Include="Assets\Photos\background\dmc_login.jpg" />
     <Content Include="Assets\Photos\background\green_leafy_wood_background_hd_picture.jpg" />
     <Content Include="Assets\Photos\background\hinh-nen-background-noel-dep_021845192.jpg" />
     <Content Include="Assets\Photos\background\mau-background-noel_021845379.jpg" />
@@ -3337,6 +3338,7 @@
     <Content Include="Views\Setting\CreateNewCompanyService.cshtml" />
     <Content Include="Views\Setting\DeleteWorkDetail.cshtml" />
     <Content Include="Views\Setting\PowerBIEmbedString.cshtml" />
+    <Content Include="Views\Member\AssignMember.cshtml" />
     <None Include="Web References\com.cbimtech.MemberServices\MemberService.disco" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -3905,7 +3907,6 @@
     <Content Include="Views\Project\EditAssign.cshtml" />
     <Content Include="Views\Member\Details.cshtml" />
     <Content Include="Views\Member\OnOffline.cshtml" />
-    <Content Include="Views\Member\AssignMember.cshtml" />
     <None Include="Web References\com.cbimtech.MemberServices\MemberService.wsdl" />
     <Content Include="Web References\com.cbimtech.MemberServices\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>
