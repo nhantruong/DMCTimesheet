@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using DMCTimesheet.Models;
@@ -25,7 +27,7 @@ namespace DMCTimesheet.Controllers
             ViewBag.WorkType = db.C07_WorkType.ToList();
             ViewBag.Workgroup = db.C19_Workgroup.ToList();
             List<C08_Timesheet> ProjectTimesheet = db.C08_Timesheet.ToList();
-            ViewBag.Embedstring = db.C98_EmbedString.OrderByDescending(s=>s.Version).FirstOrDefault();
+            ViewBag.Embedstring = db.C98_EmbedString.OrderByDescending(s => s.Version).FirstOrDefault();
             return View(ProjectTimesheet);
         }
 
@@ -76,30 +78,59 @@ namespace DMCTimesheet.Controllers
             List<DMCTimesheet.Models.C08_Timesheet> _ViecTrongNgay = new List<DMCTimesheet.Models.C08_Timesheet>();
             foreach (var item in mytimesheet)
             {
-                //int value = DateTime.Compare(DateTime.Parse(item.RecordDate.ToString()), DateTime.Today);
-                if (DateTime.Today == DateTime.Parse(item.RecordDate.ToString()))
-                {
-                    _ViecTrongNgay.Add(item);
-                }
+                if (DateTime.Today == DateTime.Parse(item.RecordDate.ToString())) _ViecTrongNgay.Add(item);                
             }
             //Công việc trong tuần
             List<DMCTimesheet.Models.C08_Timesheet> _ViecTrongTuan = new List<DMCTimesheet.Models.C08_Timesheet>();
-                        
-            DateTime startDate = MakeDate(7, false);
+
+            var tuanhienhanh = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(DateTime.Today, CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday);
+            int curYear = DateTime.Today.Year;
+            int curMonth = DateTime.Today.Month;
 
             foreach (var item in mytimesheet)
-            {
-                int value = DateTime.Compare(DateTime.Parse(item.RecordDate.ToString()), startDate);
-                if (value <= 7)
-                {
-                    _ViecTrongTuan.Add(item);
-                }
+            {                
+                DateTime itmDate = DateTime.Parse(item.RecordDate.ToString());
+                int itmYear = DateTime.Parse(item.RecordDate.ToString()).Year;
+                int itmMonth = DateTime.Parse(item.RecordDate.ToString()).Month;
+                var tuanTS = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(itmDate, CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday);
+                if (itmYear == curYear && itmMonth== curMonth& tuanTS == tuanhienhanh) _ViecTrongTuan.Add(item);               
             }
+
+            List<List<C08_Timesheet>> dailyTS = new List<List<C08_Timesheet>>();
+            List<List<C08_Timesheet>> weeklyTS = new List<List<C08_Timesheet>>();
+            List<List<C08_Timesheet>> monthlyTS = new List<List<C08_Timesheet>>();
+            List<List<C08_Timesheet>> yearlyTS = new List<List<C08_Timesheet>>();
+
+            var _weeklyTS = mytimesheet.GroupBy(s=> new {_Year = s.RecordDate.Value.Year, _Week = GetIso8601WeekOfYear(s.RecordDate.Value) })
+                .Select(p => new {_Year = p.Key._Year, _Week = p.Key._Week, ts = p.ToList() })
+                .ToList();
+
+
+            foreach (var item in mytimesheet.GroupBy(s=>s.RecordDate))//Nhóm TS theo tung ngay
+            {
+                //TS theo ngay
+                List<C08_Timesheet> c08_Timesheets = item.ToList();
+                dailyTS.Append(c08_Timesheets);
+
+                //TS theo Tuan
+                DateTime itmDate = DateTime.Parse(item.Key.ToString());//Ngay của TS
+                var WeekNum = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(itmDate, CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday);//Lay ra so tuan cua nhom
+                foreach (var itm in item.ToList())
+                {
+
+                }
+
+
+            }
+
+
+
             ViewBag.ViecTrongNgay = _ViecTrongNgay;
             ViewBag.ViecTrongTuan = _ViecTrongTuan;
-           //Detail actions
+            ViewBag.FullMyTimesheet = mytimesheet;
+            //Detail actions
             ViewBag.DetailAction = db.C21_DetailAction.ToList();
-           // List<string[]> worktypeId = new List<string[]>();    //Nhóm công việc theo workgroup
+            // List<string[]> worktypeId = new List<string[]>();    //Nhóm công việc theo workgroup
             List<string[]> listdetailaction = new List<string[]>(); //List ID công việc để lọc
 
             foreach (var item in db.C21_DetailAction.ToList())
@@ -110,12 +141,21 @@ namespace DMCTimesheet.Controllers
                 listdetailaction.Add(itm);
             }
             ViewBag.actiondetailList = listdetailaction;
-            
+
 
 
 
             return View(mytimesheet);
         }
+
+        // Calculate ISO 8601 week of year
+        public static int GetIso8601WeekOfYear(DateTime date)
+        {
+            // Calculate the week of the year using ISO 8601 definition
+            DayOfWeek day = CultureInfo.InvariantCulture.Calendar.GetDayOfWeek(date);
+            return CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(date, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
+        }
+
 
         public void GetData()
         {
@@ -169,11 +209,11 @@ namespace DMCTimesheet.Controllers
         }
 
         public DateTime MakeDate(int duration, bool TinhToi)
-        {           
+        {
             int month = DateTime.Today.Month;
             int year = DateTime.Today.Year;
             int day = DateTime.Today.Day;
-            
+
             int returnDate;
 
             if (TinhToi)
@@ -183,7 +223,7 @@ namespace DMCTimesheet.Controllers
             else
             {
                 int a = Math.Abs(day - duration);
-                returnDate = a==0?1:a;
+                returnDate = a == 0 ? 1 : a;
             }
             return new DateTime(year, month, returnDate);
         }
@@ -429,7 +469,7 @@ namespace DMCTimesheet.Controllers
                         MemberID = logUser.UserID,
                         RecordDate = recordDate,
                         ProjectId = ProjectID,
-                        WorkType = WorkID??43,
+                        WorkType = WorkID ?? 43,
                         Description = Description,
                         Hour = Hours,
                         OT = _OT

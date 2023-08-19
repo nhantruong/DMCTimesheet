@@ -1,5 +1,6 @@
 ﻿@model IEnumerable<DMCTimesheet.Models.C08_Timesheet>
 @{
+
     DMCTimesheet.Models.C06_UserPermisRelationship Userpermiss = Session["UserPermission"] as DMCTimesheet.Models.C06_UserPermisRelationship;
 
     DMCTimesheet.Models.C02_Members loginUser = Session["UserLogin"] as DMCTimesheet.Models.C02_Members;
@@ -25,34 +26,47 @@
     List<DMCTimesheet.Models.C08_Timesheet> _ViecTrongNgay = ViewBag.ViecTrongNgay as List<DMCTimesheet.Models.C08_Timesheet>;
     //Công việc trong tuần
     List<DMCTimesheet.Models.C08_Timesheet> _ViecTrongTuan = ViewBag.ViecTrongTuan as List<DMCTimesheet.Models.C08_Timesheet>;
+    //List All Timesheet
+    List<DMCTimesheet.Models.C08_Timesheet> FullMyTimesheet = ViewBag.FullMyTimesheet as List<DMCTimesheet.Models.C08_Timesheet>;
+    var allmyTS = FullMyTimesheet.ToArray();
 
     //Chi tiết công việc
     List<DMCTimesheet.Models.C21_DetailAction> DetailAction = ViewBag.DetailAction as List<DMCTimesheet.Models.C21_DetailAction>;
     List<string[]> actiondetailList = ViewBag.actiondetailList as List<string[]>;
 
-    //for chart
-    //List<string> DanhsachNgay = new List<string>();
-    //List<int> SogioTheoNgay = new List<int>();
-    //if (_ViecTrongTuan != null)
-    //{
-    //    foreach (DMCTimesheet.Models.C08_Timesheet itm in _ViecTrongTuan)
-    //    {
-    //        //DanhsachNgay.Add(DateTime.Parse(itm.);
+    var tuanhienhanh = System.Globalization.CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(DateTime.Today, System.Globalization.CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday);
 
-    //        DanhsachNgay.Add(DateTime.Parse(itm.RecordDate.Value.ToString()).ToShortDateString());
-    //        SogioTheoNgay.Add(((int)itm.Hour.Value) + (int)itm.OT.Value);
-    //    }
-    //}
+    List<string> listOfWeekName = new List<string>(); //Danh sach tuan trong timesheet ca nhan
+    List<string> listOfYears = new List<string>(); //Danh sach Năm trong timesheet ca nhan
+    List<string[]> allTS = new List<string[]>();
+    foreach (var item in FullMyTimesheet)
+    {
+        string[] itm = new string[6];
+        itm[0] = item.RecordDate.Value.ToShortDateString();
+        itm[1] = item==null? Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName:"Công việc chung";
+        itm[2] = WorkTypes.FirstOrDefault(s => s.ID == item.WorkType).WorkName;
+        itm[3] = item.Hour.ToString();
+        itm[4] = item.OT.ToString();
+        itm[5] = item.Description;
+
+        allTS.Add(itm);
+    }
+
+    foreach (var item in FullMyTimesheet)
+    {
+        listOfYears.Add(item.RecordDate.Value.Year.ToString());
+        if (item.RecordDate.Value.Year == DateTime.Today.Year)
+        {
+            DateTime TSdate = DateTime.Parse(item.RecordDate.ToString());
+            listOfWeekName.Add(System.Globalization.CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(TSdate, System.Globalization.CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday).ToString());
+
+        }
+    }
 
 
 }
-
 @* --------------------------------------------------------VIỆC TRONG NGÀY--------------------------------------------------- *@
 @*
-
-
-
-
 
 *@
 <div class="row flex">
@@ -86,7 +100,7 @@
                                 </div>
 
                                 @* WorkGroup *@
-                                <div class="form-group row  text-left">
+                                <div class="form-group row text-left">
                                     <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-primary">Nhóm hoạt động</lable>
                                     <select name="NhomHoatDong" required data-toggle="tooltip" data-placement="left" id="workgroup" onclick="onchangeworkgroup()" title="Chọn nhóm hoạt động" class="form-control col-md-7 col-sm-9 col-xs-9 text-primary">
                                         <option value="2">--Chọn nhóm hoạt động--</option>
@@ -100,7 +114,6 @@
                                         }
                                     </select>
                                 </div>
-
 
                                 @* ProjectID *@
                                 <div class="form-group row  text-left">
@@ -125,17 +138,14 @@
                                                 }
                                             }
                                         }
-
-
                                     </select>
                                 </div>
 
                                 @* LỖI *@
                                 <div class="form-group row">
-                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
-                                    <h6 class="col-md-7 col-sm-9 col-xs-9 text-danger" id="Error">@ViewBag.WorkAlert</h6>
+                                    @*<lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>*@
+                                    <small class="col-md-7 col-sm-9 col-xs-9 text-danger" id="Error">@ViewBag.WorkAlert</small>
                                 </div>
-
 
                                 @* WorkType *@
                                 <div class="form-group row  text-left">
@@ -146,21 +156,6 @@
                                                 <option value=@item.ID>[@item.WorkGroup] - @item.WorkName</option>
                                             }*@
                                     </select>
-                                </div>
-
-                                @* Hour *@
-                                <div class="form-group row text-left">
-                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thời gian</lable>
-                                    <div class="col-md-7 col-sm-9 col-xs-9">
-                                        <div class="col-md-6 text-success inline">
-                                            <lable class="control-label col-md-5 text-left">Giờ</lable>
-                                            <input type="number" class="form-control col-md-6" name="Hour" required value="4" />
-                                        </div>
-                                        <div class="col-md-6 inline">
-                                            <lable class="control-label col-md-6 text-left">OT</lable>
-                                            <input type="number" class="form-control col-md-6" name="OvertimeHour" value="0" />
-                                        </div>
-                                    </div>
                                 </div>
 
                                 @* Description *@
@@ -179,6 +174,22 @@
                                     <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Ghi chú chi tiết</lable>
                                     <textarea id="descriptionNote" class="form-control col-md-7 col-sm-9 col-xs-9 " rows="3" name="Description" placeholder="Nhập ngắn gọn nội dung công việc" required></textarea>
                                 </div>
+                                @* Hour *@
+                                <div class="form-group row text-left">
+                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thời gian</lable>
+                                    <div class="col-md-7 col-sm-9 col-xs-9">
+                                        <div class="col-md-6 text-success inline">
+                                            <lable class="control-label col-md-5 text-left">Giờ</lable>
+                                            <input type="number" class="form-control col-md-6" name="Hour" required value="4" />
+                                        </div>
+                                        <div class="col-md-6 inline">
+                                            <lable class="control-label col-md-6 text-left">Overtime</lable>
+                                            <input type="number" class="form-control col-md-6" name="OvertimeHour" value="0" />
+                                        </div>
+                                    </div>
+                                </div>
+
+
                                 <div class="form-group text-left">
                                     <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
                                     <input type="submit" value="Save" class="btn btn-success col-md-7" />
@@ -247,7 +258,7 @@
                                                             @Html.ActionLink(Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName, "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "text-primary" })
                                                         }
                                                         else
-                                                        {                                                            
+                                                        {
                                                             @Html.ActionLink("Công việc chung", "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "text-primary" })
                                                         }
                                                     </td>
@@ -285,26 +296,69 @@
 
     <div class="col-md-6 flex-column">
         <div class="col">
-            @*<div class="x_panel" style="height:auto">*@
-            @* -----------CHART -------------------------------- *@
-            @*<div class="x_title">
-
-                        <h2 class="text-warning"><b class="text-success">THỐNG KÊ CÔNG VIỆC TRONG TUẦN </b></h2>
-                        <h2 class="text-warning"> - FROM @cal.GetDayOfWeek(DateTime.Today) </h2>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="x_content">
-                        <canvas id="weekly_workdone"></canvas>
-                    </div>
-                </div>*@
-
             <div class="x_panel">
                 <div class="x_title">
                     @{
                         System.Globalization.CultureInfo cultureInfo = new System.Globalization.CultureInfo("vi-VN");
                         System.Globalization.Calendar cal = cultureInfo.Calendar;
+                        List<DateTime> dates = new List<DateTime>();
+                        for (int i = 1; i < 32; i++)
+                        {
+                            dates.Add(DateTime.Parse(DateTime.Today.Year.ToString()+"-"+ DateTime.Today.Month.ToString()+"-"+i.ToString()));
+                        }
                     }
-                    <h2 class="text-warning"><b class="text-success">DANH SÁCH CÔNG VIỆC TRONG TUẦN THỨ <i class="text-primary">@cultureInfo.Calendar.GetWeekOfYear(DateTime.Today, System.Globalization.CalendarWeekRule.FirstDay, DayOfWeek.Monday) - @DateTime.Today.Year </i></b></h2>
+                    <h2 class="text-warning"><b class="text-success">DANH SÁCH CÔNG VIỆC TRONG TUẦN THỨ <i class="text-primary">@cultureInfo.Calendar.GetWeekOfYear(DateTime.Today, System.Globalization.CalendarWeekRule.FirstDay, DayOfWeek.Monday)/ @DateTime.Today.Year </i></b></h2>
+                    <hr />
+                    @* Filters *@
+                    <div class="col-md-12">
+                        <div class="form-group-lg row ">
+                            <div class="form-group inline">
+                                @* Selector Year *@
+                                <select name="YearNum" data-toggle="tooltip" data-placement="left" id="yearnum" onclick="filterByYear()" title="Select Year" class="form-control text-primary col-md-3">
+                                    <option value="@DateTime.Now.Year">Năm @DateTime.Now.Year</option>
+                                    <option value="@DateTime.Now.Year">-------------</option>
+                                    @foreach (var item in listOfYears.Distinct())
+                                    {
+                                        <option id="@item" value="@item">Năm @item</option>
+                                    }
+                                </select>
+                                @*Selector Week number  *@
+                            <select name="WeekNum" data-toggle="tooltip" data-placement="left" id="weeknum" onclick="" title="Select Week" class="form-control text-primary col-md-2">
+                                <option value="@tuanhienhanh">Tuần @tuanhienhanh</option>
+                                <option value="@tuanhienhanh">---------------------</option>
+                                @for (int i = 1; i < 53; i++)
+                                {
+                                    <option value="@i">W @i</option>
+                                }
+                                @*@foreach (var item in listOfWeekName.Distinct())
+        {
+            <option id="@item" value="@item">W @item</option>
+        }*@
+                            </select>
+                                @*Selector Month  *@
+                                <select name="MonthNum" data-toggle="tooltip" data-placement="left" id="monthnum" onclick="createDates()" title="Select Month" class="form-control text-primary col-md-3">
+                                    <option value="@DateTime.Now.Month">Tháng @DateTime.Now.Month</option>
+                                    <option value="@DateTime.Now.Month">-------------</option>
+                                    @for (int i = 1; i < 13; i++)
+                                    {
+                                        <option value="@i">Tháng @i</option>
+                                    }
+                                </select>
+                                @*Selector date  *@
+                                <select name="DateNum" data-toggle="tooltip" data-placement="left" id="datenum" onclick="" title="Select date" class="form-control text-primary col-md-3">
+                                    <option value="@DateTime.Today">@DateTime.Today.ToShortDateString()</option>
+                                    <option value="@DateTime.Today">---------------------</option>
+                                    @foreach (var item in dates)
+                                    {
+                                        <option value="@item">@item.ToShortDateString()</option>
+                                    }
+                                </select>
+                                <input type="submit" name="name" value="View" class="col-md-1" />
+                            </div>
+                           
+                        </div>
+                    </div>
+
                     <div class="clearfix"></div>
                 </div>
                 @* -----------BẢNG THỐNG KÊ TRONG TUẦN------------------------------------------------ *@
@@ -314,14 +368,14 @@
                             <table class="table table-hover table-borderless table-striped">
                                 <thead class="bg-dark text-center text-white">
                                     <tr class="row">
-                                        <th class="col-md-1">No</th>
-                                        <th class="col-md-1">Record date</th>
-                                        <th class="col-md-2">Project</th>
-                                        <th class="col-md-2">Workdone</th>
-                                        <th class="col-md-1">Hours</th>
-                                        <th class="col-md-1">Overtime</th>
-                                        <th class="col-md-3">Description</th>
-                                        <th class="col-md-1">#</th>
+                                        <td class="col-md-1">No</td>
+                                        <td class="col-md-2">Record date</td>
+                                        <td class="col-md-2">Project</td>
+                                        <td class="col-md-2">Workdone</td>
+                                        <td class="col-md-1">Hours</td>
+                                        <td class="col-md-1">Overtime</td>
+                                        <td class="col-md-2">Description</td>
+                                        <td class="col-md-1">#</td>
                                     </tr>
                                 </thead>
                             </table>
@@ -329,15 +383,17 @@
                         <div class="table-responsive" style="height:1000px">
                             <table class="table table-hover table-bordered table-striped">
                                 <tbody id="seachResult" class="text-dark">
-                                    @if (Model != null)
+                                    @*@if (Model != null)*@
+                                    @if (_ViecTrongTuan != null)
                                     {
                                         int st = 1;
-                                        foreach (var item in Model.OrderByDescending(s => s.RecordDate))
+                                        //foreach (var item in Model.OrderByDescending(s => s.RecordDate))
+                                        foreach (var item in _ViecTrongTuan.OrderByDescending(s => s.RecordDate))
                                         {
 
                                             <tr class="row">
                                                 <td class="col-md-1 text-center">@st</td>
-                                                <td class="col-md-1">@DateTime.Parse(item.RecordDate.ToString()).ToShortDateString()</td>
+                                                <td class="col-md-2">@DateTime.Parse(item.RecordDate.ToString()).ToShortDateString()</td>
                                                 <td class="col-md-2">
                                                     @if (item.ProjectId != null)
                                                     {
@@ -353,10 +409,10 @@
                                                 <td class="col-md-2">@WorkTypes.FirstOrDefault(s => s.ID == item.WorkType).WorkName</td>
                                                 <td class="col-md-1">@item.Hour</td>
                                                 <td class="col-md-1">@item.OT</td>
-                                                <td class="col-md-3">@item.Description</td>
+                                                <td class="col-md-2">@item.Description</td>
                                                 <td class="col-md-1">
-                                                    @Html.ActionLink(" ", "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "fa fa-edit" })
-                                                    @Html.ActionLink(" ", "Delete", "Timesheet", new { id = item.Id }, new { @class = " fa fa-remove btn" })
+                                                    @*@Html.ActionLink(" ", "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "fa fa-edit" })*@
+                                                    @Html.ActionLink("X", "Delete", "Timesheet", new { id = item.Id }, new { @class = "btn btn-danger" })
                                                 </td>
                                             </tr>
                                             st++;
@@ -450,53 +506,74 @@
         document.getElementById('descriptionNote').textContent = val;
     }
 </script>
+
+@* Lọc timesheet theo Tuan *@
+<script>
+    function filterByYear() {
+        var year = document.getElementById("yearnum").value;
+        alert(year);
+        var ts = @Html.Raw(Json.Encode(allTS));        
+        alert(ts);
+    }
+</script>
+
+<script>
+    function createDates() {
+        var year = document.getElementById("yearnum").value;
+        var month = document.getElementById("monthnum").value;
+        var date = document.getElementById("datenum");
+
+        //alert(month.value + "-" + year.value);
+        var options = generateDatesInMonth(year, month);
+        //alert(options);
+        document.getElementById("datenum").value = '';
+        document.getElementById("datenum").innerHTML = '';
+
+        document.getElementById("datenum").innerHTML = createOptions(Array.from(options));
+        
+    }
+
+    //Hàm tạo ngày theo tháng-năm input
+    function generateDatesInMonth(year, month) {
+        const startDate = new Date(year, month - 1, 1);
+        const endDate = new Date(year, month, 0);
+
+        const dates = [];
+
+        for (let date = startDate; date <= endDate; date.setDate(date.getDate() + 1)) {            
+            //dates.push(new Date(date).toLocaleDateString('en-US', { day: '2-digit', month: '2-digit', year: 'numeric' }));
+            dates.push(new Date(date).toLocaleDateString('en-US'));            
+        }
+
+        return dates;
+    }
+
+    function createOptions(options) {
+        var text = "";
+        for (var i = 0; i < options.length; i++) {
+            //text += '<option value=' + "'" + options[i][1] + "'" + '>' + options[i][1] + '</option>';
+            text += '<option value=' + "'" + options[i] + "'" + '>' + options[i] + '</option>';
+        }
+        return text;
+    }
+
+</script>
+
+<script>
+    function TSreturn() {
+        var content = document.getElementById("seachResult");        
+        content.innerHTML = createTableContent();
+
+    }
+
+    function createTableContent(timesheet) {
+        var tablecontent = '';
+
+    }
+</script>
+
+
+
 <script src="~/UserStyles/Chart.js/chart.js"></script>
 <link href="~/Content/cscpda-scrollbar.css" rel="stylesheet" />
 <link href="~/Content/scrollbarStyle.css" rel="stylesheet" />
-@* Chart 3 - Donus Project theo Tình trạng *@
-
-@*<script>
-       var ctx = document.getElementById('weekly_workdone').getContext('2d');
-       var _lable = @Html.Raw(Json.Encode(DanhsachNgay));
-       var _data = @Html.Raw(Json.Encode(SogioTheoNgay));
-       var myChart = new Chart(ctx, {
-           type: 'bar',
-            data: {
-               labels:  _lable,
-                datasets: [{
-                    data: _data,
-                    backgroundColor: ['rgba(124,252,0,0.4)', 'rgba(255,165,0,0.5)', 'rgba(255,0,0, 0.7)', 'rgba(54, 255, 235,0.7)', 'rgba(220, 53, 69, 0.8)'],
-                    borderColor:'rgba(54, 162, 235, 1)',
-                    borderWidth: 1,
-                    outerWidth: 0.3
-                }]
-            },
-           options: {
-               responsive: true,//to nhỏ
-               interaction: {
-                   intersect: false,
-               },
-               scales: {
-                   x: {
-                       stacked: true,
-                   },
-                   y: {
-                       stacked: true
-                   }
-               },
-               showToolTips: true,
-               plugins: {
-                   title: {
-                       display: true,
-                       text: 'Danh sách công việc trong tuần'
-                   },
-                   legend: {//ghi chú các thành phần trong biểu đồ
-                       display: false,
-                       position: 'right',
-                       align:'left',
-                       labels: {
-                           color: 'rgb(0, 0, 0)'
-                       }
-                   }
-               }}});
-    </script>*@
