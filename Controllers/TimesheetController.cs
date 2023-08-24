@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
+using System.Diagnostics;
+using System.Dynamic;
 using System.Globalization;
 using System.Linq;
 using System.Net;
@@ -78,7 +81,7 @@ namespace DMCTimesheet.Controllers
             List<DMCTimesheet.Models.C08_Timesheet> _ViecTrongNgay = new List<DMCTimesheet.Models.C08_Timesheet>();
             foreach (var item in mytimesheet)
             {
-                if (DateTime.Today == DateTime.Parse(item.RecordDate.ToString())) _ViecTrongNgay.Add(item);                
+                if (DateTime.Today == DateTime.Parse(item.RecordDate.ToString())) _ViecTrongNgay.Add(item);
             }
             //Công việc trong tuần
             List<DMCTimesheet.Models.C08_Timesheet> _ViecTrongTuan = new List<DMCTimesheet.Models.C08_Timesheet>();
@@ -88,51 +91,50 @@ namespace DMCTimesheet.Controllers
             int curMonth = DateTime.Today.Month;
 
             foreach (var item in mytimesheet)
-            {                
+            {
                 DateTime itmDate = DateTime.Parse(item.RecordDate.ToString());
                 int itmYear = DateTime.Parse(item.RecordDate.ToString()).Year;
                 int itmMonth = DateTime.Parse(item.RecordDate.ToString()).Month;
                 var tuanTS = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(itmDate, CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday);
-                if (itmYear == curYear && itmMonth== curMonth& tuanTS == tuanhienhanh) _ViecTrongTuan.Add(item);               
+                if (itmYear == curYear && itmMonth == curMonth & tuanTS == tuanhienhanh) _ViecTrongTuan.Add(item);
             }
 
-            List<List<C08_Timesheet>> dailyTS = new List<List<C08_Timesheet>>();
-            List<List<C08_Timesheet>> weeklyTS = new List<List<C08_Timesheet>>();
-            List<List<C08_Timesheet>> monthlyTS = new List<List<C08_Timesheet>>();
-            List<List<C08_Timesheet>> yearlyTS = new List<List<C08_Timesheet>>();
+            List<KeyValuePair<string, List<C08_Timesheet>>> TSbyYear = new List<KeyValuePair<string, List<C08_Timesheet>>>();
+            List<KeyValuePair<string, List<C08_Timesheet>>> TSbyYear_Week = new List<KeyValuePair<string, List<C08_Timesheet>>>();
 
-            var _weeklyTS = mytimesheet.GroupBy(s=> new {_Year = s.RecordDate.Value.Year, _Week = GetIso8601WeekOfYear(s.RecordDate.Value) })
-                .Select(p => new {_Year = p.Key._Year, _Week = p.Key._Week, ts = p.ToList() })
-                .ToList();
-
-
-            foreach (var item in mytimesheet.GroupBy(s=>s.RecordDate))//Nhóm TS theo tung ngay
+            //Lọc dữ liệu theo Năm và theo Tuần
+            foreach (var item in mytimesheet.GroupBy(s => s.RecordDate.Value.Year))
             {
-                //TS theo ngay
-                List<C08_Timesheet> c08_Timesheets = item.ToList();
-                dailyTS.Append(c08_Timesheets);
+                KeyValuePair<string, List<C08_Timesheet>> tsY = new KeyValuePair<string, List<C08_Timesheet>>(item.Key.ToString(), item.ToList());
+                TSbyYear.Add(tsY);//Timesheet theo năm
+                var gp = item.ToList().GroupBy(s => new { weekName = GetIso8601WeekOfYear(s.RecordDate.Value) });
 
-                //TS theo Tuan
-                DateTime itmDate = DateTime.Parse(item.Key.ToString());//Ngay của TS
-                var WeekNum = CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(itmDate, CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday);//Lay ra so tuan cua nhom
-                foreach (var itm in item.ToList())
+                foreach (var itm in gp)
                 {
-
+                    string WeekName = $"{item.Key}-W{itm.Key.weekName}";
+                    KeyValuePair<string, List<C08_Timesheet>> tsYW = new KeyValuePair<string, List<C08_Timesheet>>(WeekName, itm.ToList<C08_Timesheet>());
+                    TSbyYear_Week.Add(tsYW);
                 }
-
-
             }
 
+
+            //var _weeklyTS = mytimesheet.GroupBy(s=> new {_Year = s.RecordDate.Value.Year, _Week = GetIso8601WeekOfYear(s.RecordDate.Value) })
+            //    .Select(p => new {_Year = p.Key._Year.ToString(), _Week = p.Key._Week.ToString(), ts = p.ToList() })
+            //    .AsEnumerable().Select(s=>s.ToExpando());
 
 
             ViewBag.ViecTrongNgay = _ViecTrongNgay;
             ViewBag.ViecTrongTuan = _ViecTrongTuan;
             ViewBag.FullMyTimesheet = mytimesheet;
+            ViewBag.YearlyTimesheet = TSbyYear;
+            ViewBag.WeeklyTimesheet = TSbyYear_Week;
+
             //Detail actions
             ViewBag.DetailAction = db.C21_DetailAction.ToList();
             // List<string[]> worktypeId = new List<string[]>();    //Nhóm công việc theo workgroup
             List<string[]> listdetailaction = new List<string[]>(); //List ID công việc để lọc
 
+            //
             foreach (var item in db.C21_DetailAction.ToList())
             {
                 string[] itm = new string[2];
@@ -147,6 +149,8 @@ namespace DMCTimesheet.Controllers
 
             return View(mytimesheet);
         }
+
+
 
         // Calculate ISO 8601 week of year
         public static int GetIso8601WeekOfYear(DateTime date)
@@ -606,7 +610,7 @@ namespace DMCTimesheet.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult UserEdit(int Id, DateTime RecordDate, int WorkType, int Hour, int OT, string Description)
+        public ActionResult UserEdit(int Id, DateTime RecordDate, int WorkType, int Hour, int? OT, string Description)
         {
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
             try
@@ -615,7 +619,7 @@ namespace DMCTimesheet.Controllers
                 {
                     C08_Timesheet item = db.C08_Timesheet.FirstOrDefault(s => s.Id == Id);
                     item.Description = Description;
-                    item.OT = OT;
+                    item.OT = OT ?? 0;
                     item.Hour = Hour;
                     item.WorkType = WorkType;
                     item.RecordDate = RecordDate;
@@ -636,6 +640,49 @@ namespace DMCTimesheet.Controllers
             }
 
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult UserModalEdit(int Id, DateTime RecordDate, string ProjectName, string WorkType, int Hour, int? OvertimeHour, string Description)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    C08_Timesheet item = db.C08_Timesheet.FirstOrDefault(s => s.Id == Id);
+                    if (item != null)
+                    {
+                        //Đổi dự án
+                        int pID = db.C01_Projects.FirstOrDefault(s => s.ProjectOtherName.Contains(ProjectName)).ProjectID;
+                        item.ProjectId = pID;
+
+                        item.Description = Description;
+                        item.OT = OvertimeHour ?? 0;
+                        item.Hour = Hour;
+                        item.WorkType = db.C07_WorkType.FirstOrDefault(s => s.WorkName.Contains(WorkType)).ID;// đổi công việc
+                        item.RecordDate = RecordDate;
+
+                        db.Entry(item).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
+                }
+                // return RedirectToAction("UserPage", "Home");
+                return RedirectToAction("TimesheetManage");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Projects = db.C01_Projects.ToList();
+                ViewBag.WorkType = db.C07_WorkType.ToList();
+                ViewBag.DetailAction = db.C21_DetailAction.ToList();
+                ViewBag.WorkAlert = $"Có lỗi khi cập nhật timesheet số {Id} do {ex.Message}";
+                return View();
+            }
+
+        }
+
+
+
 
         // GET: TimeSheet/Delete/5
         public ActionResult Delete(int? id)
