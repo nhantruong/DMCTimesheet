@@ -42,7 +42,19 @@
     //Worktype
     List<string> worktypeArr = WorkTypes.Select(s => s.WorkName).ToList();
 
+    //package TS each year
+    var _yearTS = TSbyYear.ToArray();
+    List<string[]> yearTS = new List<string[]>();
+    foreach (var item in TSbyYear)
+    {
+        string[] itm = new string[item.Value.Count() + 1];
+        itm[0] = item.Key;
+        Array array = item.Value.ToArray();
 
+    }
+
+    var _testjson = ViewBag.Testjson;
+    //List<string[]> testjson = _testjson;
     //Chi tiết công việc
     List<DMCTimesheet.Models.C21_DetailAction> DetailAction = ViewBag.DetailAction as List<DMCTimesheet.Models.C21_DetailAction>;
     List<string[]> actiondetailList = ViewBag.actiondetailList as List<string[]>;
@@ -52,6 +64,7 @@
     List<string> listOfWeekName = new List<string>(); //Danh sach tuan trong timesheet ca nhan
     List<string> listOfYears = new List<string>(); //Danh sach Năm trong timesheet ca nhan
     List<string[]> allTS = new List<string[]>();
+
     foreach (var item in FullMyTimesheet)
     {
         string[] itm = new string[7];
@@ -65,10 +78,7 @@
         itm[6] = item.Id.ToString();
 
         allTS.Add(itm);
-    }
 
-    foreach (var item in FullMyTimesheet)
-    {
         listOfYears.Add(item.RecordDate.Value.Year.ToString());
         if (item.RecordDate.Value.Year == DateTime.Today.Year)
         {
@@ -325,12 +335,13 @@
                     <h2 class="text-warning"><b class="text-success">DANH SÁCH CÔNG VIỆC TRONG TUẦN THỨ <i class="text-primary">@cultureInfo.Calendar.GetWeekOfYear(DateTime.Today, System.Globalization.CalendarWeekRule.FirstDay, DayOfWeek.Monday)/ @DateTime.Today.Year </i></b></h2>
                     <br />
                     @* Filters *@
-                    <div class="x_content ">
-                        <div class="row" style="background-color:#0094ff">
-                            <div class="form-group col-md-12 inline">
+                    <div class="">
+                        <div class="col-md-12">
+                            <div class="form-group">
                                 @* Selector Year *@
-                                <div class="form-group" style="background-color:brown">
-                                    <select name="YearNum" data-toggle="tooltip" data-placement="left" id="yearnum" onclick="filterByYear()" title="Select Year" class="form-control text-primary col-md-2">
+                                <div class="form-group">
+                                    <select name="YearNum" data-toggle="tooltip" data-placement="left" id="yearnum" onclick="" title="Select Year" class="form-control text-primary col-md-2">
+                                        <option value="AllYears">All</option>
                                         <option value="@DateTime.Now.Year">Năm @DateTime.Now.Year</option>
                                         <option value="@DateTime.Now.Year">-------------</option>
                                         @foreach (var item in listOfYears.Distinct())
@@ -339,10 +350,26 @@
                                         }
                                     </select>
                                 </div>
+
+                                @*Selector Month  *@
+                                <div class="form-group">
+                                    <select name="MonthNum" data-toggle="tooltip" data-placement="left" id="monthnum" onclick="createDates()" title="Select Month" class="form-control text-primary col-md-2">
+                                        <option value="AllMonths">All</option>
+                                        <option value="@DateTime.Now.Month">Tháng @DateTime.Now.Month</option>
+                                        <option value="@DateTime.Now.Month">-------------</option>
+                                        @for (int i = 1; i < 13; i++)
+                                        {
+                                            <option value="@i">Tháng @i</option>
+                                        }
+
+                                    </select>
+                                </div>
+
                                 @*Selector Week number  *@
                                 <div class="form-group">
-                                    <select name="WeekNum" data-toggle="tooltip" data-placement="left" id="weeknum" onclick="filterByWeek()" title="Select Week" class="form-control text-primary col-md-2">
-                                        <option value="@tuanhienhanh">Tuần @tuanhienhanh</option>
+                                    <select name="WeekNum" data-toggle="tooltip" data-placement="left" id="weeknum" onclick="" title="Select Week" class="form-control text-primary col-md-2">
+                                        <option value="AllWeeks">All</option>
+                                        <option value="@tuanhienhanh">Tuần hiện tại @tuanhienhanh</option>
                                         <option value="@tuanhienhanh">---------------------</option>
                                         @for (int i = 1; i < 53; i++)
                                         {
@@ -350,21 +377,12 @@
                                         }
                                     </select>
                                 </div>
-                                @*Selector Month  *@
-                                <div class="form-group">
-                                    <select name="MonthNum" data-toggle="tooltip" data-placement="left" id="monthnum" onclick="createDates()" title="Select Month" class="form-control text-primary col-md-2">
-                                        <option value="@DateTime.Now.Month">Tháng @DateTime.Now.Month</option>
-                                        <option value="@DateTime.Now.Month">-------------</option>
-                                        @for (int i = 1; i < 13; i++)
-                                        {
-                                            <option value="@i">Tháng @i</option>
-                                        }
-                                    </select>
-                                </div>
+
 
                                 @*Selector date  *@
                                 <div class="form-group">
                                     <select name="DateNum" data-toggle="tooltip" data-placement="left" id="datenum" onclick="" title="Select date" class="form-control text-primary col-md-2">
+                                        <option value="AllDays">All</option>
                                         <option value="@DateTime.Today">@DateTime.Today.ToShortDateString()</option>
                                         <option value="@DateTime.Today">---------------------</option>
                                         @foreach (var item in dates)
@@ -375,7 +393,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <input type="submit" name="name" value="View" class="form-control btn btn-white col-sm-2" onclick="AddTStoDisplay()" />
+                                    <input type="submit" name="name" value="View" class="form-control btn btn-outline-info col-sm-2" onclick="AddTStoDisplay()" />
                                 </div>
                             </div>
 
@@ -383,6 +401,9 @@
                     </div>
 
                     <div class="clearfix"></div>
+                    <div id="selectorContent"></div>
+                    <div class="clearfix"></div>
+
                 </div>
                 @* -----------BẢNG THỐNG KÊ TRONG TUẦN------------------------------------------------ *@
                 <div class="x_content">
@@ -404,8 +425,8 @@
                             </table>
                         </div>
                         <hr />
-                        <h6>TEST ADD TABLE CONTENT BY Javascript</h6>
-                        <div id="tableTS"></div>
+                        @* Table of Filter Timesheet *@
+                        <div id="tableTS" class="table-responsive" style="height:900px"></div>
 
                         <hr />
                         @* Modal *@
@@ -419,12 +440,9 @@
                                 <div class="clearfix"></div>
                             }
                         </div>
-
-
                         @*End Modal*@
                         <hr />
-
-                        <div class="table-responsive" style="height:1000px">
+                        <div id="currentWeek" class="table-responsive" style="height:1000px">
                             <table class="table table-hover table-bordered table-striped">
                                 <tbody id="seachResult" class="text-dark">
                                     @*@if (Model != null)*@
@@ -491,6 +509,7 @@
 
 @* ------------------------ADD DAILYWORK----------------------------------------------------- *@
 @* Functions cho Add dailyworks *@
+
 <script>
     function onchangeworkgroup() {
         var opt = document.getElementById("workgroup").value;
@@ -555,23 +574,10 @@
     }
 </script>
 
-<script>
-    function writetodesc(val) {
-        document.getElementById('descriptionNote').innerText = "";
-        document.getElementById('descriptionNote').textContent = val;
-    }
-</script>
 
 @* ----------------------------------------------------------------------------- *@
-@* Lọc timesheet theo Tuan *@
-<script>
-    function filterByYear() {
-        var year = document.getElementById("yearnum").value;
-        alert(year);
-        var ts = @Html.Raw(Json.Encode(allTS));
-        alert(ts);
-    }
-</script>
+
+
 
 <script>
     function createDates() {
@@ -589,7 +595,6 @@
 
     }
 
-    //Hàm tạo ngày theo tháng-năm input
     function generateDatesInMonth(year, month) {
         const startDate = new Date(year, month - 1, 1);
         const endDate = new Date(year, month, 0);
@@ -615,69 +620,178 @@
 
 </script>
 
-
+@*//var tsinYear = Object.assign(@TSbyYear); //lỗi*@
+@*//var tsinYear = @Html.Raw(TSbyYear); //lỗi*@
+@*//var tsinYear = JSON.stringify(@TSbyYear);//Lỗi*@
+@* JSON *@
 <script>
+    function filterByYear() {
+        const selectedYear = document.getElementById("yearnum").value;
+        alert(selectedYear);
+    }
+</script>
+<script>
+    @* Lọc timesheet theo Tuan *@
+
     function AddTStoDisplay() {
         ////var url = '@Url.Action("Delete", "Timesheet")';
         const display = document.getElementById("tableTS");
+        const selected = document.getElementById("selectorContent");
+        //TS
+        var alltimesheet = @Html.Raw(Json.Encode(allTS));
+        //Value from selectors
         const yearNum = document.getElementById("yearnum").value;
         const WeekNum = document.getElementById("weeknum").value;
         const MonthNum = document.getElementById("monthnum").value;
         const DayNum = document.getElementById("datenum").value;
 
-        var alltimesheet = @Html.Raw(Json.Encode(allTS));
-        //alert(alltimesheet);
-        var text = '';
 
-        text = "<div class='table-responsive' style='height:800px'> <h3> NOI DUNG TIMESHEET </h3>";
-        text += "<table class='table table-hover table-bordered table-striped'>";
-        text += "<tbody class='text-dark'>";
-        for (var i = 0; i < alltimesheet.length; i++) {
-            text += "<tr class='row'>";
-            text += "<td class='col-md-1'>" + i + "</td>";//STT
-            text += "<td class='col-md-1'>" + alltimesheet[i][0] + "</td>";//DATE
-            text += "<td class='col-md-2'>" + alltimesheet[i][1] + "</td>";//PROJECT
+        //Filter
+        if (yearNum === "AllYears") {
+            display.innerHTML='';
+            display.innerHTML = export2display(alltimesheet); //xuất kết quả timesheet ra bảng
+            selected.innerHTML = "Timesheet selected <b class='text-danger'>" + yearNum + "</b>";
+        }
+        else {
+            //Filter by Seleted Year value
 
-            //text += "<td class='col-md-3'>" + alltimesheet[i][2] + "</td>";//WORKDONE
-            text += "<td class='col-md-3'>"
-            text += "<div id='" + alltimesheet[i][2] + "' class='text-primary btn-white'><b onclick='displayTSmodal(" + alltimesheet[i][6] + ")' data-toggle='modal' data-target='#myModal' >" + alltimesheet[i][2] +"</b></div>";
-            text += "</td>";//WORKDONE
-            text += "<td class='col-md-1'>" + (parseInt(alltimesheet[i][3]) + parseInt(alltimesheet[i][4]))  + "</td>";//HOUR + OT
-            text += "<td class='col-md-3'>" + (alltimesheet[i][5]) + "</td>";//DESCRIPTION
-            text += "<td class='col-md-1'>";//BUTTON
-            text += "<div id='" + alltimesheet[i][6] + "' class='btn btn-info' onclick='displayTSmodal(" + alltimesheet[i][6] +")' data-toggle='modal' data-target='#myModal' })'>info</div>";
-            //text += "<div id='" + alltimesheet[i][6] + "'data-url=" + "@@Url.Action('Delete','Timesheet', new {id = " + alltimesheet[i][6] + " class='btn btn-info' onclick='displayTSmodal(" + alltimesheet[i][6] +")' data-toggle='modal' data-target='#myModal' })'>info</div>";
+            var yearTS = getTsbyYear(yearNum, alltimesheet);
+            selected.innerHTML = "Timesheet selected <b class='text-danger'>" + yearNum + "</b>";
+            display.innerHTML = export2display(yearTS);
 
-            text += "</td>";
-            text += "</tr>";
+            if (MonthNum !== "AllMonths") {
+                var month_yearTS = getbymonth(yearNum, MonthNum, yearTS);
+                if (month_yearTS === null || month_yearTS.length === 0) {
+                    alert("Không có Timesheet");
+                    var text = '';
+                    text += "<table class='table table-hover table-bordered table-striped'>";
+                    text += "<tbody class='text-dark'>";
+                    text += "<tr class='row'><td class='col-md-12 text-danger'> KHÔNG CÓ DỮ LIỆU </td></tr";
+                    text += "</tbody>";
+                    text += "</table>";    
+                    display.innerHTML = '';
+                    display.innerHTML = text;
                 }
-            text += "</tbody>";
-        text += "</table>";
-        text += "</div";
-        display.innerHTML = text;
+                else {
+                    alert("Timesheet tháng " + MonthNum + " Năm " + yearNum + ": " + month_yearTS.length + "records: " +month_yearTS);
+                    display.innerHTML = '';
+                    selected.innerHTML = "Timesheet selected <b class='text-danger'>Year: " + yearNum + " / Month: " + MonthNum + "</b>"                    
+                    display.innerHTML = export2display(month_yearTS); //xuất kết quả timesheet ra bảng
+                }
+
+            }
+            //alert("Timesheet filter by year: "+yearTS);
+           
+
+        }
+
+        //display.innerHTML = export2display(alltimesheet);
     }
+
+
+    //get year of timesheet
+    //var tsDate = new Date(allTs[i][0]).toLocaleDateString('en-US');
+    //var _month = new Date(allTs[i][0]).toLocaleDateString('en-US').split('/')[0];//Month
+    //var _date = new Date(allTs[i][0]).toLocaleDateString('en-US').split('/')[1];//Date
+    //var _year = new Date(allTs[i][0]).toLocaleDateString('en-US').split('/')[2];//Year
+
+    //Timesheet theo năm
+    function getTsbyYear(yearNum, allTs) {
+        try {
+            var timesheet = [];
+            for (var i = 0; i < allTs.length; i++) {
+                var tsYear = new Date(allTs[i][0]).toLocaleDateString('en-US').split('/')[2];
+                if (tsYear === yearNum) {
+                    timesheet.push(allTs[i]);
+                }}
+            return Array.from(timesheet);
+        } catch (e) {
+            alert("Lỗi getTsbyYear(): "+e);
+        }
+    }
+
+    //Timesheet theo tháng
+    function getbymonth(yearNum, month, allTs) {
+        try {
+            var timesheet = [];
+            for (var i = 0; i < allTs.length; i++) {
+                var tsYear = new Date(allTs[i][0]).toLocaleDateString('en-US').split('/')[2];//năm
+                var tsMonth = new Date(allTs[i][0]).toLocaleDateString('en-US').split('/')[0];//tháng
+                if (tsYear === yearNum && tsMonth === month) {
+                    timesheet.push(allTs[i]);
+                }}
+            return Array.from(timesheet);
+        } catch (e) {
+            alert("Lỗi getTsbyMonth(): " + e);
+        }
+    }
+
 </script>
 
+
 <script>
-    //Hiển thị modal thông tin Timesheet dc chọn
+    //Hàm hiển thị timesheet
+    function export2display(alltimesheet) {
+        var text = '';
+        text += "<table class='table table-hover table-bordered table-striped'>";
+        text += "<tbody class='text-dark'>";
+        try {
+            if (alltimesheet === null || alltimesheet.length === 0) {
+                text += "<tr class='row'><td class='col-md-12 text-danger'> KHÔNG CÓ DỮ LIỆU </td></tr";
+                text += "</tbody>";
+                text += "</table>";               
+                return text;
+            }
+            else {
+                for (var i = 0; i < alltimesheet.length; i++) {
+                    text += "<tr class='row'>";
+                    text += "<td class='col-md-1'>" + i + "</td>";//STT
+                    text += "<td class='col-md-1'>" + alltimesheet[i][0] + "</td>";//DATE
+                    text += "<td class='col-md-2'>" + alltimesheet[i][1] + "</td>";//PROJECT
+
+                    //text += "<td class='col-md-3'>" + alltimesheet[i][2] + "</td>";//WORKDONE
+                    text += "<td class='col-md-3'>"
+                    text += "<div id='" + alltimesheet[i][2] + "' class='text-primary btn-white'><b onclick='displayTSmodal(" + alltimesheet[i][6] + ")' data-toggle='modal' data-target='#myModal' >" + alltimesheet[i][2] + "</b></div>";
+                    text += "</td>";//WORKDONE
+                    text += "<td class='col-md-1'>" + (parseInt(alltimesheet[i][3]) + parseInt(alltimesheet[i][4])) + "</td>";//HOUR + OT
+                    text += "<td class='col-md-3'>" + (alltimesheet[i][5]) + "</td>";//DESCRIPTION
+                    text += "<td class='col-md-1'>";//BUTTON
+                    text += "<div id='" + alltimesheet[i][6] + "' class='btn btn-info' onclick='displayTSmodal(" + alltimesheet[i][6] + ")' data-toggle='modal' data-target='#myModal' })'>info</div>";
+                    //text += "<div id='" + alltimesheet[i][6] + "'data-url=" + "@@Url.Action('Delete','Timesheet', new {id = " + alltimesheet[i][6] + " class='btn btn-info' onclick='displayTSmodal(" + alltimesheet[i][6] +")' data-toggle='modal' data-target='#myModal' })'>info</div>";
+
+                    text += "</td>";
+                    text += "</tr>";
+                }
+            }        
+        text += "</tbody>";
+        text += "</table>";
+        /*text += "</div";*/
+            return text;
+        } catch (e) {
+            text += "<tr class='row'><td class='col-md-12 text-danger'> XÃY RA LỖI DO "+e+"</td></tr";
+            text += "</tbody>";
+            text += "</table>";
+/*            text += "</div";*/
+            return text;            
+        }
+    }
+
+    //Hiển thị MODAL thông tin Timesheet dc chọn
     function displayTSmodal(timesheetID) {
         const modal = document.getElementById("modalCode");
-        var modalContent = '';
+        try {
+            var modalContent = '';
+        //data
+            var alltimesheet = @Html.Raw(Json.Encode(allTS));
+            var myProjects = @Html.Raw(Json.Encode(myArrProject.Distinct()));
+            var worktype = @Html.Raw(Json.Encode(worktypeArr));
+            //Filter to get exactly timesheet
+            var currentTS = Array.from(alltimesheet.filter(a => a[6] == timesheetID));
 
-        var alltimesheet = @Html.Raw(Json.Encode(allTS));
+            modalContent = "<div class='modal fade' id='myModal'>";
+            modalContent += "<div class='modal-dialog'>";
+            modalContent += "<div class='modal-content'>";
 
-        var myProjects = @Html.Raw(Json.Encode(myArrProject.Distinct()));
-        var worktype = @Html.Raw(Json.Encode(worktypeArr));
-
-
-        var currentTS = Array.from(alltimesheet.filter(a => a[6] == timesheetID));
-        //alert(currentTS);
-        //alert(myProjects);
-        //alert(Date.parse(currentTS[0][0]).toString("yyyy-MM-dd"));
-
-        modalContent = "<div class='modal fade' id='myModal'>";
-        modalContent += "<div class='modal-dialog'>";
-        modalContent += "<div class='modal-content'>";
 
         /*if (currentTS.length >= 0) {*/
         /*--Modal Header--*/
@@ -772,17 +886,11 @@
         modalContent += "</div>";
 
         //alert(modalContent);
-        modal.innerHTML = modalContent;
-    }
 
-    function writeControlwithTitle(type,idname,title,val) {
-        var modalContent = '';
-        modalContent += "<div class='form-group inline row'>";
-       modalContent += "<h6 class='control-label col-md-3 col-sm-3 col-xs-3'>" + title + ": </h6>";
-       modalContent += "<input type='"+type+"' class='form-control col-md-7 col-sm-9 col-xs-9' name='" + idname + "' placeholder='' value='" + val + "'>";
-        modalContent += "</br>";
-        modalContent += "</div>";
-        return modalContent;
+            modal.innerHTML = modalContent;
+        } catch (e) {
+            alert("Lỗi Display trên Modal do " + e);
+        }
     }
 
 

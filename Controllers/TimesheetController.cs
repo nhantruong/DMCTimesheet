@@ -129,6 +129,8 @@ namespace DMCTimesheet.Controllers
             ViewBag.YearlyTimesheet = TSbyYear;
             ViewBag.WeeklyTimesheet = TSbyYear_Week;
 
+            ViewBag.Testjson = Json(TSbyYear, JsonRequestBehavior.AllowGet);
+
             //Detail actions
             ViewBag.DetailAction = db.C21_DetailAction.ToList();
             // List<string[]> worktypeId = new List<string[]>();    //Nhóm công việc theo workgroup
