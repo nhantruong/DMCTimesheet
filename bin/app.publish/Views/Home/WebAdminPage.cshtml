@@ -1,0 +1,690 @@
+﻿@{
+    ViewBag.Title = "WebAdminPage";
+
+}
+@{
+    List<DMCTimesheet.Models.C03_ProjectMembers> AssignMemProjects = ViewBag.AssignMemProjects as List<DMCTimesheet.Models.C03_ProjectMembers>;
+
+    DMCTimesheet.Models.C06_UserPermisRelationship Userpermiss = Session["UserPermission"] as DMCTimesheet.Models.C06_UserPermisRelationship;
+    DMCTimesheet.Models.C02_Members loginUser = Session["UserLogin"] as DMCTimesheet.Models.C02_Members;
+
+    List<DMCTimesheet.Models.C01_Projects> Projects = ViewBag.Projects as List<DMCTimesheet.Models.C01_Projects>;
+
+    List<DMCTimesheet.Models.C02_Members> _Members = ViewBag.Members as List<DMCTimesheet.Models.C02_Members>;
+    List<DMCTimesheet.Models.C02_Members> Members = new List<DMCTimesheet.Models.C02_Members>();
+    if (_Members.Count > 0)
+    {
+        Members = _Members.OrderBy(s => s.FullName).ToList();
+    }
+    string Error = Session["MemberAssignError"] as string ?? "";
+
+    List<KeyValuePair<int, List<int?>>> ProjectOfMember = new List<KeyValuePair<int, List<int?>>>();
+    List<string> ChartLabels = new List<string>();
+    List<double> ChartValue = new List<double>();
+    List<double> ProjectStageOfMember = new List<double>();
+    List<DMCTimesheet.Models.C01_Projects> ProjectNeedAssign = new List<DMCTimesheet.Models.C01_Projects>();
+    //Image
+    string imgPath = "../Assets/Photos/MemberImage/";
+    string NoimagePath = "../Assets/Photos/MemberImage/no-image.jpg";
+
+    if (AssignMemProjects != null)
+    {
+        ProjectNeedAssign.Clear();
+        //Danh sách dự án chưa điều phối
+        foreach (var item in AssignMemProjects)
+        {
+            ProjectNeedAssign = Projects.Where(p => p.ProjectID != item.ProjectID).Distinct().ToList();
+        }
+        //Lấy dự án của từng người
+        foreach (var mem in Members.Where(s => s.SystemMember == false))
+        {
+            KeyValuePair<int, List<int?>> keyValuePair = new KeyValuePair<int, List<int?>>(mem.UserID, AssignMemProjects.Where(s => s.ChuTriChinh == mem.UserID
+            || s.ChuTriKienTruc == mem.UserID
+            || s.ChuTriKienTruc2 == mem.UserID
+            || s.ChuTriKetCau == mem.UserID
+            || s.ChuTriKetCau2 == mem.UserID
+            || s.ChuTriMEP == mem.UserID
+            || s.ChuTriMEP2 == mem.UserID
+            || s.Admin == mem.UserID
+            || s.LegalManager2 == mem.UserID
+            || s.LegalManager == mem.UserID).Select(p => p.ProjectID).ToList());
+
+            ProjectOfMember.Add(keyValuePair);
+        }
+
+        //Lấy dự án theo Giai đoạn
+
+        //Chart data
+        foreach (var item in ProjectOfMember)
+        {
+            ChartLabels.Add(Members.First(s => s.UserID == item.Key).FullName);
+            ChartValue.Add(item.Value.Count());
+
+        }
+
+    }
+
+    //Nhóm công việc
+    List<DMCTimesheet.Models.C19_Workgroup> WorkGroup = ViewBag.WorkGroup as List<DMCTimesheet.Models.C19_Workgroup>;
+    List<DMCTimesheet.Models.C07_WorkType> WorkType = ViewBag.WorkType as List<DMCTimesheet.Models.C07_WorkType>;
+
+    //Tình trạng dự án
+    List<DMCTimesheet.Models.C16_Status> Status = ViewBag.Status as List<DMCTimesheet.Models.C16_Status>;
+
+    //Giai đoạn dự án
+    List<DMCTimesheet.Models.C20_Stage> ProjectStage = ViewBag.Stage as List<DMCTimesheet.Models.C20_Stage>;
+
+    //Loại hình dự án
+    List<DMCTimesheet.Models.C13_ProjectType> ProjectType = ViewBag.ProjectType as List<DMCTimesheet.Models.C13_ProjectType>;
+
+    //Timesheet
+    List<DMCTimesheet.Models.C08_Timesheet> Timesheet = ViewBag.Timesheet as List<DMCTimesheet.Models.C08_Timesheet>;
+
+    //Tính toán timesheet
+    List<DMCTimesheet.Models.C08_Timesheet> todayTS = Timesheet.Where(s => s.RecordDate == DateTime.Today).ToList();
+
+    //Biểu đồ 1 - Donus đếm dự án theo tình trạng
+    List<string> ProjectTypeName = ViewBag.ProjectTypeName;
+    List<double> ProjectTypeCountTS = ViewBag.ProjectTypeCountTS;
+
+    //Biểu đồ 2 - Donus đếm dự án theo Loại hình
+    List<string> ProjectStageName = ViewBag.ProjectStageName;
+    List<double> ProjectStageCount = ViewBag.ProjectStageCount;
+
+    //Biểu đồ 3 - Donus đếm dự án theo Giai đoạn
+    List<string> ProjectStatusName = ViewBag.ProjectStatusName;
+    List<double> ProjectStatusCount = ViewBag.ProjectStatusCount;
+
+
+    //Biểu đồ 4 - Timesheet
+    List<string> ProjectLabels = new List<string>();
+    List<double> TimesheetByProjectValue = new List<double>();
+    foreach (var item in Timesheet.GroupBy(s => s.ProjectId))
+    {
+        if (item.Key == null)
+        {
+            ProjectLabels.Add("Công việc chung");
+            double totalHour = 0;
+            foreach (var itm in item.ToList())
+            {
+                double hour = double.Parse(itm.Hour.ToString());
+                double OT = double.Parse(itm.OT.ToString()) * 1.5;
+                totalHour += hour + OT;
+            }
+            TimesheetByProjectValue.Add(totalHour);
+        }
+        else
+        {
+            ProjectLabels.Add(Projects.FirstOrDefault(s => s.ProjectID == item.Key).ProjectOtherName);
+            double totalHour = 0;
+            foreach (var itm in item.ToList())
+            {
+                double hour = double.Parse(itm.Hour.ToString());
+                double OT = double.Parse(itm.OT.ToString()) * 1.5;
+                totalHour += hour + OT;
+            }
+            TimesheetByProjectValue.Add(totalHour);
+        }
+
+    }
+
+    ///Đếm số lượng dự án theo giai đao của từng member
+    List<KeyValuePair<string, KeyValuePair<string, int>>> CountStageProjectOnMember = new List<KeyValuePair<string, KeyValuePair<string, int>>>();
+    //Biểu đồ 6 - Cộng dồn
+    List<string> MemberName = new List<string>();
+    List<KeyValuePair<string, int>> Stage_count = new List<KeyValuePair<string, int>>();
+    //ProjectOfMember = memberID + List<projectID, Count>
+    foreach (var memberId in ProjectOfMember)
+    {
+        MemberName.Add(Members.FirstOrDefault(s => s.UserID == memberId.Key).FullName);
+        if (memberId.Value.Count() > 0)
+        {
+            foreach (var pro in memberId.Value.ToList())
+            {
+                DMCTimesheet.Models.C01_Projects project = Projects.FirstOrDefault(s => s.ProjectID == pro.Value);
+                if (project != null && project.ProjectStage != null)
+                {
+                    int stageId = int.Parse(project.ProjectStage.ToString()); //int.Parse(Projects.FirstOrDefault(s => s.ProjectID == pro.Value).ProjectStage.ToString());
+                    int countProject = int.Parse(Projects.Where(s => s.ProjectID == pro.Value).Count().ToString());
+                    KeyValuePair<string, int> stageCount = new KeyValuePair<string, int>(ProjectStage.FirstOrDefault(s => s.Id == stageId).StageName, countProject);
+                    Stage_count.Add(stageCount);
+                }
+
+                //int stageId = int.Parse(Projects.FirstOrDefault(s => s.ProjectID == pro.Value).ProjectStage.ToString());
+                //int countProject = int.Parse(Projects.Where(s => s.ProjectID == pro.Value).Count().ToString());
+                //KeyValuePair<string, int> stageCount = new KeyValuePair<string, int>(ProjectStage.FirstOrDefault(s => s.Id == stageId).StageName, countProject);
+                //Stage_count.Add(stageCount);
+            }
+        }
+
+    }
+
+
+    //Biểu đồ 6 - Donus Timesheet theo Nhóm công việc
+    List<string> workgroupName = ViewBag.WorkGroupName;
+    List<double> workgroupCountTS = ViewBag.WorkGroupCountTS;
+
+    var _wgname = workgroupName.ToArray();
+    var _wgcount = workgroupCountTS.ToArray();
+
+    int DuAnHoTro = Projects.Where(s => s.ProjectStage == 8).Count();
+    int OngoingProject = Projects.Where(s => s.ProjectStage != 5).Count() - DuAnHoTro;
+}
+
+<h2>Web Admin Management Page</h2>
+<div class="row inline">
+    <div class="clearfix"></div>
+    <div class="col-md-12">
+        @* --------------------------------------------Số thống kê dự án----------------------------- *@
+        <div class="col-md-3 text-center">
+            <p>
+                <span id="span10" class="test-span chuto text-danger">@OngoingProject </span>
+                <span class="chunho text-primary">dự án đang thực hiện</span>
+            </p>
+            <p class="col-md-12 row">
+                <span class="col-md-6">
+                    <span id="span10" class="test-span chuto text-warning">@DuAnHoTro  </span>
+                    <span class="chunho text-primary">dự án hỗ trợ phòng ban</span>
+                </span>
+                <br />
+                <span class="col-md-6">
+                    <span id="span10" class="test-span chuto text-success">@Projects.Where(s => s.ProjectStage == 5).Count()  </span>
+                    <span class="chunho text-primary">dự án hoàn tất</span>
+                </span>
+            </p>
+        </div>
+        @* --------------------------------------------Chart 1 Đếm dự án theo Loại hình----------------------------- *@
+        <div class="col-md-3 text-center">
+            <div>
+                <canvas id="project_type"></canvas>
+            </div>
+        </div>
+        @* --------------------------------------------Chart 2 Đếm dự án theo Giai đoạn----------------------------- *@
+        <div class="col-md-3 text-center">
+            <div>
+                @*<iframe class="chartjs-hidden-iframe" style="width: 100%; display: block; border: 0px none; height: 0px; margin: 0px; position: absolute; inset: 0px;"></iframe>
+                    <canvas class="project_stage" style="margin: 15px 10px 10px 0px; width: 250px; height: 250px;" width="250" height="250"></canvas>*@
+                <canvas id="project_stage"></canvas>
+            </div>
+            @*Chart Đếm dự án theo Giai đoạn*@
+
+        </div>
+        @* --------------------------------------------Chart 3 - Đếm dự án theo Tình trạng----------------------------- *@
+        <div class="col-md-3 text-center">
+            <div>
+                @*<iframe class="chartjs-hidden-iframe" style="width: 100%; display: block; border: 0px none; height: 0px; margin: 0px; position: absolute; inset: 0px;"></iframe>
+                    <canvas class="project_Status" style="margin: 15px 10px 10px 0px; width: 250px; height: 250px;" width="250" height="250"></canvas>*@
+                <canvas id="project_status"></canvas>
+            </div>
+            @*Chart Đếm dự án theo Tình trạng*@
+        </div>
+    </div>
+</div>
+
+<div class="clearfix"></div>
+<hr />
+<div class="row">
+
+    <div class="col-md-3">
+        <h6>Thống kê nhân sự - timesheet</h6>
+        <span class="text-primary">@DateTime.Now.DayOfWeek (@DateTime.Today.Day/@DateTime.Today.Month/@DateTime.Today.Year)</span>
+    </div>
+    <div class="col-md-9">
+        @Html.ActionLink("Báo cáo chi tiết", "ProjectTimesheet", "Timesheet", null, new { @class = "btn btn-dark col-md-2" })
+
+    </div>
+    @*<div class="inline col-md-4">
+
+            <button class="btn btn-outline-success btn-dark" onclick="dailyview()">Today</button>
+                <button class="btn btn-outline-warning btn-dark" onclick="weeklyview()">Weekly</button>
+                <button class="btn btn-outline-warning btn-dark" onclick="monthlyview()">Monthly</button>
+                <button class="btn btn-outline-warning btn-dark" onclick="quarterview()">Quarter</button>
+                <button class="btn btn-outline-warning btn-dark" onclick="anualview()">Annual</button>
+                <select class="btn btn-outline-warning btn-dark">
+                    <option value="value">@DateTime.Now.Year</option>
+                </select>
+        </div>
+        <div>
+            <div class="form-group form-control">
+                from
+                <input type="date" id="fromDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                to
+                <input type="date" id="endDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                <input type="submit" id="viewStartEnd" value="view data" onclick="viewtimesheetfromto()" />
+            </div>
+        </div>*@
+</div>
+<hr />
+@*<div class="clearfix"></div>*@
+<div class="row inline">
+    @* --------------------------------------------Chart 4 - Sum Timesheet theo Dự án đang chạy----------------------------- *@
+    <div class="col-sm-8">
+        <div>
+            <canvas id="Chart_Timesheet" style="direction: ltr; position: relative; left: 0px; top: 0px; width: 950px; height: 320px;" width="950" height="320"></canvas>
+        </div>
+
+        @*<b class="text-center">Biểu đồ Tổng thời gian theo dự án</b>*@
+    </div>
+    @* --------------------------------------------Chart 5 - Sum Timesheet theo Nhóm công việc----------------------------- *@
+    <div class="col-sm-4 text-center">
+        <div>
+            <canvas id="timesheet_workgroup" style="margin: 15px 10px 10px 0px; width: 350px; height: 350px;" width="350" height="350"></canvas>
+        </div>
+    </div>
+</div>
+
+<div class="col-md-12">
+    <hr />
+    <div class="clearfix"></div>
+    @*<h3 class="text-center text-primary">CÔNG VIỆC ĐƯỢC GIAO</h3>*@
+    <div>
+        @* Bản thống kê *@
+        <div class="col-sm-6">
+            <h5 class="text-center">Bảng thống kê số lượng dự án theo thành viên</h5>
+            <div class="table-responsive-sm scrollbar">
+                <table class="table table-bordered table-condensed table-striped">
+                    <thead class="text-center">
+                        <tr class="text-white" style="background-color:#808080">
+                            <td class="col-sm-3">Tên thành viên</td>
+                            <td class="col-sm-2">SL dự án</td>
+                            <td class="col-sm-7">Tên dự án</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (AssignMemProjects == null || AssignMemProjects.Count() == 0)
+                        {
+                            <tr class="row">
+                                <td>Chưa có thông tin</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            foreach (var item in ProjectOfMember)
+                            {
+                                if (item.Value.Count() != 0)
+                                {
+                                    string UserImg = "";
+                                    if (Members.FirstOrDefault(s => s.UserID == item.Key).Image == null)
+                                    {
+                                        UserImg = NoimagePath;
+                                    }
+                                    else
+                                    {
+                                        UserImg = imgPath + @Members.FirstOrDefault(s => s.UserID == item.Key).Image;
+                                    }
+                                    <tr class="text-dark text-center row">
+                                        <td class="col-sm-3 text-center">
+                                            <p>
+                                                <img src="@UserImg" class="img-circle" alt="Alternate Text" style="height:50px; width:50px" />
+                                            </p>
+                                            <p>
+                                                @Html.ActionLink(Members.FirstOrDefault(s => s.UserID == item.Key).FullName, "Details", "Member", new { Id = item.Key }, new { @class = "btn-sm btn-dark" })
+                                                @*<b>@Members.FirstOrDefault(s => s.UserID == item.Key).FullName</b>*@
+                                            </p>
+
+                                        </td>
+                                        <td class="col-sm-2"><h3 class="text-danger">@item.Value.Count()</h3></td>
+                                        <td class="col-sm-7">
+                                            <ol class="col">
+                                                @foreach (var itm in item.Value.ToList())
+                                                {
+                                                    <li class="col-sm-6 text-left"><b>@Projects.FirstOrDefault(s => s.ProjectID == itm).ProjectOtherName</b></li>
+
+                                                }
+                                            </ol>
+
+                                        </td>
+                                    </tr>
+                                }
+
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        @* Biểu đồ 6 - dự án theo nhân sự *@
+        <div class="col-sm-6">
+            <h5 class="text-center">Biểu đồ số lượng dự án theo thành viên</h5>
+            <div>
+                <canvas id="ProjectOfMemberSummary"></canvas>
+                @*<canvas id="ProjectOfMemberSummary_stack"></canvas>*@
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .chuto {
+        visibility: visible;
+        display: inline-block;
+        clear: both;
+        float: left;
+        font-size: 96px;
+        line-height: 120px;
+        white-space: nowrap;
+        text-align: center;
+        position: relative;
+        padding: 0px;
+        margin: 0px 0px 0px 0px;
+        left: 20%;
+        top: 50%;
+    }
+
+    .chunho {
+        visibility: visible;
+        display: inline-block;
+        clear: both;
+        float: left;
+        font-size: 13px;
+        line-height: 10px;
+        white-space: nowrap;
+        text-align: center;
+        position: relative;
+        padding: 0px;
+        margin: 0px 0px 0px 0px;
+        left: 20%;
+        top: 50%;
+    }
+</style>
+<script src="~/UserStyles/Chart.js/chart.js"></script>
+<link href="~/Content/cscpda-scrollbar.css" rel="stylesheet" />
+
+<!--Filter Timesheet - Weekly-->
+<script>
+    function viewtimesheetfromto() {
+        var startDate = document.getElementById('fromDate').value;
+        var finishDate = document.getElementById('endDate').value;
+        var text = 'View Timesheet time ' + startDate + ' to ' + finishDate;
+        alert(text);
+    }
+</script>
+<script>
+    function dailyview() {
+        alert('Daily View');
+    }
+</script>
+<script>
+    function GetTimesheet() {
+        @*var AllTimesheet = @Html.Raw(Json.Encode(todayTS));
+        return AllTimesheet;*@
+    }
+</script>
+<!--Filter Timesheet-->
+<script>
+
+</script>
+
+<!--Chart 1-->
+@* Chart 1 - Donus Project theo Loại hình *@
+<script>
+    var ctx = document.getElementById('project_type').getContext('2d');
+   var lable = @Html.Raw(Json.Encode(ProjectTypeName));
+   var data = @Html.Raw(Json.Encode(ProjectTypeCountTS));
+   var myChart = new Chart(ctx, {
+       type: 'doughnut',
+        data: {
+           labels:  lable,
+            datasets: [{
+                data: data,
+                backgroundColor: ['rgba(255, 128, 255, 1)', 'rgba(128, 162, 235, 1)', 'rgba(54, 255, 235, 1)', 'rgba(54, 162, 64, 1)', 'rgba(220, 53, 69, 1)'],
+                borderColor:'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+                outerWidth: 0.3
+            }]
+        },
+       options: {
+           responsive: true,//to nhỏ
+           scales: {
+               yAxes: [{
+                   ticks: {
+                       beginAtZero: true
+                   }
+               }]
+           },
+           showToolTips: true,
+           plugins: {
+               title: {
+                   display: true,
+                   text: 'Chart 1 - Loại hình dự án'
+               },
+               legend: {//ghi chú các thành phần trong biểu đồ
+                   display: true,
+                   position: 'right',
+                   align:'left',
+                   labels: {
+                       color: 'rgb(0, 0, 0)'
+                   }
+               }
+           }}});
+</script>
+
+<!--Chart 2-->
+@* Chart 2 - Donus Project theo Giai đoạn *@
+<script>
+   var ctx = document.getElementById('project_stage').getContext('2d');
+   var lable = @Html.Raw(Json.Encode(ProjectStageName));
+   var data = @Html.Raw(Json.Encode(ProjectStageCount));
+   var myChart = new Chart(ctx, {
+       type: 'doughnut',
+        data: {
+           labels:  lable,
+            datasets: [{
+                data: data,
+                backgroundColor: ['rgba(124,252,0, 1)', 'rgba(255,165,0, 1)', 'rgba(54, 255, 235, 1)', 'rgba(54, 162, 64, 1)', 'rgba(220, 53, 69, 1)'],
+                borderColor:'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+                outerWidth: 0.3
+            }]
+        },
+       options: {
+           responsive: true,//to nhỏ
+           scales: {
+               yAxes: [{
+                   ticks: {
+                       beginAtZero: true
+                   }
+               }]
+           },
+           showToolTips: true,
+           plugins: {
+               title: {
+                   display: true,
+                   text: 'Chart 2 - Dự án theo Giai đoạn'
+               },
+               legend: {//ghi chú các thành phần trong biểu đồ
+                   display: true,
+                   position: 'right',
+                   align:'left',
+                   labels: {
+                       color: 'rgb(0, 0, 0)'
+                   }
+               }
+           }}});
+</script>
+
+<!--Chart 3-->
+@* Chart 3 - Donus Project theo Tình trạng *@
+<script>
+    var ctx = document.getElementById('project_status').getContext('2d');
+   var lable = @Html.Raw(Json.Encode(ProjectStatusName));
+   var data = @Html.Raw(Json.Encode(ProjectStatusCount));
+   var myChart = new Chart(ctx, {
+       type: 'doughnut',
+        data: {
+           labels:  lable,
+            datasets: [{
+                data: data,
+                backgroundColor: ['rgba(124,252,0,0.4)', 'rgba(255,165,0,0.5)', 'rgba(255,0,0, 0.7)', 'rgba(54, 255, 235,0.7)', 'rgba(220, 53, 69, 0.8)'],
+                borderColor:'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+                outerWidth: 0.3
+            }]
+        },
+       options: {
+           responsive: true,//to nhỏ
+           scales: {
+               yAxes: [{
+                   ticks: {
+                       beginAtZero: true
+                   }
+               }]
+           },
+           showToolTips: true,
+           plugins: {
+               title: {
+                   display: true,
+                   text: 'Chart 3 - Tình trạng dự án'
+               },
+               legend: {//ghi chú các thành phần trong biểu đồ
+                   display: true,
+                   position: 'right',
+                   align:'left',
+                   labels: {
+                       color: 'rgb(0, 0, 0)'
+                   }
+               }
+           }}});
+</script>
+
+<!--Chart 4-->
+@* Chart 4 - Timesheet theo dự án đag chạy *@
+<script>
+    var ctx = document.getElementById('Chart_Timesheet').getContext('2d');
+    var lable = @Html.Raw(Json.Encode(ProjectLabels));
+    var data =@Html.Raw(Json.Encode(TimesheetByProjectValue));
+   var myChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+        labels:  lable,
+            datasets: [{
+                label: 'Số giờ timesheet',
+                data: data,
+                backgroundColor: 'rgb(54, 162, 235)',
+                borderColor:'rgba(0, 0, 0, 0.7)',
+                borderWidth: 1,
+                outerWidth: 0.3
+            }]
+        },
+       options: {
+           responsive: false,
+           scales: {
+               yAxes: [{
+                   ticks: {
+                       beginAtZero: true
+                   }
+               }]
+           },
+           showToolTips: true,
+           plugins: {
+               title: {
+                   display: true,
+                   position: 'top',
+                   text: 'Chart 4 - Biểu đồ Tổng thời gian theo dự án'
+               },
+               legend: {//ghi chú các thành phần trong biểu đồ
+                   display: true,
+                   position: 'bottom',
+                   labels: {
+                       color: 'rgb(0, 0, 0)'}
+               }
+           }
+       }
+                    });
+</script>
+
+<!--Chart 5-->
+@* Chart 5 - Donus Timesheet theo loại hình công việc *@
+<script>
+   var ctx = document.getElementById('timesheet_workgroup').getContext('2d');
+   var lable = @Html.Raw(Json.Encode(workgroupName));
+   var data = @Html.Raw(Json.Encode(workgroupCountTS));
+   var myChart = new Chart(ctx, {
+       type: 'doughnut',
+        data: {
+           labels:  lable,
+            datasets: [{
+                data: data,
+                backgroundColor: ['rgba(255, 128, 255, 1)', 'rgba(128, 162, 235, 1)', 'rgba(54, 255, 235, 1)', 'rgba(54, 162, 64, 1)', 'rgba(220, 53, 69, 1)'],
+                borderColor:'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+                outerWidth: 0.3
+            }]
+        },
+       options: {
+           responsive: true,//to nhỏ
+           scales: {
+               yAxes: [{
+                   ticks: {
+                       beginAtZero: true
+                       /*,lables: lablesVlue, type: 'category'*/
+                   }
+               }]
+           },
+           showToolTips: true,
+           plugins: {
+               legend: {//ghi chú các thành phần trong biểu đồ
+                   display: true,
+                   position: 'right',
+                   align:'left',
+                   labels: {
+                       color: 'rgb(0, 0, 0)'
+                   }
+               },
+               title: {
+                   display: true,
+                   position: 'top',
+                   text: 'Chart 5 - Biểu đồ Tổng thời gian theo nhóm công việc'
+               }
+           }}});
+</script>
+
+<!--Chart 6-->
+@*Chart 6 - Dự án theo thành viên*@
+<script>
+    var ctx = document.getElementById('ProjectOfMemberSummary').getContext('2d');
+    var lable = @Html.Raw(Json.Encode(ChartLabels));
+    var data =@Html.Raw(Json.Encode(ChartValue));
+   var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: lable,
+            datasets: [{
+                label: 'SL dự án đang phụ trách',
+                data: data,
+                display: true,
+                backgroundColor: 'rgba(0, 128, 255, 0.8)',
+                borderColor:'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+                outerWidth: 0.3
+            }]
+        },
+       options: {
+           responsive: true,
+           scales: {
+               yAxes: [{
+                   ticks: {
+                       beginAtZero: true
+                       /*,lables: lablesVlue, type: 'category'*/
+                   }
+               }]
+           },
+           showToolTips: true,
+           plugins: {
+               title: {
+                   display: false,
+                   position: 'top',
+                   text: 'Chart 6 - Biểu đồ số lượng dự án theo nhân sự'
+               },
+               legend: {//ghi chú các thành phần trong biểu đồ
+                   display: true,
+                   position: 'bottom',
+                   labels: {
+                       color: 'rgb(0, 0, 0)'
+                   }
+               }
+           }
+}});
+</script>

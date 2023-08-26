@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+
+    List<DMCTimesheet.Models.C01_Projects> ProjectList = ViewBag.Projectlist as List<DMCTimesheet.Models.C01_Projects>;
+}
+
+<div class="jumbotron">
+    <h1>DMC TIMESHEET</h1>    
+</div>
+
+<div>
+    @foreach (DMCTimesheet.Models.C01_Projects item in ProjectList)
+    {
+        <ul>
+            <li>Thông tin dự án</li>
+            <li>Name:@item.ProjectID - @item.ProjectName</li>
+            <li>Year - @item.Year</li>
+            <li>@item.ProjectOtherName</li>
+            <li>@item.StartDate</li>
+        </ul>
+    }
+</div>

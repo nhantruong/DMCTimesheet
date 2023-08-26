@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI.WebControls;
 
 namespace DMCTimesheet.Controllers
 {
@@ -233,7 +234,7 @@ namespace DMCTimesheet.Controllers
                 enity.ProjectStage = ProjectStage;
                 if (ModelState.IsValid)
                 {
-                    
+
                     db.Entry(enity).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }
@@ -244,11 +245,11 @@ namespace DMCTimesheet.Controllers
                 StringBuilder sb = new StringBuilder();
                 foreach (var eve in ex.EntityValidationErrors)
                 {
-                    
-                    sb.Append($"Entity of type \"{eve.Entry.Entity.GetType().Name}\" in state \"{eve.Entry.State}\" has the following validation errors:");                    
+
+                    sb.Append($"Entity of type \"{eve.Entry.Entity.GetType().Name}\" in state \"{eve.Entry.State}\" has the following validation errors:");
                     foreach (var ve in eve.ValidationErrors)
                     {
-                        sb.AppendLine($"- Property: \"{ve.PropertyName}\", Error: \"{ve.ErrorMessage}\"");                       
+                        sb.AppendLine($"- Property: \"{ve.PropertyName}\", Error: \"{ve.ErrorMessage}\"");
                     }
                 }
                 ViewBag.SaveContent = $"Có lỗi trong quá trình Hiển thị thông tin do {sb.ToString()}";
@@ -421,7 +422,22 @@ namespace DMCTimesheet.Controllers
             }
         }
 
+        //POST
+        public void SaveProjectType(string typename, string typedesc)
+        {
+            C13_ProjectType enity = new C13_ProjectType() { TypeName = typename, Description = typedesc };
+            if (ModelState.IsValid)
+            {
+                db.C13_ProjectType.Add(enity);
+                db.SaveChanges();
+            }
+        }
 
+        //GET
+        public JsonResult GetProjectType()
+        {
+            return Json(db.C13_ProjectType.Select(s => new { s.TypeId, s.TypeName, s.Description }), JsonRequestBehavior.AllowGet);
+        }
     }
 
 }

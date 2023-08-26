@@ -1,0 +1,40 @@
+﻿@{
+    DMCTimesheet.Models.C06_UserPermisRelationship Userpermiss = Session["UserPermission"] as DMCTimesheet.Models.C06_UserPermisRelationship;
+    if (Userpermiss == null)
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+    else
+    {
+        switch (Userpermiss.idPer)
+        {
+            case 1://WebAdmin
+                {
+                    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+                    break;
+                }
+            case 2://User
+                {
+                    Layout = "~/Views/Shared/_UserLayout.cshtml";
+                    break;
+                }
+            case 3: //System Admin
+                {
+                    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+                    break;
+                }
+            case 4: //System Mod
+                {
+                    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+                    break;
+                }
+            default:
+                {
+                    Layout = "~/Views/Shared/_UserLayout.cshtml";
+                    break;
+                }
+        }
+    }
+
+
+}

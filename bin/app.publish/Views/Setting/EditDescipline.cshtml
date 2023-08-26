@@ -1,0 +1,53 @@
+﻿@model DMCTimesheet.Models.C18_Descipline
+@{
+    ViewBag.Title = "Edit Position Page";
+}
+
+<h3>@ViewBag.Title</h3>
+<div class="modal-body">
+    @using (Html.BeginForm("EditDescipline", "Setting", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <form>
+            @* WorkType *@
+            <div class="form-group row text-left text-dark">
+                <lable hidden class="control-label col-md-3 col-sm-3 col-xs-3">Mã chuyên môn</lable>
+                <input hidden type="number" class="form-control col-md-7 col-sm-9 col-xs-9" name="Id" placeholder="Tên chức danh" required="" value="@Model.Id" />
+            </div>
+            <div class="form-group row text-left text-dark">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên Chuyên môn</lable>
+                <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" name="DesciplineName" placeholder="Tên chức danh" required="" value="@Model.DesciplineName" />
+            </div>
+            <div class="form-group row text-left text-dark">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Kích hoạt</lable>
+                <select name="Active" class="form-control col-md-7 col-sm-9 col-xs-9">
+                    @if (Model.Active != null)
+                    {
+                        if (Model.Active == true)
+                        {
+                            <option value="@Model.Active">Active</option>
+                        }
+                        else
+                        {
+                            <option value="@Model.Active">Un-active</option>
+                        }
+                    }
+                    <option value="0"></option>
+                    <option value="1">Active</option>
+                    <option value="0">Un-active</option>
+
+                </select>
+            </div>
+
+            <br />
+            <div class="clearfix"></div>
+
+            <div class="form-group text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
+                <input type="submit" value="Lưu thông tin cập nhật" class="btn btn-success col-md-3" />
+            </div>
+        </form>
+    }
+</div>
+<hr />
+<h6 class="text-danger">@ViewBag.Error</h6>
