@@ -3,8 +3,11 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Linq;
+using System.Net.NetworkInformation;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.UI.WebControls;
 
@@ -422,22 +425,214 @@ namespace DMCTimesheet.Controllers
             }
         }
 
+        #region JAVASCRIPT-JQUERY
+
+        #region 1. POST from Views
         //POST
-        public void SaveProjectType(string typename, string typedesc)
+        /// <summary>
+        /// Add New ProjectType
+        /// </summary>
+        /// <param name="typename"></param>
+        /// <param name="Description"></param>
+        public void SaveProjectType(string typename, string Description)
         {
-            C13_ProjectType enity = new C13_ProjectType() { TypeName = typename, Description = typedesc };
-            if (ModelState.IsValid)
+            C13_ProjectType enity = db.C13_ProjectType.FirstOrDefault(s => s.TypeName.Contains(typename));
+            if (enity == null)
             {
-                db.C13_ProjectType.Add(enity);
-                db.SaveChanges();
+                try
+                {
+                    C13_ProjectType newEnity = new C13_ProjectType() { TypeName = string.IsNullOrEmpty(typename) ? "Chưa cập nhật" : typename, Description = Description };
+
+                    if (ModelState.IsValid)
+                    {
+                        db.C13_ProjectType.Add(newEnity);
+                        db.SaveChanges();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Có lỗi xãy ra do {ex.Message}");
+                }
+            }
+            else
+            {
+                throw new Exception("Đã có record này");
+            }
+
+        }
+
+        /// <summary>
+        /// Add New Project Status
+        /// </summary>
+        /// <param name="StatusName"></param>
+        /// <param name="ColorCode"></param>
+        public void SaveProjectStatus(string StatusName, string ColorCode)
+        {
+            C16_Status enity = db.C16_Status.FirstOrDefault(s => s.StatusName.Contains(StatusName));
+            if (enity == null)
+            {
+                try
+                {
+                    C16_Status status = new C16_Status() { StatusName = StatusName, ColorCode = ColorCode };
+                    db.C16_Status.Add(status);
+                    db.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    throw new Exception($"Có lỗi xãy ra do {ex.Message}");
+                }
+            }
+            else
+            {
+                throw new Exception("Đã có record này");
             }
         }
 
-        //GET
-        public JsonResult GetProjectType()
+        /// <summary>
+        /// Add New Location
+        /// </summary>
+        /// <param name="LocationName"></param>
+        /// <exception cref="Exception"></exception>
+        public void SaveProjectLocation(string LocationName)
         {
-            return Json(db.C13_ProjectType.Select(s => new { s.TypeId, s.TypeName, s.Description }), JsonRequestBehavior.AllowGet);
+            try
+            {
+                C11_Location location = db.C11_Location.FirstOrDefault(s => s.LocationName.Contains(LocationName.Trim()) || s.LocationName == LocationName.Trim());
+                if (location != null)
+                {
+                    ViewBag.Error = $"Đã có tên địa phương này";
+                    throw new Exception("");
+                }
+                else
+                {
+                    C11_Location newEnity = new C11_Location() { LocationName = LocationName };
+                    db.C11_Location.Add(newEnity);
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Có lỗi xãy ra do {ex.Message}");
+            }
+
         }
+
+        /// <summary>
+        /// Add new Owner
+        /// </summary>
+        /// <param name="OwnerName"></param>
+        /// <param name="ShortName"></param>
+        /// <param name="KeyPerson"></param>
+        /// <param name="Email"></param>
+        /// <param name="OnwerLocation"></param>
+        /// <param name="OnwerDescription"></param>
+        /// <exception cref="Exception"></exception>
+        public void SaveProjectOwner(string OwnerName, string ShortName, string KeyPerson, string Email, int? OnwerLocation, string OnwerDescription)
+        {
+            try
+            {
+                C10_Owner curEnity = db.C10_Owner.FirstOrDefault(s => s.OwnerName.Contains(OwnerName));
+                if (curEnity == null)
+                {
+                    C10_Owner newEnity = new C10_Owner()
+                    {
+                        OwnerName = OwnerName,
+                        ShortName = ShortName,
+                        Email = Email,
+                        OnwerLocation = OnwerLocation,
+                        OnwerDescription = OnwerDescription,
+                        KeyPerson = KeyPerson,
+                        Active = true
+                    };
+                    db.C10_Owner.Add(newEnity);
+                    db.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Có lỗi xãy ra do {ex.Message}");
+            }
+
+        }
+
+        /// <summary>
+        /// Add giai đoạn dự án
+        /// </summary>
+        /// <param name="LocationName"></param>
+        /// <exception cref="Exception"></exception>
+        public void SaveProjectState(string StageName)
+        {
+            try
+            {
+                C20_Stage location = db.C20_Stage.FirstOrDefault(s => s.StageName.Contains(StageName.Trim()) || s.StageName == StageName.Trim());
+                if (location == null)
+                {                                  
+                    C20_Stage newEnity = new C20_Stage() { StageName = StageName };
+                    db.C20_Stage.Add(newEnity);
+                    db.SaveChanges();                    
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Có lỗi xãy ra do {ex.Message}");
+
+            }
+
+        }
+
+
+
+        #endregion
+        #region 2. GET data from Views
+        //GET
+        /// <summary>
+        /// Get ProjectType
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult GetProjectTypes()
+        {
+            return Json(db.C13_ProjectType.Select(s => new { s.TypeId, s.TypeName, s.Description }).ToList(), JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Get Status
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult GetStatus()
+        {
+            return Json(db.C16_Status.Select(s => new { s.Id, s.StatusName, s.ColorCode }).ToList(), JsonRequestBehavior.AllowGet);
+        }
+
+        /// <summary>
+        /// Get Locations
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult GetLocations()
+        {
+            return Json(db.C11_Location.Select(s => new { s.LocationId, s.LocationName }).ToList(), JsonRequestBehavior.AllowGet);
+        }
+        
+        /// <summary>
+        /// Get OwnerList
+        /// </summary>
+        /// <returns></returns>
+        public JsonResult GetOwners()
+        {
+            return Json(db.C10_Owner.Select(s => new { s.OnwerId, s.OwnerName, s.KeyPerson, s.Email,s.OnwerLocation,s.ShortName,s.Active,s.OnwerDescription }).ToList(), JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetStates()
+        {
+            return Json(db.C20_Stage.Select(s => new { s.Id, s.StageName}).ToList(), JsonRequestBehavior.AllowGet);
+        }
+
+
+
+        #endregion
+
+
+        #endregion
+
     }
 
 }

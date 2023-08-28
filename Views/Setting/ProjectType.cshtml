@@ -93,7 +93,7 @@
             }
             else
             {
-                foreach (var item in Model.OrderBy(s => s.TypeId))
+                foreach (var item in Model.OrderByDescending(s => s.TypeId))
                 {
                     <tr class="row">
                         <td class="col-md-1 text-center">@stt</td>
