@@ -16,8 +16,10 @@ namespace DMCTimesheet.Controllers
     public class ProjectController : Controller
     {
         private readonly dmcDbcontext db = new dmcDbcontext();
-        // GET: Project
+        
+        #region C# MVC
 
+        // GET: Project
         /// <summary>
         /// Trang Index - toàn bộ dự án
         /// </summary>
@@ -261,7 +263,6 @@ namespace DMCTimesheet.Controllers
         }
 
 
-
         /// <summary>
         /// Edit thông tin điều phối thầu phụ thiết kế cho dự án
         /// </summary>
@@ -424,6 +425,10 @@ namespace DMCTimesheet.Controllers
                 return View("DeleteAssign");
             }
         }
+        
+        
+        #endregion
+
 
         #region JAVASCRIPT-JQUERY
 
@@ -473,7 +478,8 @@ namespace DMCTimesheet.Controllers
             {
                 try
                 {
-                    C16_Status status = new C16_Status() { StatusName = StatusName, ColorCode = ColorCode };
+                    string _status = !string.IsNullOrEmpty(StatusName) ? StatusName: "Chưa cập nhật thông tin";
+                    C16_Status status = new C16_Status() { StatusName = _status, ColorCode = ColorCode };
                     db.C16_Status.Add(status);
                     db.SaveChanges();
                 }
@@ -505,7 +511,8 @@ namespace DMCTimesheet.Controllers
                 }
                 else
                 {
-                    C11_Location newEnity = new C11_Location() { LocationName = LocationName };
+                    string _name = string.IsNullOrEmpty(LocationName) ? LocationName : "Chưa cập nhật thông tin";
+                    C11_Location newEnity = new C11_Location() { LocationName = _name };
                     db.C11_Location.Add(newEnity);
                     db.SaveChanges();
                 }
@@ -536,8 +543,8 @@ namespace DMCTimesheet.Controllers
                 {
                     C10_Owner newEnity = new C10_Owner()
                     {
-                        OwnerName = OwnerName,
-                        ShortName = ShortName,
+                        OwnerName = string.IsNullOrEmpty(OwnerName)?"Chưa cập nhật":OwnerName,
+                        ShortName = string.IsNullOrEmpty(ShortName)? "Chưa cập nhật" :ShortName,
                         Email = Email,
                         OnwerLocation = OnwerLocation,
                         OnwerDescription = OnwerDescription,
@@ -566,8 +573,9 @@ namespace DMCTimesheet.Controllers
             {
                 C20_Stage location = db.C20_Stage.FirstOrDefault(s => s.StageName.Contains(StageName.Trim()) || s.StageName == StageName.Trim());
                 if (location == null)
-                {                                  
-                    C20_Stage newEnity = new C20_Stage() { StageName = StageName };
+                {
+                    string _name = string.IsNullOrEmpty(StageName) ? "Chưa cập nhật": StageName;
+                    C20_Stage newEnity = new C20_Stage() { StageName = _name };
                     db.C20_Stage.Add(newEnity);
                     db.SaveChanges();                    
                 }

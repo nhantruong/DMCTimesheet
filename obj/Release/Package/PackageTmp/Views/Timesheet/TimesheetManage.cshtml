@@ -1,27 +1,21 @@
 ﻿@model IEnumerable<DMCTimesheet.Models.C08_Timesheet>
-@{
-
+@{ #region Chsrp code
     DMCTimesheet.Models.C06_UserPermisRelationship Userpermiss = Session["UserPermission"] as DMCTimesheet.Models.C06_UserPermisRelationship;
-
     DMCTimesheet.Models.C02_Members loginUser = Session["UserLogin"] as DMCTimesheet.Models.C02_Members;
     bool fullProject = false;
     if (loginUser.Position == 1 || loginUser.Position == 2 || loginUser.Position == 3)
     {
         fullProject = true;
     }
-    //= loginUser.Position == 1 || loginUser.Position == 2 || loginUser.Position == 3 ? true : false;
     int stt = 0;
     List<DMCTimesheet.Models.C02_Members> Members = ViewBag.Members as List<DMCTimesheet.Models.C02_Members>;
     List<DMCTimesheet.Models.C01_Projects> _Projects = ViewBag.Projects as List<DMCTimesheet.Models.C01_Projects>;
     List<DMCTimesheet.Models.C01_Projects> Projects = _Projects.Where(s => s.ProjectStage != 5).ToList();//Lấy dự án chưa hoàn thành
     List<DMCTimesheet.Models.C03_ProjectMembers> MyProjects = ViewBag.ProjectMember as List<DMCTimesheet.Models.C03_ProjectMembers>;
-
     List<DMCTimesheet.Models.C07_WorkType> WorkTypes = ViewBag.WorkType as List<DMCTimesheet.Models.C07_WorkType>;
     List<DMCTimesheet.Models.C19_Workgroup> WorkGroup = ViewBag.Workgroup as List<DMCTimesheet.Models.C19_Workgroup>;
-
     //TS group theo YEAR và WEEKLY
-    IEnumerable<dynamic> TSYear_Week = ViewBag.groupTSbyYEAR_WEEK;
-
+    //IEnumerable<dynamic> TSYear_Week = ViewBag.groupTSbyYEAR_WEEK;
     //group data
     List<string[]> group = ViewBag.group as List<string[]>;    //Nhóm công việc theo workgroup
     List<string[]> listIdCV = ViewBag.listIdCV as List<string[]>; //List ID công việc để lọc
@@ -33,50 +27,31 @@
     List<DMCTimesheet.Models.C08_Timesheet> FullMyTimesheet = ViewBag.FullMyTimesheet as List<DMCTimesheet.Models.C08_Timesheet>;
     //YearlyTimesheet
     //List<KeyValuePair<string, List<DMCTimesheet.Models.C08_Timesheet>>> TSbyYear = ViewBag.YearlyTimesheet as List<KeyValuePair<string, List<DMCTimesheet.Models.C08_Timesheet>>>;
-    //WeeklyTimesheet
-    //List<KeyValuePair<string, List<DMCTimesheet.Models.C08_Timesheet>>> TSbyYear_Week = ViewBag.WeeklyTimesheet as List<KeyValuePair<string, List<DMCTimesheet.Models.C08_Timesheet>>>;
-
     //my project
     List<string> myArrProject = new List<string>();
-
     //Worktype
     List<string> worktypeArr = WorkTypes.Select(s => s.WorkName).ToList();
-
-    //List<string[]> yearTS = new List<string[]>();
-    //foreach (var item in TSbyYear)
-    //{
-    //    string[] itm = new string[item.Value.Count() + 1];
-    //    itm[0] = item.Key;
-    //    Array array = item.Value.ToArray();
-
-    //}
-
-    var _testjson = ViewBag.Testjson;
+    //var _testjson = ViewBag.Testjson;
     //List<string[]> testjson = _testjson;
     //Chi tiết công việc
-    List<DMCTimesheet.Models.C21_DetailAction> DetailAction = ViewBag.DetailAction as List<DMCTimesheet.Models.C21_DetailAction>;
+    //List<DMCTimesheet.Models.C21_DetailAction> DetailAction = ViewBag.DetailAction as List<DMCTimesheet.Models.C21_DetailAction>;
     List<string[]> actiondetailList = ViewBag.actiondetailList as List<string[]>;
-
     var tuanhienhanh = System.Globalization.CultureInfo.CurrentCulture.Calendar.GetWeekOfYear(DateTime.Today, System.Globalization.CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday);
-
     List<string> listOfWeekName = new List<string>(); //Danh sach tuan trong timesheet ca nhan
     List<string> listOfYears = new List<string>(); //Danh sach Năm trong timesheet ca nhan
     List<string[]> allTS = new List<string[]>();
-
     foreach (var item in FullMyTimesheet)
     {
         string[] itm = new string[7];
         itm[0] = item.RecordDate.Value.ToShortDateString();
-        itm[1] = item.ProjectId != null ? Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName : "Công việc chung";
+        itm[1] = item.ProjectId != null? Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName:"Công việc chung";
         myArrProject.Add(itm[1]);
         itm[2] = WorkTypes.FirstOrDefault(s => s.ID == item.WorkType).WorkName;
         itm[3] = item.Hour.ToString();
         itm[4] = item.OT.ToString();
         itm[5] = item.Description;
         itm[6] = item.Id.ToString();
-
         allTS.Add(itm);
-
         listOfYears.Add(item.RecordDate.Value.Year.ToString());
         if (item.RecordDate.Value.Year == DateTime.Today.Year)
         {
@@ -85,431 +60,371 @@
 
         }
     }
-
-
-}
+    #endregion }
 @* --------------------------------------------------------VIỆC TRONG NGÀY--------------------------------------------------- *@
-@*
-
-*@
-<div class="row flex">
-    <div class="col-md-5">
-        <div class="col flex-column">
+<div class="x_panel" style="height:980px">
+    <div class="col-md-5" style="">
+        <div class="row" style="height:550px">
             @* Form tạo timesheet *@
-            <div class="x_panel">
-                <div class="x_title">
-                    <h2 class="text-warning"><b class="">Add Dailywork</b></h2>
-                    <div class="clearfix"></div>
-                </div>
-                <div class="x_content">
-                    @* Form nhập liệu *@
-                    <div class="embed-responsive">
-                        @using (Html.BeginForm("CreateTimesheet", "Timesheet", FormMethod.Post))
-                        {
-                            @Html.AntiForgeryToken()
-                            <form class="text-dark">
-                                @*<h2 class="text-left text-danger">Add daily work</h2>
-                                    <div class="clearfix"></div>*@
-                                @* memberID *@
-                                <div class="form-group row">
-                                    <lable hidden class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Tên thành viên</lable>
-                                    <input hidden type="text" class="form-control col-md-7 col-sm-9 col-xs-9" readonly name="MemberName" placeholder="" required="" value="@loginUser.FullName" />
-                                </div>
-
-                                @* Date *@
-                                <div class="form-group row">
-                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Ngày ghi</lable>
-                                    <input type="date" class="form-control col-md-7 col-sm-9 col-xs-9" name="RecordDate" placeholder="" required="" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
-                                </div>
-
-                                @* WorkGroup *@
-                                <div class="form-group row text-left">
-                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-primary">Nhóm hoạt động</lable>
-                                    <select name="NhomHoatDong" required data-toggle="tooltip" data-placement="left" id="workgroup" onclick="onchangeworkgroup()" title="Chọn nhóm hoạt động" class="form-control col-md-7 col-sm-9 col-xs-9 text-primary">
-                                        <option value="2">--Chọn nhóm hoạt động--</option>
-                                        @if (WorkGroup != null || WorkGroup.Count() > 0)
+            <div class="x_title">
+                <h2 class="text-warning"><b class="">Add Dailywork</b></h2>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                @* Form nhập liệu *@
+                <div class="embed-responsive">
+                    @using (Html.BeginForm("CreateTimesheet", "Timesheet", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <form class="text-dark">
+                            @* memberID *@
+                            <div class="form-group row">
+                                <lable hidden class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Tên thành viên</lable>
+                                <input hidden type="text" class="form-control col-md-7 col-sm-9 col-xs-9" readonly name="MemberName" placeholder="" required="" value="@loginUser.FullName" />
+                            </div>
+                            @* Date *@
+                            <div class="form-group row">
+                                <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Ngày ghi</lable>
+                                <input type="date" class="form-control col-md-7 col-sm-9 col-xs-9" name="RecordDate" placeholder="" required="" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                            </div>
+                            @* WorkGroup *@
+                            <div class="form-group row text-left">
+                                <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-primary">Nhóm hoạt động</lable>
+                                <select name="NhomHoatDong" required data-toggle="tooltip" data-placement="left" id="workgroup" onclick="onchangeworkgroup()" title="Chọn nhóm hoạt động" class="form-control col-md-7 col-sm-9 col-xs-9 text-primary">
+                                    <option value="2">--Chọn nhóm hoạt động--</option>
+                                    @if (WorkGroup != null || WorkGroup.Count() > 0)
+                                    {
+                                        <option value="2">@WorkGroup.FirstOrDefault(s => s.MaNhom == 2).GroupName</option>
+                                        foreach (var item in WorkGroup.Where(s => s.MaNhom != 2))
                                         {
-                                            <option value="2">@WorkGroup.FirstOrDefault(s => s.MaNhom == 2).GroupName</option>
-                                            foreach (var item in WorkGroup.Where(s => s.MaNhom != 2))
-                                            {
-                                                <option id="@item.MaNhom" value="@item.MaNhom">@item.GroupName</option>
-                                            }
+                                            <option id="@item.MaNhom" value="@item.MaNhom">@item.GroupName</option>
                                         }
-                                    </select>
-                                </div>
-
-                                @* ProjectID *@
-                                <div class="form-group row  text-left">
-                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3">Dự án được phân công</lable>
-                                    <select name="ProjectId" data-toggle="tooltip" disabled id="seletorProjectId" data-placement="left" title="Dự án được phân công sẽ xuất hiện ở đây, vui lòng liên hệ Admin nếu chưa có dự án" class="form-control col-md-7 col-sm-9 col-xs-9">
-                                        @if (fullProject)
+                                    }
+                                </select>
+                            </div>
+                            @* ProjectID *@
+                            <div class="form-group row  text-left">
+                                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Dự án được phân công</lable>
+                                <select name="ProjectId" data-toggle="tooltip" disabled id="seletorProjectId" data-placement="left" title="Dự án được phân công sẽ xuất hiện ở đây, vui lòng liên hệ Admin nếu chưa có dự án" class="form-control col-md-7 col-sm-9 col-xs-9">
+                                    @if (fullProject)
+                                    {
+                                        <option value=""></option>
+                                        foreach (var item in Projects.OrderBy(s => s.ProjectName))
+                                        {
+                                            <option value=@item.ProjectID>@Projects.FirstOrDefault(s => s.ProjectID == item.ProjectID).ProjectOtherName</option>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (MyProjects.Count() > 0)
                                         {
                                             <option value=""></option>
-                                            foreach (var item in Projects.OrderBy(s => s.ProjectName))
+                                            foreach (var item in MyProjects.OrderBy(s => s.Ngay))
                                             {
                                                 <option value=@item.ProjectID>@Projects.FirstOrDefault(s => s.ProjectID == item.ProjectID).ProjectOtherName</option>
                                             }
                                         }
-                                        else
-                                        {
-                                            if (MyProjects.Count() > 0)
-                                            {
-                                                <option value=""></option>
-                                                foreach (var item in MyProjects.OrderBy(s => s.Ngay))
-                                                {
-                                                    <option value=@item.ProjectID>@Projects.FirstOrDefault(s => s.ProjectID == item.ProjectID).ProjectOtherName</option>
-                                                }
-                                            }
-                                        }
-                                    </select>
-                                </div>
-
-                                @* LỖI *@
-                                <div class="form-group row">
-                                    @*<lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>*@
-                                    <small class="col-md-7 col-sm-9 col-xs-9 text-danger" id="Error">@ViewBag.WorkAlert</small>
-                                </div>
-
-                                @* WorkType *@
-                                <div class="form-group row  text-left">
-                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chọn Công việc</lable>
-                                    <select required name="WorkID" disabled data-toggle="tooltip" data-placement="left" onclick="onchangeworktype()" id="cmbworktype" title="Chọn loại hình công việc của bạn" class="form-control col-md-7 col-sm-9 col-xs-9">
-                                        @*@foreach (var item in WorkTypes.OrderBy(s => s.WorkGroup))
-                                            {
-                                                <option value=@item.ID>[@item.WorkGroup] - @item.WorkName</option>
-                                            }*@
-                                    </select>
-                                </div>
-
-                                @* Description *@
-                                @* Detail action *@
-                                <div class="form-group row  text-left">
-                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thêm chi tiết công việc</lable>
-                                    <select name="detailWork" disabled data-toggle="tooltip" data-placement="left" id="cmbdetailWork" onclick="writetodesc(this.value)" title="Chọn chi tiết công việc cụ thể" class="form-control col-md-7 col-sm-9 col-xs-9">
-                                        <option value=""></option>
-                                        @*@foreach (var item in DetailAction.OrderBy(s => s.WorktypeId))
-                                            {
-                                                <option value=@item.Id>[@item.WorktypeId] - @item.DetailAction</option>
-                                            }*@
-                                    </select>
-                                </div>
-                                <div class="form-group row">
-                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Ghi chú chi tiết</lable>
-                                    <textarea id="descriptionNote" class="form-control col-md-7 col-sm-9 col-xs-9 " rows="3" name="Description" placeholder="Nhập ngắn gọn nội dung công việc" required></textarea>
-                                </div>
-                                @* Hour *@
-                                <div class="form-group row text-left">
-                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thời gian</lable>
-                                    <div class="col-md-7 col-sm-9 col-xs-9">
-                                        <div class="col-md-6 text-success inline">
-                                            <lable class="control-label col-md-5 text-left">Giờ</lable>
-                                            <input type="number" class="form-control col-md-6" name="Hour" required value="4" />
-                                        </div>
-                                        <div class="col-md-6 inline">
-                                            <lable class="control-label col-md-6 text-left">Overtime</lable>
-                                            <input type="number" class="form-control col-md-6" name="OvertimeHour" value="0" />
-                                        </div>
+                                    }
+                                </select>
+                            </div>
+                            @* LỖI *@
+                            <div class="form-group row">
+                                @*<lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>*@
+                                <small class="col-md-7 col-sm-9 col-xs-9 text-danger" id="Error">@ViewBag.WorkAlert</small>
+                            </div>
+                            @* WorkType *@
+                            <div class="form-group row  text-left">
+                                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chọn Công việc</lable>
+                                <select required name="WorkID" disabled data-toggle="tooltip" data-placement="left" onclick="onchangeworktype()" id="cmbworktype" title="Chọn loại hình công việc của bạn" class="form-control col-md-7 col-sm-9 col-xs-9">
+                                </select>
+                            </div>
+                            @* Description *@
+                            @* Detail action *@
+                            <div class="form-group row  text-left">
+                                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thêm chi tiết công việc</lable>
+                                <select name="detailWork" disabled data-toggle="tooltip" data-placement="left" id="cmbdetailWork" onclick="writetodesc(this.value)" title="Chọn chi tiết công việc cụ thể" class="form-control col-md-7 col-sm-9 col-xs-9">
+                                    <option value=""></option>
+                                </select>
+                            </div>
+                            <div class="form-group row">
+                                <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Ghi chú chi tiết</lable>
+                                <textarea id="descriptionNote" class="form-control col-md-7 col-sm-9 col-xs-9 " rows="3" name="Description" placeholder="Nhập ngắn gọn nội dung công việc" required></textarea>
+                            </div>
+                            @* Hour *@
+                            <div class="form-group row text-left">
+                                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Thời gian</lable>
+                                <div class="col-md-7 col-sm-9 col-xs-9">
+                                    <div class="col-md-6 text-success inline">
+                                        <lable class="control-label col-md-5 text-left">Giờ</lable>
+                                        <input type="number" class="form-control col-md-6" name="Hour" required value="4" />
+                                    </div>
+                                    <div class="col-md-6 inline">
+                                        <lable class="control-label col-md-6 text-left">Overtime</lable>
+                                        <input type="number" class="form-control col-md-6" name="OvertimeHour" value="0" />
                                     </div>
                                 </div>
-
-
-                                <div class="form-group text-left">
-                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
-                                    <input type="submit" value="Save" class="btn btn-success col-md-7" />
-                                </div>
-                            </form>
-
-                            <div class="clearfix"></div>
-                        }
-                    </div>
-                </div>
-            </div>
-            <br />
-            @* --------------------------------------------------------BẢNG THỐNG KÊ VIỆC TRONG NGÀY--------------------------------------------------- *@
-            <div class="row">
-                <div class="x_panel">
-                    <div class="x_title">
-                        <h2 class="text-primary">
-                            <b class="">Công việc trong ngày <i class="text-primary">@DateTime.Today.ToShortDateString(): </i></b>
-                            @if (_ViecTrongNgay != null || _ViecTrongNgay.Count() > 0)
-                            {
-                                <a>
-                                    Hour: <b class="text-danger">@_ViecTrongNgay.Select(p => p.Hour).Sum()</b>
-                                    - OT: <b class="text-danger">@_ViecTrongNgay.Select(p => p.OT).Sum() </b>
-                                </a>
-                            }
-                            else
-                            {
-                                <b>0</b>
-                            }
-                        </h2>
-                        <div class="clearfix"></div>
-                    </div>
-                    <div class="x_content">
-                        <div class="x_content table-responsive">
-                            <div id="ajax-loader"></div>
-                            <div>
-                                <table class="table table-hover table-borderless">
-                                    <thead class="bg-dark text-center text-white">
-                                        <tr class="row">
-                                            <th class="col-1">No</th>
-                                            <th class="col-1">Record date</th>
-                                            <th class="col-2">Project</th>
-                                            <th class="col-2">Workdone</th>
-                                            <th class="col-1">Hours</th>
-                                            <th class="col-1">Overtime</th>
-                                            <th class="col-3">Description</th>
-                                            <th class="col-1">#</th>
-                                        </tr>
-                                    </thead>
-                                </table>
                             </div>
-                            <div class="table-responsive-md" style="height:450px">
-                                <table class="table table-hover table-bordered table-striped">
-                                    <tbody id="seachResult" class="text-dark">
-                                        @if (_ViecTrongNgay != null)
+                            <div class="form-group text-left">
+                                <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
+                                <input type="submit" value="Save" class="btn btn-success col-md-7" />
+                            </div>
+                        </form>
+                        <div class="clearfix"></div>
+                    }
+                </div>
+            </div>            
+            <br />
+        </div>
+        <hr />
+        @* BẢNG THỐNG KÊ VIỆC TRONG NGÀY *@
+        <div class="row" style="max-height:300px">
+            <div class="">
+                <div class="x_title">
+                    <h2 class="text-primary">
+                        <b class="">Công việc trong ngày <i class="text-primary">@DateTime.Today.ToShortDateString(): </i></b>
+                        @if (_ViecTrongNgay != null || _ViecTrongNgay.Count() > 0)
+                        {
+                            <a>
+                                Hour: <b class="text-danger">@_ViecTrongNgay.Select(p => p.Hour).Sum()</b>
+                                - OT: <b class="text-danger">@_ViecTrongNgay.Select(p => p.OT).Sum() </b>
+                            </a>
+                        }
+                        else
+                        {
+                            <b>0</b>
+                        }
+                    </h2>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="x_content">
+                    <div class="x_content table-responsive">
+                        <div>
+                            <table class="table table-hover table-borderless">
+                                <thead class="bg-dark text-center text-white">
+                                    <tr class="row">
+                                        <th class="col-1">No</th>
+                                        <th class="col-1">Record date</th>
+                                        <th class="col-2">Project</th>
+                                        <th class="col-2">Workdone</th>
+                                        <th class="col-1">Hours</th>
+                                        <th class="col-1">Overtime</th>
+                                        <th class="col-3">Description</th>
+                                        <th class="col-1">#</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                        <div class="table-responsive-md" style="height:200px">
+                            <table class="table table-hover table-bordered table-striped">
+                                <tbody id="seachResult" class="text-dark">
+                                    @if (_ViecTrongNgay != null)
+                                    {
+                                        foreach (var item in _ViecTrongNgay.OrderByDescending(s => s.RecordDate))
                                         {
-                                            foreach (var item in _ViecTrongNgay.OrderByDescending(s => s.RecordDate))
-                                            {
-                                                stt++;
-                                                <tr class="row">
-                                                    <td class="col-1 text-center">@stt</td>
-                                                    <td class="col-1">@DateTime.Parse(item.RecordDate.ToString()).ToShortDateString()</td>
-                                                    <td class="col-2">
-                                                        @if (item.ProjectId != null)
-                                                        {
-                                                            @Html.ActionLink(Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName, "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "text-primary" })
-                                                        }
-                                                        else
-                                                        {
-                                                            @Html.ActionLink("Công việc chung", "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "text-primary" })
-                                                        }
-                                                    </td>
-                                                    <td class="col-2">@WorkTypes.FirstOrDefault(s => s.ID == item.WorkType).WorkName</td>
-                                                    <td class="col-1">@item.Hour</td>
-                                                    <td class="col-1">@item.OT</td>
-                                                    <td class="col-3">@item.Description</td>
-                                                    <td class="col-1">
-                                                        @Html.ActionLink(" ", "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "fa fa-edit" })
-                                                        @Html.ActionLink(" ", "Delete", "Timesheet", new { id = item.Id }, new { @class = " fa fa-remove btn" })
-                                                    </td>
-                                                </tr>
-                                            }
-                                        }
-                                        else
-                                        {
-                                            <tr>
-                                                <td class="row text-danger">Tuần này chưa có công việc nào được ghi nhận</td>
+                                            stt++;
+                                            <tr class="row">
+                                                <td class="col-1 text-center">@stt</td>
+                                                <td class="col-1">@DateTime.Parse(item.RecordDate.ToString()).ToShortDateString()</td>
+                                                <td class="col-2">
+                                                    @if (item.ProjectId != null)
+                                                    {
+                                                        @Html.ActionLink(Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName, "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "text-primary" })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.ActionLink("Công việc chung", "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "text-primary" })
+                                                    }
+                                                </td>
+                                                <td class="col-2">@WorkTypes.FirstOrDefault(s => s.ID == item.WorkType).WorkName</td>
+                                                <td class="col-1">@item.Hour</td>
+                                                <td class="col-1">@item.OT</td>
+                                                <td class="col-3">@item.Description</td>
+                                                <td class="col-1">
+                                                    @Html.ActionLink(" ", "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "fa fa-edit" })
+                                                    @Html.ActionLink(" ", "Delete", "Timesheet", new { id = item.Id }, new { @class = " fa fa-remove btn" })
+                                                </td>
                                             </tr>
                                         }
-                                    </tbody>
-                                </table>
-                            </div>
-
+                                    }
+                                    else
+                                    {
+                                        <tr>
+                                            <td class="row text-danger">Tuần này chưa có công việc nào được ghi nhận</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
                         </div>
+
                     </div>
                 </div>
             </div>
-            @*<h6>Tổng số giờ trong trong ngày <b class="text-danger">@Model.Where(s => s.RecordDate == DateTime.Today).Select(p => p.Hour).Sum()</b></h6>*@
-
-
-
         </div>
     </div>
 
-    <div class="col-md-7 flex-column">
-        <div class="col">
-            <div class="x_panel">
-                <div class="x_title">
-                    @{
-                        System.Globalization.CultureInfo cultureInfo = new System.Globalization.CultureInfo("vi-VN");
-                        System.Globalization.Calendar cal = cultureInfo.Calendar;
-                        List<DateTime> dates = new List<DateTime>();
-                        for (int i = 1; i < 32; i++)
-                        {
-                            dates.Add(DateTime.Parse(DateTime.Today.Year.ToString() + "-" + DateTime.Today.Month.ToString() + "-" + i.ToString()));
-                        }
+    @* --------------------------------------------------------BẢNG THỐNG KÊ VIỆC TRONG TUẦN--------------------------- *@
+    <div class="col-md-7">
+        <div class="" style="height:900px">
+            <div class="x_title">
+                @{
+                    System.Globalization.CultureInfo cultureInfo = new System.Globalization.CultureInfo("vi-VN");
+                    System.Globalization.Calendar cal = cultureInfo.Calendar;
+                    List<DateTime> dates = new List<DateTime>();
+                    for (int i = 1; i < 32; i++)
+                    {
+                        dates.Add(DateTime.Parse(DateTime.Today.Year.ToString() + "-" + DateTime.Today.Month.ToString() + "-" + i.ToString()));
                     }
-                    <h2 class="text-warning"><b class="text-success">DANH SÁCH CÔNG VIỆC TRONG TUẦN THỨ <i class="text-primary">@cultureInfo.Calendar.GetWeekOfYear(DateTime.Today, System.Globalization.CalendarWeekRule.FirstDay, DayOfWeek.Monday)/ @DateTime.Today.Year </i></b></h2>
-                    <br />
-                    @* Filters *@
+                }
+                <h2 class="text-warning"><b class="text-success">DANH SÁCH CÔNG VIỆC TRONG TUẦN</b></h2>
+                @*<br />*@
+                @* Filters *@
+                <div class="col-md-12 text-left">
                     <div class="">
-                        <div class="col-md-12">
+                        <div class="form-group">
+                            @* Selector Year *@
                             <div class="form-group">
-                                <div class="col-md-1"><span class="text-primary">Filter </span></div>
-                                @* Selector Year *@
-                                <div class="form-group">
-                                    <select name="YearNum" data-toggle="tooltip" data-placement="left" id="yearnum" onclick="TsByYear()" title="Select Year" class="form-control text-primary col-md-2">
-                                        <option value="AllYears">All</option>
-                                        <option value="@DateTime.Now.Year">Năm @DateTime.Now.Year</option>
-                                        <option value="@DateTime.Now.Year">-------------</option>
-                                        @foreach (var item in listOfYears.Distinct())
-                                        {
-                                            <option id="@item" value="@item">Năm @item</option>
-                                        }
-                                    </select>
-                                </div>
-
-                                @*Selector Month  *@
-                                <div class="form-group">
-                                    <select name="MonthNum" data-toggle="tooltip" data-placement="left" id="monthnum" onclick="TSbyMonth()" title="Select Month" class="form-control text-primary col-md-2">
-                                        <option value="AllMonths">All</option>
-                                        <option value="@DateTime.Now.Month">Tháng @DateTime.Now.Month</option>
-                                        <option value="@DateTime.Now.Month">-------------</option>
-                                        @for (int i = 1; i < 13; i++)
-                                        {
-                                            <option value="@i">Tháng @i</option>
-                                        }
-
-                                    </select>
-                                </div>
-
-                                @*Selector Week number  *@
-                                <div class="form-group">
-                                    <select name="WeekNum" data-toggle="tooltip" data-placement="left" id="weeknum" onclick="TSbyWeek()" title="Select Week" class="form-control text-primary col-md-2">
-                                        <option value="AllWeeks">All</option>
-                                        <option value="@tuanhienhanh">Tuần hiện tại @tuanhienhanh</option>
-                                        <option value="@tuanhienhanh">---------------------</option>
-                                        @for (int i = 1; i < 53; i++)
-                                        {
-                                            <option value="@i">W @i</option>
-                                        }
-                                    </select>
-                                </div>
-
-
-                                @*Selector date  *@
-                                @*<div class="form-group">
-                                        <select name="DateNum" data-toggle="tooltip" data-placement="left" id="datenum" onclick="" title="Select date" class="form-control text-primary col-md-2">
-                                            <option value="AllDays">All</option>
-                                            <option value="@DateTime.Today">@DateTime.Today.ToShortDateString()</option>
-                                            <option value="@DateTime.Today">---------------------</option>
-                                            @foreach (var item in dates)
-                                            {
-                                                <option value="@item">@item.ToShortDateString()</option>
-                                            }
-                                        </select>
-                                    </div>*@
-
-                                @*<div class="form-group">
-                                        <input type="submit" name="name" value="View" class="form-control btn btn-outline-info col-sm-2" onclick="AddTStoDisplay()" />
-                                    </div>*@
+                                <select name="YearNum" data-toggle="tooltip" data-placement="left" id="yearnum" onclick="TsByYear()" title="Select Year" class="form-control text-primary col-md-2">
+                                    <option value="AllYears">All years</option>
+                                    <option value="@DateTime.Now.Year">Năm @DateTime.Now.Year</option>
+                                    <option value="@DateTime.Now.Year">-------------</option>
+                                    @foreach (var item in listOfYears.Distinct())
+                                    {
+                                        <option id="@item" value="@item">Năm @item</option>
+                                    }
+                                </select>
                             </div>
+                            @*Selector Month  *@
+                            <div class="form-group">
+                                <select name="MonthNum" data-toggle="tooltip" data-placement="left" id="monthnum" onclick="TSbyMonth()" title="Select Month" class="form-control text-primary col-md-2">
+                                    <option value="AllMonths">All months</option>
+                                    <option value="@DateTime.Now.Month">Tháng @DateTime.Now.Month</option>
+                                    <option value="@DateTime.Now.Month">-------------</option>
+                                    @for (int i = 1; i < 13; i++)
+                                    {
+                                        <option value="@i">Tháng @i</option>
+                                    }
 
+                                </select>
+                            </div>
+                            @*Selector Week number  *@
+                            <div class="form-group">
+                                <select name="WeekNum" data-toggle="tooltip" data-placement="left" id="weeknum" onclick="TSbyWeek()" title="Select Week" class="form-control text-primary col-md-2">
+                                    <option value="AllWeeks">All Weeks</option>
+                                    <option value="@tuanhienhanh">Tuần hiện tại @tuanhienhanh</option>
+                                    <option value="@tuanhienhanh">---------------------</option>
+                                    @for (int i = 1; i < 53; i++)
+                                    {
+                                        <option value="@i">W @i</option>
+                                    }
+                                </select>
+                            </div>
                         </div>
                     </div>
-
-                    <div class="clearfix"></div>
-                    <div id="selectorContent"></div>
-                    <div class="clearfix"></div>
-
                 </div>
-                @* -----------BẢNG THỐNG KÊ TRONG TUẦN------------------------------------------------ *@
-                <div class="col-md-12">
-                    @* Tieu de bang *@
-                    <div>
-                        @*<table class="table table-hover table-borderless table-striped">*@
-                        <table class="table">
-                            @*<thead class="bg-dark text-center text-white">*@
-                                <tr class="col-md-12 text-white" style="background-color:#000000">
-                                    <td class="col-sm-1">No</td>
-                                    <td class="col-md-1">Record date</td>
-                                    <td class="col-md-2">Project</td>
-                                    <td class="col-md-3">Workdone</td>
-                                    <td class="col-md-1">Time</td>
-                                    <td class="col-md-4">Description</td>
-                                    @*<td class="col-md-1">#</td>*@
-                                </tr>
-                            @*</thead>*@
-                        </table>
-                    </div>
-                </div>
-                <div class="row">
-                    @* Auto timesheet trong tuần *@
-                    <div id="currentWeek" class="table-responsive col-sm-12" style="height:800px">
-                        <table class="table table-hover table-bordered table-striped">
-                            <tbody id="seachResult" class="text-dark">
-                                @*@if (Model != null)*@
-                                @if (_ViecTrongTuan != null)
-                                {
-                                    int st = 1;
-                                    //foreach (var item in Model.OrderByDescending(s => s.RecordDate))
-                                    foreach (var item in _ViecTrongTuan.OrderByDescending(s => s.RecordDate))
-                                    {
+                <br />
+                <div class="clearfix"></div>
+                <hr />
+                <div id="selectorContent" class="form-control-dark"></div>
+                <div class="clearfix"></div>
 
-                                        <tr class="row">
-                                            <td class="col-sm-1 text-center">@st</td>
-                                            <td class="col-md-1">@DateTime.Parse(item.RecordDate.ToString()).ToShortDateString()</td>
-                                            <td class="col-md-2">
-                                                @if (item.ProjectId != null)
-                                                {
-                                                    <b class="text-primary" onclick="displayTSmodal(@item.Id)" data-toggle="modal" data-target="#myModal">@Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName</b>
-                                                    @*@Html.ActionLink(Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName, "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "text-primary" })*@
-
-                                                }
-                                                else
-                                                {
-                                                    <b class="text-primary" onclick="displayTSmodal(@item.Id)" data-toggle="modal" data-target="#myModal">Công việc chung</b>
-
-                                                    @*@Html.ActionLink("Công việc chung", "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "text-primary" })*@
-                                                }
-                                            </td>
-                                            <td class="col-md-3">@WorkTypes.FirstOrDefault(s => s.ID == item.WorkType).WorkName</td>
-                                            <td class="col-md-1">
-                                                @{
-                                                    int h = 0, ot = 0, total = 0;
-                                                    string _ot = item.OT == null ? item.OT.ToString() : "0";
-                                                    ot = int.Parse(_ot.ToString());
-                                                    h = int.Parse(item.Hour.ToString());
-                                                    total = h + ot;
-                                                    <b>@total</b>
-                                                }
-                                            </td>
-                                            <td class="col-md-4">@item.Description</td>
-                                            @*<td class="col-md-1">*@
-                                                @*@Html.ActionLink(" ", "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "fa fa-edit" })*@
-                                                @*@Html.ActionLink("X", "Delete", "Timesheet", new { id = item.Id }, new { @class = "btn btn-danger" })*@
-                                            @*</td>*@
-                                        </tr>
-                                        st++;
-                                    }
-                                }
-                                else
-                                {
-                                    <tr>
-                                        <td class="row text-danger">Tuần này chưa có công việc nào được ghi nhận</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="row">
-                    <br />
-                    <div id="tableTS" class="table-responsive col-sm-12" style="height:800px"></div>
-                </div>
+            </div>
+            @* -----------BẢNG THỐNG KÊ TRONG TUẦN------------------------------------------------ *@
+            <div class="col-md-12">
+                @* Tieu de bang *@
                 <div>
-                    @* Modal *@
-                    <div class="embed-responsive">
-                        @using (Html.BeginForm("UserModalEdit", "Timesheet", FormMethod.Post))
-                        {
-                            @Html.AntiForgeryToken()
-                            <form class="text-dark">
-                                <div class="text-dark" id="modalCode"></div>
-                            </form>
-                            <div class="clearfix"></div>
-                        }
-                    </div>
-                    @*End Modal*@
+                    @*<table class="table table-hover table-borderless table-striped">*@
+                    <table class="table">
+                        @*<thead class="bg-dark text-center text-white">*@
+                        <tr class="row text-white" style="background-color:#000000">
+                            <td class="col-md-1">No</td>
+                            <td class="col-md-1">Record date</td>
+                            <td class="col-md-2">Project</td>
+                            <td class="col-md-3">Workdone</td>
+                            <td class="col-md-1">Time</td>
+                            <td class="col-md-4">Description</td>
+                        </tr>
+                        @*</thead>*@
+                    </table>
                 </div>
+            </div>
+            <div class="row">
+                @* Auto timesheet trong tuần *@
+                <div id="currentWeek" class="table-responsive col-sm-12" style="height:850px">
+                    <table class="table table-hover table-bordered table-striped">
+                        <tbody id="seachResult" class="text-dark">
+                            @if (_ViecTrongTuan != null)
+                            {
+                                int st = 1;
+                                foreach (var item in _ViecTrongTuan.OrderByDescending(s => s.RecordDate))
+                                {
+
+                                    <tr class="row">
+                                        <td class="col-sm-1 text-center">@st</td>
+                                        <td class="col-md-1">@DateTime.Parse(item.RecordDate.ToString()).ToShortDateString()</td>
+                                        <td class="col-md-2">
+                                            @if (item.ProjectId != null)
+                                            {
+                                                <b class="text-primary" onclick="displayTSmodal(@item.Id)" data-toggle="modal" data-target="#myModal">@Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName</b>
+                                                @*@Html.ActionLink(Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName, "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "text-primary" })*@
+
+                                            }
+                                            else
+                                            {
+                                                <b class="text-primary" onclick="displayTSmodal(@item.Id)" data-toggle="modal" data-target="#myModal">Công việc chung</b>
+
+                                                @*@Html.ActionLink("Công việc chung", "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "text-primary" })*@
+                                            }
+                                        </td>
+                                        <td class="col-md-3">@WorkTypes.FirstOrDefault(s => s.ID == item.WorkType).WorkName</td>
+                                        <td class="col-md-1">
+                                            @{
+                                                int h = 0, ot = 0, total = 0;
+                                                string _ot = item.OT == null ? item.OT.ToString() : "0";
+                                                ot = int.Parse(_ot.ToString());
+                                                h = int.Parse(item.Hour.ToString());
+                                                total = h + ot;
+                                                <b>@total</b>
+                                            }
+                                        </td>
+                                        <td class="col-md-4">@item.Description</td>
+                                    </tr>
+                                    st++;
+                                }
+                            }
+                            else
+                            {
+                                <tr>
+                                    <td class="row text-danger">Tuần này chưa có công việc nào được ghi nhận</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="">
+                <div id="tableTS" class="table-responsive col-sm-12" style="height:700px"></div>
+            </div>
+            <div>
+                @* Modal *@
+                <div class="embed-responsive">
+                    @using (Html.BeginForm("UserModalEdit", "Timesheet", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <form class="text-dark">
+                            <div class="text-dark" id="modalCode"></div>
+                        </form>
+                        <div class="clearfix"></div>
+                    }
+                </div>
+                @*End Modal*@
             </div>
         </div>
     </div>
 </div>
 
 @* ------------------------ADD DAILYWORK----------------------------------------------------- *@
-@* Functions cho Add dailyworks *@
 
+@* Functions cho Add dailyworks *@
 <script>
     function onchangeworkgroup() {
         var opt = document.getElementById("workgroup").value;
@@ -551,7 +466,6 @@
         return text;
     }
 </script>
-
 <script>
     //Hàm thay đổi chi tiết công việc trong công việc dc chọn
     function onchangeworktype() {
@@ -573,12 +487,7 @@
         return text;
     }
 </script>
-
-
 @* ----------------------------------------------------------------------------- *@
-
-
-
 <script>
     function createDates() {
         var year = document.getElementById("yearnum").value;
@@ -612,14 +521,12 @@
     function createOptions(options) {
         var text = "";
         for (var i = 0; i < options.length; i++) {
-            //text += '<option value=' + "'" + options[i][1] + "'" + '>' + options[i][1] + '</option>';
             text += '<option value=' + "'" + options[i] + "'" + '>' + options[i] + '</option>';
         }
         return text;
     }
 
 </script>
-
 @*//var tsinYear = Object.assign(@TSbyYear); //lỗi*@
 @*//var tsinYear = @Html.Raw(TSbyYear); //lỗi*@
 @*//var tsinYear = JSON.stringify(@TSbyYear);//Lỗi*@
@@ -787,8 +694,6 @@
 
 </script>
 
-
-
 <script>
     @* Lọc timesheet theo Selectors *@
     function AddTStoDisplay() {
@@ -803,19 +708,18 @@
 
         //Filter
         if (yearNum === "AllYears") {
-            selected.innerHTML = "Timesheet selected <b class='text-danger'>" + yearNum + "</b>";
+            selected.innerHTML = "<br />Timesheet selected <b class='text-danger'>" + yearNum + "</b>";
             display.innerHTML = export2display(alltimesheet); //xuất kết quả timesheet ra bảng
         }
         else {
             //Filter by Seleted Year value
-            selected.innerHTML = "Timesheet selected <b class='text-danger'>" + yearNum + "</b>";
+            selected.innerHTML = "<br />Timesheet selected <b class='text-danger'>" + yearNum + "</b>";
             var yearTS = getTsbyYear(yearNum, alltimesheet);
             if (yearTS === null || yearTS.length === 0) {
                 alert("Không có dữ liệu Timesheet của năm " + yearNum);
                 display.innerHTML = nodataDisplay();
             }
             display.innerHTML = export2display(yearTS);
-
             if (MonthNum !== "AllMonths") {
                 var month_yearTS = getbymonth(yearNum, MonthNum, yearTS);
                 if (month_yearTS === null || month_yearTS.length === 0) {
@@ -823,7 +727,7 @@
                     var text = '';
                     text += "<table class='table table-hover table-bordered table-striped'>";
                     text += "<tbody class='text-dark'>";
-                    text += "<tr class='row'><td class='col-md-12 text-danger'> KHÔNG CÓ DỮ LIỆU </td></tr";
+                    text += "<tr class='row'><td class='row text-danger'> KHÔNG CÓ DỮ LIỆU </td></tr";
                     text += "</tbody>";
                     text += "</table>";
                     display.innerHTML = '';
@@ -832,16 +736,13 @@
                 else {
                     alert("Timesheet tháng " + MonthNum + " Năm " + yearNum + ": " + month_yearTS.length + "records: " +month_yearTS);
                     display.innerHTML = '';
-                    selected.innerHTML = "Timesheet selected <b class='text-danger'>Year: " + yearNum + " / Month: " + MonthNum + "</b>"
+                    selected.innerHTML = "<br />Timesheet selected <b class='text-danger'>Year: " + yearNum + " / Month: " + MonthNum + "</b>"
                     display.innerHTML = export2display(month_yearTS); //xuất kết quả timesheet ra bảng
                 }
 
             }
             //alert("Timesheet filter by year: "+yearTS);
-
-
         }
-
         //display.innerHTML = export2display(alltimesheet);
     }
 
@@ -948,7 +849,6 @@
 
 </script>
 
-
 <script>
     //Hien thi khong du lieu
     function nodataDisplay() {
@@ -961,40 +861,31 @@
         return text;
     }
 
-
     //Hàm hiển thị timesheet
     function export2display(alltimesheet) {
         const Weeklytable = document.getElementById("currentWeek");
-        //Weeklytable.innerHTML = '';
         Weeklytable.setAttribute("style", "height:0px");
         var text = '';
         text += "<table class='table table-hover table-bordered table-striped'>";
         text += "<tbody class='text-dark'>";
         try {
             if (alltimesheet === null || alltimesheet.length === 0) {
-                text += "<tr class='row'><td class='col-md-12 text-danger'> KHÔNG CÓ DỮ LIỆU </td></tr";
+                text += "<tr class='row'><td class='row text-danger'> KHÔNG CÓ DỮ LIỆU </td></tr";
                 text += "</tbody>";
                 text += "</table>";
                 return text;
             }
             else {
-                for (var i = 1; i < alltimesheet.length; i++) {
+                for (var i = 0; i < alltimesheet.length; i++) {
                     text += "<tr class='row'>";
-                    text += "<td class='col-sm-1'>" + i + "</td>";//STT
+                    text += "<td class='col-sm-1'>" + (i+1) + "</td>";//STT
                     text += "<td class='col-md-1'>" + alltimesheet[i][0] + "</td>";//DATE
                     text += "<td class='col-md-2'>" + alltimesheet[i][1] + "</td>";//PROJECT
-
-                    //text += "<td class='col-md-3'>" + alltimesheet[i][2] + "</td>";//WORKDONE
                     text += "<td class='col-md-3'>"
                     text += "<div id='" + alltimesheet[i][2] + "' class='text-primary btn-white'><b onclick='displayTSmodal(" + alltimesheet[i][6] + ")' data-toggle='modal' data-target='#myModal' >" + alltimesheet[i][2] + "</b></div>";
                     text += "</td>";//WORKDONE
                     text += "<td class='col-md-1'>" + (parseInt(alltimesheet[i][3]) + parseInt(alltimesheet[i][4])) + "</td>";//HOUR + OT
                     text += "<td class='col-md-4'>" + (alltimesheet[i][5]) + "</td>";//DESCRIPTION
-                   /* text += "<td class='col-md-1'>";*///BUTTON
-/*                    text += "<div id='" + alltimesheet[i][6] + "' class='btn btn-info' onclick='displayTSmodal(" + alltimesheet[i][6] + ")' data-toggle='modal' data-target='#myModal' })'>info</div>";*/
-                    //text += "<div id='" + alltimesheet[i][6] + "'data-url=" + "@@Url.Action('Delete','Timesheet', new {id = " + alltimesheet[i][6] + " class='btn btn-info' onclick='displayTSmodal(" + alltimesheet[i][6] +")' data-toggle='modal' data-target='#myModal' })'>info</div>";
-
-                    /*text += "</td>";*/
                     text += "</tr>";
                 }
             }
@@ -1003,7 +894,7 @@
         /*text += "</div";*/
             return text;
         } catch (e) {
-            text += "<tr class='row'><td class='col-md-12 text-danger'> XÃY RA LỖI DO "+e+"</td></tr";
+            text += "<tr class='col-md-12'><td class='row text-danger'> XÃY RA LỖI DO "+e+"</td></tr";
             text += "</tbody>";
             text += "</table>";
 /*            text += "</div";*/
@@ -1130,7 +1021,6 @@
 
 
 </script>
-
 
 <script src="~/UserStyles/Chart.js/chart.js"></script>
 <link href="~/Content/cscpda-scrollbar.css" rel="stylesheet" />

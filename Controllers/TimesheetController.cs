@@ -457,10 +457,6 @@ namespace DMCTimesheet.Controllers
                     #endregion
 
                     ViewBag.WorkAlert = "Số giờ làm việc trong ngày đã nhiều hơn 8h, cần chọn qua ô tăng ca";
-
-
-
-
                     return View("TimesheetManage", db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).ToList());
                 }
                 else
@@ -572,14 +568,7 @@ namespace DMCTimesheet.Controllers
             if (data == null || data.Count() == 0) return 0;
             try
             {
-                foreach (var item in data)
-                {
-                    if (DateTime.Compare(DateTime.Parse(item.RecordDate.ToString()), DateTime.Parse(recordDate)) == 0)
-                    {
-                        kq += item.Hour.Value;
-
-                    }
-                }
+                foreach (var item in data) if (DateTime.Compare(DateTime.Parse(item.RecordDate.ToString()), DateTime.Parse(recordDate)) == 0)  kq += item.Hour.Value;                
                 return kq;
             }
             catch (Exception)

@@ -5,7 +5,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>C:\Users\admin\OneDrive\MyApp\DMCTimesheet\Publish\ver20230829</_PublishTargetUrl>
-    <History>True|2023-08-29T00:37:16.0125625Z;True|2023-08-29T07:22:16.6315363+07:00;True|2023-08-28T16:59:56.5348780+07:00;True|2023-08-26T14:44:40.6964822+07:00;True|2023-08-18T08:59:56.2097161+07:00;False|2023-08-18T08:57:28.2834484+07:00;</History>
+    <History>True|2023-08-29T08:29:10.9060971Z;True|2023-08-29T14:47:24.5851180+07:00;True|2023-08-29T07:37:16.0125625+07:00;True|2023-08-29T07:22:16.6315363+07:00;True|2023-08-28T16:59:56.5348780+07:00;True|2023-08-26T14:44:40.6964822+07:00;True|2023-08-18T08:59:56.2097161+07:00;False|2023-08-18T08:57:28.2834484+07:00;</History>
     <LastFailureDetails />
   </PropertyGroup>
   <ItemGroup>
@@ -328,13 +328,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/01/2023 09:59:20</publishTime>
     </File>
     <File Include="bin/DMCTimesheet.dll">
-      <publishTime>08/29/2023 07:37:10</publishTime>
+      <publishTime>08/29/2023 15:28:51</publishTime>
     </File>
     <File Include="bin/DMCTimesheet.pdb">
-      <publishTime>08/29/2023 07:37:10</publishTime>
+      <publishTime>08/29/2023 15:28:51</publishTime>
     </File>
     <File Include="bin/DMCTimesheet.XmlSerializers.dll">
-      <publishTime>08/29/2023 07:37:11</publishTime>
+      <publishTime>08/29/2023 15:28:51</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>08/01/2023 09:59:21</publishTime>
@@ -10876,7 +10876,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/01/2023 09:59:19</publishTime>
     </File>
     <File Include="Views/Setting/Locations.cshtml">
-      <publishTime>08/01/2023 09:59:19</publishTime>
+      <publishTime>08/29/2023 15:18:23</publishTime>
     </File>
     <File Include="Views/Setting/Ownerlist.cshtml">
       <publishTime>08/01/2023 09:59:19</publishTime>
@@ -10888,7 +10888,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/01/2023 09:59:19</publishTime>
     </File>
     <File Include="Views/Setting/ProjectStates.cshtml">
-      <publishTime>08/01/2023 09:59:19</publishTime>
+      <publishTime>08/29/2023 15:17:29</publishTime>
     </File>
     <File Include="Views/Setting/ProjectType.cshtml">
       <publishTime>08/28/2023 11:12:38</publishTime>
@@ -10939,7 +10939,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/01/2023 09:59:19</publishTime>
     </File>
     <File Include="Views/Timesheet/TimesheetManage.cshtml">
-      <publishTime>08/26/2023 10:58:45</publishTime>
+      <publishTime>08/29/2023 14:43:22</publishTime>
     </File>
     <File Include="Views/Timesheet/UserEdit.cshtml">
       <publishTime>08/01/2023 09:59:19</publishTime>
@@ -10960,7 +10960,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/01/2023 09:59:19</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>08/29/2023 07:22:11</publishTime>
+      <publishTime>08/29/2023 15:29:04</publishTime>
     </File>
   </ItemGroup>
 </Project>

@@ -89,7 +89,7 @@
                         <td class="col-sm-2">
                             @if (item.LocationName != null)
                             {
-                                <b>@Html.ActionLink(item.LocationName, "EditLocation", "Setting", new { Id = item.LocationId }, new { @class = "text-danger" })</b>
+                                <b>@Html.ActionLink(string.IsNullOrEmpty(item.LocationName)?"Chưa cập nhật":item.LocationName, "EditLocation", "Setting", new { Id = item.LocationId }, new { @class = "text-danger" })</b>
                                 @*<b class="text-danger">@item.LocationName</b>*@
                             }
                         </td>                        
