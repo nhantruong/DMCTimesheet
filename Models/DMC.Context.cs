@@ -50,5 +50,6 @@ namespace DMCTimesheet.Models
         public virtual DbSet<C12_SubContractor> C12_SubContractor { get; set; }
         public virtual DbSet<C09_ProjectSubCon> C09_ProjectSubCon { get; set; }
         public virtual DbSet<C98_EmbedString> C98_EmbedString { get; set; }
+        public virtual DbSet<C23_NguonViec> C23_NguonViec { get; set; }
     }
 }

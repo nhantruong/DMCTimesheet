@@ -545,10 +545,7 @@ namespace DMCTimesheet.Controllers
                 foreach (var item in mytimesheet)
                 {
                     int value = DateTime.Compare(DateTime.Parse(item.RecordDate.ToString()), startDate);
-                    if (value <= 7)
-                    {
-                        _ViecTrongTuan.Add(item);
-                    }
+                    if (value <= 7) _ViecTrongTuan.Add(item);
                 }
                 ViewBag.ViecTrongNgay = _ViecTrongNgay;
                 ViewBag.ViecTrongTuan = _ViecTrongTuan;
@@ -568,7 +565,7 @@ namespace DMCTimesheet.Controllers
             if (data == null || data.Count() == 0) return 0;
             try
             {
-                foreach (var item in data) if (DateTime.Compare(DateTime.Parse(item.RecordDate.ToString()), DateTime.Parse(recordDate)) == 0)  kq += item.Hour.Value;                
+                foreach (var item in data) if (DateTime.Compare(DateTime.Parse(item.RecordDate.ToString()), DateTime.Parse(recordDate)) == 0) kq += item.Hour.Value;
                 return kq;
             }
             catch (Exception)
@@ -644,18 +641,45 @@ namespace DMCTimesheet.Controllers
                     C08_Timesheet item = db.C08_Timesheet.FirstOrDefault(s => s.Id == Id);
                     if (item != null)
                     {
-                        //Đổi dự án
-                        int pID = db.C01_Projects.FirstOrDefault(s => s.ProjectOtherName.Contains(ProjectName)).ProjectID;
-                        item.ProjectId = pID;
+                        int _Ot = OvertimeHour ?? 0;
+                        C02_Members loginUsr = Session["UserLogin"] as C02_Members;
+                        bool ktrasogio = DailyCheck(RecordDate, loginUsr.UserID, Hour, _Ot);
 
-                        item.Description = Description;
-                        item.OT = OvertimeHour ?? 0;
-                        item.Hour = Hour;
-                        item.WorkType = db.C07_WorkType.FirstOrDefault(s => s.WorkName.Contains(WorkType)).ID;// đổi công việc
-                        item.RecordDate = RecordDate;
+                        if (ktrasogio)
+                        {
+                            //Đổi dự án
+                            switch (ProjectName)
+                            {
+                                case "Công việc chung":
+                                    {
+                                        item.ProjectId = null;
+                                        break;
+                                    }
+                                default:
+                                    {
+                                        int pID = db.C01_Projects.FirstOrDefault(s => s.ProjectOtherName.Contains(ProjectName)).ProjectID;
+                                        item.ProjectId = pID;
+                                        break;
+                                    }
 
-                        db.Entry(item).State = EntityState.Modified;
-                        db.SaveChanges();
+                            }
+                            item.Description = Description;
+
+                            item.OT = OvertimeHour ?? 0;
+                            item.Hour = Hour;
+
+                            item.WorkType = db.C07_WorkType.FirstOrDefault(s => s.WorkName.Contains(WorkType)).ID;// đổi công việc
+                            item.RecordDate = RecordDate;
+
+                            db.Entry(item).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
+                        else
+                        {
+                            ViewBag.WorkAlert = $"Tổng số giờ trong ngày {RecordDate} đã hơn tiêu chuẩn (8h), cần chuyển qua tăng ca Overtime";
+                            //return View("TimesheetManage","Timesheet", ViewBag.WorkAlert);
+                            return RedirectToAction("TimesheetManage");
+                        }
                     }
                 }
                 // return RedirectToAction("UserPage", "Home");
@@ -667,9 +691,102 @@ namespace DMCTimesheet.Controllers
                 ViewBag.WorkType = db.C07_WorkType.ToList();
                 ViewBag.DetailAction = db.C21_DetailAction.ToList();
                 ViewBag.WorkAlert = $"Có lỗi khi cập nhật timesheet số {Id} do {ex.Message}";
-                return View();
+                return RedirectToAction("TimesheetManage");
             }
 
+        }
+        #region Javascript SAVE MODAL TIMESHEET
+
+
+        public string SaveTS(int Id, DateTime RecordDate, string ProjectName, string WorkType, int Hour, int? OvertimeHour, string Description)
+        {
+            try
+            {
+                C08_Timesheet item = db.C08_Timesheet.FirstOrDefault(s => s.Id == Id);
+                if (item != null)
+                {
+                    int _Ot = OvertimeHour ?? 0;
+                    C02_Members loginUsr = Session["UserLogin"] as C02_Members;
+                    bool ktrasogio = DailyCheck(RecordDate, loginUsr.UserID, Hour, _Ot);
+                    if (ktrasogio)
+                    {
+                        //Đổi dự án
+                        switch (ProjectName)
+                        {
+                            case "Công việc chung":
+                                {
+                                    item.ProjectId = null;
+                                    break;
+                                }
+                            default:
+                                {
+                                    int pID = db.C01_Projects.FirstOrDefault(s => s.ProjectOtherName.Contains(ProjectName)).ProjectID;
+                                    item.ProjectId = pID;
+                                    break;
+                                }
+                        }
+                        item.Description = Description;
+                        item.OT = OvertimeHour ?? 0;
+                        item.Hour = Hour;
+                        item.WorkType = db.C07_WorkType.FirstOrDefault(s => s.WorkName.Contains(WorkType)).ID;// đổi công việc
+                        item.RecordDate = RecordDate;
+
+                        db.Entry(item).State = EntityState.Modified;
+                        db.SaveChanges();
+                        return $"Cập nhật timesheet Id {Id} thành công";
+                    }
+                    else
+                    {
+                        return ($"Tổng số giờ trong ngày {RecordDate} đã hơn tiêu chuẩn (8h), cần chuyển qua tăng ca Overtime");
+                    }
+                }
+                else
+                {
+                    return $"Không tìm thấy Timesheet này";
+                }
+            }
+            catch (Exception ex)
+            {
+                return ($"Có lỗi xãy ra do {ex.Message}");
+            }
+
+        }
+
+        public JsonResult GetTS()
+        {
+            C02_Members logUser = Session["UserLogin"] as C02_Members;
+            return Json(db.C08_Timesheet.Where(s => s.MemberID == logUser.UserID).ToList(), JsonRequestBehavior.AllowGet);
+        }
+
+        #endregion
+        /// <summary>
+        /// Kiểm tra số giờ trong ngày
+        /// Nếu true: tổng số giờ trong ngày <=8 => OK
+        /// Nếu false: tổng số giờ trong ngày > 8 => not OK
+        /// </summary>
+        /// <param name="recordDate"></param>
+        /// <param name="hour"></param>
+        /// <param name="overtimeHour"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        private bool DailyCheck(DateTime recordDate, int userId, int hour, int? overtimeHour)
+        {
+            try
+            {
+                double total = 0;
+                //int totalhour = db.C08_Timesheet.Where(s => s.RecordDate == recordDate && s.MemberID == userId).ToList().Select(p => new { h = p.Hour, ot = p.OT }).Count();
+                var totalhour = db.C08_Timesheet.Where(s => s.RecordDate == recordDate && s.MemberID == userId).ToList();
+                foreach (var item in totalhour)
+                {
+                    total += (double)item.Hour + (double)item.OT;
+                }
+                if ((total + hour + overtimeHour) >= 8) return false;
+                else return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
         }
 
 

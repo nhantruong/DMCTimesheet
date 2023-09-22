@@ -18,6 +18,9 @@
     <NavigationProperty Name="C08_Timesheet" Relationship="Self.FK_08_Timesheet_01_Projects" FromRole="C01_Projects" ToRole="C08_Timesheet" />
     <Property Name="ProjectStage" Type="Int32" />
     <NavigationProperty Name="C09_ProjectSubCon" Relationship="DMCtimesheet.Models.FK_09_ProjectSubCon_01_Projects" FromRole="C01_Projects" ToRole="C09_ProjectSubCon" />
+    <Property Name="NguonViec" Type="Int32" />
+    <NavigationProperty Name="C23_NguonViec" Relationship="DMCtimesheet.Models.FK_01_Projects_23_NguonViec" FromRole="C01_Projects" ToRole="C23_NguonViec" />
+    <Property Name="NgayKetThuc" Type="DateTime" Precision="0" />
   </EntityType>
   <EntityType Name="C02_Members">
     <Key>
@@ -59,6 +62,7 @@
     <Property Name="ChuTriKetCau2" Type="Int32" />
     <Property Name="ChuTriMEP2" Type="Int32" />
     <Property Name="LegalManager2" Type="Int32" />
+    <Property Name="ThanhVienKhac" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="C04_Permission">
     <Key>
@@ -331,6 +335,11 @@
       <End Role="C09_ProjectSubCon" EntitySet="C09_ProjectSubCon" />
     </AssociationSet>
     <EntitySet Name="C98_EmbedString" EntityType="DMCtimesheet.Models.C98_EmbedString" />
+    <EntitySet Name="C23_NguonViec" EntityType="DMCtimesheet.Models.C23_NguonViec" />
+    <AssociationSet Name="FK_01_Projects_23_NguonViec" Association="DMCtimesheet.Models.FK_01_Projects_23_NguonViec">
+      <End Role="C23_NguonViec" EntitySet="C23_NguonViec" />
+      <End Role="C01_Projects" EntitySet="C01_Projects" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="C20_Stage">
     <Key>
@@ -541,4 +550,24 @@
     <Property Name="EmbedString" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
     <Property Name="Version" Type="Double" />
   </EntityType>
+  <EntityType Name="C23_NguonViec">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NguonViec" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="C01_Projects" Relationship="DMCtimesheet.Models.FK_01_Projects_23_NguonViec" FromRole="C23_NguonViec" ToRole="C01_Projects" />
+  </EntityType>
+  <Association Name="FK_01_Projects_23_NguonViec">
+    <End Type="DMCtimesheet.Models.C23_NguonViec" Role="C23_NguonViec" Multiplicity="0..1" />
+    <End Type="DMCtimesheet.Models.C01_Projects" Role="C01_Projects" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="C23_NguonViec">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="C01_Projects">
+        <PropertyRef Name="NguonViec" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

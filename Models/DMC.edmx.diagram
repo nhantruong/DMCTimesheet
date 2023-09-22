@@ -5,13 +5,13 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="a5027d77e3224242844f4999d09a1b1c" Name="Diagram1" ZoomLevel="109">
-        <EntityTypeShape EntityType="DMCtimesheet.Models.C01_Projects" Width="1.5" PointX="4.75" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="DMCtimesheet.Models.C01_Projects" Width="1.5" PointX="4.75" PointY="2.625" IsExpanded="true" />
         <EntityTypeShape EntityType="DMCtimesheet.Models.C02_Members" Width="1.5" PointX="9.125" PointY="1.75" IsExpanded="true" />
         <EntityTypeShape EntityType="DMCtimesheet.Models.C03_ProjectMembers" Width="1.5" PointX="7.125" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="DMCtimesheet.Models.C04_Permission" Width="1.5" PointX="11.125" PointY="3.625" IsExpanded="true" />
         <EntityTypeShape EntityType="DMCtimesheet.Models.C05_PermissionDetail" Width="1.5" PointX="13" PointY="3.625" IsExpanded="true" />
         <EntityTypeShape EntityType="DMCtimesheet.Models.C06_UserPermisRelationship" Width="1.5" PointX="11.125" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="DMCtimesheet.Models.C08_Timesheet" Width="1.5" PointX="7.125" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="DMCtimesheet.Models.C08_Timesheet" Width="1.5" PointX="7.125" PointY="5.625" IsExpanded="true" />
         <EntityTypeShape EntityType="DMCtimesheet.Models.C10_Owner" Width="1.5" PointX="14.875" PointY="6.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DMCtimesheet.Models.C11_Location" Width="1.5" PointX="14.875" PointY="1.125" IsExpanded="true" />
         <EntityTypeShape EntityType="DMCtimesheet.Models.C13_ProjectType" Width="1.5" PointX="14.875" PointY="2.625" IsExpanded="true" />
@@ -43,7 +43,9 @@
         <EntityTypeShape EntityType="DMCtimesheet.Models.C09_ProjectSubCon" Width="1.5" PointX="2.75" PointY="1.625" />
         <AssociationConnector Association="DMCtimesheet.Models.FK_09_ProjectSubCon_01_Projects" />
         <AssociationConnector Association="DMCtimesheet.Models.FK_09_ProjectSubCon_12_SubContractor" />
-        <EntityTypeShape EntityType="DMCtimesheet.Models.C98_EmbedString" Width="1.5" PointX="4.625" PointY="9.25" />
+        <EntityTypeShape EntityType="DMCtimesheet.Models.C98_EmbedString" Width="1.5" PointX="7" PointY="9.25" />
+        <EntityTypeShape EntityType="DMCtimesheet.Models.C23_NguonViec" Width="1.5" PointX="4.75" PointY="7.5" />
+        <AssociationConnector Association="DMCtimesheet.Models.FK_01_Projects_23_NguonViec" />
         </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

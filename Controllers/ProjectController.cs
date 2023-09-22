@@ -33,6 +33,7 @@ namespace DMCTimesheet.Controllers
             ViewBag.Location = db.C11_Location.ToList();
             ViewBag.Owner = db.C10_Owner.ToList();
             ViewBag.Stage = db.C20_Stage.ToList();
+            ViewBag.NguonViec = db.C23_NguonViec.ToList();
 
             return View(db.C01_Projects.ToList());
         }
@@ -52,7 +53,7 @@ namespace DMCTimesheet.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateNewProject(string MaDuAn, string ProjectName, string ProjectOtherName, DateTime StartDate, int Year, int? ProjectTypeId, int? ProjectStatusId, int? LocationId, int? OwnerId, int? ProjectStage)
+        public ActionResult CreateNewProject(string MaDuAn, string ProjectName, string ProjectOtherName, DateTime StartDate, int Year, int? ProjectTypeId, int? ProjectStatusId, int? LocationId, int? OwnerId, int? ProjectStage, int? NguonViec)
         {
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
             C01_Projects _Projects = new C01_Projects()
@@ -66,7 +67,8 @@ namespace DMCTimesheet.Controllers
                 OwnerId = OwnerId,
                 ProjectStatusId = ProjectStatusId,
                 MaDuAn = MaDuAn,
-                ProjectStage = ProjectStage
+                ProjectStage = ProjectStage,
+                NguonViec = NguonViec
 
             };
             try
@@ -87,6 +89,7 @@ namespace DMCTimesheet.Controllers
                 ViewBag.Location = db.C11_Location.ToList();
                 ViewBag.Owner = db.C10_Owner.ToList();
                 ViewBag.Stage = db.C20_Stage.ToList();
+                ViewBag.NguonViec = db.C23_NguonViec.ToList();
 
                 return View("Index", db.C01_Projects.ToList());
             }
@@ -191,6 +194,7 @@ namespace DMCTimesheet.Controllers
                 ViewBag.Stage = db.C20_Stage.ToList();
                 ViewBag.Services = db.C14_Services.ToList();
                 ViewBag.ContractorServices = db.C15_SubConServices.ToList();
+                ViewBag.nguonviec = db.C23_NguonViec.ToList();
                 return View(Enity);
             }
             catch (Exception ex)
@@ -216,7 +220,7 @@ namespace DMCTimesheet.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int ProjectID, string MaDuAn, string ProjectName, string ProjectOtherName, DateTime StartDate, int Year,
-            int? ProjectTypeId, int? ProjectStatusId, int? LocationId, int? OwnerId, int? ProjectStage)
+            int? ProjectTypeId, int? ProjectStatusId, int? LocationId, int? OwnerId, int? ProjectStage, int? NguonViec, DateTime? ngayKetThuc)
         {
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
             try
@@ -237,9 +241,10 @@ namespace DMCTimesheet.Controllers
                 enity.OwnerId = OwnerId;
                 enity.MaDuAn = MaDuAn;
                 enity.ProjectStage = ProjectStage;
+                enity.NguonViec = NguonViec;
+                enity.NgayKetThuc = ngayKetThuc;
                 if (ModelState.IsValid)
                 {
-
                     db.Entry(enity).State = System.Data.Entity.EntityState.Modified;
                     db.SaveChanges();
                 }

@@ -33,6 +33,8 @@ namespace DMCTimesheet.Models
         public Nullable<int> LocationId { get; set; }
         public Nullable<int> OwnerId { get; set; }
         public Nullable<int> ProjectStage { get; set; }
+        public Nullable<int> NguonViec { get; set; }
+        public Nullable<System.DateTime> NgayKetThuc { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<C03_ProjectMembers> C03_ProjectMembers { get; set; }
@@ -40,5 +42,6 @@ namespace DMCTimesheet.Models
         public virtual ICollection<C08_Timesheet> C08_Timesheet { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<C09_ProjectSubCon> C09_ProjectSubCon { get; set; }
+        public virtual C23_NguonViec C23_NguonViec { get; set; }
     }
 }

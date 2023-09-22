@@ -2,6 +2,7 @@
 @{ #region Chsrp code
     DMCTimesheet.Models.C06_UserPermisRelationship Userpermiss = Session["UserPermission"] as DMCTimesheet.Models.C06_UserPermisRelationship;
     DMCTimesheet.Models.C02_Members loginUser = Session["UserLogin"] as DMCTimesheet.Models.C02_Members;
+    string WorkAlert = ViewBag.WorkAlert;
     bool fullProject = false;
     if (loginUser.Position == 1 || loginUser.Position == 2 || loginUser.Position == 3)
     {
@@ -40,11 +41,11 @@
     List<string> listOfWeekName = new List<string>(); //Danh sach tuan trong timesheet ca nhan
     List<string> listOfYears = new List<string>(); //Danh sach Năm trong timesheet ca nhan
     List<string[]> allTS = new List<string[]>();
-    foreach (var item in FullMyTimesheet)
+    foreach (var item in FullMyTimesheet.OrderByDescending(s => s.RecordDate))
     {
         string[] itm = new string[7];
         itm[0] = item.RecordDate.Value.ToShortDateString();
-        itm[1] = item.ProjectId != null? Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName:"Công việc chung";
+        itm[1] = item.ProjectId != null ? _Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName : "Công việc chung";
         myArrProject.Add(itm[1]);
         itm[2] = WorkTypes.FirstOrDefault(s => s.ID == item.WorkType).WorkName;
         itm[3] = item.Hour.ToString();
@@ -62,7 +63,7 @@
     }
     #endregion }
 @* --------------------------------------------------------VIỆC TRONG NGÀY--------------------------------------------------- *@
-<div class="x_panel" style="height:980px">
+<div class="x_panel" style="height:980px" onload="thongbaoOnLoad(WorkAlert)">
     <div class="col-md-5" style="">
         <div class="row" style="height:550px">
             @* Form tạo timesheet *@
@@ -119,10 +120,18 @@
                                         if (MyProjects.Count() > 0)
                                         {
                                             <option value=""></option>
-                                            foreach (var item in MyProjects.OrderBy(s => s.Ngay))
+                                            foreach (var item in _Projects)
                                             {
-                                                <option value=@item.ProjectID>@Projects.FirstOrDefault(s => s.ProjectID == item.ProjectID).ProjectOtherName</option>
+                                                foreach (var itm in MyProjects.OrderBy(s => s.Ngay))
+                                                {
+                                                    if (itm.ProjectID == item.ProjectID)
+                                                    {
+                                                        <option value=@itm.ProjectID>@_Projects.FirstOrDefault(s => s.ProjectID == itm.ProjectID).ProjectOtherName</option>
+
+                                                    }
+                                                }
                                             }
+
                                         }
                                     }
                                 </select>
@@ -172,7 +181,7 @@
                         <div class="clearfix"></div>
                     }
                 </div>
-            </div>            
+            </div>
             <br />
         </div>
         <hr />
@@ -203,7 +212,7 @@
                                 <thead class="bg-dark text-center text-white">
                                     <tr class="row">
                                         <th class="col-1">No</th>
-                                        <th class="col-1">Record date</th>
+                                        <th class="col-1">Date</th>
                                         <th class="col-2">Project</th>
                                         <th class="col-2">Workdone</th>
                                         <th class="col-1">Hours</th>
@@ -266,17 +275,7 @@
     <div class="col-md-7">
         <div class="" style="height:900px">
             <div class="x_title">
-                @{
-                    System.Globalization.CultureInfo cultureInfo = new System.Globalization.CultureInfo("vi-VN");
-                    System.Globalization.Calendar cal = cultureInfo.Calendar;
-                    List<DateTime> dates = new List<DateTime>();
-                    for (int i = 1; i < 32; i++)
-                    {
-                        dates.Add(DateTime.Parse(DateTime.Today.Year.ToString() + "-" + DateTime.Today.Month.ToString() + "-" + i.ToString()));
-                    }
-                }
                 <h2 class="text-warning"><b class="text-success">DANH SÁCH CÔNG VIỆC TRONG TUẦN</b></h2>
-                @*<br />*@
                 @* Filters *@
                 <div class="col-md-12 text-left">
                     <div class="">
@@ -337,7 +336,7 @@
                         @*<thead class="bg-dark text-center text-white">*@
                         <tr class="row text-white" style="background-color:#000000">
                             <td class="col-md-1">No</td>
-                            <td class="col-md-1">Record date</td>
+                            <td class="col-md-1">Date</td>
                             <td class="col-md-2">Project</td>
                             <td class="col-md-3">Workdone</td>
                             <td class="col-md-1">Time</td>
@@ -423,6 +422,14 @@
 </div>
 
 @* ------------------------ADD DAILYWORK----------------------------------------------------- *@
+<script>
+    window.onload = function thongbaoOnLoad() {
+        var workalert = @Html.Raw(Json.Encode(WorkAlert));
+        if (workalert !== null) {
+            alert(workalert);
+        }
+    }
+</script>
 
 @* Functions cho Add dailyworks *@
 <script>
@@ -465,7 +472,14 @@
         }
         return text;
     }
+
+    //hàm gán giá trị lựa chọn vào Description
+    function writetodesc(val) {
+        document.getElementById("descriptionNote").innerText = val;
+    }
+
 </script>
+
 <script>
     //Hàm thay đổi chi tiết công việc trong công việc dc chọn
     function onchangeworktype() {
@@ -933,61 +947,56 @@
             //ID - currentTS[0][6]
             modalContent += "<div class='form-group inline row'>";
             modalContent += "<h6 class='control-label col-md-3 col-sm-3 col-xs-3'>" + "ID: </h6>";
-            modalContent += "<input type='text' class='form-control col-md-7 col-sm-9 col-xs-9' readonly='' name='Id' placeholder='' required='' value='" + currentTS[0][6] + "'>";
+            modalContent += "<input type='text' class='form-control col-md-7 col-sm-9 col-xs-9' readonly='' id='md_Id' name='Id' placeholder='' required='' value='" + currentTS[0][6] + "'>";
             modalContent += "</br>";
             modalContent += "</div>";
 
             //Date - currentTS[0][0]
             modalContent += "<div class='form-group inline row'>";
             modalContent += "<h6 class='control-label col-md-3 col-sm-3 col-xs-3'>" + "Ngày: </h6>";
-            modalContent += "<input type='date' class='form-control col-md-7 col-sm-9 col-xs-9' name='RecordDate' placeholder='' required='' value='" + Date.parse(currentTS[0][0]).toString("yyyy-MM-dd") + "'>";
+            modalContent += "<input type='date' class='form-control col-md-7 col-sm-9 col-xs-9' id='md_RecordDate' name='RecordDate' placeholder='' required='' value='" + Date.parse(currentTS[0][0]).toString("yyyy-MM-dd") + "'>";
             modalContent += "</br>";
             modalContent += "</div>";
 
             //Project - currentTS[0][1]
             modalContent += "<div class='form-group inline row'>";
             modalContent += "<h6 class='control-label col-md-3 col-sm-3 col-xs-3'>" + "Dự án: </h6>";
-        modalContent += "<select name='ProjectName' class='form-control col-md-7 col-sm-9 col-xs-9'>";
-        modalContent += "<option value='" + currentTS[0][1] + "'>" + currentTS[0][1] + "</option>";
-        modalContent += "<option value='" + currentTS[0][1] + "'>-----------------------</option>";
+            modalContent += "<select id='md_ProjectName' name='ProjectName' class='form-control col-md-7 col-sm-9 col-xs-9'>";
+            modalContent += "<option value='" + currentTS[0][1] + "'>" + currentTS[0][1] + "</option>";
+            modalContent += "<option value='" + currentTS[0][1] + "'>-----------------------</option>";
             for (var i = 0; i < myProjects.length; i++) {
                 modalContent += "<option value='" + myProjects[i] + "'>" + myProjects[i] +"</option>";
             }
-            //modalContent += "<input type='text' class='form-control col-md-7 col-sm-9 col-xs-9' name='ProjectId' placeholder='' required='' value='" + currentTS[0][1] + "'>";
             modalContent += "</select>";
             modalContent += "</br>";
             modalContent += "</div>";
 
             //WorkType
             modalContent += "<div class='form-group inline row'>";
-        modalContent += "<h6 class='control-label col-md-3 col-sm-3 col-xs-3'>" + "Công việc: </h6>";
+            modalContent += "<h6 class='control-label col-md-3 col-sm-3 col-xs-3'>" + "Công việc: </h6>";
 
-        modalContent += "<select name='WorkType' class='form-control col-md-7 col-sm-9 col-xs-9'>";
-        modalContent += "<option value='" + currentTS[0][2] + "'>" + currentTS[0][2] + "</option>";
-        modalContent += "<option value='" + currentTS[0][2] + "'>-----------------------</option>";
-        for (var i = 0; i < worktype.length; i++) {
-            modalContent += "<option value='" + worktype[i] + "'>" + worktype[i] +"</option>";
-        }
-        modalContent += "</select>";
+            modalContent += "<select id='md_WorkType' name='WorkType' class='form-control col-md-7 col-sm-9 col-xs-9'>";
+            modalContent += "<option value='" + currentTS[0][2] + "'>" + currentTS[0][2] + "</option>";
+            modalContent += "<option value='" + currentTS[0][2] + "'>-----------------------</option>";
 
-            //modalContent += "<input type='text' class='form-control col-md-7 col-sm-9 col-xs-9' name='WorkType' placeholder='' required='' value='" + currentTS[0][2] + "'>";
+            for (var i = 0; i < worktype.length; i++) {
+                modalContent += "<option value='" + worktype[i] + "'>" + worktype[i] + "</option>";
+            }
+            modalContent += "</select>";
             modalContent += "</br>";
             modalContent += "</div>";
 
-            //Time; Hour + OT
-            //modalContent += "<h5 class='control-label col-md-3 col-sm-3 col-xs-3'>" + "Thời gian: " + (parseInt(currentTS[0][3]) + parseInt(currentTS[0][4])) + "giờ </h4>";
-
             modalContent += "<div class='form-group inline row'>";
             modalContent += "<h6 class='control-label col-md-3 col-sm-3 col-xs-3'>" + "Thời gian: </h6>";
-            modalContent += "<input type='number' class='form-control col-md-4 col-sm-9 col-xs-9' title='Hour' name='Hour' placeholder='' value='" + parseInt(currentTS[0][3]) + "'>";
-            modalContent += "<input type='number' class='form-control col-md-3 col-sm-9 col-xs-9' title='Overtime' name='OvertimeHour' placeholder='' value='" + parseInt(currentTS[0][4]) + "'>";
+            modalContent += "<input type='number' class='form-control col-md-4 col-sm-9 col-xs-9' title='Hour' id='md_Hour' name='Hour' placeholder='' value='" + parseInt(currentTS[0][3]) + "'>";
+            modalContent += "<input type='number' class='form-control col-md-3 col-sm-9 col-xs-9' title='Overtime' id='md_OvertimeHour' name='OvertimeHour' placeholder='' value='" + parseInt(currentTS[0][4]) + "'>";
             modalContent += "</br>";
             modalContent += "</div>";
 
             //description
             modalContent += "<div class='form-group inline row'>";
             modalContent += "<h6 class='control-label col-md-3 col-sm-3 col-xs-3'>" + "Chú thích: </h6>";
-            modalContent += "<textarea class='form-control col-md-7 col-sm-9 col-xs-9' row='3' name='Description' placeholder='' required=''>" + currentTS[0][5] + "</textarea>";
+            modalContent += "<textarea class='form-control col-md-7 col-sm-9 col-xs-9' row='3' id='md_Description' name='Description' placeholder='' required=''>" + currentTS[0][5] + "</textarea>";
             modalContent += "</br>";
             modalContent += "</div>";
 
@@ -996,7 +1005,7 @@
         /*--Modal footer--*/
         modalContent += "<div class='modal-footer'>";
 
-        modalContent += "<button type='submit' class='btn btn-success text-left'>Lưu Cập nhật</button>";
+        modalContent += "<button type='submit' class='btn btn-success text-left' onclick='saveTsUpdate()'>Lưu Cập nhật</button>";
         //modalContent += "<a type='button' href='/Timesheet/Delete/" + currentTS[0][6] + "' class='btn btn-danger'>Xóa Timesheet này</a>";
 
         //Delete
@@ -1013,13 +1022,53 @@
 
         //alert(modalContent);
 
-            modal.innerHTML = modalContent;
+        modal.innerHTML = modalContent;
         } catch (e) {
             alert("Lỗi Display trên Modal do " + e);
         }
     }
 
 
+
+</script>
+
+@* save Timesheet edit record *@
+<script>
+    function saveTsUpdate() {
+        const md_Id = document.getElementById("md_Id").value;
+        const md_RecordDate = document.getElementById("md_RecordDate").value;
+        const md_Projectname = document.getElementById("md_ProjectName").value;
+        const md_WorkType = document.getElementById("md_WorkType").value;
+        const md_Hour = document.getElementById("md_Hour").value;
+        const md_OvertimeHour = document.getElementById("md_OvertimeHour").value;
+        const md_Description = document.getElementById("md_Description").value;
+
+
+        //lưu Thông tin về Server
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: '/Timesheet/SaveTS',
+            data: { Id: md_Id, RecordDate: md_RecordDate, Projectname: md_Projectname, WorkType: md_WorkType, Hour: md_Hour, OvertimeHour: md_OvertimeHour, Description: md_Description },
+            success: function myfunction() {
+                alert("Lưu thành công");
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("Có lỗi " + textStatus);
+            }
+        });
+
+        //lấy thông tin mới nhất từ server và gán vào Selector
+        $.get("/Timesheet/GetTS", function (data, status) {
+            //var content = '';
+            //for (var i = 0; i < data.length; i++) {
+            //    content += "<option value='" + data[i]?.OnwerId + "'>" + data[i]?.ShortName + "</option>";
+            //}
+            //selector.innerHTML = content; // gán value trong từng item
+            export2display(data);
+            alert("Đã load dữ liệu và gán tình trạng dự án " + status); // thông báo
+        });
+    }
 </script>
 
 <script src="~/UserStyles/Chart.js/chart.js"></script>

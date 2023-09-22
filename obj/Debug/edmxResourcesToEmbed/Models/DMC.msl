@@ -4,6 +4,8 @@
     <EntitySetMapping Name="C01_Projects">
       <EntityTypeMapping TypeName="DMCtimesheet.Models.C01_Projects">
         <MappingFragment StoreEntitySet="01_Projects">
+          <ScalarProperty Name="NgayKetThuc" ColumnName="NgayKetThuc" />
+          <ScalarProperty Name="NguonViec" ColumnName="NguonViec" />
           <ScalarProperty Name="ProjectStage" ColumnName="ProjectStage" />
           <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
           <ScalarProperty Name="MaDuAn" ColumnName="MaDuAn" />
@@ -39,6 +41,7 @@
     <EntitySetMapping Name="C03_ProjectMembers">
       <EntityTypeMapping TypeName="DMCtimesheet.Models.C03_ProjectMembers">
         <MappingFragment StoreEntitySet="03_ProjectMembers">
+          <ScalarProperty Name="ThanhVienKhac" ColumnName="ThanhVienKhac" />
           <ScalarProperty Name="LegalManager2" ColumnName="LegalManager2" />
           <ScalarProperty Name="ChuTriMEP2" ColumnName="ChuTriMEP2" />
           <ScalarProperty Name="ChuTriKetCau2" ColumnName="ChuTriKetCau2" />
@@ -265,6 +268,14 @@
           <ScalarProperty Name="EmbedString" ColumnName="EmbedString" />
           <ScalarProperty Name="NgayLap" ColumnName="NgayLap" />
           <ScalarProperty Name="ID" ColumnName="ID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="C23_NguonViec">
+      <EntityTypeMapping TypeName="DMCtimesheet.Models.C23_NguonViec">
+        <MappingFragment StoreEntitySet="23_NguonViec">
+          <ScalarProperty Name="NguonViec" ColumnName="NguonViec" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -20,6 +20,8 @@
           <Property Name="LocationId" Type="int" />
           <Property Name="OwnerId" Type="int" />
           <Property Name="ProjectStage" Type="int" />
+          <Property Name="NguonViec" Type="int" />
+          <Property Name="NgayKetThuc" Type="date" />
         </EntityType>
         <EntityType Name="02_Members">
           <Key>
@@ -56,6 +58,7 @@
           <Property Name="ChuTriKetCau2" Type="int" />
           <Property Name="ChuTriMEP2" Type="int" />
           <Property Name="LegalManager2" Type="int" />
+          <Property Name="ThanhVienKhac" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="04_Permission">
           <Key>
@@ -228,6 +231,13 @@
           <Property Name="GroupNumber" Type="int" />
           <Property Name="ServiceGroupName" Type="nvarchar" MaxLength="100" />
         </EntityType>
+        <EntityType Name="23_NguonViec">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NguonViec" Type="nvarchar" MaxLength="250" />
+        </EntityType>
         <EntityType Name="98_EmbedString">
           <Key>
             <PropertyRef Name="ID" />
@@ -248,6 +258,18 @@
           <Property Name="Details" Type="nvarchar" MaxLength="250" />
           <Property Name="GroupId" Type="int" />
         </EntityType>
+        <Association Name="FK_01_Projects_23_NguonViec">
+          <End Role="23_NguonViec" Type="Self.23_NguonViec" Multiplicity="0..1" />
+          <End Role="01_Projects" Type="Self.01_Projects" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="23_NguonViec">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="01_Projects">
+              <PropertyRef Name="NguonViec" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_03_ProjectMembers_01_Projects">
           <End Role="01_Projects" Type="Self.01_Projects" Multiplicity="0..1" />
           <End Role="03_ProjectMembers" Type="Self.03_ProjectMembers" Multiplicity="*" />
@@ -453,8 +475,13 @@
           <EntitySet Name="20_Stage" EntityType="Self.20_Stage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="21_DetailAction" EntityType="Self.21_DetailAction" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="22_ServiceGroup" EntityType="Self.22_ServiceGroup" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="23_NguonViec" EntityType="Self.23_NguonViec" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="98_EmbedString" EntityType="Self.98_EmbedString" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="99_ActivityLog" EntityType="Self.99_ActivityLog" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_01_Projects_23_NguonViec" Association="Self.FK_01_Projects_23_NguonViec">
+            <End Role="23_NguonViec" EntitySet="23_NguonViec" />
+            <End Role="01_Projects" EntitySet="01_Projects" />
+          </AssociationSet>
           <AssociationSet Name="FK_03_ProjectMembers_01_Projects" Association="Self.FK_03_ProjectMembers_01_Projects">
             <End Role="01_Projects" EntitySet="01_Projects" />
             <End Role="03_ProjectMembers" EntitySet="03_ProjectMembers" />
@@ -538,6 +565,9 @@
           <NavigationProperty Name="C08_Timesheet" Relationship="Self.FK_08_Timesheet_01_Projects" FromRole="C01_Projects" ToRole="C08_Timesheet" />
           <Property Name="ProjectStage" Type="Int32" />
           <NavigationProperty Name="C09_ProjectSubCon" Relationship="DMCtimesheet.Models.FK_09_ProjectSubCon_01_Projects" FromRole="C01_Projects" ToRole="C09_ProjectSubCon" />
+          <Property Name="NguonViec" Type="Int32" />
+          <NavigationProperty Name="C23_NguonViec" Relationship="DMCtimesheet.Models.FK_01_Projects_23_NguonViec" FromRole="C01_Projects" ToRole="C23_NguonViec" />
+          <Property Name="NgayKetThuc" Type="DateTime" Precision="0" />
         </EntityType>
         <EntityType Name="C02_Members">
           <Key>
@@ -579,6 +609,7 @@
           <Property Name="ChuTriKetCau2" Type="Int32" />
           <Property Name="ChuTriMEP2" Type="Int32" />
           <Property Name="LegalManager2" Type="Int32" />
+          <Property Name="ThanhVienKhac" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="C04_Permission">
           <Key>
@@ -851,6 +882,11 @@
             <End Role="C09_ProjectSubCon" EntitySet="C09_ProjectSubCon" />
           </AssociationSet>
           <EntitySet Name="C98_EmbedString" EntityType="DMCtimesheet.Models.C98_EmbedString" />
+          <EntitySet Name="C23_NguonViec" EntityType="DMCtimesheet.Models.C23_NguonViec" />
+          <AssociationSet Name="FK_01_Projects_23_NguonViec" Association="DMCtimesheet.Models.FK_01_Projects_23_NguonViec">
+            <End Role="C23_NguonViec" EntitySet="C23_NguonViec" />
+            <End Role="C01_Projects" EntitySet="C01_Projects" />
+          </AssociationSet>
           </EntityContainer>
         <EntityType Name="C20_Stage">
           <Key>
@@ -1061,6 +1097,26 @@
           <Property Name="EmbedString" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Version" Type="Double" />
         </EntityType>
+        <EntityType Name="C23_NguonViec">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NguonViec" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="C01_Projects" Relationship="DMCtimesheet.Models.FK_01_Projects_23_NguonViec" FromRole="C23_NguonViec" ToRole="C01_Projects" />
+        </EntityType>
+        <Association Name="FK_01_Projects_23_NguonViec">
+          <End Type="DMCtimesheet.Models.C23_NguonViec" Role="C23_NguonViec" Multiplicity="0..1" />
+          <End Type="DMCtimesheet.Models.C01_Projects" Role="C01_Projects" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C23_NguonViec">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="C01_Projects">
+              <PropertyRef Name="NguonViec" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1070,6 +1126,8 @@
           <EntitySetMapping Name="C01_Projects">
             <EntityTypeMapping TypeName="DMCtimesheet.Models.C01_Projects">
               <MappingFragment StoreEntitySet="01_Projects">
+                <ScalarProperty Name="NgayKetThuc" ColumnName="NgayKetThuc" />
+                <ScalarProperty Name="NguonViec" ColumnName="NguonViec" />
                 <ScalarProperty Name="ProjectStage" ColumnName="ProjectStage" />
                 <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
                 <ScalarProperty Name="MaDuAn" ColumnName="MaDuAn" />
@@ -1105,6 +1163,7 @@
           <EntitySetMapping Name="C03_ProjectMembers">
             <EntityTypeMapping TypeName="DMCtimesheet.Models.C03_ProjectMembers">
               <MappingFragment StoreEntitySet="03_ProjectMembers">
+                <ScalarProperty Name="ThanhVienKhac" ColumnName="ThanhVienKhac" />
                 <ScalarProperty Name="LegalManager2" ColumnName="LegalManager2" />
                 <ScalarProperty Name="ChuTriMEP2" ColumnName="ChuTriMEP2" />
                 <ScalarProperty Name="ChuTriKetCau2" ColumnName="ChuTriKetCau2" />
@@ -1331,6 +1390,14 @@
                 <ScalarProperty Name="EmbedString" ColumnName="EmbedString" />
                 <ScalarProperty Name="NgayLap" ColumnName="NgayLap" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C23_NguonViec">
+            <EntityTypeMapping TypeName="DMCtimesheet.Models.C23_NguonViec">
+              <MappingFragment StoreEntitySet="23_NguonViec">
+                <ScalarProperty Name="NguonViec" ColumnName="NguonViec" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

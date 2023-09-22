@@ -15,6 +15,8 @@
     <Property Name="LocationId" Type="int" />
     <Property Name="OwnerId" Type="int" />
     <Property Name="ProjectStage" Type="int" />
+    <Property Name="NguonViec" Type="int" />
+    <Property Name="NgayKetThuc" Type="date" />
   </EntityType>
   <EntityType Name="02_Members">
     <Key>
@@ -51,6 +53,7 @@
     <Property Name="ChuTriKetCau2" Type="int" />
     <Property Name="ChuTriMEP2" Type="int" />
     <Property Name="LegalManager2" Type="int" />
+    <Property Name="ThanhVienKhac" Type="nvarchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="04_Permission">
     <Key>
@@ -223,6 +226,13 @@
     <Property Name="GroupNumber" Type="int" />
     <Property Name="ServiceGroupName" Type="nvarchar" MaxLength="100" />
   </EntityType>
+  <EntityType Name="23_NguonViec">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NguonViec" Type="nvarchar" MaxLength="250" />
+  </EntityType>
   <EntityType Name="98_EmbedString">
     <Key>
       <PropertyRef Name="ID" />
@@ -243,6 +253,18 @@
     <Property Name="Details" Type="nvarchar" MaxLength="250" />
     <Property Name="GroupId" Type="int" />
   </EntityType>
+  <Association Name="FK_01_Projects_23_NguonViec">
+    <End Role="23_NguonViec" Type="Self.23_NguonViec" Multiplicity="0..1" />
+    <End Role="01_Projects" Type="Self.01_Projects" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="23_NguonViec">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="01_Projects">
+        <PropertyRef Name="NguonViec" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_03_ProjectMembers_01_Projects">
     <End Role="01_Projects" Type="Self.01_Projects" Multiplicity="0..1" />
     <End Role="03_ProjectMembers" Type="Self.03_ProjectMembers" Multiplicity="*" />
@@ -448,8 +470,13 @@
     <EntitySet Name="20_Stage" EntityType="Self.20_Stage" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="21_DetailAction" EntityType="Self.21_DetailAction" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="22_ServiceGroup" EntityType="Self.22_ServiceGroup" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="23_NguonViec" EntityType="Self.23_NguonViec" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="98_EmbedString" EntityType="Self.98_EmbedString" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="99_ActivityLog" EntityType="Self.99_ActivityLog" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_01_Projects_23_NguonViec" Association="Self.FK_01_Projects_23_NguonViec">
+      <End Role="23_NguonViec" EntitySet="23_NguonViec" />
+      <End Role="01_Projects" EntitySet="01_Projects" />
+    </AssociationSet>
     <AssociationSet Name="FK_03_ProjectMembers_01_Projects" Association="Self.FK_03_ProjectMembers_01_Projects">
       <End Role="01_Projects" EntitySet="01_Projects" />
       <End Role="03_ProjectMembers" EntitySet="03_ProjectMembers" />

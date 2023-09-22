@@ -5,6 +5,7 @@
     //Layout = "~/Views/Shared/_AdminLayout.cshtml";
     string userName = ViewBag.UserName;
     string backgroundImage = "../Assets/Photos/background/dmc_login.jpg";
+    string version = "1.2";
 }
 
 <!DOCTYPE html>
@@ -127,7 +128,7 @@
 
                                 <div>
                                     <h3>Coteccons Design Management Center</h3>
-                                    <p>©@DateTime.Now.Year - Version <b class="text-primary">1.0</b> - All Rights Reserved.</p>
+                                    <p>©@DateTime.Now.Year - Version <b class="text-primary">@version</b> - All Rights Reserved.</p>
                                 </div>
                             </div>
                         </form>
