@@ -158,7 +158,7 @@ namespace DMCTimesheet.Controllers
         public static int GetIso8601WeekOfYear(DateTime date)
         {
             // Calculate the week of the year using ISO 8601 definition
-            DayOfWeek day = CultureInfo.InvariantCulture.Calendar.GetDayOfWeek(date);
+            // DayOfWeek day = CultureInfo.InvariantCulture.Calendar.GetDayOfWeek(date);
             return CultureInfo.InvariantCulture.Calendar.GetWeekOfYear(date, CalendarWeekRule.FirstFourDayWeek, DayOfWeek.Monday);
         }
 
@@ -643,7 +643,7 @@ namespace DMCTimesheet.Controllers
                     {
                         int _Ot = OvertimeHour ?? 0;
                         C02_Members loginUsr = Session["UserLogin"] as C02_Members;
-                        bool ktrasogio = DailyCheck(RecordDate, loginUsr.UserID, Hour, _Ot);
+                        bool ktrasogio = DailyCheck(Id, RecordDate, loginUsr.UserID, Hour, _Ot);
 
                         if (ktrasogio)
                         {
@@ -676,6 +676,7 @@ namespace DMCTimesheet.Controllers
                         }
                         else
                         {
+                            //LỖI CHỖ NÀY- ĐANG TƯƠNG TÁC TRÊN MODAL
                             ViewBag.WorkAlert = $"Tổng số giờ trong ngày {RecordDate} đã hơn tiêu chuẩn (8h), cần chuyển qua tăng ca Overtime";
                             //return View("TimesheetManage","Timesheet", ViewBag.WorkAlert);
                             return RedirectToAction("TimesheetManage");
@@ -707,7 +708,7 @@ namespace DMCTimesheet.Controllers
                 {
                     int _Ot = OvertimeHour ?? 0;
                     C02_Members loginUsr = Session["UserLogin"] as C02_Members;
-                    bool ktrasogio = DailyCheck(RecordDate, loginUsr.UserID, Hour, _Ot);
+                    bool ktrasogio = DailyCheck(Id, RecordDate, loginUsr.UserID, Hour, _Ot);
                     if (ktrasogio)
                     {
                         //Đổi dự án
@@ -761,27 +762,53 @@ namespace DMCTimesheet.Controllers
         #endregion
         /// <summary>
         /// Kiểm tra số giờ trong ngày
-        /// Nếu true: tổng số giờ trong ngày <=8 => OK
-        /// Nếu false: tổng số giờ trong ngày > 8 => not OK
+        /// Nếu true: tổng số giờ trong ngày <=8 => OK/ True
+        /// Nếu false: tổng số giờ trong ngày > 8 => not OK/False
         /// </summary>
         /// <param name="recordDate"></param>
         /// <param name="hour"></param>
         /// <param name="overtimeHour"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        private bool DailyCheck(DateTime recordDate, int userId, int hour, int? overtimeHour)
+        private bool DailyCheck(int id, DateTime recordDate, int userId, int hour, int? overtimeHour)
         {
             try
             {
                 double total = 0;
-                //int totalhour = db.C08_Timesheet.Where(s => s.RecordDate == recordDate && s.MemberID == userId).ToList().Select(p => new { h = p.Hour, ot = p.OT }).Count();
-                var totalhour = db.C08_Timesheet.Where(s => s.RecordDate == recordDate && s.MemberID == userId).ToList();
-                foreach (var item in totalhour)
+                //Lấy các TS theo ngày input
+                var DailyTS = db.C08_Timesheet.Where(s => s.RecordDate == recordDate && s.MemberID == userId).ToList();
+                switch (DailyTS.Count)
                 {
-                    total += (double)item.Hour + (double)item.OT;
+                    case 0: //ko tìm thấy TS
+                        {
+                            return true;
+                        }
+                    case 1: //chỉ có 1 record ==> Update Record hiện có nếu Id trùng
+                        {
+                            if (DailyTS.FirstOrDefault().Id == id)
+                            {
+                                if (hour > 8)
+                                {
+                                    return false;
+                                }
+                                return true;
+                            }
+                            return false;
+                        }
+                    default: //Nhiều hơn 1 record
+                        {
+                            foreach (var item in DailyTS)
+                            {
+                                if (item.Id != id) // tính tổng số giờ hiện có không bao gồm record edit
+                                {
+                                    total += (double)item.Hour + (double)item.OT;
+                                }
+                            }
+                            //Nếu số giờ hiện có + edit
+                            if ((total + hour + overtimeHour) > 8) return false;
+                            else return true;
+                        }
                 }
-                if ((total + hour + overtimeHour) >= 8) return false;
-                else return true;
             }
             catch (Exception)
             {
@@ -1015,14 +1042,14 @@ namespace DMCTimesheet.Controllers
             {
                 db.Entry(workType).State = EntityState.Modified;
                 db.SaveChanges();
-
+                return Json(workType, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
             {
-                status = ex.Message;
-
+                status = $"Có lỗi {ex.Message}"; ;
+                return Json(status, JsonRequestBehavior.AllowGet);
             }
-            return Json(workType, JsonRequestBehavior.AllowGet);
+
         }
 
 
