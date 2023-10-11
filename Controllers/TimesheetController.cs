@@ -309,6 +309,28 @@ namespace DMCTimesheet.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        public ActionResult CreateNewTS(int? ProjectID, string RecordDate, int? WorkID, string Hour, string OvertimeHour, string Description, int NhomHoatDong)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            C02_Members logUser = Session["UserLogin"] as C02_Members;
+            try
+            {
+                C08_Timesheet newEnity = new C08_Timesheet() { };
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            return View();
+        }
+
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult CreateTimesheet(int? ProjectID, string RecordDate, int? WorkID, string Hour, string OvertimeHour, string Description, int NhomHoatDong)
         {
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");

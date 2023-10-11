@@ -74,19 +74,20 @@
             <div class="x_content">
                 @* Form nhập liệu *@
                 <div class="embed-responsive">
-                    @using (Html.BeginForm("CreateTimesheet", "Timesheet", FormMethod.Post))
+                    @*@using (Html.BeginForm("CreateTimesheet", "Timesheet", FormMethod.Post))*@
+                    @using (Html.BeginForm("CreateNewTS", "Timesheet", FormMethod.Post))
                     {
                         @Html.AntiForgeryToken()
                         <form class="text-dark">
                             @* memberID *@
                             <div class="form-group row">
                                 <lable hidden class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Tên thành viên</lable>
-                                <input hidden type="text" class="form-control col-md-7 col-sm-9 col-xs-9" readonly name="MemberName" placeholder="" required="" value="@loginUser.FullName" />
+                                <input hidden type="text" class="form-control col-md-7 col-sm-9 col-xs-9" readonly name="MemberName" placeholder="Tên" required="" value="@loginUser.FullName" />
                             </div>
                             @* Date *@
                             <div class="form-group row">
                                 <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Ngày ghi</lable>
-                                <input type="date" class="form-control col-md-7 col-sm-9 col-xs-9" name="RecordDate" placeholder="" required="" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                                <input type="date" class="form-control col-md-7 col-sm-9 col-xs-9" name="RecordDate" placeholder="Ngày ghi" required="" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
                             </div>
                             @* WorkGroup *@
                             <div class="form-group row text-left">
@@ -165,13 +166,16 @@
                                 <div class="col-md-7 col-sm-9 col-xs-9">
                                     <div class="col-md-6 text-success inline">
                                         <lable class="control-label col-md-5 text-left">Giờ</lable>
-                                        <input type="number" class="form-control col-md-6" name="Hour" required value="4" />
+                                        <input type="number" class="form-control col-md-6" name="Hour" required value="4" placeholder="số giờ đã làm" />
                                     </div>
                                     <div class="col-md-6 inline">
                                         <lable class="control-label col-md-6 text-left">Overtime</lable>
-                                        <input type="number" class="form-control col-md-6" name="OvertimeHour" value="0" />
+                                        <input type="number" class="form-control col-md-6" name="OvertimeHour" value="0" placeholder="số giờ tăng ca" />
                                     </div>
-                                </div>
+                                    <div class="form-group row inline">
+                                        <lable class="control-label text-right"><i class="text-danger">Giờ >8h sẽ tự chuyển vào tăng ca cho công việc điền cuối cùng.</i></lable>
+                                    </div>
+                                </div>                                
                             </div>
                             <div class="form-group text-left">
                                 <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
