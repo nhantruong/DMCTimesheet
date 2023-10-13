@@ -1,0 +1,116 @@
+﻿@model IEnumerable<DMCTimesheet.Models.C08_Timesheet>
+@{
+    DMCTimesheet.Models.C06_UserPermisRelationship Userpermiss = Session["UserPermission"] as DMCTimesheet.Models.C06_UserPermisRelationship;
+    DMCTimesheet.Models.C02_Members loginUser = Session["UserLogin"] as DMCTimesheet.Models.C02_Members;
+
+    List<DMCTimesheet.Models.C01_Projects> Projects = ViewBag.Projects as List<DMCTimesheet.Models.C01_Projects>;
+    List<DMCTimesheet.Models.C02_Members> Members = ViewBag.Members as List<DMCTimesheet.Models.C02_Members>;
+    List<DMCTimesheet.Models.C07_WorkType> WorkType = ViewBag.WorkType as List<DMCTimesheet.Models.C07_WorkType>;
+    List<DMCTimesheet.Models.C19_Workgroup> WorkGroup = ViewBag.Workgroup as List<DMCTimesheet.Models.C19_Workgroup>;
+    //string BI_embed = "https://app.powerbi.com/view?r=eyJrIjoiMWFhYTViM2ItYjYxNi00ZGI5LTk1MjQtNGUzZTc0NjdkZGIxIiwidCI6ImFmYzIxMzc5LTEwMGItNDYzZC04MzI1LWNkMTY4NmFlOTRjYSIsImMiOjEwfQ%3D%3D";
+    DMCTimesheet.Models.C98_EmbedString BI_embed = ViewBag.Embedstring as DMCTimesheet.Models.C98_EmbedString;
+
+    int stt = 1;
+}
+
+<h3>@ViewBag.Title</h3>
+<div>
+    <h4>BI Report</h4>
+    <div>
+        <div class="embed-responsive embed-responsive-16by9">
+            @*<iframe title="DMCreport - Page 1" width="1024" height="1060" src="https://app.powerbi.com/view?r=eyJrIjoiMWFhYTViM2ItYjYxNi00ZGI5LTk1MjQtNGUzZTc0NjdkZGIxIiwidCI6ImFmYzIxMzc5LTEwMGItNDYzZC04MzI1LWNkMTY4NmFlOTRjYSIsImMiOjEwfQ%3D%3D" frameborder="0" allowFullScreen="true"></iframe>*@
+            <iframe title="DMCreport - Page 1" width="1024" height="1060" src=@BI_embed.EmbedString frameborder="0" allowFullScreen="true"></iframe>
+        </div>
+    </div>
+</div>
+
+<div>
+    <h4>DANH MỤC TIMESHEET THEO DỰ ÁN</h4>
+    <div>
+        <table class="table">
+            <thead class="table-dark">
+                <tr class="row text-white">
+                    <td class="col-md-1">STT</td>
+                    <td class="col-md-1">Tên dự án</td>
+                    <td class="col-md-1">Ngày</td>
+                    <td class="col-md-2">Tên Thành viên</td>
+                    <td class="col-md-2">Công việc</td>
+                    <td class="col-md-1">Thời gian thực hiện</td>
+                    <td class="col-md-3">Chi tiết công việc</td>
+                </tr>
+            </thead>
+        </table>
+    </div>
+    <div class="table-responsive" style="height:800px">
+        <table class="table table-bordered table-striped">
+           <caption></caption>
+            <tbody>
+                @if (Model == null || Model.Count() == 0)
+                {
+                    <tr>
+                        <td class="row text-white">Chưa có timesheet</td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var item in Model.OrderByDescending(s=>s.RecordDate))
+                    {
+                        <tr class="row">
+                            <td class="col-md-1 text-center text-dark">@stt</td>
+                            <td class="col-md-1">
+                                @if (item.ProjectId != null)
+                                {
+                                    @*<b class="text-primary">@Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName</b>*@
+                                <b>@Html.ActionLink(Projects.FirstOrDefault(s => s.ProjectID == item.ProjectId).ProjectOtherName, "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "text-primary" })</b>
+                                }
+                                else
+                                {
+                                    @*<b class="text-danger">Công việc chung</b>*@
+                            <b>@Html.ActionLink("Công việc chung", "UserEdit", "Timesheet", new { id = item.Id }, new { @class = "text-primary" })</b>
+                                }
+                            </td>
+                            <td class="col-md-1 text-center text-dark">
+                                @if (item.RecordDate != null)
+                                {
+                                    @DateTime.Parse(item.RecordDate.ToString()).ToString("yyyy-MM-dd");
+                                }
+                            </td>
+                            <td class="col-md-2">
+                                @if (item.MemberID != null)
+                                {
+                                    <b class="text-danger">@Members.FirstOrDefault(s => s.UserID == item.MemberID).FullName</b>
+                                }
+
+                            </td>
+
+                            <td class="col-md-2">
+                                @if (item.WorkType != null)
+                                {
+                                    <a class="text-dark">@WorkType.FirstOrDefault(s => s.ID == item.WorkType).WorkName</a>
+                                }
+                            </td>
+
+                            <td class="col-md-1">
+                                @if (item.Hour != null || item.OT != null)
+                                {
+                                    <div class="inline">
+                                        <p>Hour: <b class="text-primary">@item.Hour</b></p>
+                                        <p>OT: <b class="text-danger">@item.OT</b></p>
+                                    </div>
+                                }
+                            </td>
+                            <td class="col-md-3 text-dark">
+                                @if (item.Description != null)
+                                {
+                                    <i>@item.Description</i>
+                                }
+                            </td>
+                        </tr>
+                        stt++;
+                    }
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>

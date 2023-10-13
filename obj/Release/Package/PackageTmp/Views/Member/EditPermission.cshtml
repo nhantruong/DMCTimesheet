@@ -1,0 +1,82 @@
+﻿@model IEnumerable<DMCTimesheet.Models.C06_UserPermisRelationship>
+@{
+    ViewBag.Title = "Member permission";
+    //Layout = "~/Views/Shared/_AdminLayout.cshtml";
+
+    //Data from Controller
+    List<DMCTimesheet.Models.C04_Permission> Permissions = ViewBag.Permissions as List<DMCTimesheet.Models.C04_Permission>;
+    List<DMCTimesheet.Models.C02_Members> Members = ViewBag.Members as List<DMCTimesheet.Models.C02_Members>;
+    
+}
+
+<h3><i class="text-danger">@ViewBag.Error</i></h3>
+<br />
+<h3>@ViewBag.Title</h3>
+
+<div>
+    <table class="table table-condensed">
+        <tr class="text-white" style="background-color:#808080">
+            <td class="col-sm-1">ID</td>
+            <td class="col-sm-2">UserName</td>
+            <td class="col-sm-2">Permission Name</td>
+            <td class="col-sm-2">Permission Description</td>
+            <td class="col-sm-1">Actived?</td>
+            <td class="col-sm-1">#</td>
+        </tr>
+        @foreach (var item in Model.OrderBy(s => s.id_user_perm))
+        {
+            using (Html.BeginForm("EditPermit", "Member", FormMethod.Post, new { @class = "text-danger" }))
+            {
+                @Html.AntiForgeryToken()
+                <tr>
+
+                    <td class="col-sm-1">
+                        <input type="number" name="id_user_perm" class="form-control text-primary" readonly value="@item.id_user_perm" />
+                    </td>
+                    <td class="col-sm-2">
+                        <input type="text" class="text-danger form-control" readonly name="idUser" value="@Members.FirstOrDefault(s => s.UserID == item.idUser).FullName" />
+                    </td>
+                    <td class="text-danger col-sm-2">
+                        <select name="idPer" class="form-control">
+                            <option value=@Permissions.FirstOrDefault(s => s.id_Per == item.idPer).id_Per>@Permissions.FirstOrDefault(s => s.id_Per == item.idPer).PermissionName</option>
+                            <option value=@Permissions.FirstOrDefault(s => s.id_Per == item.idPer).id_Per>-----------</option>
+                            @foreach (var per in Permissions)
+                            {
+                                <option value=@per.id_Per>@per.PermissionName</option>
+                            }
+                        </select>
+                    </td>
+
+                    <td class="col-sm-2">
+                        <input type="text" name="idPer" class="text-primary form-control" readonly value="@Permissions.FirstOrDefault(s => s.id_Per == item.idPer).PerDescription" />
+                    </td>
+                    <td class="col-sm-1">
+                        <select name="actived" class="form-control">
+                            @if (item.actived != null)
+                            {
+                                if (item.actived == true)
+                                {
+                                    <option value="@item.actived">Active</option>
+                                }
+                                else
+                                {
+                                    <option value="@item.actived">Un-active</option>
+                                }
+                            }
+                            <option value="@item.actived">-------</option>
+                            <option value="0">Un-active</option>
+                            <option value="1">Active</option>
+                        </select>
+                    </td>
+                    <td class="col-sm-1">
+                        <div class="form-group text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
+                            <input type="submit" value="Save" class="btn btn-warning col-md-7" />
+                        </div>
+                    </td>
+
+                </tr>
+            }
+        }
+    </table>
+</div>

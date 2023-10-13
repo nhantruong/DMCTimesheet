@@ -14,7 +14,10 @@
     }
 
     string Error = Session["MemberAssignError"] as string ?? "";
+    //Dự án của từng thành viên
     List<KeyValuePair<int, List<int?>>> ProjectOfMember = new List<KeyValuePair<int, List<int?>>>();
+    ProjectOfMember = ViewBag.ProjectOfMember as List<KeyValuePair<int, List<int?>>>;
+
     List<string> ChartLabels = new List<string>();
     List<double> ChartValue = new List<double>();
     List<DMCTimesheet.Models.C01_Projects> ProjectNeedAssign = new List<DMCTimesheet.Models.C01_Projects>();
@@ -36,27 +39,15 @@
     {
         ProjectNeedAssign.Clear();
         //Danh sách dự án chưa điều phối
+        ProjectNeedAssign = Projects.ToList();
         foreach (var item in Model)
         {
-            ProjectNeedAssign = Projects.Where(p => p.ProjectID != item.ProjectID).Distinct().ToList();
+            DMCTimesheet.Models.C01_Projects pro = Projects.FirstOrDefault(p => p.ProjectID == item.ProjectID);
+            if (pro != null)
+            {
+                ProjectNeedAssign.Remove(pro);
+            }
         }
-        //Lấy dự án của từng người
-        foreach (var mem in Members.Where(s => s.SystemMember == false))
-        {
-            KeyValuePair<int, List<int?>> keyValuePair = new KeyValuePair<int, List<int?>>(mem.UserID, Model.Where(s => s.ChuTriChinh == mem.UserID
-            || s.ChuTriKienTruc == mem.UserID
-            || s.ChuTriKienTruc2 == mem.UserID
-            || s.ChuTriKetCau == mem.UserID
-            || s.ChuTriKetCau2 == mem.UserID
-            || s.ChuTriMEP == mem.UserID
-            || s.ChuTriMEP2 == mem.UserID
-            || s.Admin == mem.UserID
-            || s.LegalManager == mem.UserID
-            || s.LegalManager2 == mem.UserID).Select(p => p.ProjectID).ToList());
-
-            ProjectOfMember.Add(keyValuePair);
-        }
-
         //Chart data
         foreach (var item in ProjectOfMember)
         {
@@ -441,16 +432,16 @@
     <table class="table">
         <thead class="table-dark">
             <tr class="row text-center">
-                <td class="col-1"><b>Ngày lập</b></td>
-                <td class="col-2"><b>Dự án</b></td>
-                <td class="col-1"><b>Chủ trì dự án</b></td>
-                <td class="col-1"><b>Bộ môn Kiến trúc</b></td>
-                <td class="col-1"><b>Bộ môn Kết cấu</b></td>
-                <td class="col-1"><b>Bộ môn MEP</b></td>
-                <td class="col-1"><b>Pháp lý</b></td>
-                <td class="col-1"><b>Admin</b></td>
-                <td class="col-1"><b>Quản lý BIM</b></td>
-                <td class="col-1"><b>Xóa</b></td>
+                <td class="col-md-1"><b>Ngày lập</b></td>
+                <td class="col-md-2"><b>Dự án</b></td>
+                <td class="col-md-1"><b>Chủ trì dự án</b></td>
+                <td class="col-md-1"><b>Bộ môn Kiến trúc</b></td>
+                <td class="col-md-1"><b>Bộ môn Kết cấu</b></td>
+                <td class="col-md-1"><b>Bộ môn MEP</b></td>
+                <td class="col-md-1"><b>Pháp lý dự án</b></td>
+                <td class="col-md-3"><b>Thành viên khác</b></td>
+                @*<td class="col-1"><b>Quản lý BIM</b></td>*@
+                <td class="col-md-1"><b>Xóa</b></td>
             </tr>
         </thead>
     </table>
@@ -468,84 +459,135 @@
             }
             else
             {
-                foreach (var item in Model)
+                foreach (var item in Model.OrderByDescending(s => s.ProjectID))
                 {
                     string name = @Projects.FirstOrDefault(s => s.ProjectID == item.ProjectID).MaDuAn + "-" + @Projects.FirstOrDefault(s => s.ProjectID == item.ProjectID).ProjectOtherName;
 
                     <tr class="row text-dark text-center">
-                        <td class="col-1">@DateTime.Parse(item.Ngay.ToString()).ToShortDateString()</td>
-                        <td class="col-2 text-left"><b>@Html.ActionLink(name, "EditAssign", "Member", new { Id = item.ID }, new { @class = "text-primary" })</b></td>
-                        <td class="col-1">
+                        <td class="col-md-1">@DateTime.Parse(item.Ngay.ToString()).ToShortDateString()</td>
+                        <td class="col-md-2 text-left"><b>@Html.ActionLink(name, "EditAssign", "Member", new { Id = item.ID }, new { @class = "text-primary" })</b></td>
+                        @* Chủ trì Chính *@
+                        <td class="col-md-1">
                             @if (item.ChuTriChinh != null)
                             {
-                                <b class="text-danger">@Members.FirstOrDefault(s => s.UserID == item.ChuTriChinh).FullName</b>
+                                if (@Members.FirstOrDefault(s => s.UserID == item.ChuTriChinh).Deactived == true)
+                                {
+                                    <b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriChinh).FullName <i class="text-danger">*</i></b>
+                                }
+                                else
+                                {
+                                    <b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriChinh).FullName</b>
+                                }
                             }
                         </td>
-                        <td class="col-1 text-left text-justify">
+                        @* Chủ trì Kiến trúc *@
+                        <td class="col-md-1 text-left text-justify">
 
                             @if (item.ChuTriKienTruc != null)
                             {
-                                <a>Chủ trì: </a><p><b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriKienTruc).FullName </b></p>}
-                            @if (item.ChuTriKienTruc2 != null)
-                            {
-                                <a>Hỗ trợ: </a><p><b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriKienTruc2).FullName</b></p>
+                                if (@Members.FirstOrDefault(s => s.UserID == item.ChuTriKienTruc).Deactived == true)
+                                {
+                                    <b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriKienTruc).FullName <i class="text-danger">*</i></b>
+                                }
+                                else
+                                {
+                                    <b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriKienTruc).FullName</b>
+                                }
+                                @*<b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriKienTruc).FullName </b>*@
                             }
-
                         </td>
-                        <td class="col-1 text-sm-left">
+                        @* Chủ trì Kết cấu *@
+                        <td class="col-md-1 text-sm-left">
                             @if (item.ChuTriKetCau != null)
                             {
-                                <a>Chủ trì: </a><p><b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriKetCau).FullName</b></p>
-                            }
-                            @if (item.ChuTriKetCau2 != null)
-                            {
-                                <a>Hỗ trợ: </a><p><b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriKetCau2).FullName</b></p>
+                                if (@Members.FirstOrDefault(s => s.UserID == item.ChuTriKetCau).Deactived == true)
+                                {
+                                    <b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriKetCau).FullName <i class="text-danger">*</i></b>
+                                }
+                                else
+                                {
+                                    <b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriKetCau).FullName</b>
+                                }
+                                @*<b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriKetCau).FullName</b>*@
                             }
 
                         </td>
-                        <td class="col-1 text-sm-left">
+                        @* Chủ trì MEPF *@
+                        <td class="col-md-1 text-sm-left">
 
                             @if (item.ChuTriMEP != null)
                             {
-                                <a>Chủ trì: </a><p><b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriMEP).FullName</b></p>
+                                if (@Members.FirstOrDefault(s => s.UserID == item.ChuTriMEP).Deactived == true)
+                                {
+                                    <b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriMEP).FullName <i class="text-danger">*</i></b>
+                                }
+                                else
+                                {
+                                    <b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriMEP).FullName</b>
+                                }
+                                @*<b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriMEP).FullName</b>*@
                             }
-                            @if (item.ChuTriMEP2 != null)
-                            {
-                                <a>Hỗ trợ: </a><p><b class="">@Members.FirstOrDefault(s => s.UserID == item.ChuTriMEP2).FullName</b></p>
-                            }
-
 
                         </td>
-                        <td class="col-1 text-sm-left">
-
+                        @* Pháp Lý dự án *@
+                        <td class="col-md-1 text-sm-left">
                             @if (item.LegalManager != null)
                             {
-                                <a>Chủ trì: </a><p><b class=""> @Members.FirstOrDefault(s => s.UserID == item.LegalManager).FullName</b></p>
-                            }
-                            @if (item.LegalManager2 != null)
-                            {
-                                <a>Hỗ trợ: </a><p><b class="">@Members.FirstOrDefault(s => s.UserID == item.LegalManager2).FullName</b></p>
-                            }
-
-                        </td>
-                        <td class="col-1 text-sm-left">
-                            @if (item.Admin != null)
-                            {
-                                <b>@Members.FirstOrDefault(s => s.UserID == item.Admin).FullName</b>
-                            }
-
-                        </td>
-                        <td class="col-1 text-sm-left">
-                            @if (item.BIMManager != null)
-                            {
-                                if (BIMer.Count() > 0)
+                                if (@Members.FirstOrDefault(s => s.UserID == item.LegalManager).Deactived == true)
                                 {
-                                    <b> @BIMer.FirstOrDefault(s => s.ID == item.BIMManager).SoftName</b>
+                                    <b class="">@Members.FirstOrDefault(s => s.UserID == item.LegalManager).FullName <i class="text-danger">*</i></b>
                                 }
-
+                                else
+                                {
+                                    <b class="">@Members.FirstOrDefault(s => s.UserID == item.LegalManager).FullName</b>
+                                }
+                                @*<b class=""> @Members.FirstOrDefault(s => s.UserID == item.LegalManager).FullName</b>*@
                             }
+
                         </td>
-                        <td class="col-1">@Html.ActionLink(" ", "DeleteAssigned", "Member", new { ID = item.ID }, new { @class = "btn fa fa-remove" })</td>
+                        @* Thành viên khác *@
+                        <td class="col-md-3 text-sm-left">
+                            <ul class="col">
+                                @if (!string.IsNullOrEmpty(item.ThanhVienKhac))
+                                {
+                                    foreach (var itm in item.ThanhVienKhac.Split(',').ToArray())
+                                    {
+                                        int uId = int.Parse(itm);
+                                        string fullname = "Chua xac dinh";
+                                        try
+                                        {
+                                            if (@Members.FirstOrDefault(s => s.UserID == uId).Deactived == true)
+                                            {
+                                                fullname = @_Members.FirstOrDefault(s => s.UserID == uId).FullName + "*";
+                                            }
+                                            else
+                                            {
+                                                fullname = @_Members.FirstOrDefault(s => s.UserID == uId).FullName;
+                                            }
+                                            //fullname = @_Members.FirstOrDefault(s => s.UserID == uId).FullName;
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            fullname = $"Chua xac dinh do {ex.Message}";
+                                        }
+                                        <li class="col-sm-6 text-left">@fullname</li>
+                                    }
+                                }
+                            </ul>
+
+                        </td>
+
+                        @*<td class="col-1 text-sm-left">
+                                @if (item.BIMManager != null)
+                                {
+                                    if (BIMer.Count() > 0)
+                                    {
+                                        <b> @BIMer.FirstOrDefault(s => s.ID == item.BIMManager).SoftName</b>
+                                    }
+
+                                }
+                            </td>*@
+                        <td class="col-md-1">@Html.ActionLink(" ", "DeleteAssigned", "Member", new { ID = item.ID }, new { @class = "btn fa fa-remove" })</td>
                     </tr>
                 }
             }
@@ -554,9 +596,18 @@
     </table>
 </div>
 
-
-<hr />
+<p class="text-danger"><i>[*] là nhân sự đã chuyển công tác</i></p>
+<div>
+    <b>Danh sách dự án chưa điều phối</b>
+    <ul class="col">
+        @foreach (var item in ProjectNeedAssign.Distinct())
+        {
+            <li class="col-sm-2"><b>@item.ProjectOtherName</b></li>
+        }
+    </ul>
+</div>
 <div class="clearfix"></div>
+<hr />
 <h3 class="text-center text-primary">CÔNG VIỆC ĐƯỢC GIAO</h3>
 <div>
     @* Bảng thống kê *@
@@ -565,8 +616,8 @@
         <table class="table table-bordered table-condensed table-striped">
             <tr class="text-white" style="background-color:#808080">
                 <td class="col-sm-3">Tên thành viên</td>
-                <td class="col-sm-2">SL dự án</td>
-                <td class="col-sm-7">Tên dự án</td>
+                @*<td class="col-sm-2">SL dự án</td>*@
+                <td class="col-sm-9">Tên dự án</td>
             </tr>
         </table>
         <div class="table-responsive" style="height:600px">
@@ -580,7 +631,7 @@
                     }
                     else
                     {
-                        foreach (var item in ProjectOfMember)
+                        foreach (var item in ProjectOfMember.OrderByDescending(s => s.Value.Count()))
                         {
                             if (item.Value.Count() != 0)
                             {
@@ -601,10 +652,12 @@
                                         <p>
                                             <b>@Members.FirstOrDefault(s => s.UserID == item.Key).FullName</b>
                                         </p>
-
+                                        <p class="inline">
+                                            <h6 class="text-primary">@item.Value.Count()<small> dự án</small></h6>
+                                        </p>
                                     </td>
-                                    <td class="col-sm-2">@item.Value.Count()</td>
-                                    <td class="col-sm-7">
+                                    @* <td class="col-sm-2">@item.Value.Count()</td>*@
+                                    <td class="col-sm-9">
                                         <ol class="col">
                                             @foreach (var itm in item.Value.ToList())
                                             {
@@ -634,7 +687,7 @@
 </div>
 
 <script>
-    function getBIMtarget() {
+    function getDMCmember() {
         $('#createBtn').click(function () {
             var selectedItems = [];
             var Thanhvien_Khac = document.getElementById("Thanhvien_Khac");
@@ -650,21 +703,21 @@
     }
 
 
-    function addData(checkbox, targetName) {        
-        if (checkbox.checked) {            
-            //document.getElementById("Thanhvien_Khac").value += targetName + ";";           
-            document.getElementById("Thanhvien_Khac").value += targetName + ",";            
+    function addData(checkbox, userName) {
+        if (checkbox.checked) {
+            //document.getElementById("Thanhvien_Khac").value += targetName + ";";
+            document.getElementById("Thanhvien_Khac").value += userName + ",";
         }
         else if (!checkbox.checked) {
             //var targets = [];
             //targets = document.getElementById("Thanhvien_Khac").value.split(';');
             targets = document.getElementById("Thanhvien_Khac").value.split(',');
-            var newtarget = [];
+            var newmemberlist = [];
             $('.form-check-input:checked').each(function () {
-                newtarget.push($(this).val());
+                newmemberlist.push($(this).val());
             });
-            alert("Removed: '" + targetName + " !'");
-            document.getElementById("Thanhvien_Khac").value = newtarget+',';
+            alert("Removed: '" + userName + " !'");
+            document.getElementById("Thanhvien_Khac").value = newmemberlist + ',';
             if (document.getElementById("Thanhvien_Khac").value == "NaN") {
                 alert("Project don't have any member !");
                 document.getElementById("Thanhvien_Khac").value = "";
@@ -699,8 +752,8 @@
                             datasets: [{
                                 label: '',
                                 data: data,
-                                backgroundColor: 'rgba(255, 255, 64, 0.3)',
-                                borderColor:'rgba(255, 128, 128, 1)',
+                                backgroundColor: 'rgba(64, 64, 64, 0.3)',
+                                borderColor:'rgba(0, 0, 0, 1)',
                                 borderWidth: 1
                             }]
                         },

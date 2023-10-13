@@ -10,7 +10,7 @@ namespace DMCTimesheet.Controllers
 {
     public class MemberController : Controller
     {
-        private readonly dmcDbcontext db = new dmcDbcontext();
+        public static readonly dmcDbcontext db = new dmcDbcontext();
 
 
         #region CRUD timesheet
@@ -41,6 +41,15 @@ namespace DMCTimesheet.Controllers
 
             ViewBag.Position = db.C17_Position.ToList();
             ViewBag.Descipline = db.C18_Descipline.ToList();
+            KeyValuePair<int, List<int?>> myproject = GetDMCdata.DuAnTheoThanhVien(id);
+            List<C01_Projects> mem = new List<C01_Projects>();
+            foreach (var item in myproject.Value.ToList())
+            {
+                C01_Projects itm = db.C01_Projects.FirstOrDefault(p => p.ProjectID == item.Value);
+                mem.Add(itm);
+            }
+            ViewBag.myProject = mem;
+
             C02_Members enity = db.C02_Members.FirstOrDefault(s => s.UserID == id);
             if (enity == null) return RedirectToAction("Index");
             return View(enity);
@@ -227,14 +236,21 @@ namespace DMCTimesheet.Controllers
                 ViewBag.Projects = db.C01_Projects.ToList();
                 //ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
                 ViewBag.Members = db.C02_Members.ToList();
+
+                #region Tính toán dự án từng thành viên, trả về danh sách KeyValue - UserID-List<Project> 
+                //KeyValuePair<int, List<int?>> ProjectOfMember = DuAnTheoThanhVien(14);
+                ViewBag.ProjectOfMember = GetDMCdata.DuAnCacThanhVien();
+                #endregion
+
                 return View(db.C03_ProjectMembers.ToList());
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 ViewBag.Projects = db.C01_Projects.ToList();
                 ViewBag.Members = db.C02_Members.ToList();
+                ViewBag.ProjectOfMember = GetDMCdata.DuAnCacThanhVien();
                 //ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
-                ViewBag.Error = "Lỗi kết nối đến server ban BIM";
+                ViewBag.Error = $"Lỗi kết nối đến server ban BIM và {ex.Message}";
                 return View(db.C03_ProjectMembers.ToList());
             }
 
@@ -300,6 +316,97 @@ namespace DMCTimesheet.Controllers
 
         }
 
+        /// <summary>
+        /// Phân công nhiệm vụ trong dự án
+        /// </summary>
+        /// <param name="ProjectID"></param>
+        /// <param name="ChuTriChinh"></param>
+        /// <param name="ChuTriKienTruc"></param>
+        /// <param name="ChuTriKetCau"></param>
+        /// <param name="ChuTriMEP"></param>
+        /// <param name="Ngay"></param>
+        /// <param name="LegalManager"></param>
+        /// <param name="ThanhVienKhac"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult NewAM(int? ProjectID, int? ChuTriChinh, int? ChuTriKienTruc, int? ChuTriKetCau, int? ChuTriMEP, DateTime Ngay, int? LegalManager, string ThanhVienKhac)
+        {
+            if (Session["UserLogin"] == null || ProjectID == null) return RedirectToAction("Login", "Home");
+            try
+            {
+                C03_ProjectMembers current = db.C03_ProjectMembers.FirstOrDefault(s => s.ProjectID == ProjectID);
+                if (current == null)
+                {
+                    string danhsachThanhvien = "";
+                    danhsachThanhvien = string.Join(", ", GetDMCdata.GetUserIdList(ThanhVienKhac));
+
+                    ////string danhsachThanhvien = "";                   
+                    ////Xử lý lấy MemberID trong danh sách Thành vien khác
+                    //if (!string.IsNullOrEmpty(ThanhVienKhac))
+                    //{
+                    //    List<C02_Members> members = db.C02_Members.ToList();
+                    //    var thanhvienKhac = ThanhVienKhac.Split(',').Distinct().ToArray();
+                    //    string _ThanhVienKhac = "";
+                    //    foreach (var item in thanhvienKhac)
+                    //    {
+                    //        if (string.IsNullOrEmpty(item)) break;
+                    //        int uId = members.FirstOrDefault(s => s.FullName == item).UserID;
+                    //        bool existing = uId == ChuTriChinh || uId == ChuTriKienTruc || uId == ChuTriKetCau || uId == ChuTriMEP || uId == LegalManager;
+                    //        if (!string.IsNullOrEmpty(item) && !existing)
+                    //        {
+                    //            //_ThanhVienKhac += members.FirstOrDefault(s => s.FullName == item).UserID.ToString() + ",";
+                    //            _ThanhVienKhac += uId.ToString() + ",";
+                    //        }
+                    //    }
+                    //    danhsachThanhvien = _ThanhVienKhac.Remove(_ThanhVienKhac.Length - 1, 1);
+                    //    //Kiem tra thanh vien da co hay chua
+
+                    //}
+                    //Thêm record
+                    C03_ProjectMembers newAssignment = new C03_ProjectMembers()
+                    {
+                        ProjectID = ProjectID,
+                        ChuTriChinh = ChuTriChinh,
+                        ChuTriKienTruc = ChuTriKienTruc,
+                        ChuTriKetCau = ChuTriKetCau,
+                        ChuTriMEP = ChuTriMEP,
+                        LegalManager = LegalManager,
+                        Ngay = Ngay,
+                        ThanhVienKhac = danhsachThanhvien
+                    };
+                    if (ModelState.IsValid)
+                    {
+                        db.C03_ProjectMembers.Add(newAssignment);
+                        db.SaveChanges();
+                    }
+                }
+                else
+                {
+                    //Session["MemberAssignError"] = $"Đã có điều phối Thành viên cho dự án này";
+                    ViewBag.Projects = db.C01_Projects.ToList();
+                    //ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
+                    ViewBag.Members = db.C02_Members.ToList();
+                    List<MemberOutput> BIMer = new List<MemberOutput>();
+
+                    using (MemberService memberService = new MemberService())
+                    {
+                        BIMer.AddRange(memberService.DanhSachMember().ToList());
+                    }
+                    ViewBag.BIMer = BIMer;
+                    ViewBag.Error = $"Đã có điều phối Thành viên cho dự án này";
+                    return View("AssignMember", db.C03_ProjectMembers.ToList());
+                    //return RedirectToAction("AssignMember");
+                }
+                return RedirectToAction("AssignMember");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Có lỗi trong quá trình tạo mới do {ex.Message}";
+                return View("AssignMember");
+            }
+        }
+
         public ActionResult EditAssign(int Id)
         {
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
@@ -314,7 +421,8 @@ namespace DMCTimesheet.Controllers
             ViewBag.Members = db.C02_Members.ToList();
             //ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
             List<MemberOutput> BIMer = new List<MemberOutput>();
-
+            List<int?> ProjectMembers = GetDMCdata.DanhSachThanhVienTheoDuAn(int.Parse(enity.ProjectID.ToString()));
+            ViewBag.ProjectMembers = ProjectMembers;
             using (MemberService memberService = new MemberService())
             {
                 BIMer.AddRange(memberService.DanhSachMember().ToList());
@@ -324,6 +432,7 @@ namespace DMCTimesheet.Controllers
             return View(enity);
         }
 
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult EditAssignMember(int? ID, int? ProjectID, int? ChuTriChinh, int? ChuTriKienTruc, int? ChuTriKetCau, int? ChuTriMEP, DateTime Ngay,
@@ -375,6 +484,73 @@ namespace DMCTimesheet.Controllers
 
 
         }
+
+
+        /// <summary>
+        /// Điều chỉnh Phân công nhiệm vụ
+        /// </summary>
+        /// <param name="ID"></param>
+        /// <param name="ProjectID"></param>
+        /// <param name="ChuTriChinh"></param>
+        /// <param name="ChuTriKienTruc"></param>
+        /// <param name="ChuTriKetCau"></param>
+        /// <param name="ChuTriMEP"></param>
+        /// <param name="Ngay"></param>
+        /// <param name="BIMManager"></param>
+        /// <param name="LegalManager"></param>
+        /// <param name="Admin"></param>
+        /// <param name="ChuTriKienTruc2"></param>
+        /// <param name="ChuTriKetCau2"></param>
+        /// <param name="ChuTriMEP2"></param>
+        /// <param name="LegalManager2"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditAM(int? ID, int? ProjectID, int? ChuTriChinh, int? ChuTriKienTruc, int? ChuTriKetCau, int? ChuTriMEP, DateTime Ngay,
+            int? LegalManager, string ThanhVienKhac)
+        {
+            if (Session["UserLogin"] == null || ID == null || ProjectID == null) return RedirectToAction("Login", "Home");
+            if (ID < 0) return RedirectToAction("AssignMember");
+            try
+            {
+                C03_ProjectMembers enity = db.C03_ProjectMembers.FirstOrDefault(s => s.ID == ID);
+                if (enity == null)
+                {
+                    ViewBag.Error = $"Không tìm thấy dự án này";
+                    return View("EditAssign");
+                }
+                enity.ProjectID = ProjectID;
+                enity.ChuTriChinh = ChuTriChinh;
+                enity.ChuTriKienTruc = ChuTriKienTruc;
+                enity.ChuTriKetCau = ChuTriKetCau;
+                enity.ChuTriMEP = ChuTriMEP;
+                enity.LegalManager = LegalManager;
+                enity.ThanhVienKhac = string.IsNullOrWhiteSpace(ThanhVienKhac) ? "" : string.Join(", ", GetDMCdata.GetUserIdList(ThanhVienKhac));
+                enity.Ngay = Ngay;
+
+
+                if (ModelState.IsValid)
+                {
+                    db.Entry(enity).State = System.Data.Entity.EntityState.Modified;
+                    db.SaveChanges();
+                }
+                else
+                {
+                    Session["MemberAssignError"] = $"Không kết nối được server";
+                    return RedirectToAction("AssignMember");
+                }
+                return RedirectToAction("AssignMember");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Có lỗi trong khi cập nhật data do {ex.Message}";
+                return View("EditAssign");
+            }
+
+
+        }
+
+
 
 
         public ActionResult DeleteAssigned(int? ID)

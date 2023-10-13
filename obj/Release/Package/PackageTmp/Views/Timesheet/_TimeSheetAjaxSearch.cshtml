@@ -1,0 +1,42 @@
+﻿@model IEnumerable<DMCTimesheet.Models.C08_Timesheet>
+@{
+    int stt = 0;
+    List<DMCTimesheet.Models.C02_Members> Members = ViewBag.Members as List<DMCTimesheet.Models.C02_Members>;
+    List<DMCTimesheet.Models.C01_Projects> Projects = ViewBag.Projects as List<DMCTimesheet.Models.C01_Projects>;
+    DMCTimesheet.Models.C02_Members loginUser = Session["UserLogin"] as DMCTimesheet.Models.C02_Members;
+}
+@try
+{
+    foreach (var item in Model.Where(s=>s.MemberID == loginUser.UserID).GroupBy(s => s.ProjectId))
+    {       
+        <tr>
+            <td colspan="8" class="text-left"><h5><b class="text-primary">@item.Key - @Projects.Where(s => s.ProjectID == item.Key).FirstOrDefault().ProjectName </b><i class="fa fa-bicycle text-danger"> @item.ToList().Count() records</i></h5></td>
+            @*<td colspan="8" class="text-left"><h5><b class="text-primary">@Members.Where(s=>s.BIMstaffID == item.Key).FirstOrDefault().Sortname</b></h5></td>*@
+        </tr>
+        foreach (var itm in item.ToList())
+        {
+            stt++;
+            <tr>
+                <td>@stt</td>
+                <td>@DateTime.Parse(itm.RecordDate.ToString()).ToShortDateString()</td>
+                <td>@itm.ProjectId - @Projects.FirstOrDefault(s=>s.ProjectID == itm.ProjectId).ProjectName</td>
+                <td>@itm.WorkType</td>
+                <td>@itm.Hour</td>
+                <td>@itm.OT</td>
+                <td>@itm.Description</td>
+                <td>
+                    @Html.ActionLink(" ", "UserEdit", "Timesheet", new { id = itm.Id }, new { @class = "fa fa-edit btn" })
+                    @Html.ActionLink(" ", "UserDelete", "Timesheet", new { id = itm.Id }, new { @class = " fa fa-remove btn" })
+                </td>
+            </tr>
+        }
+
+    }
+}
+catch (Exception)
+{
+    <h5>Không tìm thấy dữ liệu</h5>
+}
+
+
+

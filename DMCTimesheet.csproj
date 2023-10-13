@@ -305,15 +305,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Assets\Chi tiết dự án DRAGON BAY VIEW %281646%29 - Coteccons Group.htm" />
-    <Content Include="Assets\Chi tiết dự án DRAGON BAY VIEW %281646%29 - Coteccons Group_files\ckeditor.js" />
-    <Content Include="Assets\Chi tiết dự án DRAGON BAY VIEW %281646%29 - Coteccons Group_files\csst.css" />
-    <Content Include="Assets\Chi tiết dự án DRAGON BAY VIEW %281646%29 - Coteccons Group_files\intro.js" />
-    <Content Include="Assets\Chi tiết dự án DRAGON BAY VIEW %281646%29 - Coteccons Group_files\introjs.css" />
-    <Content Include="Assets\Chi tiết dự án DRAGON BAY VIEW %281646%29 - Coteccons Group_files\intro_002.js" />
-    <Content Include="Assets\Chi tiết dự án DRAGON BAY VIEW %281646%29 - Coteccons Group_files\kendo.common.min.css" />
-    <Content Include="Assets\Chi tiết dự án DRAGON BAY VIEW %281646%29 - Coteccons Group_files\kendo.moonlight.min.css" />
-    <Content Include="Assets\Chi tiết dự án DRAGON BAY VIEW %281646%29 - Coteccons Group_files\kendo.moonlight.mobile.min.css" />
     <Content Include="Assets\LogoCTC_New.png" />
     <Content Include="Assets\NoImage.jpg" />
     <Content Include="Assets\Photos\ajax-loader.gif" />
@@ -454,9 +445,6 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
-    <Content Include="Assets\Chi tiết dự án DRAGON BAY VIEW %281646%29 - Coteccons Group_files\bootstrap" />
-    <Content Include="Assets\Chi tiết dự án DRAGON BAY VIEW %281646%29 - Coteccons Group_files\jquery" />
-    <Content Include="Assets\Chi tiết dự án DRAGON BAY VIEW %281646%29 - Coteccons Group_files\kendo" />
     <Content Include="Content\bootstrap-datepicker.css.map" />
     <Content Include="Content\bootstrap-datepicker.standalone.css.map" />
     <Content Include="Content\bootstrap-datepicker3.css.map" />

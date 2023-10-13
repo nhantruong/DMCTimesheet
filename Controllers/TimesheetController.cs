@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 using DMCTimesheet.Models;
+using Microsoft.Ajax.Utilities;
 
 namespace DMCTimesheet.Controllers
 {
@@ -44,18 +45,8 @@ namespace DMCTimesheet.Controllers
             ViewBag.WorkType = db.C07_WorkType.ToList();
             ViewBag.Workgroup = db.C19_Workgroup.ToList();
 
-            ViewBag.ProjectMember = db.C03_ProjectMembers.Where(
-              s => s.ChuTriKienTruc == logUser.UserID
-                || s.ChuTriChinh == logUser.UserID
-                || s.ChuTriKienTruc2 == logUser.UserID
-                || s.ChuTriKetCau == logUser.UserID
-                || s.ChuTriKetCau2 == logUser.UserID
-                || s.ChuTriMEP == logUser.UserID
-                || s.ChuTriMEP2 == logUser.UserID
-                || s.LegalManager == logUser.UserID
-                || s.LegalManager2 == logUser.UserID
-                || s.Admin == logUser.UserID
-                ).Distinct().ToList();
+            ViewBag.ProjectMember = GetDMCdata.DuAnTheoThanhVienID(logUser.UserID);
+
 
             List<string[]> group = new List<string[]>();    //Nhóm công việc theo workgroup
             List<string[]> listIdCV = new List<string[]>(); //List ID công việc để lọc
@@ -135,8 +126,6 @@ namespace DMCTimesheet.Controllers
             ViewBag.DetailAction = db.C21_DetailAction.ToList();
             // List<string[]> worktypeId = new List<string[]>();    //Nhóm công việc theo workgroup
             List<string[]> listdetailaction = new List<string[]>(); //List ID công việc để lọc
-
-            //
             foreach (var item in db.C21_DetailAction.ToList())
             {
                 string[] itm = new string[2];
@@ -145,10 +134,6 @@ namespace DMCTimesheet.Controllers
                 listdetailaction.Add(itm);
             }
             ViewBag.actiondetailList = listdetailaction;
-
-
-
-
             return View(mytimesheet);
         }
 
@@ -246,18 +231,7 @@ namespace DMCTimesheet.Controllers
             ViewBag.WorkType = db.C07_WorkType.ToList();
             ViewBag.Workgroup = db.C19_Workgroup.ToList();
 
-            ViewBag.ProjectMember = db.C03_ProjectMembers.Where(
-              s => s.ChuTriKienTruc == logUser.UserID
-                || s.ChuTriChinh == logUser.UserID
-                || s.ChuTriKienTruc2 == logUser.UserID
-                || s.ChuTriKetCau == logUser.UserID
-                || s.ChuTriKetCau2 == logUser.UserID
-                || s.ChuTriMEP == logUser.UserID
-                || s.ChuTriMEP2 == logUser.UserID
-                || s.LegalManager == logUser.UserID
-                || s.LegalManager2 == logUser.UserID
-                || s.Admin == logUser.UserID
-                ).ToList();
+            ViewBag.ProjectMember = GetDMCdata.DuAnTheoThanhVienID(logUser.UserID);
 
             List<string[]> group = new List<string[]>();    //Nhóm công việc theo workgroup
             List<string[]> listIdCV = new List<string[]>(); //List ID công việc để lọc
@@ -343,17 +317,7 @@ namespace DMCTimesheet.Controllers
                 ViewBag.Workgroup = db.C19_Workgroup.ToList();
                 ViewBag.WorkType = db.C07_WorkType.ToList();
 
-                ViewBag.ProjectMember = db.C03_ProjectMembers.Where(s => s.ChuTriKienTruc == logUser.UserID
-                || s.ChuTriChinh == logUser.UserID
-                || s.ChuTriKienTruc2 == logUser.UserID
-                || s.ChuTriKetCau == logUser.UserID
-                || s.ChuTriKetCau2 == logUser.UserID
-                || s.ChuTriMEP == logUser.UserID
-                || s.ChuTriMEP2 == logUser.UserID
-                || s.LegalManager == logUser.UserID
-                || s.LegalManager2 == logUser.UserID
-                || s.Admin == logUser.UserID
-                ).ToList();
+                ViewBag.ProjectMember = GetDMCdata.DuAnTheoThanhVienID(logUser.UserID);
 
                 #region GetData
 
@@ -418,17 +382,7 @@ namespace DMCTimesheet.Controllers
                     ViewBag.Workgroup = db.C19_Workgroup.ToList();
                     ViewBag.WorkType = db.C07_WorkType.ToList();
 
-                    ViewBag.ProjectMember = db.C03_ProjectMembers.Where(s => s.ChuTriKienTruc == logUser.UserID
-                    || s.ChuTriChinh == logUser.UserID
-                    || s.ChuTriKienTruc2 == logUser.UserID
-                    || s.ChuTriKetCau == logUser.UserID
-                    || s.ChuTriKetCau2 == logUser.UserID
-                    || s.ChuTriMEP == logUser.UserID
-                    || s.ChuTriMEP2 == logUser.UserID
-                    || s.LegalManager == logUser.UserID
-                    || s.LegalManager2 == logUser.UserID
-                    || s.Admin == logUser.UserID
-                    ).ToList();
+                    ViewBag.ProjectMember = GetDMCdata.DuAnTheoThanhVienID(logUser.UserID);
                     #region GetData
 
                     List<string[]> group = new List<string[]>();    //Nhóm công việc theo workgroup
@@ -516,17 +470,7 @@ namespace DMCTimesheet.Controllers
                 ViewBag.Workgroup = db.C19_Workgroup.ToList();
                 ViewBag.WorkType = db.C07_WorkType.ToList();
 
-                ViewBag.ProjectMember = db.C03_ProjectMembers.Where(s => s.ChuTriKienTruc == logUser.UserID
-                || s.ChuTriChinh == logUser.UserID
-                || s.ChuTriKienTruc2 == logUser.UserID
-                || s.ChuTriKetCau == logUser.UserID
-                || s.ChuTriKetCau2 == logUser.UserID
-                || s.ChuTriMEP == logUser.UserID
-                || s.ChuTriMEP2 == logUser.UserID
-                || s.LegalManager == logUser.UserID
-                || s.LegalManager2 == logUser.UserID
-                || s.Admin == logUser.UserID
-                ).ToList();
+                ViewBag.ProjectMember = GetDMCdata.DuAnTheoThanhVienID(logUser.UserID);
                 #region GetData
 
                 List<string[]> group = new List<string[]>();    //Nhóm công việc theo workgroup

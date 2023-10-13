@@ -1,0 +1,31 @@
+﻿
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Report system</title>
+</head>
+<body>
+    <div>
+        @using (Html.BeginForm("ReportManagement", "Reports", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            <form action="/" method="post" style="">
+                <div>
+                    @Html.ReportViewer(ViewBag.TSReportViewer as Microsoft.Reporting.WebForms.ReportViewer, new { @width = "100%", @height = "80%" })
+                </div>
+                <div>
+                    <input type="submit" name="name" value="" />
+                </div>
+            </form>
+        }
+
+    </div>
+
+</body>
+</html>
