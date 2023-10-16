@@ -3,22 +3,30 @@
     ViewBag.Title = "Project Assignment edit";
     //Layout = "~/Views/Shared/_AdminLayout.cshtml";
     //Thông tin từ Controller gửi lên
-    List<DMCTimesheet.Models.C01_Projects> Projects = ViewBag.Projects as List<DMCTimesheet.Models.C01_Projects>;
-    List<DMCTimesheet.Models.C02_Members> _Members = ViewBag.Members as List<DMCTimesheet.Models.C02_Members>;
-    List<DMCTimesheet.Models.C02_Members> Members = _Members.OrderBy(s => s.FullName).ToList();
+    //List<DMCTimesheet.Models.C01_Projects> Projects = ViewBag.Projects as List<DMCTimesheet.Models.C01_Projects>;
+    string ProjectName = ViewBag.Projects;
+    List<DMCTimesheet.Models.C02_Members> Members = ViewBag.Members as List<DMCTimesheet.Models.C02_Members>;
+    //List<DMCTimesheet.Models.C02_Members> Members = _Members.OrderBy(s => s.FullName).ToList();
     List<DMCTimesheet.com.cbimtech.MemberServices.MemberOutput> BIMer = ViewBag.BIMer as List<DMCTimesheet.com.cbimtech.MemberServices.MemberOutput>;
 
     List<DMCTimesheet.Models.C02_Members> chuyenCongTac = new List<DMCTimesheet.Models.C02_Members>();
-    chuyenCongTac = _Members.Where(s => s.Deactived == true).ToList();
+    chuyenCongTac = Members.Where(s => s.Deactived == true).ToList();
 
-    List<int?> ProjectMembers = ViewBag.ProjectMembers as List<int?>;
+    List<int?> _ProjectMembers = ViewBag.ProjectMembers as List<int?>;
+    List<int> ProjectMembers = new List<int>();
+    string[] _tvk = Model.ThanhVienKhac.Split(',');
+    for (int i = 0; i < _tvk.Length; i++)
+    {
+        ProjectMembers.Add(int.Parse(_tvk[i]));
+    }
+    
 
 
     //string Error = Session["MemberAssignError"] as string ?? "";
 }
 @*<h3><i>@Error</i></h3>*@
 <div>
-    <h3>ĐIỀU CHỈNH THÔNG TIN ĐIỀU PHỐI CHO DỰ ÁN <b class="text-danger">@Projects.FirstOrDefault(s => s.ProjectID == Model.ProjectID).ProjectOtherName</b></h3>
+    <h3>ĐIỀU CHỈNH THÔNG TIN ĐIỀU PHỐI CHO DỰ ÁN <b class="text-danger">@ProjectName</b></h3>
 </div>
 <div class="modal-body">
     @*@using (Html.BeginForm("EditAssignMember", "Member", FormMethod.Post))*@
@@ -43,7 +51,7 @@
             @* ARC ID *@
             <div class="form-group row  text-left">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3"><b>Chủ trì Dự án</b></lable>
-                <select name="ChuTriChinh" class="form-control col-md-7 col-sm-9 col-xs-9">
+                <select name="ChuTriChinh" id="ChutriDuAn" class="form-control col-md-7 col-sm-9 col-xs-9">
                     @if (@Model.ChuTriChinh != null)
                     {
                         <option value="@Model.ChuTriChinh">@Members.FirstOrDefault(s => s.UserID == Model.ChuTriChinh).FullName</option>
@@ -58,7 +66,7 @@
             @* Architecture ID *@
             <div class="form-group row  text-left">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3"><b class="text-primary">Chủ trì bộ môn Kiến trúc</b></lable>
-                <select name="ChuTriKienTruc" class="form-control col-md-7 col-sm-9 col-xs-9">
+                <select name="ChuTriKienTruc" id="ChutriKientruc" class="form-control col-md-7 col-sm-9 col-xs-9">
                     @if (@Model.ChuTriKienTruc != null)
                     {
                         <option value="@Model.ChuTriKienTruc">@Members.FirstOrDefault(s => s.UserID == Model.ChuTriKienTruc).FullName</option>
@@ -73,7 +81,7 @@
             @* Structure ID *@
             <div class="form-group row  text-left">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3"><b class="text-primary">Chủ trì bộ môn Kết cấu</b></lable>
-                <select name="ChuTriKetCau" class="form-control col-md-7 col-sm-9 col-xs-9">
+                <select name="ChuTriKetCau" id="ChutriKetCau" class="form-control col-md-7 col-sm-9 col-xs-9">
                     @if (@Model.ChuTriKetCau != null)
                     {
                         <option value="@Model.ChuTriKetCau">@Members.FirstOrDefault(s => s.UserID == Model.ChuTriKetCau).FullName</option>
@@ -89,7 +97,7 @@
             @* MEP ID *@
             <div class="form-group row  text-left">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3"><b class="text-primary">Chủ trì bộ môn Cơ điện - MEPF</b></lable>
-                <select name="ChuTriMEP" class="form-control col-md-7 col-sm-9 col-xs-9">
+                <select name="ChuTriMEP" id="ChutriMEP" class="form-control col-md-7 col-sm-9 col-xs-9">
                     @if (@Model.ChuTriMEP != null)
                     {
                         <option value="@Model.ChuTriMEP">@Members.FirstOrDefault(s => s.UserID == Model.ChuTriMEP).FullName</option>
@@ -105,7 +113,7 @@
             @* Legal ID *@
             <div class="form-group row  text-left">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3"><b class="text-primary">Pháp lý</b></lable>
-                <select name="LegalManager" class="form-control col-md-7 col-sm-9 col-xs-9">
+                <select name="LegalManager" id="LegalManager" class="form-control col-md-7 col-sm-9 col-xs-9">
                     @if (@Model.LegalManager != null)
                     {
                         <option value="@Model.LegalManager">@Members.FirstOrDefault(s => s.UserID == Model.LegalManager).FullName</option>
@@ -281,16 +289,24 @@
 <script>
     function getDMCmember() {
         $('#createBtn').click(function () {
+            var chutriChinh = document.getElementById("ChutriDuAn");
+            var ARC = document.getElementById("ChutriKientruc");
+            var STR = document.getElementById("ChutriKetcau");
+            var MEP = document.getElementById("ChutriMEP");
+            var Legal = document.getElementById("LegalManager");
+
             var selectedItems = [];
             var Thanhvien_Khac = document.getElementById("Thanhvien_Khac");
             Thanhvien_Khac.value = "";
             // Process the selectedItems array as needed (e.g., save to a database, etc.)
             var selectedItems = [];
             $('.form-check-input:checked').each(function () {
+                var itm =   $(this).val();
+                if(itm !==ARC || itm!== STR || itm!== MEP || itm!==Legal ){              
                 selectedItems.push($(this).val());
+                }
             });
             Thanhvien_Khac.value = selectedItems;
-
         });
     }
 

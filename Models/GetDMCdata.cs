@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Web;
+using DMCTimesheet.com.cbimtech.MemberServices;
 using DMCTimesheet.Models;
 using Microsoft.Ajax.Utilities;
 
@@ -11,6 +13,9 @@ namespace DMCTimesheet.Models
     public static class GetDMCdata
     {
         public static readonly dmcDbcontext db = new dmcDbcontext();
+
+        #region DMC
+
         public static IEnumerable<C02_Members> GetDMCMembers()
         {
             using (dmcDbcontext db = new dmcDbcontext())
@@ -73,6 +78,7 @@ namespace DMCTimesheet.Models
                 return null;
             }
         }
+        
         /// <summary>
         /// danh sách dự án theo ID thành viên
         /// </summary>
@@ -152,17 +158,17 @@ namespace DMCTimesheet.Models
         }
 
         /// <summary>
-        /// Lọc thành viên trong dự án
+        /// Lấy danh sách các thành viên tham gia trong dự án - ProjectId
         /// </summary>
         /// <param name="projectId">ProjectId</param>
         /// <returns>List[UserId]</returns>
-        public static List<int?> DanhSachThanhVienTheoDuAn(int projectId)
+        public static List<int?> DanhSachUserIDTheoDuAn(int projectId)
         {
             List<int?> users = new List<int?>();
             try
             {
                 //List<int?> _users = new List<int?>();
-                C03_ProjectMembers project = db.C03_ProjectMembers.FirstOrDefault(s => s.ProjectID == projectId);
+                C03_ProjectMembers project = db.C03_ProjectMembers.FirstOrDefault(s => s.ID == projectId);
                 if (project != null)
                 {
                     if (project.ChuTriChinh != null) users.Add(project.ChuTriChinh);
@@ -170,9 +176,9 @@ namespace DMCTimesheet.Models
                     if (project.ChuTriKetCau != null) users.Add(project.ChuTriKetCau);
                     if (project.ChuTriMEP != null) users.Add(project.ChuTriMEP);
                     if (project.LegalManager != null) users.Add(project.LegalManager);
-                    var thanhvienkhac = project.ThanhVienKhac.Split(';');
+                    var thanhvienkhac = project.ThanhVienKhac.Split(',');
                     foreach (var item in thanhvienkhac) if (!string.IsNullOrEmpty(item)) if (users.Any(s => s != int.Parse(item))) users.Add(int.Parse(item));
-                    
+
                     return users.Distinct().ToList();
                 }
                 else { return null; }
@@ -184,29 +190,95 @@ namespace DMCTimesheet.Models
         }
 
         /// <summary>
-        /// Lấy danh sách UserId dựa trên danh sách
+        /// Danh sách Users - C02_member trong dự án
         /// </summary>
-        /// <param name="usernameList"></param>
-        /// <returns></returns>
-        public static List<int> GetUserIdList(string usernameList)
+        /// <param name="projectId">Project ID</param>
+        /// <returns>List[C02_Member]</returns>
+        public static List<C02_Members> DanhSachC02MemberTheoDuAn(int projectId)
         {
-            List<int> users = new List<int>();
+            List<C02_Members> users = new List<C02_Members>();
             try
             {
-                char sp = usernameList.Contains(';') ? ';':',' ;
-                                
-                var listname = usernameList.Split(sp);
-                foreach (var item in listname) {
-                    int uId = db.C02_Members.First(s => s.FullName == item).UserID;
-                    users.Append(uId); 
+                C03_ProjectMembers project = db.C03_ProjectMembers.FirstOrDefault(s => s.ProjectID == projectId);
+                if (project != null)
+                {
+                    if (project.ChuTriChinh != null) users.Add(db.C02_Members.FirstOrDefault(s=>s.UserID == project.ChuTriChinh));
+                    if (project.ChuTriKienTruc != null) users.Add(db.C02_Members.FirstOrDefault(s => s.UserID == project.ChuTriKienTruc));
+                    if (project.ChuTriKetCau != null) users.Add(db.C02_Members.FirstOrDefault(s => s.UserID == project.ChuTriKetCau));
+                    if (project.ChuTriMEP != null) users.Add(db.C02_Members.FirstOrDefault(s => s.UserID == project.ChuTriMEP));
+                    if (project.LegalManager != null) users.Add(db.C02_Members.FirstOrDefault(s => s.UserID == project.LegalManager));
+
+                    var thanhvienkhac = project.ThanhVienKhac.Split(',');
+                    for (int i = 0; i < thanhvienkhac.Length; i++)
+                    {
+                        int uId = int.Parse(thanhvienkhac[i]);
+                        if (!string.IsNullOrEmpty(thanhvienkhac[i])) if (db.C02_Members.Any(s => s.UserID != uId)) users.Add(db.C02_Members.FirstOrDefault(p => p.UserID == uId));
+                    }
+                    //foreach (var item in thanhvienkhac) if (!string.IsNullOrEmpty(item)) if (db.C02_Members.Any(s=>s.UserID != int.Parse(item))) users.Add(db.C02_Members.FirstOrDefault(p=>p.UserID == int.Parse(item)));
+
+                    return users.Distinct().ToList();
                 }
-                return users;
+                else { return null; }
             }
             catch (Exception)
             {
                 return null;
             }
         }
+
+
+        /// <summary>
+        /// Lấy danh sách UserId dựa trên danh sách Fullname từng người
+        /// </summary>
+        /// <param name="usernameList">string-Danh sách Fullname từng người</param>
+        /// <returns>List[UserID]</returns>
+        public static List<int> GetUserIdList(string usernameList)
+        {
+            List<int> userlist;
+            try
+            {
+                char sp = usernameList.Contains(';') ? ';' : ',';
+                var listname = usernameList.Split(sp);
+                userlist = new List<int>();
+                foreach (var item in listname)
+                {
+                    if (!string.IsNullOrEmpty(item))
+                    {
+                        int uId = db.C02_Members.First(s => s.FullName == item).UserID;
+                        userlist.Add(uId);
+                    }
+
+                }
+                return userlist;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        #endregion
+
+        #region BIM team
+        public static List<MemberOutput> GetBIMmemberList()
+        {
+            List<MemberOutput> BIMer = new List<MemberOutput>();
+            try
+            {
+                using (MemberService memberService = new MemberService())
+                {
+                    BIMer.AddRange(memberService.DanhSachMember().ToList());
+                }
+                return BIMer;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+
+        }
+        #endregion
 
     }
 }

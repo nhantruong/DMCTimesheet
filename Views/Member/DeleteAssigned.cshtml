@@ -3,11 +3,15 @@
     ViewBag.Title = "Xóa điều phối nhân sự cho dự án, are you sure?";
     //Layout = "~/Views/Shared/_AdminLayout.cshtml";
     //Thông tin từ Controller gửi lên
-    List<DMCTimesheet.Models.C01_Projects> Projects = ViewBag.Projects as List<DMCTimesheet.Models.C01_Projects>;
+    string ProjectName = ViewBag.ProjectName;
     List<DMCTimesheet.Models.C02_Members> _Members = ViewBag.Members as List<DMCTimesheet.Models.C02_Members>;
     List<DMCTimesheet.Models.C02_Members> Members = _Members.OrderBy(s => s.FullName).ToList();
     List<DMCTimesheet.com.cbimtech.MemberServices.MemberOutput> BIMer = ViewBag.BIMer as List<DMCTimesheet.com.cbimtech.MemberServices.MemberOutput>;
     //string Error = Session["MemberAssignError"] as string ?? "";
+    string mem = "";
+    foreach (var item in Members) {
+                mem += string.Concat(item.FullName, ";");
+    }
 }
 <h1 class="text-primary text-left">@ViewBag.Title</h1>
 <h4 class="text-danger text-left">@ViewBag.Error</h4>
@@ -29,7 +33,7 @@
             <div class="form-group row  text-left">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3"><b class="text-danger">Tên dự án</b></lable>
                 <select name="ProjectID" class="form-control col-md-7 col-sm-9 col-xs-9">
-                    <option value=@Model.ProjectID>@Projects.FirstOrDefault(s => s.ProjectID == Model.ProjectID).ProjectOtherName</option>
+                    <option value=@Model.ProjectID>@ProjectName</option>
                 </select>
             </div>
             @* Chu tri ID *@
@@ -53,17 +57,6 @@
                     }
                 </select>
             </div>
-            @* ARC 2 *@
-            <div class="form-group row  text-left">
-                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chủ trì 2 bộ môn <b class="text-primary">Kiến trúc</b></lable>
-                <select name="ChuTriKienTruc2" class="form-control col-md-7 col-sm-9 col-xs-9">
-                    @if (Model.ChuTriKienTruc2 != null)
-                    {
-                        <option value="@Model.ChuTriKienTruc2">@Members.FirstOrDefault(s => s.UserID == Model.ChuTriKienTruc2).FullName</option>
-
-                    }
-                </select>
-            </div>
 
             @* Structure ID *@
             <div class="form-group row  text-left">
@@ -72,17 +65,6 @@
                     @if (Model.ChuTriKetCau != null)
                     {
                         <option value="@Model.ChuTriKetCau">@Members.FirstOrDefault(s => s.UserID == Model.ChuTriKetCau).FullName</option>
-
-                    }
-                </select>
-            </div>
-            @* Structure 2 *@
-            <div class="form-group row  text-left">
-                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chủ trì 2 bộ môn <b class="text-primary">Kết cấu</b></lable>
-                <select name="ChuTriKetCau2" class="form-control col-md-7 col-sm-9 col-xs-9">
-                    @if (Model.ChuTriKetCau2 != null)
-                    {
-                        <option value="@Model.ChuTriKetCau2">@Members.FirstOrDefault(s => s.UserID == Model.ChuTriKetCau2).FullName</option>
 
                     }
                 </select>
@@ -100,29 +82,7 @@
                 </select>
             </div>
 
-            @* MEP 2 *@
-            <div class="form-group row  text-left">
-                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chủ trì 2 bộ môn <b class="text-primary">Cơ điện - MEPF</b></lable>
-                <select name="ChuTriMEP2" class="form-control col-md-7 col-sm-9 col-xs-9">
-                    @if (Model.ChuTriMEP2 != null)
-                    {
-                        <option value="@Model.ChuTriMEP2">@Members.FirstOrDefault(s => s.UserID == Model.ChuTriMEP2).FullName</option>
 
-                    }
-                </select>
-            </div>
-
-            @* Landscape ID *@
-            <div class="form-group row  text-left">
-                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Quản lý <b class="text-primary">BIM</b></lable>
-                <select name="BIMManager" class="form-control col-md-7 col-sm-9 col-xs-9">
-                    @if (Model.BIMManager != null)
-                    {
-                        <option value="@Model.BIMManager">@BIMer.FirstOrDefault(s => s.ID == Model.BIMManager).SoftName</option>
-
-                    }
-                </select>
-            </div>
             @* Legal ID *@
             <div class="form-group row  text-left">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3"><b class="text-primary">Pháp lý</b></lable>
@@ -134,28 +94,14 @@
                     }
                 </select>
             </div>
-            @* Legal 2 *@
-            <div class="form-group row  text-left">
-                <lable class="control-label col-md-3 col-sm-3 col-xs-3"><b class="text-primary">Hỗ trợ Pháp lý</b></lable>
-                <select name="LegalManager2" class="form-control col-md-7 col-sm-9 col-xs-9">
-                    @if (Model.LegalManager2 != null)
-                    {
-                        <option value="@Model.LegalManager2">@Members.FirstOrDefault(s => s.UserID == Model.LegalManager2).FullName</option>
 
-                    }
-                </select>
-            </div>
             @* Admin ID *@
             <div class="form-group row  text-left">
-                <lable class="control-label col-md-3 col-sm-3 col-xs-3"><b class="text-primary">Admin</b></lable>
-                <select name="LegalManager" class="form-control col-md-7 col-sm-9 col-xs-9">
-                    @if (Model.Admin != null)
-                    {
-                        <option value="@Model.Admin">@Members.FirstOrDefault(s => s.UserID == Model.Admin).FullName</option>
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3"><b class="text-primary">Thành viên khác</b></lable>
+                <textarea class="form-control col-md-7 col-sm-9 col-xs-9">@mem</textarea>
 
-                    }
-                </select>
             </div>
+
 
             <div class="form-group text-left">
                 <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>

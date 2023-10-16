@@ -602,7 +602,7 @@
     <ul class="col">
         @foreach (var item in ProjectNeedAssign.Distinct())
         {
-            <li class="col-sm-2"><b>@item.ProjectOtherName</b></li>
+            <li class="col-sm-2 text-primary"><b>@item.ProjectOtherName</b></li>
         }
     </ul>
 </div>
@@ -653,7 +653,7 @@
                                             <b>@Members.FirstOrDefault(s => s.UserID == item.Key).FullName</b>
                                         </p>
                                         <p class="inline">
-                                            <h6 class="text-primary">@item.Value.Count()<small> dự án</small></h6>
+                                            <h4 class="text-primary">@item.Value.Count()<small> dự án</small></h4>
                                         </p>
                                     </td>
                                     @* <td class="col-sm-2">@item.Value.Count()</td>*@
