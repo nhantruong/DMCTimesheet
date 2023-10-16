@@ -27,6 +27,10 @@
     string imgPath = "../Assets/Photos/MemberImage/";
     string NoimagePath = "../Assets/Photos/MemberImage/no-image.jpg";
 
+    //Dự án của từng thành viên
+    //List<KeyValuePair<int, List<int?>>> ProjectOfMember = new List<KeyValuePair<int, List<int?>>>();
+    //ProjectOfMember = ViewBag.ProjectOfMember as List<KeyValuePair<int, List<int?>>>;
+
     if (AssignMemProjects != null)
     {
         ProjectNeedAssign.Clear();
@@ -171,7 +175,7 @@
     int OngoingProject = Projects.Where(s => s.ProjectStage != 5).Count() - DuAnHoTro;
 }
 
-<h2>Web Admin Management Page</h2>
+<h2>DMC Timesheet Admin Management homepage</h2>
 <div class="row inline">
     <div class="clearfix"></div>
     <div class="col-md-12">
@@ -240,33 +244,14 @@
                         @*  @Html.ReportViewer(ViewBag.TSReportViewer as Microsoft.Reporting.WebForms.ReportViewer, new { @width = "100%", @height = "80%" })*@
                     </div>
                     <div>
-                       @* <input type="submit" name="name" value="Report Management" class="btn btn-info" />*@
+                        @* <input type="submit" name="name" value="Report Management" class="btn btn-info" />*@
                     </div>
                 </form>
             }
 
         </div>
     </div>
-    @*<div class="inline col-md-4">
 
-            <button class="btn btn-outline-success btn-dark" onclick="dailyview()">Today</button>
-                <button class="btn btn-outline-warning btn-dark" onclick="weeklyview()">Weekly</button>
-                <button class="btn btn-outline-warning btn-dark" onclick="monthlyview()">Monthly</button>
-                <button class="btn btn-outline-warning btn-dark" onclick="quarterview()">Quarter</button>
-                <button class="btn btn-outline-warning btn-dark" onclick="anualview()">Annual</button>
-                <select class="btn btn-outline-warning btn-dark">
-                    <option value="value">@DateTime.Now.Year</option>
-                </select>
-        </div>
-        <div>
-            <div class="form-group form-control">
-                from
-                <input type="date" id="fromDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
-                to
-                <input type="date" id="endDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
-                <input type="submit" id="viewStartEnd" value="view data" onclick="viewtimesheetfromto()" />
-            </div>
-        </div>*@
 </div>
 <hr />
 @*<div class="clearfix"></div>*@
@@ -295,15 +280,20 @@
         @* Bản thống kê *@
         <div class="col-sm-6">
             <h5 class="text-center">Bảng thống kê số lượng dự án theo thành viên</h5>
-            <div class="table-responsive-sm scrollbar">
+            <div class="table-responsive-sm">
                 <table class="table table-bordered table-condensed table-striped">
                     <thead class="text-center">
                         <tr class="text-white" style="background-color:#808080">
-                            <td class="col-sm-3">Tên thành viên</td>
-                            <td class="col-sm-2">SL dự án</td>
-                            <td class="col-sm-7">Tên dự án</td>
+                            <td class="col-sm-4">Tên thành viên</td>
+                            @*<td class="col-sm-2">SL dự án</td>*@
+                            <td class="col-sm-8">Tên dự án</td>
                         </tr>
                     </thead>
+
+                </table>
+            </div>
+            <div class="table-responsive" style="height:600px">
+                <table class="table table-bordered table-condensed table-striped">
                     <tbody>
                         @if (AssignMemProjects == null || AssignMemProjects.Count() == 0)
                         {
@@ -327,30 +317,28 @@
                                         UserImg = imgPath + @Members.FirstOrDefault(s => s.UserID == item.Key).Image;
                                     }
                                     <tr class="text-dark text-center row">
-                                        <td class="col-sm-3 text-center">
+                                        <td class="col-sm-4 text-center">
                                             <p>
                                                 <img src="@UserImg" class="img-circle" alt="Alternate Text" style="height:50px; width:50px" />
                                             </p>
                                             <p>
-                                                @Html.ActionLink(Members.FirstOrDefault(s => s.UserID == item.Key).FullName, "Details", "Member", new { Id = item.Key }, new { @class = "btn-sm btn-dark" })
-                                                @*<b>@Members.FirstOrDefault(s => s.UserID == item.Key).FullName</b>*@
+                                                @Html.ActionLink(Members.FirstOrDefault(s => s.UserID == item.Key).FullName, "Details", "Member", new { Id = item.Key }, new { @class = "btn btn-outline-info" })
                                             </p>
-
+                                            <p class="inline">
+                                                <h4 class="text-primary">@item.Value.Count()<small> dự án</small></h4>
+                                            </p>
                                         </td>
-                                        <td class="col-sm-2"><h3 class="text-danger">@item.Value.Count()</h3></td>
-                                        <td class="col-sm-7">
+                                        @*<td class="col-sm-2"><h3 class="text-danger">@item.Value.Count()</h3></td>*@
+                                        <td class="col-sm-8">
                                             <ol class="col">
                                                 @foreach (var itm in item.Value.ToList())
                                                 {
                                                     <li class="col-sm-6 text-left"><b>@Projects.FirstOrDefault(s => s.ProjectID == itm).ProjectOtherName</b></li>
-
                                                 }
                                             </ol>
-
                                         </td>
                                     </tr>
                                 }
-
                             }
                         }
                     </tbody>
@@ -363,12 +351,10 @@
             <h5 class="text-center">Biểu đồ số lượng dự án theo thành viên</h5>
             <div>
                 <canvas id="ProjectOfMemberSummary"></canvas>
-                @*<canvas id="ProjectOfMemberSummary_stack"></canvas>*@
             </div>
         </div>
     </div>
 </div>
-
 
 <style>
     .chuto {

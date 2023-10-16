@@ -1,0 +1,32 @@
+﻿@model DMCTimesheet.Models.C23_NguonViec
+@{
+    ViewBag.Title = "Edit Job source Page";
+}
+
+<h3>@ViewBag.Title</h3>
+<div class="modal-body">
+    @using (Html.BeginForm("EditJobSource", "Setting", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <form>
+            @* WorkType *@
+            <div class="form-group row text-left text-dark">
+                <lable hidden class="control-label col-md-3 col-sm-3 col-xs-3">Id</lable>
+                <input hidden type="number" class="form-control col-md-7 col-sm-9 col-xs-9" name="Id" placeholder="Id Nguồn việc" required="" value="@Model.Id" />
+            </div>
+            <div class="form-group row text-left text-dark">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên Nguồn việc</lable>
+                <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" name="NguonViec" placeholder="Tên Nguồn việc" required="" value="@Model.NguonViec" />
+            </div>
+            <br />
+            <div class="clearfix"></div>
+
+            <div class="form-group text-left">
+                <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left"></lable>
+                <input type="submit" value="Lưu thông tin cập nhật" class="btn btn-success col-md-3" />
+            </div>
+        </form>
+    }
+</div>
+<hr />
+<h6 class="text-danger">@ViewBag.Error</h6>

@@ -76,8 +76,7 @@
             <div class="x_content">
                 @* Form nhập liệu *@
                 <div class="embed-responsive">
-                    @*@using (Html.BeginForm("CreateTimesheet", "Timesheet", FormMethod.Post))*@
-                    @using (Html.BeginForm("CreateNewTS", "Timesheet", FormMethod.Post))
+                    @using (Html.BeginForm("CreateTimesheet", "Timesheet", FormMethod.Post))                 
                     {
                         @Html.AntiForgeryToken()
                         <form class="text-dark">

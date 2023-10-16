@@ -1591,5 +1591,108 @@ namespace DMCTimesheet.Controllers
 
         #endregion
 
+        #region JobSource
+
+        public ActionResult JobSource()
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            return View(db.C23_NguonViec.ToList());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateNewJobSource(string NguonViec)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            try
+            {
+                C23_NguonViec nguonviec = db.C23_NguonViec.FirstOrDefault(s => s.NguonViec.Contains(NguonViec.Trim()) || s.NguonViec == NguonViec.Trim());
+                if (nguonviec != null)
+                {
+                    ViewBag.Error = $"Đã có tên địa phương này";
+                    return View("JobSource", db.C23_NguonViec.ToList());
+                }
+                else
+                {
+                    
+                    C23_NguonViec newEnity = new C23_NguonViec() { NguonViec = NguonViec };
+                    db.C23_NguonViec.Add(newEnity);
+                    db.SaveChanges();
+                    return RedirectToAction("JobSource");
+                }
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Có lỗi xãy ra do {ex.InnerException.Message}";
+                return View("JobSource", db.C23_NguonViec.ToList());
+            }
+
+        }
+
+        public ActionResult EditJobSource(int? Id)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Id == null) return RedirectToAction("JobSource");
+            C23_NguonViec enity = db.C23_NguonViec.FirstOrDefault(s => s.Id == Id);
+            if (enity == null) return RedirectToAction("JobSource");
+            return View(enity);
+        }
+        public ActionResult DeleteJobSource(int? Id)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Id == null) return RedirectToAction("JobSource");
+            C23_NguonViec enity = db.C23_NguonViec.FirstOrDefault(s => s.Id == Id);
+            if (enity == null) return RedirectToAction("JobSource");
+            return View(enity);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult EditJobSource(int? Id, string NguonViec)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Id == null) return RedirectToAction("JobSource");
+            C23_NguonViec enity = db.C23_NguonViec.FirstOrDefault(s => s.Id == Id);
+            if (enity == null) return RedirectToAction("JobSource");
+            try
+            {
+                enity.NguonViec = NguonViec;
+                
+                db.Entry(enity).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("JobSource");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Có lỗi xãy ra do {ex.InnerException.Message}";
+                return View();
+            }
+        }
+
+        [HttpPost, ActionName("ConfirmDeleteJobSource")]
+        [ValidateAntiForgeryToken]
+        public ActionResult ConfirmDeleteJobSource(int? Id)
+        {
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
+            if (Id == null) return RedirectToAction("JobSource");
+            C23_NguonViec enity = db.C23_NguonViec.FirstOrDefault(s => s.Id == Id);
+            if (enity == null) return RedirectToAction("JobSource");
+            try
+            {
+                db.Entry(enity).State = EntityState.Deleted;
+                db.SaveChanges();
+                return RedirectToAction("JobSource");
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Có lỗi xãy ra do {ex.InnerException.Message}";
+                return View("JobSource");
+            }
+        }
+
+
+        #endregion
+
+
     }
 }

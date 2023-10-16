@@ -3364,6 +3364,9 @@
     <Content Include="Views\Setting\PowerBIEmbedString.cshtml" />
     <Content Include="Views\Member\AssignMember.cshtml" />
     <Content Include="Views\Reports\Index.cshtml" />
+    <Content Include="Views\Setting\JobSource.cshtml" />
+    <Content Include="Views\Setting\EditJobSource.cshtml" />
+    <Content Include="Views\Setting\DeleteJobSource.cshtml" />
     <None Include="Web References\com.cbimtech.MemberServices\MemberService.disco" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
