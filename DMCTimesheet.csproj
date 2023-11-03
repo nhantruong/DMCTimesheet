@@ -321,8 +321,10 @@
     <Content Include="Assets\Photos\background\green_leafy_wood_background_hd_picture.jpg" />
     <Content Include="Assets\Photos\background\hinh-nen-background-noel-dep_021845192.jpg" />
     <Content Include="Assets\Photos\background\mau-background-noel_021845379.jpg" />
+    <Content Include="Assets\Photos\background\mountain_background.jpg" />
     <Content Include="Assets\Photos\background\no-image-available.jpg" />
     <Content Include="Assets\Photos\background\NOX_Textures_402_2.jpg" />
+    <Content Include="Assets\Photos\background\RD_StudioClearSky.png" />
     <Content Include="Assets\Photos\background\z3581200428884_d75aa136e3c932c8a97a3a18f7f17aa4.jpg" />
     <Content Include="Assets\Photos\background\z3581200430767_4fe7f8b66267236664c66fbd5e975872.jpg" />
     <Content Include="Assets\Photos\background\z3581200459912_43da298d59988034d5c668ecdc1beb29.jpg" />
@@ -3367,6 +3369,7 @@
     <Content Include="Views\Setting\JobSource.cshtml" />
     <Content Include="Views\Setting\EditJobSource.cshtml" />
     <Content Include="Views\Setting\DeleteJobSource.cshtml" />
+    <Content Include="Views\Shared\_AddNewProject.cshtml" />
     <None Include="Web References\com.cbimtech.MemberServices\MemberService.disco" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">

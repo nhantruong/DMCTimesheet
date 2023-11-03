@@ -235,16 +235,25 @@ namespace DMCTimesheet.Models
         public static List<int> GetUserIdList(string usernameList)
         {
             List<int> userlist;
+            string _usernameList = "";
             try
             {
-                char sp = usernameList.Contains(';') ? ';' : ',';
-                var listname = usernameList.Split(sp);
+                if (usernameList.Contains(';'))
+                {
+                    _usernameList = usernameList.Replace(";", ",");
+                }
+                else { _usernameList = usernameList; }
+                //char sp = usernameList.Contains(';') ? ';' : ',';
+                //char sp = _usernameList.Contains(';') ? ';' : ',';
+                //var listname = usernameList.Split(sp);
+                var listname = _usernameList.Split(',');
                 userlist = new List<int>();
                 foreach (var item in listname)
                 {
-                    if (!string.IsNullOrEmpty(item))
-                    {
-                        int uId = db.C02_Members.First(s => s.FullName == item).UserID;
+                    string itm = item.Trim();
+                    if (!string.IsNullOrEmpty(itm))
+                    {                        
+                        int uId = db.C02_Members.First(s => s.FullName == itm).UserID;
                         userlist.Add(uId);
                     }
 

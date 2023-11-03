@@ -422,10 +422,18 @@
     </div>
     <div class="col-md-5 text-right inline">
         <button type="button" class="btn btn-warning btn-outline-dark btn-small text-right" data-toggle="modal" data-target="#newAM"><i class="fa fa-plus"></i> Phân công nhiệm vụ</button>
-        <button type="button" onclick="alert('Tính năng đang tích hợp!')" class="btn btn-warning btn-outline-dark btn-small text-right" data-toggle="modal" data-target="#newProject"><i class="fa fa-home"></i>Thêm dự án</button>
+        @*<button type="button" onclick="alert('Tính năng đang tích hợp!')" class="btn btn-warning btn-outline-dark btn-small text-right" data-toggle="modal" data-target="#newProject"><i class="fa fa-home"></i>Thêm dự án</button>*@
+       
+    <button type="button" onclick="loadPartialView()" class="btn btn-warning btn-outline-dark btn-small text-right" data-toggle="modal" data-target="#newProject">more...<i class="fa fa-fighter-jet"></i> </button>
+    
     </div>
 
 </div>
+
+@* PartialView *@
+<div id="partialViewContainer"></div>
+
+
 <div class="clearfix"></div>
 @* bảng thống kê dự án *@
 <div>
@@ -550,9 +558,10 @@
                             <ul class="col">
                                 @if (!string.IsNullOrEmpty(item.ThanhVienKhac))
                                 {
-                                    foreach (var itm in item.ThanhVienKhac.Split(',').ToArray())
+                                    foreach (var itm in item.ThanhVienKhac.Split(',').ToList().Where(s=> s != null).ToArray())
                                     {
                                         int uId = int.Parse(itm);
+                                        
                                         string fullname = "Chua xac dinh";
                                         try
                                         {
@@ -727,6 +736,20 @@
 
 
 </script>
+
+
+@* Load PartialView *@
+<script type="text/javascript">
+    function loadPartialView() {
+        $.ajax({
+            url: "@Url.Action("AddProjectPartialView", "Member")",
+            type: "GET",
+            success: function (response) {
+                $("#partialViewContainer").html(response);
+            }
+        });
+    }
+</script>        
 
 
 @section Scripts {

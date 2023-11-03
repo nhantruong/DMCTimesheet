@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using DMCTimesheet.Models;
 using DMCTimesheet.com.cbimtech.MemberServices;
 using System.Security.Cryptography;
+using System.Text;
+using System.Diagnostics;
 
 namespace DMCTimesheet.Controllers
 {
@@ -224,11 +226,11 @@ namespace DMCTimesheet.Controllers
         /// <returns></returns>
         public ActionResult AssignMember()
         {
-            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");            
+            if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
             try
-            {                
+            {
                 ViewBag.BIMer = GetDMCdata.GetBIMmemberList();
-                ViewBag.Projects = db.C01_Projects.ToList();               
+                ViewBag.Projects = db.C01_Projects.ToList();
                 ViewBag.Members = db.C02_Members.ToList();
                 ViewBag.ProjectOfMember = GetDMCdata.DuAnCacThanhVien();
                 return View(db.C03_ProjectMembers.ToList());
@@ -333,7 +335,7 @@ namespace DMCTimesheet.Controllers
                     foreach (var uId in _tvk)
                     {
                         bool existing = uId == ChuTriChinh || uId == ChuTriKienTruc || uId == ChuTriKetCau || uId == ChuTriMEP || uId == LegalManager;
-                        if (!existing) tvk.Add(uId);  
+                        if (!existing) tvk.Add(uId);
                     }
                     danhsachThanhvien = string.Join(", ", tvk);
                     //Thêm record
@@ -359,7 +361,7 @@ namespace DMCTimesheet.Controllers
                     //Session["MemberAssignError"] = $"Đã có điều phối Thành viên cho dự án này";
                     ViewBag.Projects = db.C01_Projects.ToList();
                     //ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
-                    ViewBag.Members = db.C02_Members.ToList();                    
+                    ViewBag.Members = db.C02_Members.ToList();
                     ViewBag.BIMer = GetDMCdata.GetBIMmemberList();
                     ViewBag.Error = $"Đã có điều phối Thành viên cho dự án này";
                     return View("AssignMember", db.C03_ProjectMembers.ToList());
@@ -384,11 +386,11 @@ namespace DMCTimesheet.Controllers
                 Session["MemberAssignError"] = $"Không tìm thấy dự án này";
                 return RedirectToAction("AssignMember");
             }
-            int pId = db.C03_ProjectMembers.FirstOrDefault(s=>s.ID == Id).ProjectID.Value;
-            ViewBag.Projects = db.C01_Projects.FirstOrDefault(s=>s.ProjectID == pId).ProjectOtherName; //Tên dự án
+            int pId = db.C03_ProjectMembers.FirstOrDefault(s => s.ID == Id).ProjectID.Value;
+            ViewBag.Projects = db.C01_Projects.FirstOrDefault(s => s.ProjectID == pId).ProjectOtherName; //Tên dự án
             ViewBag.Members = db.C02_Members.ToList(); //Dsach thành viên DMC
             ViewBag.BIMer = GetDMCdata.GetBIMmemberList();//Danh sách thành viên BIM
-            ViewBag.ProjectMembers = GetDMCdata.DanhSachUserIDTheoDuAn(int.Parse(enity.ID.ToString()));            
+            ViewBag.ProjectMembers = GetDMCdata.DanhSachUserIDTheoDuAn(int.Parse(enity.ID.ToString()));
 
             return View(enity);
         }
@@ -479,12 +481,21 @@ namespace DMCTimesheet.Controllers
                     ViewBag.Error = $"Không tìm thấy dự án này";
                     return View("EditAssign");
                 }
+                StringBuilder sb = new StringBuilder();
+                string tvk = "";
+
+                if (!string.IsNullOrWhiteSpace(ThanhVienKhac))
+                {
+                    List<int> userlist = new List<int>();
+                    userlist = GetDMCdata.GetUserIdList(ThanhVienKhac);
+                    if (userlist != null)  tvk = string.Join(",", userlist);                       
+                }
                 enity.ChuTriChinh = ChuTriChinh;
                 enity.ChuTriKienTruc = ChuTriKienTruc;
                 enity.ChuTriKetCau = ChuTriKetCau;
                 enity.ChuTriMEP = ChuTriMEP;
                 enity.LegalManager = LegalManager;
-                enity.ThanhVienKhac = string.IsNullOrWhiteSpace(ThanhVienKhac) ? "" : string.Join(", ", GetDMCdata.GetUserIdList(ThanhVienKhac));
+                enity.ThanhVienKhac = tvk;
                 enity.Ngay = Ngay;
                 if (ModelState.IsValid)
                 {
@@ -501,7 +512,8 @@ namespace DMCTimesheet.Controllers
             catch (Exception ex)
             {
                 ViewBag.Error = $"Có lỗi trong khi cập nhật data do {ex.Message}";
-                return View("EditAssign");
+                return RedirectToAction("EditAM");
+                //return View("EditAssign");
             }
         }
 
@@ -515,8 +527,8 @@ namespace DMCTimesheet.Controllers
                 Session["MemberAssignError"] = $"Không tìm thấy dự án này";
                 return RedirectToAction("AssignMember");
             }
-            ViewBag.ProjectName = db.C01_Projects.FirstOrDefault(s=>s.ProjectID == enity.ProjectID).ProjectOtherName;
-            ViewBag.Members = GetDMCdata.DanhSachC02MemberTheoDuAn(enity.ProjectID.Value);           
+            ViewBag.ProjectName = db.C01_Projects.FirstOrDefault(s => s.ProjectID == enity.ProjectID).ProjectOtherName;
+            ViewBag.Members = GetDMCdata.DanhSachC02MemberTheoDuAn(enity.ProjectID.Value);
             ViewBag.BIMer = GetDMCdata.GetBIMmemberList();
             return View(enity);
         }
@@ -548,7 +560,7 @@ namespace DMCTimesheet.Controllers
                 ViewBag.SaveContent = $"{ex.Message}";
                 ViewBag.Bool = true;
                 ViewBag.Projects = db.C01_Projects.ToList();
-                ViewBag.Members = db.C02_Members.ToList();                
+                ViewBag.Members = db.C02_Members.ToList();
                 ViewBag.BIMer = GetDMCdata.GetBIMmemberList();
                 ViewBag.Error = $"Có lỗi trong khi cập nhật data do {ex.Message}";
                 return View("DeleteAssigned");
@@ -619,6 +631,21 @@ namespace DMCTimesheet.Controllers
             }
         }
 
+        #endregion
+
+        #region PartialView
+        public ActionResult AddProjectPartialView()
+        {
+            ViewBag.Projects = db.C01_Projects.ToList();
+            ViewBag.ProjectType = db.C13_ProjectType.ToList();
+            ViewBag.Status = db.C16_Status.ToList();
+            ViewBag.Location = db.C11_Location.ToList();
+            ViewBag.Owner = db.C10_Owner.ToList();
+            ViewBag.Stage = db.C20_Stage.ToList();
+            ViewBag.NguonViec = db.C23_NguonViec.ToList();
+
+            return PartialView("_AddNewProject", db.C01_Projects.ToList());
+        }
         #endregion
 
     }

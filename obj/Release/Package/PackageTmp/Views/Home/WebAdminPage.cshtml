@@ -303,7 +303,7 @@
                         }
                         else
                         {
-                            foreach (var item in ProjectOfMember)
+                            foreach (var item in ProjectOfMember.OrderByDescending(s=>s.Value.Count()))
                             {
                                 if (item.Value.Count() != 0)
                                 {

@@ -137,7 +137,7 @@
                         foreach (var item in tvk)
                         {
                             int uId = int.Parse(item);
-                            sb.Append($" {Members.FirstOrDefault(s => s.UserID == uId).FullName};");
+                            sb.Append($" {Members.FirstOrDefault(s => s.UserID == uId).FullName},");
 
                         }
                     }

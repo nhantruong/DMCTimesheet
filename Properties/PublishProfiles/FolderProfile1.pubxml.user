@@ -4,8 +4,8 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
 -->
 <Project>
   <PropertyGroup>
-    <_PublishTargetUrl>C:\Users\admin\OneDrive\MyApp\DMCTimesheet\Publish\ver1.3-2023.10.13\Ver1.4_16102023</_PublishTargetUrl>
-    <History>True|2023-10-16T07:13:04.5338178Z;True|2023-10-13T11:09:30.3045332+07:00;True|2023-10-13T10:24:17.5984955+07:00;True|2023-09-04T15:27:33.3166846+07:00;True|2023-08-29T15:29:10.9060971+07:00;True|2023-08-29T14:47:24.5851180+07:00;True|2023-08-29T07:37:16.0125625+07:00;True|2023-08-29T07:22:16.6315363+07:00;True|2023-08-28T16:59:56.5348780+07:00;True|2023-08-26T14:44:40.6964822+07:00;True|2023-08-18T08:59:56.2097161+07:00;False|2023-08-18T08:57:28.2834484+07:00;</History>
+    <_PublishTargetUrl>C:\Users\admin\OneDrive\MyApp\DMCTimesheet\Publish\Ver1.5_03112023</_PublishTargetUrl>
+    <History>True|2023-11-03T07:20:03.5689071Z;True|2023-10-16T14:13:04.5338178+07:00;True|2023-10-13T11:09:30.3045332+07:00;True|2023-10-13T10:24:17.5984955+07:00;True|2023-09-04T15:27:33.3166846+07:00;True|2023-08-29T15:29:10.9060971+07:00;True|2023-08-29T14:47:24.5851180+07:00;True|2023-08-29T07:37:16.0125625+07:00;True|2023-08-29T07:22:16.6315363+07:00;True|2023-08-28T16:59:56.5348780+07:00;True|2023-08-26T14:44:40.6964822+07:00;True|2023-08-18T08:59:56.2097161+07:00;False|2023-08-18T08:57:28.2834484+07:00;</History>
     <LastFailureDetails />
   </PropertyGroup>
   <ItemGroup>
@@ -349,13 +349,13 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>10/08/2022 19:58:44</publishTime>
     </File>
     <File Include="bin/DMCTimesheet.dll">
-      <publishTime>10/16/2023 14:12:55</publishTime>
+      <publishTime>11/03/2023 14:19:55</publishTime>
     </File>
     <File Include="bin/DMCTimesheet.pdb">
-      <publishTime>10/16/2023 14:12:55</publishTime>
+      <publishTime>11/03/2023 14:19:55</publishTime>
     </File>
     <File Include="bin/DMCTimesheet.XmlSerializers.dll">
-      <publishTime>10/16/2023 14:12:56</publishTime>
+      <publishTime>11/03/2023 14:19:56</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>08/01/2023 09:59:21</publishTime>
@@ -10996,7 +10996,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/01/2023 09:59:19</publishTime>
     </File>
     <File Include="Views/Home/Login.cshtml">
-      <publishTime>10/16/2023 14:10:26</publishTime>
+      <publishTime>11/03/2023 14:18:30</publishTime>
     </File>
     <File Include="Views/Home/SysAdminPage.cshtml">
       <publishTime>08/01/2023 09:59:19</publishTime>
@@ -11011,10 +11011,10 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/01/2023 09:59:19</publishTime>
     </File>
     <File Include="Views/Home/WebAdminPage.cshtml">
-      <publishTime>10/16/2023 12:10:59</publishTime>
+      <publishTime>10/16/2023 14:27:05</publishTime>
     </File>
     <File Include="Views/Member/AssignMember.cshtml">
-      <publishTime>10/16/2023 11:34:12</publishTime>
+      <publishTime>11/03/2023 14:08:12</publishTime>
     </File>
     <File Include="Views/Member/DeleteAssigned.cshtml">
       <publishTime>10/16/2023 09:54:41</publishTime>
@@ -11026,7 +11026,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>10/13/2023 09:53:39</publishTime>
     </File>
     <File Include="Views/Member/EditAssign.cshtml">
-      <publishTime>10/16/2023 09:35:24</publishTime>
+      <publishTime>11/03/2023 10:45:22</publishTime>
     </File>
     <File Include="Views/Member/EditPermission.cshtml">
       <publishTime>08/18/2023 07:50:11</publishTime>
@@ -11181,6 +11181,9 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
     <File Include="Views/Shared/Error.cshtml">
       <publishTime>08/01/2023 09:59:19</publishTime>
     </File>
+    <File Include="Views/Shared/_AddNewProject.cshtml">
+      <publishTime>11/03/2023 14:17:11</publishTime>
+    </File>
     <File Include="Views/Shared/_AdminLayout.cshtml">
       <publishTime>10/16/2023 14:10:03</publishTime>
     </File>
@@ -11233,7 +11236,7 @@ https://go.microsoft.com/fwlink/?LinkID=208121.
       <publishTime>08/01/2023 09:59:19</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>10/16/2023 14:12:57</publishTime>
+      <publishTime>11/03/2023 14:19:57</publishTime>
     </File>
     <File Include="x64/SqlServerSpatial160.dll">
       <publishTime>10/08/2022 19:58:44</publishTime>
