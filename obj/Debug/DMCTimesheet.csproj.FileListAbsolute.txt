@@ -154,6 +154,6 @@ C:\Users\admin\Documents\DMCTimesheet\bin\zh-CHS\Microsoft.ReportViewer.DataVisu
 C:\Users\admin\Documents\DMCTimesheet\bin\zh-CHT\Microsoft.ReportViewer.DataVisualization.resources.dll
 C:\Users\admin\Documents\DMCTimesheet\obj\Debug\DMCTimesheet.csproj.AssemblyReference.cache
 C:\Users\admin\Documents\DMCTimesheet\obj\Debug\DMCTimesheet.csproj.CoreCompileInputs.cache
-C:\Users\admin\Documents\DMCTimesheet\obj\Debug\DMCTimesheet.csproj.CopyComplete
+C:\Users\admin\Documents\DMCTimesheet\obj\Debug\DMCTimes.2C1C5331.Up2Date
 C:\Users\admin\Documents\DMCTimesheet\obj\Debug\DMCTimesheet.dll
 C:\Users\admin\Documents\DMCTimesheet\obj\Debug\DMCTimesheet.pdb

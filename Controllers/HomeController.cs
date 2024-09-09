@@ -1,4 +1,5 @@
 ﻿using DMCTimesheet.Models;
+using Microsoft.Ajax.Utilities;
 using System;
 using System.Collections.Generic;
 using System.EnterpriseServices;
@@ -339,19 +340,23 @@ namespace DMCTimesheet.Controllers
                         ViewBag.LoginNote = "User không tồn tại, vui lòng liên hệ admin";
                         return View("Login");
                     }
-                    //Nhân sự
+                    #region Nhan su                    
                     //ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).GetEnumerator();
-                    IEnumerable<C02_Members> member =  GetDMCdata.GetDMCMembers();;/* = new IEnumerable<C02_Members>(); List<C02_Members>();*/
-                   
+                    IEnumerable<C02_Members> member = GetDMCdata.GetDMCMembers(); ;/* = new IEnumerable<C02_Members>(); List<C02_Members>();*/
                     ViewBag.Members = member;
+                    //ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
 
+                    #endregion
 
-
-                   //ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
+                    #region Du an                   
                     //Dự án
                     ViewBag.Projects = GetDMCdata.GetDMCProjects();
-                    
                     //ViewBag.Projects = db.C01_Projects.ToList();
+                    #endregion
+
+                    #region Charts Data
+
+                    
                     #region Char 1 - Loại hình dự án - 
                     //Loại hình dự án
                     ViewBag.ProjectType = db.C13_ProjectType.ToList();
@@ -471,9 +476,22 @@ namespace DMCTimesheet.Controllers
                     #region Chart 6 & Table 1 - Thống kê dự án theo nhân sự - 
                     //Điều phối nhân sự trong dự án
                     ViewBag.AssignMemProjects = db.C03_ProjectMembers.ToList();
+
+
+                    ////Test
+                    //var test = CollectModelData.GetAssignedProjectsByUserId(5,db.C03_ProjectMembers.ToList());
+                    List<C01_Projects> ongoingP = db.C01_Projects.Where(s => s.ProjectStage != 5).ToList();// 5: stage Hoàn tất
+
+                    List<C03_ProjectMembers> ongoingAssignP = new List<C03_ProjectMembers>();
+                    foreach (C01_Projects item in ongoingP)
+                    {
+                        ongoingAssignP.Add(db.C03_ProjectMembers.FirstOrDefault(s => s.ProjectID == item.ProjectID));
+                    }
+                    ViewBag.AssignedProjects = CollectModelData.GetAssignedProjects(ongoingAssignP.ToList());   
+
                     #endregion
 
-
+                    #endregion
 
 
                     return View();

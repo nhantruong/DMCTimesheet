@@ -14,12 +14,15 @@
 
     List<int?> _ProjectMembers = ViewBag.ProjectMembers as List<int?>;
     List<int> ProjectMembers = new List<int>();
+
     string[] _tvk = Model.ThanhVienKhac.Split(',');
+
     for (int i = 0; i < _tvk.Length; i++)
     {
-        ProjectMembers.Add(int.Parse(_tvk[i]));
+        if (!string.IsNullOrEmpty(_tvk[i])) { ProjectMembers.Add(int.Parse(_tvk[i])); }
+
     }
-    
+
 
 
     //string Error = Session["MemberAssignError"] as string ?? "";
@@ -229,7 +232,7 @@
                                             <input type="checkbox" class="form-check-input" name="@item.UserID" value="@item.FullName" id="@chkname" onchange="addData(this,'@item.FullName')" />
                                             <label class="form-check-label" for="@chkname">@item.FullName</label>
                                         </div>
-                                    }                                    
+                                    }
                                     k++;
                                 }
                             }
@@ -239,27 +242,31 @@
                         <b class="text-danger">Khác</b>
                         <div class="form-check">
                             @{
-                                int l = k + 1;
-                                foreach (var item in Members.Where(s => s.Descipline > 3 && s.SystemMember == false && s.Deactived == false).OrderBy(s => s.UserName))
+                                if (ProjectMembers.Count() > 0)
                                 {
-                                    string chkname = string.Concat("chk", l);
-                                    if (ProjectMembers.Any(s => s == item.UserID))
+                                    int l = k + 1;
+                                    foreach (var item in Members.Where(s => s.Descipline > 3 && s.SystemMember == false && s.Deactived == false).OrderBy(s => s.UserName))
                                     {
-                                        _checked = "checked";
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" name="@item.UserID" value="@item.FullName" @_checked id="@chkname" onchange="addData(this,'@item.FullName')" />
-                                            <label class="form-check-label" for="@chkname">@item.FullName</label>
-                                        </div>
+                                        string chkname = string.Concat("chk", l);
+                                        if (ProjectMembers.Any(s => s == item.UserID))
+                                        {
+                                            _checked = "checked";
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" name="@item.UserID" value="@item.FullName" @_checked id="@chkname" onchange="addData(this,'@item.FullName')" />
+                                                <label class="form-check-label" for="@chkname">@item.FullName</label>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" name="@item.UserID" value="@item.FullName" id="@chkname" onchange="addData(this,'@item.FullName')" />
+                                                <label class="form-check-label" for="@chkname">@item.FullName</label>
+                                            </div>
+                                        }
+                                        l++;
                                     }
-                                    else
-                                    {
-                                        <div class="form-check">
-                                            <input type="checkbox" class="form-check-input" name="@item.UserID" value="@item.FullName" id="@chkname" onchange="addData(this,'@item.FullName')" />
-                                            <label class="form-check-label" for="@chkname">@item.FullName</label>
-                                        </div>
-                                    }
-                                    l++;
                                 }
+
                             }
                         </div>
                     </div>
@@ -301,9 +308,9 @@
             // Process the selectedItems array as needed (e.g., save to a database, etc.)
             var selectedItems = [];
             $('.form-check-input:checked').each(function () {
-                var itm =   $(this).val();
-                if(itm !==ARC || itm!== STR || itm!== MEP || itm!==Legal ){              
-                selectedItems.push($(this).val());
+                var itm = $(this).val();
+                if (itm !== ARC || itm !== STR || itm !== MEP || itm !== Legal) {
+                    selectedItems.push($(this).val());
                 }
             });
             Thanhvien_Khac.value = selectedItems;

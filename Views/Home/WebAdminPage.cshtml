@@ -5,6 +5,7 @@
 @{
     List<DMCTimesheet.Models.C03_ProjectMembers> AssignMemProjects = ViewBag.AssignMemProjects as List<DMCTimesheet.Models.C03_ProjectMembers>;
 
+
     DMCTimesheet.Models.C06_UserPermisRelationship Userpermiss = Session["UserPermission"] as DMCTimesheet.Models.C06_UserPermisRelationship;
     DMCTimesheet.Models.C02_Members loginUser = Session["UserLogin"] as DMCTimesheet.Models.C02_Members;
 
@@ -18,7 +19,9 @@
     }
     string Error = Session["MemberAssignError"] as string ?? "";
 
-    List<KeyValuePair<int, List<int?>>> ProjectOfMember = new List<KeyValuePair<int, List<int?>>>();
+    //List<KeyValuePair<int, List<int?>>> ProjectOfMember = new List<KeyValuePair<int, List<int?>>>();
+    List<KeyValuePair<int, List<int?>>> ProjectOfMember = ViewBag.AssignedProjects as List<KeyValuePair<int, List<int?>>>;
+
     List<string> ChartLabels = new List<string>();
     List<double> ChartValue = new List<double>();
     List<double> ProjectStageOfMember = new List<double>();
@@ -28,45 +31,19 @@
     string NoimagePath = "../Assets/Photos/MemberImage/no-image.jpg";
 
     //Dự án của từng thành viên
-    //List<KeyValuePair<int, List<int?>>> ProjectOfMember = new List<KeyValuePair<int, List<int?>>>();
-    //ProjectOfMember = ViewBag.ProjectOfMember as List<KeyValuePair<int, List<int?>>>;
+    ProjectOfMember = ViewBag.AssignedProjects as List<KeyValuePair<int, List<int?>>>;
 
-    if (AssignMemProjects != null)
+    //Lấy dự án theo Giai đoạn
+
+    //Chart data
+    foreach (var item in ProjectOfMember)
     {
-        ProjectNeedAssign.Clear();
-        //Danh sách dự án chưa điều phối
-        foreach (var item in AssignMemProjects)
-        {
-            ProjectNeedAssign = Projects.Where(p => p.ProjectID != item.ProjectID).Distinct().ToList();
-        }
-        //Lấy dự án của từng người
-        foreach (var mem in Members.Where(s => s.SystemMember == false))
-        {
-            KeyValuePair<int, List<int?>> keyValuePair = new KeyValuePair<int, List<int?>>(mem.UserID, AssignMemProjects.Where(s => s.ChuTriChinh == mem.UserID
-            || s.ChuTriKienTruc == mem.UserID
-            || s.ChuTriKienTruc2 == mem.UserID
-            || s.ChuTriKetCau == mem.UserID
-            || s.ChuTriKetCau2 == mem.UserID
-            || s.ChuTriMEP == mem.UserID
-            || s.ChuTriMEP2 == mem.UserID
-            || s.Admin == mem.UserID
-            || s.LegalManager2 == mem.UserID
-            || s.LegalManager == mem.UserID).Select(p => p.ProjectID).ToList());
-
-            ProjectOfMember.Add(keyValuePair);
-        }
-
-        //Lấy dự án theo Giai đoạn
-
-        //Chart data
-        foreach (var item in ProjectOfMember)
-        {
-            ChartLabels.Add(Members.First(s => s.UserID == item.Key).FullName);
-            ChartValue.Add(item.Value.Count());
-
-        }
+        ChartLabels.Add(Members.First(s => s.UserID == item.Key).FullName);
+        ChartValue.Add(item.Value.Count());
 
     }
+
+    // }
 
     //Nhóm công việc
     List<DMCTimesheet.Models.C19_Workgroup> WorkGroup = ViewBag.WorkGroup as List<DMCTimesheet.Models.C19_Workgroup>;
@@ -173,7 +150,7 @@
 
     int DuAnHoTro = Projects.Where(s => s.ProjectStage == 8).Count();
     int OngoingProject = Projects.Where(s => s.ProjectStage != 5).Count() - DuAnHoTro;
-}
+    }
 
 <h2>DMC Timesheet Admin Management homepage</h2>
 <div class="row inline">
@@ -278,8 +255,8 @@
     @*<h3 class="text-center text-primary">CÔNG VIỆC ĐƯỢC GIAO</h3>*@
     <div>
         @* Bản thống kê *@
-        <div class="col-sm-6">
-            <h5 class="text-center">Bảng thống kê số lượng dự án theo thành viên</h5>
+        <div class="col-sm-8">
+            <h5 class="text-center"><b>Bảng thống kê Dự án đang tiến hành theo thành viên</b></h5>
             <div class="table-responsive-sm">
                 <table class="table table-bordered table-condensed table-striped">
                     <thead class="text-center">
@@ -303,7 +280,7 @@
                         }
                         else
                         {
-                            foreach (var item in ProjectOfMember.OrderByDescending(s=>s.Value.Count()))
+                            foreach (var item in ProjectOfMember.OrderByDescending(s => s.Value.Count()))
                             {
                                 if (item.Value.Count() != 0)
                                 {
@@ -333,7 +310,9 @@
                                             <ol class="col">
                                                 @foreach (var itm in item.Value.ToList())
                                                 {
-                                                    <li class="col-sm-6 text-left"><b>@Projects.FirstOrDefault(s => s.ProjectID == itm).ProjectOtherName</b></li>
+                                                    int? st = Projects.FirstOrDefault(s => s.ProjectID == itm).ProjectStage;
+                                                    string stage = st != null ? ProjectStage.FirstOrDefault(s => s.Id == st).StageName : "*";
+                                                    <li class="col-sm-6 text-left"><b>@Projects.FirstOrDefault(s => s.ProjectID == itm).ProjectOtherName</b>(<small class="text-danger">@stage</small>)</li>
                                                 }
                                             </ol>
                                         </td>
@@ -344,10 +323,12 @@
                     </tbody>
                 </table>
             </div>
+            <p class="text-danger">(*) dự án cho các công ty/ tổ chức thành viên</p>
+
         </div>
 
         @* Biểu đồ 6 - dự án theo nhân sự *@
-        <div class="col-sm-6">
+        <div class="col-sm-4">
             <h5 class="text-center">Biểu đồ số lượng dự án theo thành viên</h5>
             <div>
                 <canvas id="ProjectOfMemberSummary"></canvas>
