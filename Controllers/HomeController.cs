@@ -342,21 +342,22 @@ namespace DMCTimesheet.Controllers
                     }
                     #region Nhan su                    
                     //ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).GetEnumerator();
-                    IEnumerable<C02_Members> member = GetDMCdata.GetDMCMembers(); ;/* = new IEnumerable<C02_Members>(); List<C02_Members>();*/
-                    ViewBag.Members = member;
+                    //IEnumerable<C02_Members> member = GetDMCdata.GetDMCMembers(); ;/* = new IEnumerable<C02_Members>(); List<C02_Members>();*/
+                    ViewBag.Members = GetDMCdata.GetDMCMembers(false); ;/* = new IEnumerable<C02_Members>(); List<C02_Members>();*/
+                                        
                     //ViewBag.Members = db.C02_Members.Where(s => s.Deactived == false).ToList();
 
                     #endregion
 
                     #region Du an                   
-                    //Dự án
+                    //All Dự án
                     ViewBag.Projects = GetDMCdata.GetDMCProjects();
                     //ViewBag.Projects = db.C01_Projects.ToList();
                     #endregion
 
                     #region Charts Data
 
-                    
+
                     #region Char 1 - Loại hình dự án - 
                     //Loại hình dự án
                     ViewBag.ProjectType = db.C13_ProjectType.ToList();
@@ -480,14 +481,26 @@ namespace DMCTimesheet.Controllers
 
                     ////Test
                     //var test = CollectModelData.GetAssignedProjectsByUserId(5,db.C03_ProjectMembers.ToList());
-                    List<C01_Projects> ongoingP = db.C01_Projects.Where(s => s.ProjectStage != 5).ToList();// 5: stage Hoàn tất
+
+                    // 5: stage Hoàn tất
+                    List<C01_Projects> ongoingP = db.C01_Projects.Where(s => s.ProjectStage != 5).ToList();
+                    ViewBag.ongoingP = db.C01_Projects.Where(s => s.ProjectStage != 5).ToList();
+
+                    // All dự án hoàn tất
+                    ViewBag.FinishP = db.C01_Projects.Where(s => s.ProjectStage == 5).ToList();
+                    
+                    //Dự án Chính - Nguonviec == 1
+                    ViewBag.OngoingMainProjects = db.C01_Projects.Where(s => s.ProjectStage != 5 && s.NguonViec == 1).ToList();
+                    //Du an Ho tro
+                    ViewBag.OngoingSupportProjects = db.C01_Projects.Where(s => s.ProjectStage != 5 && s.NguonViec != 1).ToList();
+
 
                     List<C03_ProjectMembers> ongoingAssignP = new List<C03_ProjectMembers>();
                     foreach (C01_Projects item in ongoingP)
                     {
                         ongoingAssignP.Add(db.C03_ProjectMembers.FirstOrDefault(s => s.ProjectID == item.ProjectID));
                     }
-                    ViewBag.AssignedProjects = CollectModelData.GetAssignedProjects(ongoingAssignP.ToList());   
+                    ViewBag.AssignedProjects = CollectModelData.GetAssignedProjects(ongoingAssignP.ToList());
 
                     #endregion
 

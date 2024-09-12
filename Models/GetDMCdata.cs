@@ -16,14 +16,19 @@ namespace DMCTimesheet.Models
 
         #region DMC
 
-        public static IEnumerable<C02_Members> GetDMCMembers()
+        /// <summary>
+        /// Lấy danh sách thành viên tại DMC
+        /// </summary>
+        /// <param name="deactive">true: đã nghỉ việc</param>
+        /// <returns></returns>
+        public static IEnumerable<C02_Members> GetDMCMembers(bool deactive)
         {
             using (dmcDbcontext db = new dmcDbcontext())
             {
                 try
                 {
                     List<C02_Members> members = new List<C02_Members>();
-                    members = db.C02_Members.Where(s => s.Deactived == false).ToList();
+                    members = db.C02_Members.Where(s => s.Deactived == deactive).ToList();
                     return members;
                 }
                 catch (Exception)
@@ -36,7 +41,7 @@ namespace DMCTimesheet.Models
         }
 
         /// <summary>
-        /// 
+        /// Danh sách toàn bộ dự án của DMC, không lọc
         /// </summary>
         /// <returns></returns>
         public static IEnumerable<C01_Projects> GetDMCProjects()
@@ -45,9 +50,7 @@ namespace DMCTimesheet.Models
             {
                 try
                 {
-                    List<C01_Projects> project = new List<C01_Projects>();
-                    project = db.C01_Projects.ToList();
-                    return project;
+                    return db.C01_Projects.ToList();
                 }
                 catch (Exception)
                 {

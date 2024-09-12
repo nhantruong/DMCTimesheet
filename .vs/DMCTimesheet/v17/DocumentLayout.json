@@ -1,7 +1,16 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\admin\\Documents\\DMCTimesheet\\",
-  "Documents": [],
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{D8A4A441-064A-4F81-848C-9112C390AAF2}|DMCTimesheet.csproj|C:\\Users\\admin\\Documents\\DMCTimesheet\\views\\home\\webadminpage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{D8A4A441-064A-4F81-848C-9112C390AAF2}|DMCTimesheet.csproj|solutionrelative:views\\home\\webadminpage.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{D8A4A441-064A-4F81-848C-9112C390AAF2}|DMCTimesheet.csproj|c:\\users\\admin\\documents\\dmctimesheet\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{D8A4A441-064A-4F81-848C-9112C390AAF2}|DMCTimesheet.csproj|solutionrelative:controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -9,11 +18,37 @@
       "DocumentGroups": [
         {
           "DockedWidth": 188,
-          "SelectedChildIndex": -1,
+          "SelectedChildIndex": 2,
           "Children": [
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\admin\\Documents\\DMCTimesheet\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\admin\\Documents\\DMCTimesheet\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "Controllers\\HomeController.cs",
+              "ViewState": "AgIAAGQBAAAAAAAAAAAowOUBAABXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-09-11T01:20:34.964Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "WebAdminPage.cshtml",
+              "DocumentMoniker": "C:\\Users\\admin\\Documents\\DMCTimesheet\\Views\\Home\\WebAdminPage.cshtml",
+              "RelativeDocumentMoniker": "Views\\Home\\WebAdminPage.cshtml",
+              "ToolTip": "C:\\Users\\admin\\Documents\\DMCTimesheet\\Views\\Home\\WebAdminPage.cshtml",
+              "RelativeToolTip": "Views\\Home\\WebAdminPage.cshtml",
+              "ViewState": "AgIAADwBAAAAAAAAAAAAwEABAAAIAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2024-09-10T08:44:14.015Z",
+              "EditorCaption": ""
             }
           ]
         }
