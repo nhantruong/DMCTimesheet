@@ -17,6 +17,18 @@
     <Property Name="ProjectStage" Type="int" />
     <Property Name="NguonViec" Type="int" />
     <Property Name="NgayKetThuc" Type="date" />
+    <Property Name="QuocGia" Type="int" />
+    <Property Name="ML_ProjectSize" Type="float" />
+    <Property Name="ML_ProjectComplexity" Type="nvarchar" MaxLength="25" />
+    <Property Name="ML_EstimatedCost" Type="decimal" Precision="19" Scale="4" />
+    <Property Name="ML_ActualCost" Type="decimal" Precision="19" Scale="4" />
+    <Property Name="ML_EstimatedTimePerTask" Type="float" />
+    <Property Name="ML_ActualTimePerTask" Type="float" />
+    <Property Name="ML_LabourCost" Type="money" />
+    <Property Name="ML_MaterialCost" Type="money" />
+    <Property Name="ML_EquipmentCost" Type="money" />
+    <Property Name="ML_RiskFactors" Type="nvarchar" MaxLength="250" />
+    <Property Name="ML_ChangedOrder" Type="int" />
   </EntityType>
   <EntityType Name="02_Members">
     <Key>
@@ -133,6 +145,7 @@
     </Key>
     <Property Name="LocationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="LocationName" Type="nvarchar" MaxLength="50" />
+    <Property Name="Country" Type="nvarchar" MaxLength="150" />
   </EntityType>
   <EntityType Name="12_SubContractor">
     <Key>
@@ -186,6 +199,17 @@
     <Property Name="Active" Type="bit" />
     <Property Name="isLeader" Type="bit" />
   </EntityType>
+  <EntityType Name="17a_QuocGias">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="KhuVuc" Type="nvarchar" MaxLength="150" />
+    <Property Name="TenQuocGia_EN" Type="nvarchar" MaxLength="200" />
+    <Property Name="TenQuocGia_VN" Type="nvarchar" MaxLength="200" />
+    <Property Name="TenGoiChinhThe" Type="nvarchar(max)" />
+    <Property Name="MaVietTat" Type="nchar" MaxLength="2" />
+  </EntityType>
   <EntityType Name="18_Descipline">
     <Key>
       <PropertyRef Name="Id" />
@@ -233,6 +257,23 @@
     <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="NguonViec" Type="nvarchar" MaxLength="250" />
   </EntityType>
+  <EntityType Name="24_ChangedOrder">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ProjectId" Type="int" Nullable="false" />
+    <Property Name="CO_Number" Type="nvarchar" MaxLength="50" />
+    <Property Name="CO_Resource" Type="nvarchar(max)" />
+    <Property Name="CO_Description" Type="nvarchar(max)" />
+    <Property Name="CO_Descipline" Type="int" />
+    <Property Name="CO_TotalCost" Type="money" />
+    <Property Name="CO_TimeSpend" Type="datetime" />
+    <Property Name="CO_LabourCost" Type="money" />
+    <Property Name="CO_MaterialCost" Type="money" />
+    <Property Name="CO_EquipmentCost" Type="money" />
+    <Property Name="CO_DelayTime" Type="datetime" />
+  </EntityType>
   <EntityType Name="98_EmbedString">
     <Key>
       <PropertyRef Name="ID" />
@@ -253,6 +294,18 @@
     <Property Name="Details" Type="nvarchar" MaxLength="250" />
     <Property Name="GroupId" Type="int" />
   </EntityType>
+  <Association Name="FK_01_Projects_17a_QuocGias">
+    <End Role="17a_QuocGias" Type="Self.17a_QuocGias" Multiplicity="0..1" />
+    <End Role="01_Projects" Type="Self.01_Projects" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="17a_QuocGias">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="01_Projects">
+        <PropertyRef Name="QuocGia" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
   <Association Name="FK_01_Projects_23_NguonViec">
     <End Role="23_NguonViec" Type="Self.23_NguonViec" Multiplicity="0..1" />
     <End Role="01_Projects" Type="Self.01_Projects" Multiplicity="*" />
@@ -465,14 +518,20 @@
     <EntitySet Name="15_SubConServices" EntityType="Self.15_SubConServices" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="16_Status" EntityType="Self.16_Status" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="17_Position" EntityType="Self.17_Position" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="17a_QuocGias" EntityType="Self.17a_QuocGias" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="18_Descipline" EntityType="Self.18_Descipline" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="19_Workgroup" EntityType="Self.19_Workgroup" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="20_Stage" EntityType="Self.20_Stage" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="21_DetailAction" EntityType="Self.21_DetailAction" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="22_ServiceGroup" EntityType="Self.22_ServiceGroup" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="23_NguonViec" EntityType="Self.23_NguonViec" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="24_ChangedOrder" EntityType="Self.24_ChangedOrder" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="98_EmbedString" EntityType="Self.98_EmbedString" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="99_ActivityLog" EntityType="Self.99_ActivityLog" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_01_Projects_17a_QuocGias" Association="Self.FK_01_Projects_17a_QuocGias">
+      <End Role="17a_QuocGias" EntitySet="17a_QuocGias" />
+      <End Role="01_Projects" EntitySet="01_Projects" />
+    </AssociationSet>
     <AssociationSet Name="FK_01_Projects_23_NguonViec" Association="Self.FK_01_Projects_23_NguonViec">
       <End Role="23_NguonViec" EntitySet="23_NguonViec" />
       <End Role="01_Projects" EntitySet="01_Projects" />

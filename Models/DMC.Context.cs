@@ -26,7 +26,6 @@ namespace DMCTimesheet.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<C01_Projects> C01_Projects { get; set; }
         public virtual DbSet<C02_Members> C02_Members { get; set; }
         public virtual DbSet<C03_ProjectMembers> C03_ProjectMembers { get; set; }
         public virtual DbSet<C04_Permission> C04_Permission { get; set; }
@@ -51,5 +50,8 @@ namespace DMCTimesheet.Models
         public virtual DbSet<C09_ProjectSubCon> C09_ProjectSubCon { get; set; }
         public virtual DbSet<C98_EmbedString> C98_EmbedString { get; set; }
         public virtual DbSet<C23_NguonViec> C23_NguonViec { get; set; }
+        public virtual DbSet<C24_ChangedOrder> C24_ChangedOrder { get; set; }
+        public virtual DbSet<C17a_QuocGias> C17a_QuocGias { get; set; }
+        public virtual DbSet<C01_Projects> C01_Projects { get; set; }
     }
 }

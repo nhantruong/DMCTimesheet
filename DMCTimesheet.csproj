@@ -249,6 +249,9 @@
     <Compile Include="Models\C16_Status.cs">
       <DependentUpon>DMC.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\C17a_QuocGias.cs">
+      <DependentUpon>DMC.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\C17_Position.cs">
       <DependentUpon>DMC.tt</DependentUpon>
     </Compile>
@@ -268,6 +271,9 @@
       <DependentUpon>DMC.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\C23_NguonViec.cs">
+      <DependentUpon>DMC.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\C24_ChangedOrder.cs">
       <DependentUpon>DMC.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\C98_EmbedString.cs">

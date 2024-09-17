@@ -435,9 +435,21 @@ namespace DMCTimesheet.Controllers
 
                     #endregion
 
+                    #region Chart 3a - Nguồn việc
+                    List<KeyValuePair<int?,int>> NguonViecData = new List<KeyValuePair<int?,int>>();
+                    foreach (var item in db.C01_Projects.GroupBy(s=>s.NguonViec))
+                    {
+                        NguonViecData.Add(new KeyValuePair<int?, int>(item.Key??0, item.ToList().Count()));
+                    }
+                    ViewBag.NguonViecChart = NguonViecData;
+                    ViewBag.NguonViec = db.C23_NguonViec.ToList();
+                    #endregion
+
+
                     #region Chart 4 - Timesheet
                     ViewBag.Timesheet = db.C08_Timesheet.ToList();
-
+                    ViewBag.CurrentWeekTimesheet = GetDMCdata.GetDMCTimesheetinThisWeek();
+                    ViewBag.CurrentWeekNumber = GetDMCdata.GetYearWeekfromDate(DateTime.Now);
                     #endregion
 
                     #region Chart 5 - Timesheet theo nhóm công việc
@@ -483,16 +495,16 @@ namespace DMCTimesheet.Controllers
                     //var test = CollectModelData.GetAssignedProjectsByUserId(5,db.C03_ProjectMembers.ToList());
 
                     // 5: stage Hoàn tất
-                    List<C01_Projects> ongoingP = db.C01_Projects.Where(s => s.ProjectStage != 5).ToList();
-                    ViewBag.ongoingP = db.C01_Projects.Where(s => s.ProjectStage != 5).ToList();
+                    List<C01_Projects> ongoingP = db.C01_Projects.Where(s => s.ProjectStatusId != 13).ToList();
+                    ViewBag.ongoingP = ongoingP;
 
                     // All dự án hoàn tất
-                    ViewBag.FinishP = db.C01_Projects.Where(s => s.ProjectStage == 5).ToList();
+                    ViewBag.FinishP = db.C01_Projects.Where(s => s.ProjectStatusId == 13).ToList();
                     
                     //Dự án Chính - Nguonviec == 1
-                    ViewBag.OngoingMainProjects = db.C01_Projects.Where(s => s.ProjectStage != 5 && s.NguonViec == 1).ToList();
+                    ViewBag.OngoingMainProjects = ongoingP.Where(s => s.ProjectStage != 5 && s.NguonViec == 1).ToList();
                     //Du an Ho tro
-                    ViewBag.OngoingSupportProjects = db.C01_Projects.Where(s => s.ProjectStage != 5 && s.NguonViec != 1).ToList();
+                    ViewBag.OngoingSupportProjects = ongoingP.Where(s => s.ProjectStage != 5 && s.NguonViec != 1).ToList();
 
 
                     List<C03_ProjectMembers> ongoingAssignP = new List<C03_ProjectMembers>();
@@ -503,6 +515,7 @@ namespace DMCTimesheet.Controllers
                     ViewBag.AssignedProjects = CollectModelData.GetAssignedProjects(ongoingAssignP.ToList());
 
                     #endregion
+
 
                     #endregion
 

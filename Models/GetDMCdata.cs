@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Cryptography;
 using System.Text;
 using System.Web;
@@ -13,7 +16,11 @@ namespace DMCTimesheet.Models
     public static class GetDMCdata
     {
         public static readonly dmcDbcontext db = new dmcDbcontext();
-
+        public static ArrayList QuocGia = new ArrayList() {"Việt Nam","Laos","Campodia","Thailand","Indonesia","Kazahstan","Albania"," Andorra"," Argentina"," Úc"," Áo"," Bỉ"," Bosnia Herzegovina","Brazil","Bulgaria","Canada","Chile","Colombia","Costa Rica","Croatia","CH Séc","Đan Mạch","Estonia","Phần_Lan","Pháp",
+            "Đức","Gibraltar","Hy Lạp","Hungary","Iceland","Ireland","Israel","Ý","Nhật Bản","Latvia"," Liechtenstein"," Lithuania"," Luxembourg"," Bắc_Macedonia"," Malta"," Mexico"," Moldova"," Monaco"," Montenegro",
+            "Hà_Lan"," New_Zealand"," Na_Uy"," Peru"," Ba_Lan"," Bồ_Đào_Nha"," Puerto_Rico"," Rumani"," San_Marino"," Serbia"," Singapore"," Slovakia"," Slovenia"," Nam_Phi"," Hàn_Quốc"," Tây_Ban_Nha"," Thụy_Điển"," Thụy_Sĩ",
+            "Ukraine"," Vương_Quốc_Anh"," Hoa_Kỳ" };
+        
         #region DMC
 
         /// <summary>
@@ -81,7 +88,7 @@ namespace DMCTimesheet.Models
                 return null;
             }
         }
-        
+
         /// <summary>
         /// danh sách dự án theo ID thành viên
         /// </summary>
@@ -205,7 +212,7 @@ namespace DMCTimesheet.Models
                 C03_ProjectMembers project = db.C03_ProjectMembers.FirstOrDefault(s => s.ProjectID == projectId);
                 if (project != null)
                 {
-                    if (project.ChuTriChinh != null) users.Add(db.C02_Members.FirstOrDefault(s=>s.UserID == project.ChuTriChinh));
+                    if (project.ChuTriChinh != null) users.Add(db.C02_Members.FirstOrDefault(s => s.UserID == project.ChuTriChinh));
                     if (project.ChuTriKienTruc != null) users.Add(db.C02_Members.FirstOrDefault(s => s.UserID == project.ChuTriKienTruc));
                     if (project.ChuTriKetCau != null) users.Add(db.C02_Members.FirstOrDefault(s => s.UserID == project.ChuTriKetCau));
                     if (project.ChuTriMEP != null) users.Add(db.C02_Members.FirstOrDefault(s => s.UserID == project.ChuTriMEP));
@@ -255,7 +262,7 @@ namespace DMCTimesheet.Models
                 {
                     string itm = item.Trim();
                     if (!string.IsNullOrEmpty(itm))
-                    {                        
+                    {
                         int uId = db.C02_Members.First(s => s.FullName == itm).UserID;
                         userlist.Add(uId);
                     }
@@ -268,6 +275,66 @@ namespace DMCTimesheet.Models
                 return null;
             }
         }
+
+        #region DMc Timesheet
+        /// <summary>
+        /// Get all timesheet in this week
+        /// </summary>
+        /// <returns></returns>
+        public static List<C08_Timesheet> GetDMCTimesheetinThisWeek()
+        {
+            try
+            {
+                List<C08_Timesheet> collectbyMonth = db.C08_Timesheet.Where(s => s.RecordDate.Value.Month == DateTime.Now.Month).ToList();
+                string currentWeekNumber = GetYearWeekfromDate(DateTime.Now.Date);
+                List<C08_Timesheet> tsbyWeek = new List<C08_Timesheet>();
+                foreach (C08_Timesheet item in collectbyMonth)
+                {
+                    DateTime _ts = DateTime.Parse(item.RecordDate.ToString());
+                    string tsdate = GetYearWeekfromDate(_ts);
+                    if (tsdate == currentWeekNumber)
+                    {
+                        tsbyWeek.Add(item);
+                    }
+                }
+
+                return tsbyWeek;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Hàm trả về chuỗi ký hiệu yyyyWxx từ 1 ngày nhập vào
+        /// </summary>
+        /// <param name="date">Ngày cần tìm</param>
+        /// <returns>"Year - W - WeekofYear"</returns>
+        public static string GetYearWeekfromDate(DateTime date)
+        {
+            if (date == null) return "Ngày không hợp lệ";
+            try
+            {
+                DateTime input = DateTime.Parse(date.ToString());
+                Calendar cal = new GregorianCalendar();
+                int year = input.Year;
+                int weekofYear = cal.GetWeekOfYear(input, CalendarWeekRule.FirstFullWeek, DayOfWeek.Monday);
+                return string.Concat(year, "W", weekofYear.ToString());
+            }
+            catch (Exception ex)
+            {
+                return $"Có lỗi {ex.Message}";
+            }
+        }
+
+
+
+
+        #endregion
+
+
+
 
         #endregion
 

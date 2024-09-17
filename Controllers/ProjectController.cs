@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
+using System.Data.SqlTypes;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Security.Cryptography.X509Certificates;
@@ -34,7 +35,7 @@ namespace DMCTimesheet.Controllers
             ViewBag.Owner = db.C10_Owner.ToList();
             ViewBag.Stage = db.C20_Stage.ToList();
             ViewBag.NguonViec = db.C23_NguonViec.ToList();
-
+            ViewBag.QuocGia = db.C17a_QuocGias.ToList();
             return View(db.C01_Projects.ToList());
         }
 
@@ -53,7 +54,11 @@ namespace DMCTimesheet.Controllers
         /// <returns></returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult CreateNewProject(string MaDuAn, string ProjectName, string ProjectOtherName, DateTime StartDate, int Year, int? ProjectTypeId, int? ProjectStatusId, int? LocationId, int? OwnerId, int? ProjectStage, int? NguonViec)
+        public ActionResult CreateNewProject(string MaDuAn, string ProjectName, string ProjectOtherName, DateTime StartDate, int Year, int? ProjectTypeId, int? ProjectStatusId, int? LocationId, int? OwnerId, int? ProjectStage, int? NguonViec,
+            //new
+            int? QuocGia, double? ML_ProjectSize, string ML_ProjectComplexity, decimal? ML_EstimatedCost, decimal? ML_ActualCost, double? ML_EstimatedTimePerTask,
+            double? ML_ActualTimePerTask, decimal? ML_LabourCost, decimal? ML_MaterialCost, decimal? ML_EquipmentCost, string ML_RiskFactors, int? ML_ChangedOrder
+            )
         {
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
             C01_Projects _Projects = new C01_Projects()
@@ -68,8 +73,15 @@ namespace DMCTimesheet.Controllers
                 ProjectStatusId = ProjectStatusId,
                 MaDuAn = MaDuAn,
                 ProjectStage = ProjectStage,
-                NguonViec = NguonViec
-
+                //new
+                NguonViec = NguonViec, 
+                QuocGia = QuocGia??10,
+                ML_ProjectSize = ML_ProjectSize,ML_ProjectComplexity = !string.IsNullOrEmpty(ML_ProjectComplexity)? ML_ProjectComplexity.ToString() : "Chưa cập nhật",
+                ML_EstimatedCost = ML_EstimatedCost??0, ML_ActualCost = ML_ActualCost??0,
+                ML_EstimatedTimePerTask = ML_EstimatedTimePerTask??0, ML_ActualTimePerTask = ML_ActualTimePerTask??0,
+                ML_LabourCost = ML_LabourCost??0,ML_MaterialCost = ML_MaterialCost??0,ML_EquipmentCost = ML_EquipmentCost??0,
+                ML_ChangedOrder = ML_ChangedOrder??0,ML_RiskFactors= !string.IsNullOrEmpty(ML_RiskFactors)?ML_RiskFactors.ToString():"Chưa cập nhật"
+                // end new
             };
             try
             {
@@ -147,22 +159,7 @@ namespace DMCTimesheet.Controllers
                 {
                     db.C09_ProjectSubCon.Add(assignProject);
                     db.SaveChanges();
-                }
-                //}
-                //else
-                //{
-                //    //Session["ProjectAssignError"] = $"Đã có điều phối NTP cho dự án này";
-                //    ViewBag.Projects = db.C01_Projects.ToList();
-                //    ViewBag.SubCons = db.C12_SubContractor.ToList();
-                //    ViewBag.AssignProject = db.C09_ProjectSubCon.ToList();
-                //    ViewBag.Stage = db.C20_Stage.ToList();
-                //    ViewBag.Error = $"Đã có điều phối NTP cho dự án này";
-
-                //    ViewBag.Services = db.C14_Services.ToList();
-                //    ViewBag.ContractorServices = db.C15_SubConServices.ToList();
-
-                //    return View("AssignDesigner", db.C09_ProjectSubCon.ToList());
-                //}
+                }               
                 return RedirectToAction("AssignDesigner");
             }
             catch (Exception ex)
@@ -195,6 +192,9 @@ namespace DMCTimesheet.Controllers
                 ViewBag.Services = db.C14_Services.ToList();
                 ViewBag.ContractorServices = db.C15_SubConServices.ToList();
                 ViewBag.nguonviec = db.C23_NguonViec.ToList();
+                //Thêm mới fields
+                ViewBag.QuocGia = GetDMCdata.QuocGia.ToArray();   
+
                 return View(Enity);
             }
             catch (Exception ex)
@@ -220,7 +220,10 @@ namespace DMCTimesheet.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit(int ProjectID, string MaDuAn, string ProjectName, string ProjectOtherName, DateTime StartDate, int Year,
-            int? ProjectTypeId, int? ProjectStatusId, int? LocationId, int? OwnerId, int? ProjectStage, int? NguonViec, DateTime? ngayKetThuc)
+            int? ProjectTypeId, int? ProjectStatusId, int? LocationId, int? OwnerId, int? ProjectStage, int? NguonViec, DateTime? ngayKetThuc,
+            //new
+            int? QuocGia, double? ML_ProjectSize, string ML_ProjectComplexity,decimal? ML_EstimatedCost, decimal? ML_ActualCost,double? ML_EstimatedTimePerTask,
+            double? ML_ActualTimePerTask, decimal? ML_LabourCost, decimal? ML_MaterialCost, decimal? ML_EquipmentCost, string ML_RiskFactors, int? ML_ChangedOrder)
         {
             if (Session["UserLogin"] == null) return RedirectToAction("Login", "Home");
             try
@@ -243,6 +246,21 @@ namespace DMCTimesheet.Controllers
                 enity.ProjectStage = ProjectStage;
                 enity.NguonViec = NguonViec;
                 enity.NgayKetThuc = ngayKetThuc;
+                //new
+                enity.QuocGia = QuocGia??10;
+                enity.ML_ProjectSize = ML_ProjectSize??0;
+                enity.ML_ProjectComplexity = !string.IsNullOrEmpty(ML_ProjectComplexity) ? ML_ProjectComplexity : "Chưa cập nhật";
+                enity.ML_EstimatedCost = ML_EstimatedCost ?? 0;
+                enity.ML_LabourCost = ML_LabourCost ?? 0;
+                enity.ML_MaterialCost = ML_MaterialCost ?? 0;
+                enity.ML_ActualCost = ML_ActualCost ?? 0;
+                enity.ML_ActualTimePerTask = ML_ActualTimePerTask ?? 0;
+                enity.ML_EstimatedTimePerTask = ML_EstimatedTimePerTask ?? 0;
+                enity.ML_EquipmentCost = ML_EquipmentCost ?? 0;
+                enity.ML_RiskFactors = !string.IsNullOrEmpty(ML_RiskFactors) ? ML_RiskFactors : "Chưa cập nhật";
+                enity.ML_ChangedOrder = ML_ChangedOrder ?? 0;
+
+                //end new
                 if (ModelState.IsValid)
                 {
                     db.Entry(enity).State = System.Data.Entity.EntityState.Modified;

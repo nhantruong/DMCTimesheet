@@ -35,13 +35,26 @@ namespace DMCTimesheet.Models
         public Nullable<int> ProjectStage { get; set; }
         public Nullable<int> NguonViec { get; set; }
         public Nullable<System.DateTime> NgayKetThuc { get; set; }
+        public Nullable<int> QuocGia { get; set; }
+        public Nullable<double> ML_ProjectSize { get; set; }
+        public string ML_ProjectComplexity { get; set; }
+        public Nullable<decimal> ML_EstimatedCost { get; set; }
+        public Nullable<decimal> ML_ActualCost { get; set; }
+        public Nullable<double> ML_EstimatedTimePerTask { get; set; }
+        public Nullable<double> ML_ActualTimePerTask { get; set; }
+        public Nullable<decimal> ML_LabourCost { get; set; }
+        public Nullable<decimal> ML_MaterialCost { get; set; }
+        public Nullable<decimal> ML_EquipmentCost { get; set; }
+        public string ML_RiskFactors { get; set; }
+        public Nullable<int> ML_ChangedOrder { get; set; }
     
+        public virtual C17a_QuocGias C17a_QuocGias { get; set; }
+        public virtual C23_NguonViec C23_NguonViec { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<C03_ProjectMembers> C03_ProjectMembers { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<C08_Timesheet> C08_Timesheet { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<C09_ProjectSubCon> C09_ProjectSubCon { get; set; }
-        public virtual C23_NguonViec C23_NguonViec { get; set; }
     }
 }

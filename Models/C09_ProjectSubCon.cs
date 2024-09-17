@@ -20,7 +20,7 @@ namespace DMCTimesheet.Models
         public Nullable<int> ServicesAssign { get; set; }
         public Nullable<int> SubConId { get; set; }
     
-        public virtual C01_Projects C01_Projects { get; set; }
         public virtual C12_SubContractor C12_SubContractor { get; set; }
+        public virtual C01_Projects C01_Projects { get; set; }
     }
 }

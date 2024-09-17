@@ -29,12 +29,13 @@
     List<DMCTimesheet.Models.C01_Projects> ProjectNeedAssign = new List<DMCTimesheet.Models.C01_Projects>();
 
 
-
+    //Nguonviec
+    List<KeyValuePair<int?, int>> NguonViecData = new List<KeyValuePair<int?, int>>();
+    List<string> nguonviecName = new List<string>();
+    List<int> sltheoNguonviec = new List<int>();
+    List<DMCTimesheet.Models.C23_NguonViec> NguonViecs = ViewBag.NguonViec as List<DMCTimesheet.Models.C23_NguonViec>;
 
     #endregion
-
-
-
 
     #region Data packages from Server
 
@@ -54,8 +55,6 @@
     //4. Dự án của từng thành viên
     ProjectOfMember = ViewBag.AssignedProjects as List<KeyValuePair<int, List<int?>>>;
 
-
-
     //5. Nhóm công việc
     List<DMCTimesheet.Models.C19_Workgroup> WorkGroup = ViewBag.WorkGroup as List<DMCTimesheet.Models.C19_Workgroup>;
     List<DMCTimesheet.Models.C07_WorkType> WorkType = ViewBag.WorkType as List<DMCTimesheet.Models.C07_WorkType>;
@@ -71,10 +70,34 @@
 
     //9. Timesheet
     List<DMCTimesheet.Models.C08_Timesheet> Timesheet = ViewBag.Timesheet as List<DMCTimesheet.Models.C08_Timesheet>;
+    List<DMCTimesheet.Models.C08_Timesheet> weeklyTS = ViewBag.CurrentWeekTimesheet as List<DMCTimesheet.Models.C08_Timesheet>;
+    List<KeyValuePair<string, double?>> TSbyUser = new List<KeyValuePair<string, double?>>();
+
+    //9.1 for chart
+    var weeklybyUser = weeklyTS.GroupBy(s => s.MemberID);
+    List<string> memberName = new List<string>();
+    List<double?> memberHour = new List<double?>();
+
+    foreach (var item in Members)
+    {
+        string memName = item.FullName;
+        double? TotalHour = 0;
+        foreach (var ts in weeklyTS)
+        {
+            if (ts.MemberID == item.UserID)
+            {
+                TotalHour += ts.Hour + ts.OT;
+            }
+        }
+        TSbyUser.Add(new KeyValuePair<string, double?>(memName, TotalHour));
+    }
+    foreach (var item in TSbyUser)
+    {
+        memberName.Add(item.Key);
+        memberHour.Add(item.Value);
+    }
 
     //10. SupportProjects
-    //List<DMCTimesheet.Models.C01_Projects> OngoingSupportProjects = ViewBag.OngoingSupportProjects as List<DMCTimesheet.Models.C01_Projects>;
-    // List<DMCTimesheet.Models.C01_Projects> OngoingMainProjects = ViewBag.OngoingMainProjects as List<DMCTimesheet.Models.C01_Projects>;
     List<DMCTimesheet.Models.C01_Projects> ongoingP = ViewBag.ongoingP as List<DMCTimesheet.Models.C01_Projects>;
     List<DMCTimesheet.Models.C01_Projects> FinishP = ViewBag.FinishP as List<DMCTimesheet.Models.C01_Projects>;
 
@@ -95,11 +118,21 @@
     }
 
 
-
-
-
-    //int DuAnHoTro = Projects.Where(s => s.ProjectStage == 8).Count();
-    //int OngoingProject = Projects.Where(s => s.ProjectStage != 5).Count() - DuAnHoTro;
+    //Nguon viec
+    NguonViecData = ViewBag.NguonViecChart as List<KeyValuePair<int?, int>>;
+    foreach (var item in NguonViecData.OrderByDescending(s => s.Value))
+    {
+        int id = int.Parse(item.Key.ToString());
+        if (id == 0)
+        {
+            nguonviecName.Add("Chưa cập nhật");
+        }
+        else
+        {
+            nguonviecName.Add(NguonViecs.FirstOrDefault(s => s.Id == id).NguonViec);
+        }
+        sltheoNguonviec.Add(item.Value);
+    }
 
 
     //Lấy dự án theo Giai đoạn
@@ -124,7 +157,6 @@
     //Biểu đồ 3 - Donus đếm dự án theo Giai đoạn
     List<string> ProjectStatusName = ViewBag.ProjectStatusName;
     List<double> ProjectStatusCount = ViewBag.ProjectStatusCount;
-
 
     //Biểu đồ 4 - Timesheet
     List<string> ProjectLabels = new List<string>();
@@ -179,11 +211,6 @@
                     KeyValuePair<string, int> stageCount = new KeyValuePair<string, int>(ProjectStage.FirstOrDefault(s => s.Id == stageId).StageName, countProject);
                     Stage_count.Add(stageCount);
                 }
-
-                //int stageId = int.Parse(Projects.FirstOrDefault(s => s.ProjectID == pro.Value).ProjectStage.ToString());
-                //int countProject = int.Parse(Projects.Where(s => s.ProjectID == pro.Value).Count().ToString());
-                //KeyValuePair<string, int> stageCount = new KeyValuePair<string, int>(ProjectStage.FirstOrDefault(s => s.Id == stageId).StageName, countProject);
-                //Stage_count.Add(stageCount);
             }
         }
 
@@ -199,13 +226,17 @@
 
     #endregion
 
+
+    #region Current Week Number of Year
+    string currentWNum = ViewBag.CurrentWeekNumber;
     #endregion
 
+    #endregion
 
 }
 
 <div class="row">
-    <div class="col-md-3">       
+    <div class="col-md-3">
         <p class="text-primary">@DateTime.Now.DayOfWeek (@DateTime.Today.Day/@DateTime.Today.Month/@DateTime.Today.Year)</p>
     </div>
     <div class="col-md-9">
@@ -229,24 +260,32 @@
 </div>
 <div class="clearfix"></div>
 <hr />
-<h5>Tổng quan</h5>
+@*<h5 class="text-center">Tổng quan</h5>*@
 @* --------------------------------------------Số thống kê dự án----------------------------- *@
 <div class="row">
     <div class="col-md-12">
+        @* SL Tất cả dự án *@
+        <div class="form-group-lg col-md-4 text-md-center inline">
+            <div class="col-md-12 text-primary">
+                <div class=""><label class="chuto">@Projects.Count() </label><span class="chunho text-sm-right">Dự án (@Projects.OrderBy(s => s.Year).First().Year - @Projects.OrderByDescending(s => s.Year).First().Year)</span></div>
+
+            </div>
+        </div>
+        @* SL dự án đang triển khai *@
         <div class="form-group-lg col-md-4">
             <div class="col-md-4 text-primary">
-                <div class="row"><label class="chuto">@ongoingP.Count() </label><span class="chunho text-sm-right">Dự án đang thực hiện</</span></div>
+                <div class=""><label class="chuto">@ongoingP.Count() </label><span class="chunho text-sm-right">Dự án đang thực hiện</</span></div>
             </div>
             <div class="col-md-8 inline text-primary">
                 <div class="row"><label class="chutrungbinh">@OnPMain </label><span class="chunho text-sm-right">chính</span></div>
                 <div class="row"><label class="center text-white">|</label></div>
                 <div class="row"><label class="chutrungbinh">@OnPSup </label><span class="chunho text-sm-right">hỗ trợ</span></div>
             </div>
-
         </div>
+        @* SL dự án hoàn tất *@
         <div class="form-group-lg col-md-4 text-md-center">
             <div class="col-md-4 text-success">
-                <div class="row"><label class="chuto">@FinishP.Count()  </label><span class="chunho text-sm-right">Dự án đã hoàn tất</</span></div>
+                <div class=""><label class="chuto">@FinishP.Count()  </label><span class="chunho text-sm-right">Dự án đã hoàn tất</</span></div>
             </div>
             <div class="col-md-8 inline text-success">
                 <div class="row"><label class="chutrungbinh">@FinPMain </label><span class="chunho text-sm-right">chính</span></div>
@@ -254,79 +293,95 @@
                 <div class="row"><label class="chutrungbinh">@FinPSup </label><span class="chunho text-sm-right">hỗ trợ</span></div>
             </div>
         </div>
-        <div class="form-group-lg col-md-4 text-md-center">
-            <div class="col-md-4 text-primary">
-                <div class="row"><label class="chuto">@Projects.Count() </label><span class="chunho text-sm-right">Dự án (@Projects.OrderBy(s => s.Year).First().Year - @Projects.OrderByDescending(s => s.Year).First().Year)</</span></div>
-            </div>
-            <div class="col-md-8 text-primary">
 
-            </div>
-        </div>
+
     </div>
 </div>
 
-<div class="col-md-12">
-    @* --------------------------------------------Chart 1 Đếm dự án theo Loại hình----------------------------- *@
-    <div class="col-md-3 text-center">
-        <canvas id="project_type"></canvas>
+<div class="" style="height: 50px">
+    <div class="col-md-12" style="position: relative; width: auto; height: 400px; left: 0px; top: 0px;right:30px">
+        @* --------------------------------------------Chart 1 Đếm dự án theo Loại hình----------------------------- *@
+        <div class="col-md-3 text-center">
+            <canvas id="project_type" style="direction: ltr; position: relative; left: 0px; top: 0px; width: fit-content; height: 180px;"></canvas>
+        </div>
+        @* --------------------------------------------Chart 2 Đếm dự án theo Giai đoạn----------------------------- *@
+        <div class="col-md-3 text-center">
+            <canvas id="project_stage" style="direction: ltr; position: relative; left: 0px; top: 0px; width: fit-content; height: 180px;"></canvas>
+            @*Chart Đếm dự án theo Giai đoạn*@
+        </div>
+        @* --------------------------------------------Chart 3 - Đếm dự án theo Tình trạng----------------------------- *@
+        <div class="col-md-3 text-center">
+            <canvas id="project_status" style="direction: ltr; position: relative; left: 0px; top: 0px; width: fit-content; height: 180px;"></canvas>
+        </div>
+        @* --------------------------------------------Chart 3a - Đếm dự án theo Nguồn việc----------------------------- *@
+        <div class="col-md-3 text-center">
+            <canvas id="project_NguonViec" style="direction: ltr; position: relative; left: 0px; top: 0px; width: fit-content; height: 180px;"></canvas>
+        </div>
+
+
+
     </div>
-    @* --------------------------------------------Chart 2 Đếm dự án theo Giai đoạn----------------------------- *@
-    <div class="col-md-3 text-center">
-        <canvas id="project_stage"></canvas>
-        @*Chart Đếm dự án theo Giai đoạn*@
-    </div>
-    @* --------------------------------------------Chart 3 - Đếm dự án theo Tình trạng----------------------------- *@
-    <div class="col-md-3 text-center">
-        <canvas id="project_status"></canvas>
-        @*Chart Đếm dự án theo Tình trạng*@
-    </div>
+
 </div>
 <div class="clearfix"></div>
-
+<hr />
+<h5 class="text-center">Tổng quan công việc thực hiện năm <b class="text-primary">@DateTime.Now.Year </b></h5>
 <div class="row">
-    <h5>Tổng quan công việc thực hiện năm <b class="text-primary">@DateTime.Now.Year </b></h5>
     <br />
 
     @* --------------------------------------------Chart 4 - Sum Timesheet theo Dự án đang chạy----------------------------- *@
 
-<div class="inline">
-    <div class="col-sm-3 text-center" style="position: relative; width: auto; height: 100px; left: 0px; top: 0px;right:30px ">
-        <canvas id="timesheet_workgroup"></canvas>
-        @*<div>Chart 5 - Biểu đồ Tổng thời gian theo nhóm công việc</div>*@
-    </div>
-    <div class="col-sm-6">
-        <canvas id="Chart_Timesheet" style="direction: ltr; position: relative; left: 0px; top: 0px; width: fit-content; height: 300px;"></canvas>
-    </div>
-    @* --------------------------------------------Chart 6 - dự án theo nhân sự ---------------------------- *@
-
-    <div class="col-sm-3">
-        <h5 class="text-center">Dự án theo thành viên</h5>
-        <div>
-            <canvas id="ProjectOfMemberSummary" class="col-sm-12" style="resize:horizontal; height: 400px; width:fit-content"></canvas>
+    <div class="inline">
+        <div class="col-sm-3 text-center" style="position: relative; width: auto; height: 400px; left: 0px; top: 0px;right:30px ">
+            <canvas id="timesheet_workgroup"></canvas>
+            @*<div>Chart 5 - Biểu đồ Tổng thời gian theo nhóm công việc</div>*@
         </div>
+        <div class="col-sm-6">
+            <canvas id="Chart_Timesheet" style="direction: ltr; position: relative; left: 20px; top: 0px; width: fit-content; height: 400px;"></canvas>
+        </div>
+        @* --------------------------------------------Chart 6 - dự án theo nhân sự ---------------------------- *@
+
+        <div class="col-sm-3">
+            @*<h5 class="text-center">Dự án theo thành viên</h5>*@
+            <div>
+                <canvas id="ProjectOfMemberSummary" class="col-sm-12" style="resize: horizontal; left: 50px; height: 400px; width: fit-content"></canvas>
+            </div>
+        </div>
+
     </div>
-
-</div>
 </div>
 
-<div class="col-md-12">    
-    @*<h3 class="text-center text-primary">CÔNG VIỆC ĐƯỢC GIAO</h3>*@
+@* --------------------------------------------timesheet theo tuần----------------------------- *@
+<div class="clearfix"></div>
+<hr />
+<h5 class="text-center">Timesheet trong  tuần thứ <b>@currentWNum.Split('W')[1]</b> năm <b>@DateTime.Now.Year</b> (dự án đang hoạt động)</h5>
+<div class="col-md-12 row" style="height:400px">
     <div>
-        @* Bảng thống kê *@
-        <div class="col-sm-6" style=" height:700px">
-            <h5 class="text-center"><b>Dự án đang triển khai của thành viên</b></h5>
-            <div class="table-responsive-sm">
-                <table class="table table-bordered table-condensed table-striped">
+        <canvas id="SummaryWeeklyTS" class="col-md-12" style="resize: both; left: 50px; height: 400px; width: 1500px"></canvas>
+    </div>
+</div>
+
+@* --------------------------------------------Thông tin về dự án----------------------------- *@
+<div class="clearfix"></div>
+<hr />
+<h5 class="text-center">Thông tin Dự án</h5>
+
+<div class="col-md-12 row" style="height:700px">
+    <div class="col-md-5">
+        <div class="row" style="background-color:white;">
+            <h5 class="text-center">Dự án đang triển khai của <b>@Members.Count()</b> thành viên</h5>
+            <div class="table-responsive">
+                <table class="table table-bordered table-condensed">
                     <thead class="text-center">
                         <tr class="text-white" style="background-color:#808080">
-                            <td class="col-sm-4">Tên thành viên</td>
-                            <td class="col-sm-8">Tên dự án</td>
+                            <td class="col-md-4">Tên thành viên</td>
+                            <td class="col-md-8">Tên dự án</td>
                         </tr>
                     </thead>
                 </table>
             </div>
-            <div class="table-responsive" style="height:600px">
-                <table class="table table-bordered table-condensed table-striped">
+            <div class="table-responsive" style="height:620px">
+                <table class="table table-bordered table-hover table-condensed text-dark">
                     <tbody>
                         @if (AssignMemProjects == null || AssignMemProjects.Count() == 0)
                         {
@@ -350,7 +405,7 @@
                                         UserImg = imgPath + @Members.FirstOrDefault(s => s.UserID == item.Key).Image;
                                     }
                                     <tr class="text-dark text-center row">
-                                        <td class="col-sm-4 text-center">
+                                        <td class="col-md-4 text-center">
                                             <p>
                                                 <img src="@UserImg" class="img-circle" alt="Alternate Text" style="height:50px; width:50px" />
                                             </p>
@@ -362,13 +417,14 @@
                                             </p>
                                         </td>
                                         @*<td class="col-sm-2"><h3 class="text-danger">@item.Value.Count()</h3></td>*@
-                                        <td class="col-sm-8">
+                                        <td class="col-md-8">
                                             <ol class="col">
                                                 @foreach (var itm in item.Value.ToList())
                                                 {
-                                                    int? st = Projects.FirstOrDefault(s => s.ProjectID == itm).ProjectStage;
-                                                    string stage = st != null ? ProjectStage.FirstOrDefault(s => s.Id == st).StageName : "*";
-                                                    <li class="col-sm-6 text-left"><b>@Projects.FirstOrDefault(s => s.ProjectID == itm).ProjectOtherName</b>(<small class="text-danger">@stage</small>)</li>
+                                                    //int? st = Projects.FirstOrDefault(s => s.ProjectID == itm).ProjectStage;
+                                                    //string stage = st != null ? ProjectStage.FirstOrDefault(s => s.Id == st).StageName : "*";
+                                                    @*<li class="col-sm-6 text-left"><b>@Projects.FirstOrDefault(s => s.ProjectID == itm).ProjectOtherName</b>(<small class="text-danger">@stage</small>)</li>*@
+                                                    <li class="col-sm-6 text-left"><b>@Projects.FirstOrDefault(s => s.ProjectID == itm).ProjectOtherName</b></li>
                                                 }
                                             </ol>
                                         </td>
@@ -379,72 +435,86 @@
                     </tbody>
                 </table>
             </div>
-            <p class="text-danger">(*) dự án cho các công ty/ tổ chức thành viên</p>
+            @*<p class="text-danger">(*) dự án cho các công ty/ tổ chức thành viên</p>*@
+
         </div>
-        <br />       
-
-        <div class="col-sm-6">
-            <div class="row">
-                <h5 class="text-center">Dự án đang triển khai</h5>
-                <div class="table-responsive">
-                    <table class="table table-bordered table-condensed">
-                        <thead class="table table-active">
-                            <tr class="text-white" style="background-color:#808080">
-                                <td class="col-md-2">Năm</td>
-                                <td class="col-md-10">Tên dự án</td>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
-                <div class="table-responsive" style="height:250px">
-                    <table class="table table-bordered table-condensed text-dark">
-                        <tbody>
-                            @foreach (var item in Projects.Where(s => s.ProjectStage == 5))
-                            {
-                                <tr>
-                                    <td class="col-md-2">@item.Year</td>
-                                    <td class="col-md-10">@item.ProjectName</td>
-                                </tr>
-
-                            }
-                        </tbody>
-
-                    </table>
-                </div>
-
+    </div>
+    <div class="col-md-7" style="height:700px">
+        <div class="row " style="background-color:white; height:350px">
+            <h5 class="text-center">Danh sách <b>@ongoingP.Count()</b> dự án đang triển khai</h5>
+            <div class="table-responsive">
+                <table class="table table-bordered table-condensed">
+                    <thead class="table table-active">
+                        <tr class="text-white" style="background-color:#808080">
+                            <td class="col-md-1">Năm</td>
+                            <td class="col-md-11">Tên dự án</td>
+                        </tr>
+                    </thead>
+                </table>
             </div>
-            <div class="row">
-                <h5 class="text-center">Dự án đã hoàn tất</h5>
-                <div class="table-responsive">
-                    <table class="table table-bordered table-condensed">
-                        <thead class="table table-active">
-                            <tr class="text-white" style="background-color:#808080">
-                                <td class="col-md-2">Năm</td>
-                                <td class="col-md-10">Tên dự án</td>
+            <div class="table-responsive" style="height:260px">
+                <table class="table table-bordered table-hover table-condensed text-dark">
+                    <tbody>
+                        @foreach (var item in ongoingP)
+                        {
+                            int? st = item.ProjectStage;
+                            string stage = st != null ? ProjectStage.FirstOrDefault(s => s.Id == st).StageName : "*";
+                            <tr>
+                                <td class="col-md-1">@item.Year</td>
+                                <td class="col-md-11">@item.ProjectOtherName <small class="text-danger">(@stage)</small> </td>
                             </tr>
-                        </thead>
-                    </table>
-                </div>
-                <div class="table-responsive" style="height:250px">
-                    <table class="table table-bordered table-condensed text-dark">
-                        <tbody>
-                            @foreach (var item in Projects.Where(s => s.ProjectStage == 5))
-                            {
-                                <tr>
-                                    <td class="col-md-2">@item.Year</td>
-                                    <td class="col-md-10">@item.ProjectName</td>
-                                </tr>
+                        }
+                    </tbody>
 
-                            }
-                        </tbody>
-
-                    </table>
-                </div>
-
+                </table>
             </div>
+            <div class="text-center col-md-12">
+                <p class="text-primary text-right"> (*) dự án cho các công ty/ tổ chức thành viên</p>
+            </div>
+        </div>
+        <br />
+        <div class="row " style="background-color:white; height:350px">
+            <h5 class="text-center">Danh sách <b>@FinishP.Count()</b> Dự án đã hoàn tất</h5>
+            <div class="table-responsive">
+                <table class="table table-bordered table-condensed">
+                    <thead class="table table-active">
+                        <tr class="text-white" style="background-color:#808080">
+                            <td class="col-md-1">Năm</td>
+                            <td class="col-md-11">Tên dự án</td>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+            <div class="table-responsive" style="height:260px">
+                <table class="table table-bordered table-condensed text-dark">
+                    <tbody>
+                        @foreach (var item in FinishP)
+                        {
+                            int? st = item.ProjectStage;
+                            string stage = st != null ? ProjectStage.FirstOrDefault(s => s.Id == st).StageName : "*";
+                            <tr>
+                                <td class="col-md-1">@item.Year</td>
+                                <td class="col-md-11">@item.ProjectName <small class="text-danger">(@stage)</small> </td>
+                            </tr>
+
+                        }
+                    </tbody>
+
+                </table>
+            </div>
+
         </div>
     </div>
 </div>
+
+<div class="clearfix"></div>
+<hr />
+@* ------------------------------------------------------------------END CONTENT OF THIS PAGE-------------------------------------- *@
+
+
+<script src="~/UserStyles/Chart.js/chart.js"></script>
+<link href="~/Content/cscpda-scrollbar.css" rel="stylesheet" />
+
 
 @* STYLE Chu TO - NHO *@
 <style>
@@ -496,8 +566,8 @@
         top: 0%;
     }
 </style>
-<script src="~/UserStyles/Chart.js/chart.js"></script>
-<link href="~/Content/cscpda-scrollbar.css" rel="stylesheet" />
+
+
 
 <!--Filter Timesheet - Weekly-->
 <script>
@@ -536,7 +606,8 @@
            labels:  lable,
             datasets: [{
                 data: data,
-                backgroundColor: ['rgba(255, 128, 255, 1)', 'rgba(128, 162, 235, 1)', 'rgba(54, 255, 235, 1)', 'rgba(54, 162, 64, 1)', 'rgba(220, 53, 69, 1)'],
+                backgroundColor: ['rgba(255, 128, 255, 1)', 'rgba(128, 162, 235, 1)', 'rgba(54, 255, 235, 1)',
+                    'rgba(54, 162, 64, 1)', 'rgba(220, 53, 69, 1)', 'rgba(255,128,0, 0.7)', 'rgba(0,0,0, 0.7)'],
                 borderColor:'rgba(54, 162, 235, 1)',
                 borderWidth: 1,
                 outerWidth: 0.3
@@ -582,7 +653,8 @@
            labels:  lable,
             datasets: [{
                 data: data,
-                backgroundColor: ['rgba(124,252,0, 1)', 'rgba(255,165,0, 1)', 'rgba(54, 255, 235, 1)', 'rgba(54, 162, 64, 1)', 'rgba(220, 53, 69, 1)'],
+                backgroundColor: ['rgba(124,252,0, 1)', 'rgba(255,165,0, 1)', 'rgba(0,0,64, 0.7)',
+                    'rgba(54, 255, 235, 1)', 'rgba(54, 162, 64, 1)', 'rgba(0, 0, 69, 1)'],
                 borderColor:'rgba(54, 162, 235, 1)',
                 borderWidth: 1,
                 outerWidth: 0.3
@@ -627,7 +699,7 @@
            labels:  lable,
             datasets: [{
                 data: data,
-                backgroundColor: ['rgba(124,252,0,0.4)', 'rgba(255,165,0,0.5)', 'rgba(255,0,0, 0.7)', 'rgba(54, 255, 235,0.7)', 'rgba(220, 53, 69, 0.8)'],
+                backgroundColor: ['rgba(255,75,191,0.5)', 'rgba(21,245,32,0.4)',  'rgba(160,106, 128,1)', 'rgba(186, 118, 80, 0.8)'],
                 borderColor:'rgba(54, 162, 235, 1)',
                 borderWidth: 1,
                 outerWidth: 0.3
@@ -659,6 +731,56 @@
                }
            }}});
 </script>
+
+<!--Chart 3a-->
+@* Chart 3a - Donus Project theo NguonViec *@
+<script>
+    var ctx = document.getElementById('project_NguonViec').getContext('2d');
+   var lable = @Html.Raw(Json.Encode(nguonviecName));
+   var data = @Html.Raw(Json.Encode(sltheoNguonviec));
+   var myChart = new Chart(ctx, {
+       type: 'doughnut',
+        data: {
+           labels:  lable,
+            datasets: [{
+                data: data,
+                backgroundColor: ['rgba(124,252,0,0.4)', 'rgba(255,165,0,0.5)', 'rgba(255,0,0, 0.7)',
+                    'rgba(54, 255, 235,0.7)', 'rgba(220, 53, 69, 0.8)', 'rgba(0,0,0, 0.7)', 'rgba(128,35,65, 0.7)', 'rgba(64,145,55, 0.7)',
+                ],
+                borderColor:'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+                outerWidth: 0.3
+            }]
+        },
+       options: {
+           indexAxis: 'y',
+           responsive: true,//to nhỏ
+           scales: {
+               yAxes: [{
+                   ticks: {
+                       beginAtZero: true
+                   }
+               }]
+           },
+           showToolTips: true,
+           plugins: {
+               title: {
+                   display: true,
+                   text: 'Chart 3a - Dự án theo Nguồn công việc',
+                   position: 'bottom'
+               },
+               legend: {//ghi chú các thành phần trong biểu đồ
+                   display: true,
+                   position: 'right',
+                   align:'left',
+                   labels: {
+                       color: 'rgb(0, 0, 0)'
+                   }
+               }
+           }}});
+</script>
+
+
 
 <!--Chart 4-->
 @* Chart 4 - Timesheet theo dự án đag chạy *@
@@ -806,4 +928,78 @@
                }
            }
 }});
+</script>
+
+@* -------------------Chart summary Timesheet theo từng User *@
+<script>
+    var ctx = document.getElementById('SummaryWeeklyTS').getContext('2d');
+    var lable = @Html.Raw(Json.Encode(memberName));
+    var data =@Html.Raw(Json.Encode(memberHour));
+   var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: lable,
+            datasets: [{
+                type: 'bar',
+                label: 'Tổng số giờ đã điền: ',
+                data: data,
+                display: true,
+                backgroundColor: 'rgba(128, 255, 128, 1)',
+                borderColor:'rgba(0, 0, 0, 1)',
+                borderWidth: 1,
+                outerWidth: 0.3
+            },
+                {
+                type: 'line',
+                label: 'Tổng số giờ giới hạn trong tuần ',
+                data: generateValue(data.length,44),
+                display: true,
+                backgroundColor: 'rgba(255, 0, 0, 1)',
+                borderColor: 'rgba(0, 0, 0, 1)',
+                borderWidth: 1,
+                outerWidth: 0.3
+            }
+            ],
+
+        },
+       options: {
+           responsive: true,
+           legend: {
+               position: 'bottom',
+           },
+           hover: {
+               mode: 'label'
+           },
+           scales: {
+               y: [{  
+                   min:0, max: 44
+               }]
+           },
+           showToolTips: true,
+           plugins: {
+               title: {
+                   display: true,
+                   position: 'top',
+                   text: 'Chart 7 - Biểu đồ timesheet trong tuần theo thành viên',
+                   position: 'bottom'
+               },
+               legend: {//ghi chú các thành phần trong biểu đồ
+                   display: true,
+                   position: 'bottom',
+                   labels: {
+                       color: 'rgb(0, 0, 0)'
+                   }
+               }
+           }
+       }
+   });
+
+
+    function generateValue(value,target) {
+        var kq = [];
+        for (var v = 0; v < value; v++) {
+            kq.push(target);
+        }
+        return kq;
+    }
 </script>

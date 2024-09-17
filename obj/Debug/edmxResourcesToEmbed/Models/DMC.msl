@@ -1,25 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
   <EntityContainerMapping StorageEntityContainer="DMCtimesheetModelsStoreContainer" CdmEntityContainer="dmcDbcontext">
-    <EntitySetMapping Name="C01_Projects">
-      <EntityTypeMapping TypeName="DMCtimesheet.Models.C01_Projects">
-        <MappingFragment StoreEntitySet="01_Projects">
-          <ScalarProperty Name="NgayKetThuc" ColumnName="NgayKetThuc" />
-          <ScalarProperty Name="NguonViec" ColumnName="NguonViec" />
-          <ScalarProperty Name="ProjectStage" ColumnName="ProjectStage" />
-          <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
-          <ScalarProperty Name="MaDuAn" ColumnName="MaDuAn" />
-          <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
-          <ScalarProperty Name="ProjectOtherName" ColumnName="ProjectOtherName" />
-          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-          <ScalarProperty Name="Year" ColumnName="Year" />
-          <ScalarProperty Name="ProjectTypeId" ColumnName="ProjectTypeId" />
-          <ScalarProperty Name="ProjectStatusId" ColumnName="ProjectStatusId" />
-          <ScalarProperty Name="LocationId" ColumnName="LocationId" />
-          <ScalarProperty Name="OwnerId" ColumnName="OwnerId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="C02_Members">
       <EntityTypeMapping TypeName="DMCtimesheet.Models.C02_Members">
         <MappingFragment StoreEntitySet="02_Members">
@@ -121,6 +102,7 @@
     <EntitySetMapping Name="C11_Location">
       <EntityTypeMapping TypeName="DMCtimesheet.Models.C11_Location">
         <MappingFragment StoreEntitySet="11_Location">
+          <ScalarProperty Name="Country" ColumnName="Country" />
           <ScalarProperty Name="LocationId" ColumnName="LocationId" />
           <ScalarProperty Name="LocationName" ColumnName="LocationName" />
         </MappingFragment>
@@ -276,6 +258,67 @@
         <MappingFragment StoreEntitySet="23_NguonViec">
           <ScalarProperty Name="NguonViec" ColumnName="NguonViec" />
           <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="C24_ChangedOrder">
+      <EntityTypeMapping TypeName="DMCtimesheet.Models.C24_ChangedOrder">
+        <MappingFragment StoreEntitySet="24_ChangedOrder">
+          <ScalarProperty Name="CO_DelayTime" ColumnName="CO_DelayTime" />
+          <ScalarProperty Name="CO_EquipmentCost" ColumnName="CO_EquipmentCost" />
+          <ScalarProperty Name="CO_MaterialCost" ColumnName="CO_MaterialCost" />
+          <ScalarProperty Name="CO_LabourCost" ColumnName="CO_LabourCost" />
+          <ScalarProperty Name="CO_TimeSpend" ColumnName="CO_TimeSpend" />
+          <ScalarProperty Name="CO_TotalCost" ColumnName="CO_TotalCost" />
+          <ScalarProperty Name="CO_Descipline" ColumnName="CO_Descipline" />
+          <ScalarProperty Name="CO_Description" ColumnName="CO_Description" />
+          <ScalarProperty Name="CO_Resource" ColumnName="CO_Resource" />
+          <ScalarProperty Name="CO_Number" ColumnName="CO_Number" />
+          <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="C17a_QuocGias">
+      <EntityTypeMapping TypeName="DMCtimesheet.Models.C17a_QuocGias">
+        <MappingFragment StoreEntitySet="17a_QuocGias">
+          <ScalarProperty Name="MaVietTat" ColumnName="MaVietTat" />
+          <ScalarProperty Name="TenGoiChinhThe" ColumnName="TenGoiChinhThe" />
+          <ScalarProperty Name="TenQuocGia_VN" ColumnName="TenQuocGia_VN" />
+          <ScalarProperty Name="TenQuocGia_EN" ColumnName="TenQuocGia_EN" />
+          <ScalarProperty Name="KhuVuc" ColumnName="KhuVuc" />
+          <ScalarProperty Name="Id" ColumnName="Id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="C01_Projects">
+      <EntityTypeMapping TypeName="DMCtimesheet.Models.C01_Projects">
+        <MappingFragment StoreEntitySet="01_Projects">
+          <ScalarProperty Name="ML_ChangedOrder" ColumnName="ML_ChangedOrder" />
+          <ScalarProperty Name="ML_RiskFactors" ColumnName="ML_RiskFactors" />
+          <ScalarProperty Name="ML_EquipmentCost" ColumnName="ML_EquipmentCost" />
+          <ScalarProperty Name="ML_MaterialCost" ColumnName="ML_MaterialCost" />
+          <ScalarProperty Name="ML_LabourCost" ColumnName="ML_LabourCost" />
+          <ScalarProperty Name="ML_ActualTimePerTask" ColumnName="ML_ActualTimePerTask" />
+          <ScalarProperty Name="ML_EstimatedTimePerTask" ColumnName="ML_EstimatedTimePerTask" />
+          <ScalarProperty Name="ML_ActualCost" ColumnName="ML_ActualCost" />
+          <ScalarProperty Name="ML_EstimatedCost" ColumnName="ML_EstimatedCost" />
+          <ScalarProperty Name="ML_ProjectComplexity" ColumnName="ML_ProjectComplexity" />
+          <ScalarProperty Name="ML_ProjectSize" ColumnName="ML_ProjectSize" />
+          <ScalarProperty Name="QuocGia" ColumnName="QuocGia" />
+          <ScalarProperty Name="NgayKetThuc" ColumnName="NgayKetThuc" />
+          <ScalarProperty Name="NguonViec" ColumnName="NguonViec" />
+          <ScalarProperty Name="ProjectStage" ColumnName="ProjectStage" />
+          <ScalarProperty Name="OwnerId" ColumnName="OwnerId" />
+          <ScalarProperty Name="LocationId" ColumnName="LocationId" />
+          <ScalarProperty Name="ProjectStatusId" ColumnName="ProjectStatusId" />
+          <ScalarProperty Name="ProjectTypeId" ColumnName="ProjectTypeId" />
+          <ScalarProperty Name="Year" ColumnName="Year" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="ProjectOtherName" ColumnName="ProjectOtherName" />
+          <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+          <ScalarProperty Name="MaDuAn" ColumnName="MaDuAn" />
+          <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

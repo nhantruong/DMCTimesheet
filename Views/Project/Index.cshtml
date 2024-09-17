@@ -13,9 +13,21 @@
     List<DMCTimesheet.Models.C10_Owner> owners = ViewBag.Owner as List<DMCTimesheet.Models.C10_Owner>;
     List<DMCTimesheet.Models.C23_NguonViec> nguonviec = ViewBag.NguonViec as List<DMCTimesheet.Models.C23_NguonViec>;
 
+    List<DMCTimesheet.Models.C17a_QuocGias> QuocGias = ViewBag.QuocGia as List<DMCTimesheet.Models.C17a_QuocGias>;
+
+    string[] _MaduAnCheck = myProject.Select(s => s.MaDuAn.Trim()).ToArray();
+    string[] MaduAnCheck = new string[_MaduAnCheck.Length];
+    foreach (var item in _MaduAnCheck)
+    {
+        if (!string.IsNullOrEmpty(item))
+        {
+            MaduAnCheck.Append(item.TrimEnd());
+        }
+
+    }
 }
 
-<script src="~/Scripts/bootstrap-table-multiple-sort.min.js"></script>
+@*<script src="~/Scripts/bootstrap-table-multiple-sort.min.js"></script>*@
 <link href="~/Content/cscpda-scrollbar.css" rel="stylesheet" />
 @* Modal create new *@
 <div>
@@ -33,115 +45,140 @@
                 @using (Html.BeginForm("CreateNewProject", "Project", FormMethod.Post))
                 {
                     @Html.AntiForgeryToken()
-                <form>
-                    <div class="form-group row text-left">
-                        <lable class="control-label col-md-3 col-sm-3 col-xs-3">Năm</lable>
-                        <input type="number" class="text-dark form-control col-md-7 col-sm-9 col-xs-9" name="Year" value="@DateTime.Now.Year" />
-                    </div>
-                    @*MADuAn *@
-                    <div class="form-group row text-left">
-                        <lable class="control-label col-md-3 col-sm-3 col-xs-3">Mã dự án</lable>
-                        <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" name="MaDuAn" placeholder="Nhập Mã dự án" value="" />
-                    </div>
-                    <div class="form-group row text-left">
-                        <lable class="control-label col-md-3 col-sm-3 col-xs-4">Tên dự án (Theo Hợp đồng)</lable>
-                        <input type="text" class="form-control col-md-7 col-sm-9 col-xs-8" name="ProjectName" placeholder="" value="" />
-                    </div>
-                    <div class="form-group row text-left">
-                        <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên rút gọn</lable>
-                        <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" name="ProjectOtherName" placeholder="" required="" value="" />
-                    </div>
-                    <div class="form-group row">
-                        <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Ngày bắt đầu</lable>
-                        <input type="date" class="form-control col-md-7 col-sm-9 col-xs-9" name="StartDate" placeholder="" required="" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
-                    </div>
+                    <form>
+                        <div class="form-group row text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Năm</lable>
+                            <input type="number" class="text-dark form-control col-md-7 col-sm-9 col-xs-9" name="Year" value="@DateTime.Now.Year" />
+                        </div>
+                        @*MADuAn *@
+                        <div class="form-group row text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Mã dự án</lable>
+                            <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" id="MaDuAn" name="MaDuAn" placeholder="Phân biệt chữ hoa-thường" value="" />
+                            @*<small id="KQktra" class="text-danger"></small>*@
+                            <button type="button" id="checkMaduAn" onclick="checkId()"><b class="fa fa-check"></b></button>
+                        </div>
+                        <div class="form-group row text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-4">Tên dự án (Theo Hợp đồng)</lable>
+                            <input type="text" class="form-control col-md-7 col-sm-9 col-xs-8" name="ProjectName" placeholder="" value="" />
+                        </div>
+                        <div class="form-group row text-left">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tên rút gọn</lable>
+                            <input type="text" class="form-control col-md-7 col-sm-9 col-xs-9" name="ProjectOtherName" placeholder="" required="" value="" />
+                        </div>
+                        <div class="form-group row">
+                            <lable class="control-label col-md-3 col-sm-3 col-xs-3 text-left">Ngày bắt đầu</lable>
+                            <input type="date" class="form-control col-md-7 col-sm-9 col-xs-9" name="StartDate" placeholder="" required="" value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                        </div>
+                        <div class="col-md-12 row">
+                            <div class="col-md-6">
+                                @* NguonViex *@
+                                <div class="form-group row  text-left">
+                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3">Nguồn công việc</lable>
+                                    <select id="NguonViec" name="NguonViec" class="form-control col-md-6 col-sm-9 col-xs-9">
+                                        <option value="">Chọn</option>
+                                        @foreach (var item in nguonviec)
+                                        {
+                                            <option value=@item.Id>@item.NguonViec</option>
+                                        }
+                                    </select>
+                                    @* *@
+                                    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#add">...</button>
+                                </div>
+                                @* ProjectTypeID *@
+                                <div class="form-group row  text-left">
+                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3">Loại hình dự án</lable>
+                                    <select id="slprojectType" name="ProjectTypeId" class="form-control col-md-6 col-sm-9 col-xs-9">
+                                        <option value="">Chọn</option>
+                                        @foreach (var item in projectType.OrderBy(s => s.TypeName))
+                                        {
+                                            <option value=@item.TypeId>@item.TypeName</option>
+                                        }
+                                    </select>
+                                    @* Nút Thêm Nhanh ProjectType *@
+                                    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addPtypeModal">...</button>
+                                </div>
+                                @* StatusID *@
+                                <div class="form-group row  text-left">
+                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tình trạng</lable>
+                                    <select id="statusId" name="ProjectStatusId" class="form-control col-md-6 col-sm-9 col-xs-9">
+                                        <option value="">Chọn</option>
+                                        @foreach (var item in status.OrderBy(s => s.StatusName))
+                                        {
+                                            <option value=@item.Id>@item.StatusName</option>
+                                        }
+                                    </select>
+                                    @* Nút Thêm Nhanh Status *@
+                                    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addStatusModal">...</button>
+                                </div>
+                                @* LocationID *@
+                                <div class="form-group row  text-left">
+                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3">Vị trí</lable>
+                                    <select id="locationId" name="LocationId" class="form-control col-md-6 col-sm-9 col-xs-9">
+                                        <option value="">Chọn</option>
+                                        @foreach (var item in locations.OrderBy(s => s.LocationName))
+                                        {
+                                            <option value=@item.LocationId>@item.LocationName</option>
+                                        }
+                                    </select>
+                                    @* Nút Thêm Nhanh Location *@
+                                    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addLocationModal">...</button>
+                                </div>
+                                @* OwnerID *@
+                                <div class="form-group row  text-left">
+                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chủ đầu tư</lable>
+                                    <select id="OwnerId" name="OwnerId" class="form-control col-md-6 col-sm-9 col-xs-9">
+                                        <option value="">Chọn</option>
+                                        @foreach (var item in owners.OrderBy(s => s.ShortName))
+                                        {
+                                            <option value=@item.OnwerId>@item.ShortName</option>
+                                        }
+                                    </select>
+                                    @* Nút Thêm Nhanh CDT *@
+                                    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addOwnerModal">...</button>
+                                </div>
+                                @* StageID *@
+                                <div class="form-group row  text-left">
+                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3">Giai Đoạn</lable>
+                                    <select id="ProjectStage" name="ProjectStage" class="form-control col-md-6 col-sm-9 col-xs-9">
+                                        <option value="">Chọn</option>
+                                        @foreach (var item in stage.OrderBy(s => s.StageName))
+                                        {
+                                            <option value=@item.Id>@item.StageName</option>
+                                        }
+                                    </select>
+                                    @* Nút Thêm Nhanh CDT *@
+                                    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addStageModal">...</button>
+                                </div>
+                            </div>
+                            @* New Fields *@
+                            <div class="col-md-6">
+                                @* Quốc gia *@
+                                <div class="form-group row  text-left">
+                                    <lable class="control-label col-md-3 col-sm-3 col-xs-3">Quốc gia</lable>
+                                    <select id="QuocGia" name="QuocGia" class="form-control col-md-6 col-sm-9 col-xs-9">
+                                        <option value="">Chọn</option>
+                                        <option value='10'>@QuocGias.FirstOrDefault(s => s.Id == 10).TenQuocGia_EN</option>
+                                        <option value='175'>@QuocGias.FirstOrDefault(s => s.Id == 175).TenQuocGia_EN</option>
+                                        <option value="">-----------------------------------</option>
+                                        @foreach (var item in QuocGias)
+                                        {
+                                            <option value=@item.Id>@item.TenQuocGia_EN (@item.MaVietTat)</option>
+                                        }
+                                    </select>
+                                    @* *@
+                                    <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addQuocGia">...</button>
+                                </div>
 
-                    @* NguonViex *@
-                    <div class="form-group row  text-left">
-                        <lable class="control-label col-md-3 col-sm-3 col-xs-3">Nguồn công việc</lable>
-                        <select id="NguonViec" name="NguonViec" class="form-control col-md-6 col-sm-9 col-xs-9">
-                            <option value="">Chọn</option>
-                            @foreach (var item in nguonviec)
-                            {
-                                <option value=@item.Id>@item.NguonViec</option>
-                            }
-                        </select>
-                        @* *@
-                        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#add">...</button>
-                    </div>
-
-                    @* ProjectTypeID *@
-                    <div class="form-group row  text-left">
-                        <lable class="control-label col-md-3 col-sm-3 col-xs-3">Loại hình dự án</lable>
-                        <select id="slprojectType" name="ProjectTypeId" class="form-control col-md-6 col-sm-9 col-xs-9">
-                            <option value="">Chọn</option>
-                            @foreach (var item in projectType.OrderBy(s => s.TypeName))
-                            {
-                                <option value=@item.TypeId>@item.TypeName</option>
-                            }
-                        </select>
-                        @* Nút Thêm Nhanh ProjectType *@
-                        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addPtypeModal">...</button>
-                    </div>
-                    @* StatusID *@
-                    <div class="form-group row  text-left">
-                        <lable class="control-label col-md-3 col-sm-3 col-xs-3">Tình trạng</lable>
-                        <select id="statusId" name="ProjectStatusId" class="form-control col-md-6 col-sm-9 col-xs-9">
-                            <option value="">Chọn</option>
-                            @foreach (var item in status.OrderBy(s => s.StatusName))
-                            {
-                                <option value=@item.Id>@item.StatusName</option>
-                            }
-                        </select>
-                        @* Nút Thêm Nhanh Status *@
-                        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addStatusModal">...</button>
-                    </div>
-                    @* LocationID *@
-                    <div class="form-group row  text-left">
-                        <lable class="control-label col-md-3 col-sm-3 col-xs-3">Vị trí</lable>
-                        <select id="locationId" name="LocationId" class="form-control col-md-6 col-sm-9 col-xs-9">
-                            <option value="">Chọn</option>
-                            @foreach (var item in locations.OrderBy(s => s.LocationName))
-                            {
-                                <option value=@item.LocationId>@item.LocationName</option>
-                            }
-                        </select>
-                        @* Nút Thêm Nhanh Location *@
-                        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addLocationModal">...</button>
-                    </div>
-                    @* OwnerID *@
-                    <div class="form-group row  text-left">
-                        <lable class="control-label col-md-3 col-sm-3 col-xs-3">Chủ đầu tư</lable>
-                        <select id="OwnerId" name="OwnerId" class="form-control col-md-6 col-sm-9 col-xs-9">
-                            <option value="">Chọn</option>
-                            @foreach (var item in owners.OrderBy(s => s.ShortName))
-                            {
-                                <option value=@item.OnwerId>@item.ShortName</option>
-                            }
-                        </select>
-                        @* Nút Thêm Nhanh CDT *@
-                        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addOwnerModal">...</button>
-                    </div>
-                    @* StageID *@
-                    <div class="form-group row  text-left">
-                        <lable class="control-label col-md-3 col-sm-3 col-xs-3">Giai Đoạn</lable>
-                        <select id="ProjectStage" name="ProjectStage" class="form-control col-md-6 col-sm-9 col-xs-9">
-                            <option value="">Chọn</option>
-                            @foreach (var item in stage.OrderBy(s => s.StageName))
-                            {
-                                <option value=@item.Id>@item.StageName</option>
-                            }
-                        </select>
-                        @* Nút Thêm Nhanh CDT *@
-                        <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#addStageModal">...</button>
-                    </div>
+                            </div>
+                            
+                        </div>
 
 
-                    <div class="form-group text-left">
-                        <lable class="control-label col-md-4 col-sm-4 col-xs-3 text-left"></lable>
-                        <input type="submit" value="Save" class="btn btn-dark col-md-12" />
-                    </div>
-                </form>
+                        <div class="form-group text-left">
+                            <lable class="control-label col-md-4 col-sm-4 col-xs-3 text-left"></lable>
+                            <input type="submit" value="Save" class="btn btn-dark col-md-12" />
+                        </div>
+                    </form>
                 }
             </div>
         </div>
@@ -154,7 +191,7 @@
     <div class="modal-dialog modal-dialog-centered" style="width: 600px">
         <div class="modal-content text-white" style="background-color:#808080">
             <div class="modal-header">
-                <h6 class="modal-title">Thêm loại hình dự án</h6>               
+                <h6 class="modal-title">Thêm loại hình dự án</h6>
             </div>
             <div class="modal-body text-white">
                 @Html.AntiForgeryToken()
@@ -184,7 +221,7 @@
         <div class="modal-dialog modal-dialog-centered" style="width: 600px">
             <div class="modal-content text-white" style="background-color:#808080">
                 <div class="modal-header">
-                    <h6 class="modal-title">Thêm Tình trạng dự án</h6>                   
+                    <h6 class="modal-title">Thêm Tình trạng dự án</h6>
                 </div>
                 <div class="modal-body text-white">
                     <form>
@@ -272,7 +309,7 @@
 
                     <div class="form-group row  text-left">
                         <lable class="control-label col-md-3 col-sm-3 col-xs-3">Vị trí</lable>
-                        <select id="OnwerLocation" name="OnwerLocation" class="form-control col-md-7 col-sm-9 col-xs-9">                            
+                        <select id="OnwerLocation" name="OnwerLocation" class="form-control col-md-7 col-sm-9 col-xs-9">
                             <option value="">Chọn</option>
                             @foreach (var item in locations.Where(s => s.LocationId != 1).OrderBy(s => s.LocationName))
                             {
@@ -321,11 +358,12 @@
 </div>
 
 
+
 @* End Form nhập liệu *@
 
 <div class="clearfix"></div>
 <div class="col-md-12">
-    <div class="col-md-10"><h3 class="text-primary">DANH SÁCH DỰ ÁN ĐANG TIẾN HÀNH <span class="text-danger">@myProject.Where(s => s.ProjectStage != 5).Count()</span></h3></div>
+    <div class="col-md-10"><h3 class="text-primary">DANH SÁCH <span class="text-danger">@myProject.Where(s => s.ProjectStatusId != 13).Count()</span> DỰ ÁN ĐANG TIẾN HÀNH </h3></div>
     <div class="col-md-2">
         <button type="button" class="btn btn-dark btn-small text-right" data-toggle="modal" data-target="#newProject"><i class="fa fa-plus-circle"></i> Thêm dự án</button>
     </div>
@@ -334,8 +372,8 @@
     <table class="table table-hover table-condensed table-striped ">
         <thead class="table-dark">
             <tr>
-                <td class="col-sm-1 text-center">Năm</td>
-                <td class="col-md-2">Mã dự án</td>
+                @*<td class="col-sm-1 text-center">Năm</td>*@
+                <td class="col-md-1">Mã dự án</td>
                 <td class="col-md-2">Tên rút gọn</td>
 
                 <td class="col-md-1">Chủ đầu tư</td>
@@ -345,14 +383,14 @@
 
                 <td class="col-md-2">Tên dự án theo Hợp đồng</td>
                 <td class="col-md-1">Địa điểm</td>
-                @*<td class="col-md-1">#</td>*@
+                <td class="col-sm-1">Quốc gia</td>
+                <td class="col-sm-1">X</td>
             </tr>
         </thead>
     </table>
 </div>
 <div class="table-responsive" style="height: 600px">
     <table class="table table-hover table-condensed table-striped ">
-        <caption>Số lượng dự án đang tiến hành: <b class="text-danger">@myProject.Where(s => s.ProjectStage != 5).Count()</b></caption>
         <tbody>
             @if (myProject == null || myProject.Count() == 0)
             {
@@ -362,20 +400,23 @@
             }
             else
             {
-                foreach (var item in myProject.Where(s => s.ProjectStage != 5).OrderByDescending(m => m.MaDuAn).ThenBy(p => p.ProjectOtherName))
+                foreach (var item in myProject.Where(s => s.ProjectStatusId != 13).OrderByDescending(m => m.MaDuAn).ThenBy(p => p.ProjectOtherName))
                 {
                     <tr class="row text-dark">
-                        <td class="col-sm-1 text-center">@item.Year</td>
-                        <td class="col-md-2">
+                        @*<td class="col-sm-1 text-center">@item.Year</td>*@
+                        <td class="col-md-1">
                             <b>@item.MaDuAn</b>
-                            @if (item.NguonViec != null)
+                            @if (!string.IsNullOrEmpty(item.MaDuAn) && item.NguonViec != null)
                             {
-                                <span class="badge badge-info">@nguonviec.FirstOrDefault(s => s.Id == item.NguonViec).NguonViec</span>
-
+                                string DMCcolorCode = "badge-info";
+                                if (item.NguonViec == 1)
+                                {
+                                    DMCcolorCode = "badge-danger";
+                                }
+                                <span class="badge @DMCcolorCode">@nguonviec.FirstOrDefault(s => s.Id == item.NguonViec).NguonViec</span>
                             }
                         </td>
                         <td class="col-md-2">
-
                             <div class="inline">
                                 <b>@Html.ActionLink(item.ProjectOtherName, "Edit", "Project", new { id = item.ProjectID }, new { @class = "text-primary" })</b>
                                 @if (item.ProjectStatusId != null)
@@ -384,9 +425,7 @@
                                     <span class="@color">@status.FirstOrDefault(s => s.Id == item.ProjectStatusId).StatusName</span>
                                 }
                             </div>
-
                         </td>
-
                         <td class="col-md-1">
                             @{
                                 DMCTimesheet.Models.C10_Owner cdt = new DMCTimesheet.Models.C10_Owner();
@@ -407,26 +446,38 @@
                             {
                                 @projectType.FirstOrDefault(s => s.TypeId == item.ProjectTypeId).TypeName
                             }
-
                         </td>
-
                         <td class="col-md-1">
                             @if (item.ProjectStage != null)
                             {
                                 @stage.FirstOrDefault(s => s.Id == item.ProjectStage).StageName
                             }
-
                         </td>
                         <td class="col-md-1">@DateTime.Parse(item.StartDate.ToString()).ToShortDateString()</td>
-                        <td class="col-md-2"><b>@Html.ActionLink(item.ProjectOtherName, "Edit", "Project", new { id = item.ProjectID }, new { @class = "text-primary" })</b></td>
+                        @if (string.IsNullOrEmpty(item.ProjectName))
+                        {
+                            string tenduan = "Chưa cập nhật";
+                            <td class="col-md-2"><b>@Html.ActionLink(tenduan, "Edit", "Project", new { id = item.ProjectID }, new { @class = "text-primary" })</b></td>
+                        }
+                        else
+                        {
+                            <td class="col-md-2"><b>@Html.ActionLink(item.ProjectName, "Edit", "Project", new { id = item.ProjectID }, new { @class = "text-primary" })</b></td>
+
+                        }
                         <td class="col-md-1">
                             @if (item.LocationId != null)
                             {
                                 @locations.FirstOrDefault(s => s.LocationId == item.LocationId).LocationName
                             }
-                            @Html.ActionLink(" ", "DeleteProject", "Project", new { Id = item.ProjectID }, new { @class = "fa fa-remove btn" })
+                            @*@Html.ActionLink(" ", "DeleteProject", "Project", new { Id = item.ProjectID }, new { @class = "fa fa-remove btn" })*@
                         </td>
-                        @*<td class="col-md-1">@Html.ActionLink(" ", "DeleteProject", "Project", new { Id = item.ProjectID }, new { @class = "fa fa-remove btn" })</td>*@
+                        <td class="col-md-1">
+                            @if (item.QuocGia != null)
+                            {
+                                @QuocGias.FirstOrDefault(s => s.Id == item.QuocGia).TenQuocGia_EN
+                            }
+                        </td>
+                        <td class="col-sm-1">@Html.ActionLink(" ", "DeleteProject", "Project", new { Id = item.ProjectID }, new { @class = "fa fa-remove btn text-danger" })</td>
                     </tr>
                 }
             }
@@ -439,13 +490,13 @@
 <div class="clearfix"></div>
 @* DỰ ÁN HOÀN TẤT *@
 <div class="col-md-12">
-    <div class="col-md-10"><h3 class="text-success">DANH SÁCH DỰ ÁN HOÀN TẤT <span class="text-danger">@myProject.Where(s => s.ProjectStage == 5).Count()</span></h3></div>
+    <div class="col-md-10"><h3 class="text-success">DANH SÁCH <span class="text-danger">@myProject.Where(s => s.ProjectStatusId == 13).Count()</span> DỰ ÁN HOÀN TẤT </h3></div>
 </div>
 <div>
     <table class="table table-hover table-condensed table-striped ">
         <thead class="table-dark">
             <tr>
-                <td class="col-sm-1 text-center">Năm</td>
+                @*<td class="col-sm-1 text-center">Năm</td>*@
                 <td class="col-md-1">Mã dự án</td>
                 <td class="col-md-2">Tên rút gọn</td>
 
@@ -456,6 +507,7 @@
 
                 <td class="col-md-2">Tên dự án theo Hợp đồng</td>
                 <td class="col-md-1">Địa điểm</td>
+                <td class="col-md-1">Quốc gia</td>
                 <td class="col-md-1">Xóa dự án</td>
             </tr>
         </thead>
@@ -463,9 +515,8 @@
 </div>
 <div class="table-responsive" style="height:400px">
     <table class="table table-hover table-condensed table-striped ">
-        <caption>Số lượng dự án đang tiến hành:<b class="text-danger">@myProject.Where(s => s.ProjectStage == 5).Count()</b></caption>
         <tbody>
-            @if (myProject == null || myProject.Where(s => s.ProjectStage == 5).Count() == 0)
+            @if (myProject == null || myProject.Where(s => s.ProjectStatusId == 13).Count() == 0)
             {
                 <tr class="row">
                     <td>Chưa có dự án Hoàn thành</td>
@@ -473,19 +524,31 @@
             }
             else
             {
-                foreach (var item in myProject.Where(s => s.ProjectStage == 5).OrderByDescending(s => s.ProjectOtherName).OrderByDescending(s => s.StartDate))
+                foreach (var item in myProject.Where(s => s.ProjectStatusId == 13).OrderByDescending(s => s.ProjectOtherName).OrderByDescending(s => s.StartDate))
                 {
                     <tr class="row text-dark">
-                        <td class="col-sm-1 text-center">@item.Year</td>
+                        @*<td class="col-sm-1 text-center">@item.Year</td>*@
                         <td class="col-md-1">
                             <b>@item.MaDuAn</b>
                             @if (item.NguonViec != null)
                             {
-                                <span class="badge badge-info">@nguonviec.FirstOrDefault(s => s.Id == item.NguonViec).NguonViec</span>
+                                string DMCcolorCode = "badge-info";
+                                if (item.NguonViec == 1)
+                                {
+                                    DMCcolorCode = "badge-danger";
+                                }
+                                <span class="badge @DMCcolorCode">@nguonviec.FirstOrDefault(s => s.Id == item.NguonViec).NguonViec</span>
 
                             }
                         </td>
-                        <td class="col-md-2"><b>@Html.ActionLink(item.ProjectOtherName, "Edit", "Project", new { id = item.ProjectID }, new { @class = "text-primary" })</b></td>
+                        <td class="col-md-2">
+                            <b>@Html.ActionLink(item.ProjectOtherName, "Edit", "Project", new { id = item.ProjectID }, new { @class = "text-primary" })</b>
+                            @if (item.ProjectStage != null)
+                            {
+                                <span class="badge badge-success">@stage.FirstOrDefault(s => s.Id == item.ProjectStage).StageName</span>
+
+                            }
+                        </td>
 
                         <td class="col-md-1">
                             @if (item.OwnerId != null)
@@ -509,7 +572,16 @@
 
                         </td>
                         <td class="col-md-1">@DateTime.Parse(item.NgayKetThuc.ToString()).ToShortDateString()</td>
-                        <td class="col-md-2"><b>@Html.ActionLink(item.ProjectName, "Edit", "Project", new { id = item.ProjectID }, new { @class = "text-primary" })</b></td>
+                        @if (string.IsNullOrEmpty(item.ProjectName))
+                        {
+                            string tenduan = "Chưa cập nhật";
+                            <td class="col-md-2"><b>@Html.ActionLink(tenduan, "Edit", "Project", new { id = item.ProjectID }, new { @class = "text-primary" })</b></td>
+                        }
+                        else
+                        {
+                            <td class="col-md-2"><b>@Html.ActionLink(item.ProjectName, "Edit", "Project", new { id = item.ProjectID }, new { @class = "text-primary" })</b></td>
+
+                        }
                         <td class="col-md-1">
                             @if (item.LocationId != null)
                             {
@@ -517,7 +589,14 @@
                             }
 
                         </td>
+                        <td class="col-md-1">
+                            @if (item.QuocGia != null)
+                            {
+                                @QuocGias.FirstOrDefault(s => s.Id == item.QuocGia).TenQuocGia_EN
+                            }
+                        </td>
                         <td class="col-md-1">@Html.ActionLink(" ", "DeleteProject", "Project", new { Id = item.ProjectID }, new { @class = "fa fa-remove btn" })</td>
+
                     </tr>
                 }
             }
@@ -528,7 +607,7 @@
 
 
 @* KHỐI FUNCTIONS THỰC HIỆN GHI NHANH DATA VÀ ĐIỀU CHỈNH NỘI DUNG CONTROLERS *@
-<script>    
+<script>
     //PROJECT TYPES
     function getProjectType() {
         const typeName = document.getElementById("typename").value;
@@ -577,7 +656,7 @@
             var content = '';
             for (var i = 0; i < data.length; i++) {
                 content += "<option value='" + data[i]?.Id + "'>" + data[i]?.StatusName + "</option>";
-            }            
+            }
             selector.innerHTML = content; // gán value trong từng item
             alert("Đã load dữ liệu và gán tình trạng dự án " + status); // thông báo
         });
@@ -594,7 +673,7 @@
 
     //LOCATIONS
     function getLocation() {
-        const LocationName = document.getElementById("LocationName").value;        
+        const LocationName = document.getElementById("LocationName").value;
         const selector = document.getElementById("locationId"); // lấy Selector
 
         //lưu Thông tin về Server
@@ -622,7 +701,7 @@
         });
     }
 
-    //OWNERS 
+    //OWNERS
     function getOwner() {
         const OwnerName = document.getElementById("OwnerName").value;
         const ShortName = document.getElementById("ShortName").value;
@@ -656,7 +735,6 @@
             alert("Đã load dữ liệu và gán tình trạng dự án " + status); // thông báo
         });
     }
-
 
     //STAGES
     function getStage() {
@@ -727,15 +805,40 @@
         return content;
     }
 
-    
+
 </script>
 
+<script>
+ /* Hàm kiểm tra Mã dự án mới*/
+ function checkId() {
+     var Id = document.getElementById("MaDuAn").value.trim();
+     try {
+        var currentPid = @Html.Raw(Json.Encode(_MaduAnCheck));
+         //alert("Current ID: " + currentPid);
+         if (Id === "") {
+             alert("Mã dự án đang bỏ trống, Vui lòng nhập Mã dự án");
+             document.getElementById("MaDuAn").select();
+         }
+         else if (Id !== null || Id !== "" || Id.length !== 0) {
+             alert("Mã dự án cần kiểm tra: " + Id);
+             if (currentPid.indexOf(Id) !== -1) {
+                 alert("Đã tồn tại Mã: - " +  Id + " - trong database");
+             }
+             else {
+                 alert("Có thể sử dụng mã này");
+             }
+         }
+     } catch (e) {
+         alert("Lỗi: " + e.value);
+     }
 
+ }
+
+</script>
 
 
 @* TEST FUNCTIONS *@
 <script>
-    
     function getData() {
         $.ajax({
             type: 'GET',

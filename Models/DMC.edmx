@@ -22,6 +22,18 @@
           <Property Name="ProjectStage" Type="int" />
           <Property Name="NguonViec" Type="int" />
           <Property Name="NgayKetThuc" Type="date" />
+          <Property Name="QuocGia" Type="int" />
+          <Property Name="ML_ProjectSize" Type="float" />
+          <Property Name="ML_ProjectComplexity" Type="nvarchar" MaxLength="25" />
+          <Property Name="ML_EstimatedCost" Type="decimal" Precision="19" Scale="4" />
+          <Property Name="ML_ActualCost" Type="decimal" Precision="19" Scale="4" />
+          <Property Name="ML_EstimatedTimePerTask" Type="float" />
+          <Property Name="ML_ActualTimePerTask" Type="float" />
+          <Property Name="ML_LabourCost" Type="money" />
+          <Property Name="ML_MaterialCost" Type="money" />
+          <Property Name="ML_EquipmentCost" Type="money" />
+          <Property Name="ML_RiskFactors" Type="nvarchar" MaxLength="250" />
+          <Property Name="ML_ChangedOrder" Type="int" />
         </EntityType>
         <EntityType Name="02_Members">
           <Key>
@@ -138,6 +150,7 @@
           </Key>
           <Property Name="LocationId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="LocationName" Type="nvarchar" MaxLength="50" />
+          <Property Name="Country" Type="nvarchar" MaxLength="150" />
         </EntityType>
         <EntityType Name="12_SubContractor">
           <Key>
@@ -191,6 +204,17 @@
           <Property Name="Active" Type="bit" />
           <Property Name="isLeader" Type="bit" />
         </EntityType>
+        <EntityType Name="17a_QuocGias">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="KhuVuc" Type="nvarchar" MaxLength="150" />
+          <Property Name="TenQuocGia_EN" Type="nvarchar" MaxLength="200" />
+          <Property Name="TenQuocGia_VN" Type="nvarchar" MaxLength="200" />
+          <Property Name="TenGoiChinhThe" Type="nvarchar(max)" />
+          <Property Name="MaVietTat" Type="nchar" MaxLength="2" />
+        </EntityType>
         <EntityType Name="18_Descipline">
           <Key>
             <PropertyRef Name="Id" />
@@ -238,6 +262,23 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="NguonViec" Type="nvarchar" MaxLength="250" />
         </EntityType>
+        <EntityType Name="24_ChangedOrder">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ProjectId" Type="int" Nullable="false" />
+          <Property Name="CO_Number" Type="nvarchar" MaxLength="50" />
+          <Property Name="CO_Resource" Type="nvarchar(max)" />
+          <Property Name="CO_Description" Type="nvarchar(max)" />
+          <Property Name="CO_Descipline" Type="int" />
+          <Property Name="CO_TotalCost" Type="money" />
+          <Property Name="CO_TimeSpend" Type="datetime" />
+          <Property Name="CO_LabourCost" Type="money" />
+          <Property Name="CO_MaterialCost" Type="money" />
+          <Property Name="CO_EquipmentCost" Type="money" />
+          <Property Name="CO_DelayTime" Type="datetime" />
+        </EntityType>
         <EntityType Name="98_EmbedString">
           <Key>
             <PropertyRef Name="ID" />
@@ -258,6 +299,18 @@
           <Property Name="Details" Type="nvarchar" MaxLength="250" />
           <Property Name="GroupId" Type="int" />
         </EntityType>
+        <Association Name="FK_01_Projects_17a_QuocGias">
+          <End Role="17a_QuocGias" Type="Self.17a_QuocGias" Multiplicity="0..1" />
+          <End Role="01_Projects" Type="Self.01_Projects" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="17a_QuocGias">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="01_Projects">
+              <PropertyRef Name="QuocGia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_01_Projects_23_NguonViec">
           <End Role="23_NguonViec" Type="Self.23_NguonViec" Multiplicity="0..1" />
           <End Role="01_Projects" Type="Self.01_Projects" Multiplicity="*" />
@@ -470,14 +523,20 @@
           <EntitySet Name="15_SubConServices" EntityType="Self.15_SubConServices" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="16_Status" EntityType="Self.16_Status" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="17_Position" EntityType="Self.17_Position" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="17a_QuocGias" EntityType="Self.17a_QuocGias" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="18_Descipline" EntityType="Self.18_Descipline" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="19_Workgroup" EntityType="Self.19_Workgroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="20_Stage" EntityType="Self.20_Stage" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="21_DetailAction" EntityType="Self.21_DetailAction" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="22_ServiceGroup" EntityType="Self.22_ServiceGroup" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="23_NguonViec" EntityType="Self.23_NguonViec" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="24_ChangedOrder" EntityType="Self.24_ChangedOrder" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="98_EmbedString" EntityType="Self.98_EmbedString" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="99_ActivityLog" EntityType="Self.99_ActivityLog" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_01_Projects_17a_QuocGias" Association="Self.FK_01_Projects_17a_QuocGias">
+            <End Role="17a_QuocGias" EntitySet="17a_QuocGias" />
+            <End Role="01_Projects" EntitySet="01_Projects" />
+          </AssociationSet>
           <AssociationSet Name="FK_01_Projects_23_NguonViec" Association="Self.FK_01_Projects_23_NguonViec">
             <End Role="23_NguonViec" EntitySet="23_NguonViec" />
             <End Role="01_Projects" EntitySet="01_Projects" />
@@ -547,28 +606,6 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="DMCtimesheet.Models" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="C01_Projects">
-          <Key>
-            <PropertyRef Name="ProjectID" />
-          </Key>
-          <Property Name="ProjectID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MaDuAn" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
-          <Property Name="ProjectName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="ProjectOtherName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
-          <Property Name="StartDate" Type="DateTime" Precision="0" />
-          <Property Name="Year" Type="Int32" />
-          <Property Name="ProjectTypeId" Type="Int32" />
-          <Property Name="ProjectStatusId" Type="Int32" />
-          <Property Name="LocationId" Type="Int32" />
-          <Property Name="OwnerId" Type="Int32" />
-          <NavigationProperty Name="C03_ProjectMembers" Relationship="Self.FK_03_ProjectMembers_01_Projects" FromRole="C01_Projects" ToRole="C03_ProjectMembers" />
-          <NavigationProperty Name="C08_Timesheet" Relationship="Self.FK_08_Timesheet_01_Projects" FromRole="C01_Projects" ToRole="C08_Timesheet" />
-          <Property Name="ProjectStage" Type="Int32" />
-          <NavigationProperty Name="C09_ProjectSubCon" Relationship="DMCtimesheet.Models.FK_09_ProjectSubCon_01_Projects" FromRole="C01_Projects" ToRole="C09_ProjectSubCon" />
-          <Property Name="NguonViec" Type="Int32" />
-          <NavigationProperty Name="C23_NguonViec" Relationship="DMCtimesheet.Models.FK_01_Projects_23_NguonViec" FromRole="C01_Projects" ToRole="C23_NguonViec" />
-          <Property Name="NgayKetThuc" Type="DateTime" Precision="0" />
-        </EntityType>
         <EntityType Name="C02_Members">
           <Key>
             <PropertyRef Name="UserID" />
@@ -603,13 +640,13 @@
           <Property Name="BIMManager" Type="Int32" />
           <Property Name="LegalManager" Type="Int32" />
           <Property Name="Admin" Type="Int32" />
-          <NavigationProperty Name="C01_Projects" Relationship="Self.FK_03_ProjectMembers_01_Projects" FromRole="C03_ProjectMembers" ToRole="C01_Projects" />
           <NavigationProperty Name="C02_Members" Relationship="Self.FK_3_ChonNhansu_02_Members_Main" FromRole="C03_ProjectMembers" ToRole="C02_Members" />
           <Property Name="ChuTriKienTruc2" Type="Int32" />
           <Property Name="ChuTriKetCau2" Type="Int32" />
           <Property Name="ChuTriMEP2" Type="Int32" />
           <Property Name="LegalManager2" Type="Int32" />
           <Property Name="ThanhVienKhac" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="C01_Projects" Relationship="DMCtimesheet.Models.FK_03_ProjectMembers_01_Projects" FromRole="C03_ProjectMembers" ToRole="C01_Projects" />
         </EntityType>
         <EntityType Name="C04_Permission">
           <Key>
@@ -655,10 +692,10 @@
           <Property Name="Hour" Type="Double" />
           <Property Name="OT" Type="Double" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="C01_Projects" Relationship="Self.FK_08_Timesheet_01_Projects" FromRole="C08_Timesheet" ToRole="C01_Projects" />
           <NavigationProperty Name="C02_Members" Relationship="Self.FK_08_Timesheet_02_Members" FromRole="C08_Timesheet" ToRole="C02_Members" />
           <Property Name="isConfirm" Type="Boolean" />
           <NavigationProperty Name="C07_WorkType" Relationship="DMCtimesheet.Models.FK_08_Timesheet_07_WorkType" FromRole="C08_Timesheet" ToRole="C07_WorkType" />
+          <NavigationProperty Name="C01_Projects" Relationship="DMCtimesheet.Models.FK_08_Timesheet_01_Projects" FromRole="C08_Timesheet" ToRole="C01_Projects" />
         </EntityType>
         <EntityType Name="C10_Owner">
           <Key>
@@ -679,6 +716,7 @@
           </Key>
           <Property Name="LocationId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="LocationName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Country" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="C13_ProjectType">
           <Key>
@@ -713,30 +751,6 @@
           <Property Name="DesciplineName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Active" Type="Boolean" />
         </EntityType>
-        <Association Name="FK_03_ProjectMembers_01_Projects">
-          <End Role="C01_Projects" Type="Self.C01_Projects" Multiplicity="0..1" />
-          <End Role="C03_ProjectMembers" Type="Self.C03_ProjectMembers" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="C01_Projects">
-              <PropertyRef Name="ProjectID" />
-            </Principal>
-            <Dependent Role="C03_ProjectMembers">
-              <PropertyRef Name="ProjectID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK_08_Timesheet_01_Projects">
-          <End Role="C01_Projects" Type="Self.C01_Projects" Multiplicity="0..1" />
-          <End Role="C08_Timesheet" Type="Self.C08_Timesheet" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="C01_Projects">
-              <PropertyRef Name="ProjectID" />
-            </Principal>
-            <Dependent Role="C08_Timesheet">
-              <PropertyRef Name="ProjectId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_06_UserPermisRelationship_02_Members">
           <End Role="C02_Members" Type="Self.C02_Members" Multiplicity="0..1" />
           <End Role="C06_UserPermisRelationship" Type="Self.C06_UserPermisRelationship" Multiplicity="*" />
@@ -798,7 +812,6 @@
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="dmcDbcontext" annotation:LazyLoadingEnabled="false">
-          <EntitySet Name="C01_Projects" EntityType="Self.C01_Projects" />
           <EntitySet Name="C02_Members" EntityType="Self.C02_Members" />
           <EntitySet Name="C03_ProjectMembers" EntityType="Self.C03_ProjectMembers" />
           <EntitySet Name="C04_Permission" EntityType="Self.C04_Permission" />
@@ -811,14 +824,6 @@
           <EntitySet Name="C16_Status" EntityType="Self.C16_Status" />
           <EntitySet Name="C17_Position" EntityType="Self.C17_Position" />
           <EntitySet Name="C18_Descipline" EntityType="Self.C18_Descipline" />
-          <AssociationSet Name="FK_03_ProjectMembers_01_Projects" Association="Self.FK_03_ProjectMembers_01_Projects">
-            <End Role="C01_Projects" EntitySet="C01_Projects" />
-            <End Role="C03_ProjectMembers" EntitySet="C03_ProjectMembers" />
-          </AssociationSet>
-          <AssociationSet Name="FK_08_Timesheet_01_Projects" Association="Self.FK_08_Timesheet_01_Projects">
-            <End Role="C01_Projects" EntitySet="C01_Projects" />
-            <End Role="C08_Timesheet" EntitySet="C08_Timesheet" />
-          </AssociationSet>
           <AssociationSet Name="FK_06_UserPermisRelationship_02_Members" Association="Self.FK_06_UserPermisRelationship_02_Members">
             <End Role="C02_Members" EntitySet="C02_Members" />
             <End Role="C06_UserPermisRelationship" EntitySet="C06_UserPermisRelationship" />
@@ -873,19 +878,34 @@
             <End Role="C15_SubConServices" EntitySet="C15_SubConServices" />
           </AssociationSet>
           <EntitySet Name="C09_ProjectSubCon" EntityType="DMCtimesheet.Models.C09_ProjectSubCon" />
-          <AssociationSet Name="FK_09_ProjectSubCon_01_Projects" Association="DMCtimesheet.Models.FK_09_ProjectSubCon_01_Projects">
-            <End Role="C01_Projects" EntitySet="C01_Projects" />
-            <End Role="C09_ProjectSubCon" EntitySet="C09_ProjectSubCon" />
-          </AssociationSet>
           <AssociationSet Name="FK_09_ProjectSubCon_12_SubContractor" Association="DMCtimesheet.Models.FK_09_ProjectSubCon_12_SubContractor">
             <End Role="C12_SubContractor" EntitySet="C12_SubContractor" />
             <End Role="C09_ProjectSubCon" EntitySet="C09_ProjectSubCon" />
           </AssociationSet>
           <EntitySet Name="C98_EmbedString" EntityType="DMCtimesheet.Models.C98_EmbedString" />
           <EntitySet Name="C23_NguonViec" EntityType="DMCtimesheet.Models.C23_NguonViec" />
+          <EntitySet Name="C24_ChangedOrder" EntityType="DMCtimesheet.Models.C24_ChangedOrder" />
+          <EntitySet Name="C17a_QuocGias" EntityType="DMCtimesheet.Models.C17a_QuocGias" />
+          <EntitySet Name="C01_Projects" EntityType="DMCtimesheet.Models.C01_Projects" />
+          <AssociationSet Name="FK_01_Projects_17a_QuocGias" Association="DMCtimesheet.Models.FK_01_Projects_17a_QuocGias">
+            <End Role="C17a_QuocGias" EntitySet="C17a_QuocGias" />
+            <End Role="C01_Projects" EntitySet="C01_Projects" />
+          </AssociationSet>
           <AssociationSet Name="FK_01_Projects_23_NguonViec" Association="DMCtimesheet.Models.FK_01_Projects_23_NguonViec">
             <End Role="C23_NguonViec" EntitySet="C23_NguonViec" />
             <End Role="C01_Projects" EntitySet="C01_Projects" />
+          </AssociationSet>
+          <AssociationSet Name="FK_03_ProjectMembers_01_Projects" Association="DMCtimesheet.Models.FK_03_ProjectMembers_01_Projects">
+            <End Role="C01_Projects" EntitySet="C01_Projects" />
+            <End Role="C03_ProjectMembers" EntitySet="C03_ProjectMembers" />
+          </AssociationSet>
+          <AssociationSet Name="FK_08_Timesheet_01_Projects" Association="DMCtimesheet.Models.FK_08_Timesheet_01_Projects">
+            <End Role="C01_Projects" EntitySet="C01_Projects" />
+            <End Role="C08_Timesheet" EntitySet="C08_Timesheet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_09_ProjectSubCon_01_Projects" Association="DMCtimesheet.Models.FK_09_ProjectSubCon_01_Projects">
+            <End Role="C01_Projects" EntitySet="C01_Projects" />
+            <End Role="C09_ProjectSubCon" EntitySet="C09_ProjectSubCon" />
           </AssociationSet>
           </EntityContainer>
         <EntityType Name="C20_Stage">
@@ -1061,21 +1081,9 @@
           <Property Name="ProjectId" Type="Int32" />
           <Property Name="ServicesAssign" Type="Int32" />
           <Property Name="SubConId" Type="Int32" />
-          <NavigationProperty Name="C01_Projects" Relationship="DMCtimesheet.Models.FK_09_ProjectSubCon_01_Projects" FromRole="C09_ProjectSubCon" ToRole="C01_Projects" />
           <NavigationProperty Name="C12_SubContractor" Relationship="DMCtimesheet.Models.FK_09_ProjectSubCon_12_SubContractor" FromRole="C09_ProjectSubCon" ToRole="C12_SubContractor" />
+          <NavigationProperty Name="C01_Projects" Relationship="DMCtimesheet.Models.FK_09_ProjectSubCon_01_Projects" FromRole="C09_ProjectSubCon" ToRole="C01_Projects" />
         </EntityType>
-        <Association Name="FK_09_ProjectSubCon_01_Projects">
-          <End Type="DMCtimesheet.Models.C01_Projects" Role="C01_Projects" Multiplicity="0..1" />
-          <End Type="DMCtimesheet.Models.C09_ProjectSubCon" Role="C09_ProjectSubCon" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="C01_Projects">
-              <PropertyRef Name="ProjectID" />
-            </Principal>
-            <Dependent Role="C09_ProjectSubCon">
-              <PropertyRef Name="ProjectId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_09_ProjectSubCon_12_SubContractor">
           <End Type="DMCtimesheet.Models.C12_SubContractor" Role="C12_SubContractor" Multiplicity="0..1" />
           <End Type="DMCtimesheet.Models.C09_ProjectSubCon" Role="C09_ProjectSubCon" Multiplicity="*" />
@@ -1105,6 +1113,82 @@
           <Property Name="NguonViec" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="C01_Projects" Relationship="DMCtimesheet.Models.FK_01_Projects_23_NguonViec" FromRole="C23_NguonViec" ToRole="C01_Projects" />
         </EntityType>
+        <EntityType Name="C24_ChangedOrder">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ProjectId" Type="Int32" Nullable="false" />
+          <Property Name="CO_Number" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CO_Resource" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CO_Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CO_Descipline" Type="Int32" />
+          <Property Name="CO_TotalCost" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="CO_TimeSpend" Type="DateTime" Precision="3" />
+          <Property Name="CO_LabourCost" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="CO_MaterialCost" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="CO_EquipmentCost" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="CO_DelayTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="C17a_QuocGias">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="KhuVuc" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="TenQuocGia_EN" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="TenQuocGia_VN" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="TenGoiChinhThe" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MaVietTat" Type="String" MaxLength="2" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="C01_Projects" Relationship="DMCtimesheet.Models.FK_01_Projects_17a_QuocGias" FromRole="C17a_QuocGias" ToRole="C01_Projects" />
+        </EntityType>
+        <EntityType Name="C01_Projects">
+          <Key>
+            <PropertyRef Name="ProjectID" />
+          </Key>
+          <Property Name="ProjectID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MaDuAn" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="ProjectName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ProjectOtherName" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="StartDate" Type="DateTime" Precision="0" />
+          <Property Name="Year" Type="Int32" />
+          <Property Name="ProjectTypeId" Type="Int32" />
+          <Property Name="ProjectStatusId" Type="Int32" />
+          <Property Name="LocationId" Type="Int32" />
+          <Property Name="OwnerId" Type="Int32" />
+          <Property Name="ProjectStage" Type="Int32" />
+          <Property Name="NguonViec" Type="Int32" />
+          <Property Name="NgayKetThuc" Type="DateTime" Precision="0" />
+          <Property Name="QuocGia" Type="Int32" />
+          <Property Name="ML_ProjectSize" Type="Double" />
+          <Property Name="ML_ProjectComplexity" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="ML_EstimatedCost" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ML_ActualCost" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ML_EstimatedTimePerTask" Type="Double" />
+          <Property Name="ML_ActualTimePerTask" Type="Double" />
+          <Property Name="ML_LabourCost" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ML_MaterialCost" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ML_EquipmentCost" Type="Decimal" Precision="19" Scale="4" />
+          <Property Name="ML_RiskFactors" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ML_ChangedOrder" Type="Int32" />
+          <NavigationProperty Name="C17a_QuocGias" Relationship="DMCtimesheet.Models.FK_01_Projects_17a_QuocGias" FromRole="C01_Projects" ToRole="C17a_QuocGias" />
+          <NavigationProperty Name="C23_NguonViec" Relationship="DMCtimesheet.Models.FK_01_Projects_23_NguonViec" FromRole="C01_Projects" ToRole="C23_NguonViec" />
+          <NavigationProperty Name="C03_ProjectMembers" Relationship="DMCtimesheet.Models.FK_03_ProjectMembers_01_Projects" FromRole="C01_Projects" ToRole="C03_ProjectMembers" />
+          <NavigationProperty Name="C08_Timesheet" Relationship="DMCtimesheet.Models.FK_08_Timesheet_01_Projects" FromRole="C01_Projects" ToRole="C08_Timesheet" />
+          <NavigationProperty Name="C09_ProjectSubCon" Relationship="DMCtimesheet.Models.FK_09_ProjectSubCon_01_Projects" FromRole="C01_Projects" ToRole="C09_ProjectSubCon" />
+        </EntityType>
+        <Association Name="FK_01_Projects_17a_QuocGias">
+          <End Type="DMCtimesheet.Models.C17a_QuocGias" Role="C17a_QuocGias" Multiplicity="0..1" />
+          <End Type="DMCtimesheet.Models.C01_Projects" Role="C01_Projects" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C17a_QuocGias">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="C01_Projects">
+              <PropertyRef Name="QuocGia" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_01_Projects_23_NguonViec">
           <End Type="DMCtimesheet.Models.C23_NguonViec" Role="C23_NguonViec" Multiplicity="0..1" />
           <End Type="DMCtimesheet.Models.C01_Projects" Role="C01_Projects" Multiplicity="*" />
@@ -1117,31 +1201,48 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_03_ProjectMembers_01_Projects">
+          <End Type="DMCtimesheet.Models.C01_Projects" Role="C01_Projects" Multiplicity="0..1" />
+          <End Type="DMCtimesheet.Models.C03_ProjectMembers" Role="C03_ProjectMembers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C01_Projects">
+              <PropertyRef Name="ProjectID" />
+            </Principal>
+            <Dependent Role="C03_ProjectMembers">
+              <PropertyRef Name="ProjectID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_08_Timesheet_01_Projects">
+          <End Type="DMCtimesheet.Models.C01_Projects" Role="C01_Projects" Multiplicity="0..1" />
+          <End Type="DMCtimesheet.Models.C08_Timesheet" Role="C08_Timesheet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C01_Projects">
+              <PropertyRef Name="ProjectID" />
+            </Principal>
+            <Dependent Role="C08_Timesheet">
+              <PropertyRef Name="ProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_09_ProjectSubCon_01_Projects">
+          <End Type="DMCtimesheet.Models.C01_Projects" Role="C01_Projects" Multiplicity="0..1" />
+          <End Type="DMCtimesheet.Models.C09_ProjectSubCon" Role="C09_ProjectSubCon" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="C01_Projects">
+              <PropertyRef Name="ProjectID" />
+            </Principal>
+            <Dependent Role="C09_ProjectSubCon">
+              <PropertyRef Name="ProjectId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="DMCtimesheetModelsStoreContainer" CdmEntityContainer="dmcDbcontext">
-          <EntitySetMapping Name="C01_Projects">
-            <EntityTypeMapping TypeName="DMCtimesheet.Models.C01_Projects">
-              <MappingFragment StoreEntitySet="01_Projects">
-                <ScalarProperty Name="NgayKetThuc" ColumnName="NgayKetThuc" />
-                <ScalarProperty Name="NguonViec" ColumnName="NguonViec" />
-                <ScalarProperty Name="ProjectStage" ColumnName="ProjectStage" />
-                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
-                <ScalarProperty Name="MaDuAn" ColumnName="MaDuAn" />
-                <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
-                <ScalarProperty Name="ProjectOtherName" ColumnName="ProjectOtherName" />
-                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-                <ScalarProperty Name="Year" ColumnName="Year" />
-                <ScalarProperty Name="ProjectTypeId" ColumnName="ProjectTypeId" />
-                <ScalarProperty Name="ProjectStatusId" ColumnName="ProjectStatusId" />
-                <ScalarProperty Name="LocationId" ColumnName="LocationId" />
-                <ScalarProperty Name="OwnerId" ColumnName="OwnerId" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="C02_Members">
             <EntityTypeMapping TypeName="DMCtimesheet.Models.C02_Members">
               <MappingFragment StoreEntitySet="02_Members">
@@ -1243,6 +1344,7 @@
           <EntitySetMapping Name="C11_Location">
             <EntityTypeMapping TypeName="DMCtimesheet.Models.C11_Location">
               <MappingFragment StoreEntitySet="11_Location">
+                <ScalarProperty Name="Country" ColumnName="Country" />
                 <ScalarProperty Name="LocationId" ColumnName="LocationId" />
                 <ScalarProperty Name="LocationName" ColumnName="LocationName" />
               </MappingFragment>
@@ -1398,6 +1500,67 @@
               <MappingFragment StoreEntitySet="23_NguonViec">
                 <ScalarProperty Name="NguonViec" ColumnName="NguonViec" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C24_ChangedOrder">
+            <EntityTypeMapping TypeName="DMCtimesheet.Models.C24_ChangedOrder">
+              <MappingFragment StoreEntitySet="24_ChangedOrder">
+                <ScalarProperty Name="CO_DelayTime" ColumnName="CO_DelayTime" />
+                <ScalarProperty Name="CO_EquipmentCost" ColumnName="CO_EquipmentCost" />
+                <ScalarProperty Name="CO_MaterialCost" ColumnName="CO_MaterialCost" />
+                <ScalarProperty Name="CO_LabourCost" ColumnName="CO_LabourCost" />
+                <ScalarProperty Name="CO_TimeSpend" ColumnName="CO_TimeSpend" />
+                <ScalarProperty Name="CO_TotalCost" ColumnName="CO_TotalCost" />
+                <ScalarProperty Name="CO_Descipline" ColumnName="CO_Descipline" />
+                <ScalarProperty Name="CO_Description" ColumnName="CO_Description" />
+                <ScalarProperty Name="CO_Resource" ColumnName="CO_Resource" />
+                <ScalarProperty Name="CO_Number" ColumnName="CO_Number" />
+                <ScalarProperty Name="ProjectId" ColumnName="ProjectId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C17a_QuocGias">
+            <EntityTypeMapping TypeName="DMCtimesheet.Models.C17a_QuocGias">
+              <MappingFragment StoreEntitySet="17a_QuocGias">
+                <ScalarProperty Name="MaVietTat" ColumnName="MaVietTat" />
+                <ScalarProperty Name="TenGoiChinhThe" ColumnName="TenGoiChinhThe" />
+                <ScalarProperty Name="TenQuocGia_VN" ColumnName="TenQuocGia_VN" />
+                <ScalarProperty Name="TenQuocGia_EN" ColumnName="TenQuocGia_EN" />
+                <ScalarProperty Name="KhuVuc" ColumnName="KhuVuc" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="C01_Projects">
+            <EntityTypeMapping TypeName="DMCtimesheet.Models.C01_Projects">
+              <MappingFragment StoreEntitySet="01_Projects">
+                <ScalarProperty Name="ML_ChangedOrder" ColumnName="ML_ChangedOrder" />
+                <ScalarProperty Name="ML_RiskFactors" ColumnName="ML_RiskFactors" />
+                <ScalarProperty Name="ML_EquipmentCost" ColumnName="ML_EquipmentCost" />
+                <ScalarProperty Name="ML_MaterialCost" ColumnName="ML_MaterialCost" />
+                <ScalarProperty Name="ML_LabourCost" ColumnName="ML_LabourCost" />
+                <ScalarProperty Name="ML_ActualTimePerTask" ColumnName="ML_ActualTimePerTask" />
+                <ScalarProperty Name="ML_EstimatedTimePerTask" ColumnName="ML_EstimatedTimePerTask" />
+                <ScalarProperty Name="ML_ActualCost" ColumnName="ML_ActualCost" />
+                <ScalarProperty Name="ML_EstimatedCost" ColumnName="ML_EstimatedCost" />
+                <ScalarProperty Name="ML_ProjectComplexity" ColumnName="ML_ProjectComplexity" />
+                <ScalarProperty Name="ML_ProjectSize" ColumnName="ML_ProjectSize" />
+                <ScalarProperty Name="QuocGia" ColumnName="QuocGia" />
+                <ScalarProperty Name="NgayKetThuc" ColumnName="NgayKetThuc" />
+                <ScalarProperty Name="NguonViec" ColumnName="NguonViec" />
+                <ScalarProperty Name="ProjectStage" ColumnName="ProjectStage" />
+                <ScalarProperty Name="OwnerId" ColumnName="OwnerId" />
+                <ScalarProperty Name="LocationId" ColumnName="LocationId" />
+                <ScalarProperty Name="ProjectStatusId" ColumnName="ProjectStatusId" />
+                <ScalarProperty Name="ProjectTypeId" ColumnName="ProjectTypeId" />
+                <ScalarProperty Name="Year" ColumnName="Year" />
+                <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+                <ScalarProperty Name="ProjectOtherName" ColumnName="ProjectOtherName" />
+                <ScalarProperty Name="ProjectName" ColumnName="ProjectName" />
+                <ScalarProperty Name="MaDuAn" ColumnName="MaDuAn" />
+                <ScalarProperty Name="ProjectID" ColumnName="ProjectID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
